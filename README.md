@@ -27,7 +27,7 @@ Vue.use(VueGoodTable);
 
 ## Basic Example
 
-```
+```html
 <template>
   <div class="myclass">
     <vue-good-table
