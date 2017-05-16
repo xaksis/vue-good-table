@@ -106,7 +106,7 @@ This should result in the screenshot seen above
   <tbody>
     <tr>
       <td>title</td>
-      <td>Array containing objects that describe table columns</td>
+      <td>Title shows up above the table</td>
       <td>String, <code>"Test Table"</code></td>
     </tr>
     <tr>
@@ -168,6 +168,11 @@ This should result in the screenshot seen above
       <td>Enable sorting by clicking column</td>
       <td>Boolean</td>
     </tr>
+    <tr>
+      <td>styleClass</td>
+      <td>Allows applying your own classes to table</td>
+      <td>String <em>default: 'table table-bordered'</em></td>
+    </tr>
   </tbody>
 </table>
 
@@ -228,6 +233,19 @@ This should result in the screenshot seen above
     </tr>
   </tbody>
 </table>
+
+## Style Options
+
+Vue-good-table allows providing your own css classes for the table via **styleClass** option but it also has in-built classes that you can make use of
+### .table
+![Table Screenshot](README/images/table.png)
+
+### .table .table-bordered
+![Table Bordered Screenshot](README/images/table-bordered.png)
+
+### .table .table-stripped
+![Table Bordered Striped Screenshot](README/images/table-bordered-striped.png)
+
 
 ## Authors
 

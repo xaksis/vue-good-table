@@ -545,6 +545,7 @@
   }
   
   .table-footer select {
+    display: inline-block;
     background-color: transparent;
     width: auto;
     padding: 0;
