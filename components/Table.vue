@@ -1,0 +1,559 @@
+<template>
+  <div class="good-table">
+    <div class="table-header clearfix">
+      <h2 class="table-title pull-left">{{title}}</h2>
+      <div class="actions pull-right">
+      </div>
+    </div>
+    <table ref="table" :class="styleClass">
+      <thead>
+        <tr>
+          <th v-for="(column, index) in columns"
+            @click="sort(index)"
+            :class="columnHeaderClass(column, index)"
+            :style="{width: column.width ? column.width : 'auto'}">
+            <span>{{column.label}}</span>
+          </th>
+          <slot name="thead-tr"></slot>
+        </tr>
+        <tr v-if="hasFilterRow">
+          <th v-for="(column, index) in columns">
+            <input v-if="column.filterable" type="text" class="form-control" v-bind:placeholder="'Filter ' + column.label"
+            v-bind:value="columnFilters[column.field]"
+            v-on:input="updateFilters(column, $event.target.value)">
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
+          <td v-for="(column, i) in columns" :class="getDataStyle(i)" v-if="!column.html">
+            {{ collectFormatted(row, column) }}
+          </td>
+          <td v-for="(column, i) in columns" :class="getDataStyle(i)" v-html="collect(row, column.field)" v-if="column.html">
+          </td>
+          <slot name="tbody-tr" :row="row"></slot>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="table-footer" v-if="paginate">
+      <div class="datatable-length">
+        <label>
+          <span>Rows per page:</span>
+          <select class="browser-default" @change="onTableLength">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+            <option value="-1">All</option>
+          </select>
+        </label>
+      </div>
+      <div class="pagination-controls">
+        <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
+          <span class="chevron left"></span>
+          <span class="label">PREV</span>
+        </a>
+        <div class="info">{{paginatedInfo}}</div>
+        <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
+          <span class="label">NEXT</span>
+          <span class="chevron right"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'vue-good-table',
+    props: {
+      styleClass: {default: 'table table-bordered'},
+      title: '',
+      columns: {},
+      rows: {},
+      onClick: {},
+      perPage: {default: 10},
+      sortable: {default: true},
+      paginate: {default: false},
+    },
+
+    data: () => ({
+      currentPage: 1,
+      currentPerPage: 10,
+      sortColumn: -1,
+      sortType: 'asc',
+      columnFilters: {},
+      filteredRows: [],
+    }),
+
+    methods: {
+      nextPage() {
+        if (this.processedRows.length > this.currentPerPage * this.currentPage)
+          ++this.currentPage;
+      },
+
+      previousPage() {
+        if (this.currentPage > 1)
+          --this.currentPage;
+      },
+
+      onTableLength(e) {
+        this.currentPerPage = e.target.value;
+      },
+
+      sort(index) {
+        if (!this.sortable)
+          return;
+        if (this.sortColumn === index) {
+          this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.sortType = 'asc';
+          this.sortColumn = index;
+        }
+      },
+
+      click(row, index) {
+        if (this.onClick)
+          this.onClick(row, index);
+      },
+
+      // field can be: 
+      // 1. function 
+      // 2. regular property - ex: 'prop'
+      // 3. nested property path - ex: 'nested.prop'
+      collect(obj, field) {
+        
+        //utility function to get nested property
+        function dig(obj, selector) {
+          var result = obj;
+          const splitter = selector.split('.');
+          for (let i = 0; i < splitter.length; i++)
+            if (typeof(result) === 'undefined')
+              return undefined;
+            else
+              result = result[splitter[i]];
+          return result;
+        }
+
+        if (typeof(field) === 'function')
+          return field(obj);
+        else if (typeof(field) === 'string')
+          return dig(obj, field);
+        else
+          return undefined;
+      },
+
+      collectFormatted(obj, column) {
+        //helper functions within collect
+        function formatDecimal(v) {
+          return parseFloat(Math.round(v * 100) / 100).toFixed(2);
+        }
+
+        function formatPercent(v) {
+          return parseFloat(v * 100).toFixed(2) + '%';
+        }
+
+
+        var value = this.collect(obj, column.field);
+        //lets format the resultant data
+        switch(column.type) {
+          case 'decimal':
+            return formatDecimal(value);
+          case 'percentage':
+            return formatPercent(value);
+          default:
+            return value;
+        }
+      },
+
+
+      // Get the necessary style-classes for the given column
+      //--------------------------------------------------------
+      columnHeaderClass(column, index){
+        var classString = '';
+        if (this.sortable) {
+          classString += 'sorting ';
+        }
+        if (index === this.sortColumn) {
+          if (this.sortType === 'desc') {
+            classString += 'sorting-desc ';
+          } else {
+            classString += 'sorting-asc ';
+          }
+        }
+        classString += this.getDataStyle(index);
+        return classString;
+      },
+      // given column index, we can figure out what style classes
+      // to apply to this data
+      //---------------------------------------------------------
+      getDataStyle(index) {
+        var classString = '';
+        switch (this.columns[index].type) {
+          case 'number':
+          case 'percentage':
+          case 'decimal': 
+            classString = 'right-align ';
+          break;
+          default:
+            classString = 'left-align ';
+            break;
+        }
+        return classString;
+      },
+
+      //since vue doesn't detect property addition and deletion, we 
+      // need to create helper function to set property etc
+      updateFilters(column, value) {
+        this.$set(this.columnFilters, column.field, value)
+      },
+
+      //method to filter rows 
+      filterRows() {
+        var computedRows = this.rows;
+        if(this.hasFilterRow) {
+          for (var col of this.columns){
+            if (col.filterable && this.columnFilters[col.field]) {
+              computedRows = computedRows.filter(row => {
+
+                switch(col.type) {
+                  case 'number':
+                  case 'percentage':
+                  case 'decimal':
+                    //in case of numeric value we need to do an exact
+                    //match for now
+                    return row[col.field] == this.columnFilters[col.field];
+                  default: 
+                    //text value lets test starts with
+                    return (row[col.field]).toLowerCase().startsWith((this.columnFilters[col.field]).toLowerCase());
+                }
+              });
+            }
+          }
+        }
+        this.filteredRows = computedRows;
+      }
+    },
+
+    watch: {
+      columnFilters: {
+          handler: function(newObj){
+            this.filterRows();
+          },
+          deep: true,
+      }
+    },
+
+    computed: {
+      // to create a filter row, we need to 
+      // make sure that there is atleast 1 column
+      // that requires filtering
+      hasFilterRow(){
+        for(var col of this.columns){
+          if(col.filterable){
+            return true;
+          }
+        }
+        return false;
+      },
+
+      // this is done everytime sortColumn 
+      // or sort type changes 
+      //----------------------------------------
+      processedRows() {
+        var computedRows = this.filteredRows;
+
+        //taking care of sort here
+        if (this.sortable !== false) {
+          computedRows = computedRows.sort((x,y) => {
+            if (!this.columns[this.sortColumn])
+              return 0;
+
+            const cook = (x) => {
+              x = this.collect(x, this.columns[this.sortColumn].field);
+              if (typeof(x) === 'string') {
+                x = x.toLowerCase();
+                if (this.columns[this.sortColumn].numeric)
+                  x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
+              }
+              return x;
+            }
+
+            x = cook(x);
+            y = cook(y);
+
+            return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
+          })
+        }
+
+        return computedRows;
+      },
+
+      paginated() {
+        var paginatedRows = this.processedRows;
+
+        if (this.paginate) {
+          var pageStart = (this.currentPage - 1) * this.currentPerPage;
+
+          //in case of filtering we might be on a page that is
+          // not relevant anymore
+          if (pageStart >= this.processedRows.length) {
+            this.currentPage = 1;
+            pageStart = 0;
+          }
+
+          //calculate page end now
+          var pageEnd = paginatedRows.length + 1;
+          
+          //if the setting is set to 'all'
+          if (this.currentPerPage != -1) {
+            pageEnd = this.currentPage * this.currentPerPage;
+          }
+
+          paginatedRows = paginatedRows.slice(pageStart, pageEnd);
+        }
+        return paginatedRows;
+      },
+
+      paginatedInfo() {
+        var infoStr = '';
+        infoStr += (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
+        infoStr += ' - ';
+        infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
+        infoStr += ' of ';
+        infoStr += this.processedRows.length;
+        return infoStr;
+      }
+    },
+
+    mounted() {
+      this.filteredRows = this.rows;
+    }
+  }
+</script>
+
+<style lang="css" scoped>
+
+/* Utility styles
+************************************************/
+.right-align{
+  text-align: right;
+}
+
+.left-align{
+  text-align: left;
+}
+
+.pull-left{
+  float:  left !important;
+}
+
+.pull-right{
+  float:  right !important;
+}
+
+.clearfix::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+/* Table specific styles
+************************************************/
+
+  table{
+    border-collapse: collapse;
+    background-color: transparent;
+    margin-bottom:  1rem;
+  }
+  .table{
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .table.table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0,0,0,.05);
+  }
+
+  .table.table-bordered td, .table-bordered th {
+      border: 1px solid #DDD;
+  }
+
+  .table thead th {
+    vertical-align: bottom;
+    /* border-bottom: 2px solid #eceeef; */
+    border-bottom:  2px solid #ddd;
+    padding: .75rem 1.5rem .75rem .75rem;
+    background-color: rgba(0,0,0,0.03);
+  }
+
+  .table td, .table th {
+    padding: .75rem .75rem .75rem .75rem;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+  }
+
+  tr.clickable {
+    cursor: pointer;
+  }
+
+  .table input{
+    display: block;
+    width: 97%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  }
+
+  table th.sorting-asc,
+  table th.sorting-desc {
+    color: rgba(0, 0, 0, 0.66);
+    position: relative;
+  }
+
+  table th.sorting:after,
+  table th.sorting-asc:after  {
+    font-family: 'Material Icons';
+    position:  absolute;
+    height:  0px;
+    width:  0px;
+    content: '';
+    display: none;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid rgba(0, 0, 0, 0.66);
+    margin-top:  6px;
+    margin-left:  5px;
+  }
+
+  table th.sorting:hover:after{
+    display: inline-block;
+    border-bottom-color: rgba(0,0,0,0.25);
+  }
+
+  table th.sorting-asc:after,
+  table th.sorting-desc:after {
+    display: inline-block;
+  }
+
+  table th.sorting-desc:after {
+    border-top:  6px solid rgba(0, 0, 0, 0.66);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: none;
+    margin-top:  8px;
+  }
+
+/* Table header specific styles
+************************************************/
+
+.table-header{
+  padding:  .75rem;
+}
+
+.table-header .table-title{
+  margin:  0px;
+  font-size: 18px;
+}
+
+
+/* Table footer specific styles
+************************************************/
+
+  .table-footer{
+    background-color: rgba(0,0,0, 0.03);
+    border: 1px solid #eceeef;
+    margin-bottom:  2rem;
+    padding:  1rem;
+    border-radius: 8px;
+    text-align: right;
+    font-size: 14px;
+    color:  rgba(0, 0, 0, 0.44);
+  }
+
+  .table-footer>div{
+    display: inline-block;
+    margin-left:  32px;
+  }
+
+  .pagination-controls>*{
+    display: inline-block;
+  }
+
+  .pagination-controls a{
+    text-decoration: none;
+    color:  #3796EC;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .pagination-controls a span{
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .pagination-controls .info{
+    margin:  0px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color:  rgba(0, 0, 0, 0.40);
+  }
+
+  .pagination-controls a .chevron{
+    width:  24px;
+    height:  24px;
+    border-radius: 15%;
+    border:  1px solid rgba(0,0,0,0.2);
+    background-color: #fff;
+    position:  relative;
+    margin:  0px 8px;
+  }
+
+  .pagination-controls .chevron::after{
+    content:  '';
+    position:  absolute;
+    display:  block;
+    left:  50%;
+    top:  50%;
+    margin-top:  -6px;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  .pagination-controls .chevron.left::after{
+    border-right:  6px solid rgba(0, 0, 0, 0.66);
+    margin-left:  -3px;
+  }
+
+  .pagination-controls .chevron.right::after{
+    border-left:  6px solid rgba(0, 0, 0, 0.66);
+    margin-left:  -3px;
+  }
+  
+  .table-footer select {
+    background-color: transparent;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    height: auto;
+    font-size: 14px;
+    margin-left: 8px;
+    color:  rgba(0, 0, 0, 0.55);
+    font-weight: bold;
+  }
+</style>
