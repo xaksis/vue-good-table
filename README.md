@@ -123,6 +123,7 @@ This should result in the screenshot seen above
           //...
         ]
       </pre>
+      <em>For all column properties, see below</em>
       </td>
     </tr>
     <tr>
@@ -156,9 +157,9 @@ This should result in the screenshot seen above
       <td>Function to run when a row is clicked</td>
       <td>
         <pre lang="javascript">
-        function(row){
-          console.log(row);
-        }
+          function(row){
+            console.log(row);
+          }
         </pre>
       </td>
     </tr>
@@ -166,6 +167,64 @@ This should result in the screenshot seen above
       <td>sortable</td>
       <td>Enable sorting by clicking column</td>
       <td>Boolean</td>
+    </tr>
+  </tbody>
+</table>
+
+### Column Options
+<table>
+  <thead>
+    <tr>
+      <td>Option</td>
+      <td>Description</td>
+      <td>Type, example</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>label (required)</td>
+      <td>Label to put on column header</td>
+      <td>String <code>{label: "Name"}</code></td>
+    </tr>
+    <tr>
+      <td>field (required)</td>
+      <td>Row object property that this column corresponds to</td>
+      <td>
+        Could be: 
+        <ul>
+          <li>String <code>eg: 'name'</code> - simple row property name</li>
+          <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
+          </li>
+          <li>Function - a function that returns a value to be displayed based on the row object</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>type (optional)</td>
+      <td>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</td>
+      <td>
+        Possible values: 
+        <ul>
+          <li>number - right aligned</li>
+          <li>decimal - right aligned, 2 decimal places</li>
+          <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>filterable (optional)</td>
+      <td>provides the column with a filter input</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
+      <td>html (optional)</td>
+      <td>indicates whether this column will require html rendering or not</td>
+      <td>Boolean, example: if row had a property 'htmlContent' like <code>htmlContent: '<button>Hello</button>'</code>, then html: true on the column will render a button</td>
+    </tr>
+    <tr>
+      <td>width (optional)</td>
+      <td>provide a width value for this column</td>
+      <td>example: <code>width: '50px'</code></td>
     </tr>
   </tbody>
 </table>
