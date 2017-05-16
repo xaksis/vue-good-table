@@ -1,16 +1,21 @@
 {
   "name": "vue-good-table",
   "version": "1.0.0",
-  "description": "A simple, clean data table for vuejs with essential features like sorting, column filtering, pagination etc",
+  "description": "A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xaksis/vue-good-table"
+  },
   "keywords": [
+    "vue",
     "vuejs",
     "table",
     "datatable"
   ],
-  "author": "xaksis",
+  "author": "Akshay Anand",
   "license": "MIT"
 }
