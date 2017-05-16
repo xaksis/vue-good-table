@@ -95,24 +95,6 @@ This should result in the screenshot seen above
 
 ### Component Options
 
-| Options | Description | type |
-|:------- | ----------- | ------- |
-| title   | Title goes above the table | String |
-| columns | Array containing objects that describe table columns |  ```json
-[{
-  label: 'Name',
-  field: 'name',
-  filterable: true,
-}...]
-``` *See below for full list of column options* |
-| rows    | Array containing row objects| ```json 
-[{id:1, name:"John",age:"20"}...]
-``` |
-| paginate | Enable Pagination for table | Boolean |
-| perPage | Number of rows per page | Integer *default: 10* |
-| onClick | Function to run when a row is clicked | Function (row as 1st param) | 
-| sortable | Enable sorting by clicking column | Boolean |
-
 <table>
   <thead>
     <tr>
