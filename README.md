@@ -113,7 +113,7 @@ This should result in the screenshot seen above
       <td>columns</td>
       <td>Array containing objects that describe table columns</td>
       <td>
-      <pre lang="json">
+      <pre lang="javascript">
         [
           {
             label: 'Name',
@@ -129,7 +129,7 @@ This should result in the screenshot seen above
       <td>rows</td>
       <td>Array containing row objects</td>
       <td>
-        <pre lang="json">
+        <pre lang="javascript">
           [
             {
               id:1, 
