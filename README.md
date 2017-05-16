@@ -107,13 +107,13 @@ This should result in the screenshot seen above
     <tr>
       <td>title</td>
       <td>Array containing objects that describe table columns</td>
-      <td>String, `"Test Table"`</td>
+      <td>String, <code>"Test Table"</code></td>
     </tr>
     <tr>
       <td>columns</td>
       <td>Array containing objects that describe table columns</td>
       <td>
-      ```json
+      <pre lang="json">
         [
           {
             label: 'Name',
@@ -122,13 +122,14 @@ This should result in the screenshot seen above
           }
           //...
         ]
-      ```
+      </pre>
       </td>
     </tr>
     <tr>
       <td>rows</td>
       <td>Array containing row objects</td>
-      <td>```json 
+      <td>
+        <pre lang="json">
           [
             {
               id:1, 
@@ -137,7 +138,7 @@ This should result in the screenshot seen above
             },
             //...
           ]
-        ```
+        </pre>
       </td>
     </tr>
     <tr>
@@ -148,17 +149,17 @@ This should result in the screenshot seen above
     <tr>
       <td>perPage</td>
       <td>Number of rows per page</td>
-      <td>Integer (*default: 10*)</td>
+      <td>Integer (<em>default: 10</em>)</td>
     </tr>
     <tr>
       <td>onClick</td>
       <td>Function to run when a row is clicked</td>
       <td>
-        ```javascript
+        <pre lang="javascript">
         function(row){
           console.log(row);
         }
-        ```
+        </pre>
       </td>
     </tr>
     <tr>
