@@ -7,6 +7,16 @@
     </div>
     <table ref="table" :class="styleClass">
       <thead>
+        <tr v-if="globalSearch">
+          <td :colspan="columns.length">
+            <div class="global-search">
+              <span class="global-search-icon">
+                <img src="../images/search_icon.png" alt="Search Icon" />
+              </span>
+              <input type="text" class="form-control global-search-input" placeholder="Search Table" v-model="globalSearchTerm" />
+            </div>
+          </td>
+        </tr>
         <tr>
           <th v-for="(column, index) in columns"
             @click="sort(index)"
@@ -78,6 +88,7 @@
       perPage: {default: 10},
       sortable: {default: true},
       paginate: {default: false},
+      globalSearch: {default: false},
     },
 
     data: () => ({
@@ -85,6 +96,7 @@
       currentPerPage: 10,
       sortColumn: -1,
       sortType: 'asc',
+      globalSearchTerm: '',
       columnFilters: {},
       filteredRows: [],
     }),
@@ -224,7 +236,7 @@
                   case 'percentage':
                   case 'decimal':
                     //in case of numeric value we need to do an exact
-                    //match for now
+                    //match for now`
                     return row[col.field] == this.columnFilters[col.field];
                   default: 
                     //text value lets test starts with
@@ -252,9 +264,11 @@
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow(){
-        for(var col of this.columns){
-          if(col.filterable){
-            return true;
+        if (!this.globalSearch) {
+          for(var col of this.columns){
+            if(col.filterable){
+              return true;
+            }
           }
         }
         return false;
@@ -287,6 +301,21 @@
 
             return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
           })
+        }
+
+        // take care of the global filter here also
+        if (this.globalSearch && !!this.globalSearchTerm) {
+          var filteredRows = [];
+          for (var row of this.rows) {
+            for(var col of this.columns) {
+              if (String(this.collectFormatted(row, col)).toLowerCase()
+                  .includes(this.globalSearchTerm.toLowerCase())) {
+                filteredRows.push(row);
+                break;
+              }
+            }
+          }
+          computedRows = filteredRows;
         }
 
         return computedRows;
@@ -556,5 +585,25 @@
     margin-left: 8px;
     color:  rgba(0, 0, 0, 0.55);
     font-weight: bold;
+  }
+
+  /* Global Search  
+  **********************************************/
+  .global-search{
+    position:  relative;
+    padding-left: 40px;
+  }
+  .global-search-icon{
+    position:  absolute;
+    left:  0px;
+    max-width:  32px;
+  }
+  .global-search-icon > img{
+    max-width:  100%;
+    margin-top:  8px;
+    opacity: 0.5;
+  }
+  .global-search-input{
+   
   }
 </style>

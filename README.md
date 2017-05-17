@@ -173,6 +173,11 @@ This should result in the screenshot seen above
       <td>Allows applying your own classes to table</td>
       <td>String <em>default: 'table table-bordered'</em></td>
     </tr>
+    <tr>
+      <td>globalSearch</td>
+      <td>Allows a single search input for the whole table <em>Note: enabling this filter disables column filters</em></td>
+      <td>Boolean <em>default: false</em></td>
+    </tr>
   </tbody>
 </table>
 
@@ -224,7 +229,7 @@ This should result in the screenshot seen above
     <tr>
       <td>html (optional)</td>
       <td>indicates whether this column will require html rendering or not</td>
-      <td>Boolean, example: if row had a property 'htmlContent' like <code>htmlContent: '<button>Hello</button>'</code>, then html: true on the column will render a button</td>
+      <td>Boolean, example: if row had a property 'htmlContent' like <code>htmlContent: '<pre><button>Hello</button></pre>'</code>, then html: true on the column will render a button</td>
     </tr>
     <tr>
       <td>width (optional)</td>
@@ -234,16 +239,18 @@ This should result in the screenshot seen above
   </tbody>
 </table>
 
-## Style Options
+
+### Style Options
 
 Vue-good-table allows providing your own css classes for the table via **styleClass** option but it also has in-built classes that you can make use of
-### .table
+
+#### .table
 ![Table Screenshot](README/images/table.png)
 
-### .table .table-bordered
+#### .table .table-bordered
 ![Table Bordered Screenshot](README/images/table-bordered.png)
 
-### .table .table-stripped
+#### .table .table-stripped
 ![Table Bordered Striped Screenshot](README/images/table-bordered-striped.png)
 
 
