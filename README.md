@@ -229,7 +229,7 @@ This should result in the screenshot seen above
     <tr>
       <td>html (optional)</td>
       <td>indicates whether this column will require html rendering or not</td>
-      <td>Boolean, example: if row had a property 'htmlContent' like <code>htmlContent: '<pre><button>Hello</button></pre>'</code>, then html: true on the column will render a button</td>
+      <td>Boolean, example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then html: true on the column will render a button</td>
     </tr>
     <tr>
       <td>width (optional)</td>
