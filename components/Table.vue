@@ -106,6 +106,7 @@
       globalSearchTerm: '',
       columnFilters: {},
       filteredRows: [],
+      timer: null,
     }),
 
     methods: {
@@ -229,12 +230,17 @@
       //since vue doesn't detect property addition and deletion, we 
       // need to create helper function to set property etc
       updateFilters(column, value) {
-        this.$set(this.columnFilters, column.field, value)
+        const _this = this;
+        if (this.timer) clearTimeout(this.timer);
+        this.timer = setTimeout(function(){
+          _this.$set(_this.columnFilters, column.field, value)  
+        }, 400);
+        
       },
 
       //method to filter rows 
       filterRows() {
-        var computedRows = this.rows;
+        var computedRows = JSON.parse(JSON.stringify(this.rows));
         if(this.hasFilterRow) {
           for (var col of this.columns){
             if (col.filterable && this.columnFilters[col.field]) {
@@ -277,6 +283,7 @@
           this.currentPerPage = 10;
         }
       }
+
     },
 
     computed: {
@@ -379,7 +386,7 @@
     },
 
     mounted() {
-      this.filteredRows = this.rows;
+      this.filteredRows = JSON.parse(JSON.stringify(this.rows));
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
