@@ -365,6 +365,7 @@
     },
 
     mounted() {
+      this.currentPerPage = this.perPage;
       this.filteredRows = this.rows;
     }
   }
