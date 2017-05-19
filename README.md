@@ -178,6 +178,31 @@ This should result in the screenshot seen above
       <td>Allows a single search input for the whole table <em>Note: enabling this filter disables column filters</em></td>
       <td>Boolean <em>default: false</em></td>
     </tr>
+    <tr>
+      <td colspan="3">
+        <strong>Text Options</strong> - for those interested in using other languages
+      </td>
+    </tr>
+    <tr>
+      <td>globalSearchPlaceholder</td>
+      <td>Text for global search input place holder</td>
+      <td>default: "Search Table"</td>
+    </tr>
+    <tr>
+      <td>nextText</td>
+      <td>Text for pagination 'Next' link </td>
+      <td>default: "Next"</td>
+    </tr>
+    <tr>
+      <td>prevText</td>
+      <td>Text for pagination 'Prev' link </td>
+      <td>default: "Prev"</td>
+    </tr>
+    <tr>
+      <td>rowsPerPageText</td>
+      <td>Text for pagination 'Rows per page' label </td>
+      <td>default: "Rows per page"</td>
+    </tr>
   </tbody>
 </table>
 

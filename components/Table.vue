@@ -13,7 +13,7 @@
               <span class="global-search-icon">
                 <img src="../images/search_icon.png" alt="Search Icon" />
               </span>
-              <input type="text" class="form-control global-search-input" placeholder="Search Table" v-model="globalSearchTerm" />
+              <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" />
             </div>
           </td>
         </tr>
@@ -50,7 +50,7 @@
     <div class="table-footer" v-if="paginate">
       <div class="datatable-length">
         <label>
-          <span>Rows per page:</span>
+          <span>{{rowsPerPageText}}</span>
           <select class="browser-default" @change="onTableLength">
             <option value="10">10</option>
             <option value="20">20</option>
@@ -64,11 +64,11 @@
       <div class="pagination-controls">
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
           <span class="chevron left"></span>
-          <span class="label">PREV</span>
+          <span class="label">{{prevText}}</span>
         </a>
         <div class="info">{{paginatedInfo}}</div>
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
-          <span class="label">NEXT</span>
+          <span class="label">{{nextText}}</span>
           <span class="chevron right"></span>
         </a>
       </div>
@@ -89,6 +89,12 @@
       sortable: {default: true},
       paginate: {default: false},
       globalSearch: {default: false},
+      
+      //text options
+      globalSearchPlaceholder: {default: 'Search Table'},
+      nextText: {default: 'Next'},
+      prevText: {default: 'Prev'},
+      rowsPerPageText: {default: 'Rows per page:'},
     },
 
     data: () => ({
