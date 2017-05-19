@@ -51,7 +51,8 @@
       <div class="datatable-length">
         <label>
           <span>{{rowsPerPageText}}</span>
-          <select class="browser-default" @change="onTableLength">
+          <span v-if="perPage" class="perpage-count">{{perPage}}</span>
+          <select v-if="!perPage" class="browser-default" @change="onTableLength">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
@@ -85,7 +86,7 @@
       columns: {},
       rows: {},
       onClick: {},
-      perPage: {default: 10},
+      perPage: {},
       sortable: {default: true},
       paginate: {default: false},
       globalSearch: {default: false},
@@ -176,6 +177,8 @@
 
 
         var value = this.collect(obj, column.field);
+
+        if (!value) return '';
         //lets format the resultant data
         switch(column.type) {
           case 'decimal':
@@ -262,6 +265,17 @@
             this.filterRows();
           },
           deep: true,
+      },
+      rows() {
+        this.filterRows();
+      },
+      perPage() {
+        if (this.perPage) {
+          this.currentPerPage = this.perPage;
+        }else{
+          //reset to default
+          this.currentPerPage = 10;
+        }
       }
     },
 
@@ -361,12 +375,10 @@
         infoStr += ' of ';
         infoStr += this.processedRows.length;
         return infoStr;
-      }
+      },
     },
 
     mounted() {
-      this.currentPerPage = this.perPage;
-      this.filteredRows = this.rows;
     }
   }
 </script>
@@ -592,6 +604,12 @@
     margin-left: 8px;
     color:  rgba(0, 0, 0, 0.55);
     font-weight: bold;
+  }
+
+  .table-footer .perpage-count{
+    color:  rgba(0, 0, 0, 0.55);
+    font-weight: bold;
+    margin-left:  10px;
   }
 
   /* Global Search  
