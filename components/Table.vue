@@ -379,6 +379,10 @@
     },
 
     mounted() {
+      this.filteredRows = this.rows;
+      if (this.perPage) {
+        this.currentPerPage = this.perPage;
+      }
     }
   }
 </script>
