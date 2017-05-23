@@ -90,6 +90,7 @@
       sortable: {default: true},
       paginate: {default: false},
       globalSearch: {default: false},
+      defaultSortBy: {default: null},
       
       //text options
       globalSearchPlaceholder: {default: 'Search Table'},
@@ -389,6 +390,16 @@
       this.filteredRows = JSON.parse(JSON.stringify(this.rows));
       if (this.perPage) {
         this.currentPerPage = this.perPage;
+      }
+      //take care of default sort on mount
+      if (this.defaultSortBy) {
+        for (let [index, col] of this.columns.entries()) {
+          if (col.field === this.defaultSortBy.field) {
+            this.sortColumn = index;
+            this.sortType = this.defaultSortBy.type || 'asc';
+            break;
+          }
+        }
       }
     }
   }

@@ -179,6 +179,18 @@ This should result in the screenshot seen above
       <td>Boolean <em>default: false</em></td>
     </tr>
     <tr>
+      <td>defaultSortBy</td>
+      <td>Allows specifying a default sort for the table on wakeup</td>
+      <td>Object, example:
+        <pre lang="javascript">
+        {
+          field: 'name', 
+          type: 'asc' //asc or desc (default: 'asc')
+        }
+        </pre>
+      </td>
+    </tr>
+    <tr>
       <td colspan="3">
         <strong>Text Options</strong> - for those interested in using other languages
       </td>
