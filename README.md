@@ -113,16 +113,16 @@ This should result in the screenshot seen above
       <td>columns</td>
       <td>Array containing objects that describe table columns</td>
       <td>
-      <pre lang="javascript">
-        [
-          {
-            label: 'Name',
-            field: 'name',
-            filterable: true,
-          }
-          //...
-        ]
-      </pre>
+<pre lang="javascript">
+  [
+    {
+      label: 'Name',
+      field: 'name',
+      filterable: true,
+    }
+    //...
+  ]
+</pre>
       <em>For all column properties, see below</em>
       </td>
     </tr>
@@ -130,16 +130,16 @@ This should result in the screenshot seen above
       <td>rows</td>
       <td>Array containing row objects</td>
       <td>
-        <pre lang="javascript">
-          [
-            {
-              id:1, 
-              name:"John",
-              age:"20"
-            },
-            //...
-          ]
-        </pre>
+<pre lang="javascript">
+  [
+    {
+      id:1, 
+      name:"John",
+      age:"20"
+    },
+    //...
+  ]
+</pre>
       </td>
     </tr>
     <tr>
@@ -156,11 +156,11 @@ This should result in the screenshot seen above
       <td>onClick</td>
       <td>Function to run when a row is clicked</td>
       <td>
-        <pre lang="javascript">
-          function(row){
-            console.log(row);
-          }
-        </pre>
+<pre lang="javascript">
+  function(row){
+    console.log(row);
+  }
+</pre>
       </td>
     </tr>
     <tr>
@@ -177,6 +177,18 @@ This should result in the screenshot seen above
       <td>globalSearch</td>
       <td>Allows a single search input for the whole table <em>Note: enabling this filter disables column filters</em></td>
       <td>Boolean <em>default: false</em></td>
+    </tr>
+    <tr>
+      <td>defaultSortBy</td>
+      <td>Allows specifying a default sort for the table on wakeup</td>
+      <td>Object, example:
+<pre lang="javascript">
+{
+  field: 'name', 
+  type: 'asc' //asc or desc (default: 'asc')
+}
+</pre>
+      </td>
     </tr>
     <tr>
       <td colspan="3">
@@ -282,8 +294,6 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ## Authors
 
 * **Akshay Anand** - *Initial work* - [xaksis](https://github.com/xaksis)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
