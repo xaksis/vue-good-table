@@ -179,6 +179,11 @@ This should result in the screenshot seen above
       <td>Boolean <em>default: false</em></td>
     </tr>
     <tr>
+      <td>lineNumbers</td>
+      <td>Enable sorting by clicking column</td>
+      <td>Boolean <em>default: false</em></td>
+    </tr>
+    <tr>
       <td>defaultSortBy</td>
       <td>Allows specifying a default sort for the table on wakeup</td>
       <td>Object, example:
