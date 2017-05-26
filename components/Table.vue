@@ -8,7 +8,7 @@
     <table ref="table" :class="styleClass">
       <thead>
         <tr v-if="globalSearch">
-          <td :colspan="columns.length">
+          <td :colspan="lineNumbers ? columns.length + 1: columns.length">
             <div class="global-search">
               <span class="global-search-icon">
                 <img src="../images/search_icon.png" alt="Search Icon" />
@@ -18,6 +18,7 @@
           </td>
         </tr>
         <tr>
+          <th v-if="lineNumbers" class="line-numbers"></th>
           <th v-for="(column, index) in columns"
             @click="sort(index)"
             :class="columnHeaderClass(column, index)"
@@ -27,6 +28,7 @@
           <slot name="thead-tr"></slot>
         </tr>
         <tr v-if="hasFilterRow">
+          <th v-if="lineNumbers"></th>
           <th v-for="(column, index) in columns">
             <input v-if="column.filterable" type="text" class="form-control" v-bind:placeholder="'Filter ' + column.label"
             v-bind:value="columnFilters[column.field]"
@@ -37,6 +39,7 @@
 
       <tbody>
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
+          <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
           <td v-for="(column, i) in columns" :class="getDataStyle(i)" v-if="!column.html">
             {{ collectFormatted(row, column) }}
           </td>
@@ -47,8 +50,8 @@
       </tbody>
     </table>
 
-    <div class="table-footer" v-if="paginate">
-      <div class="datatable-length">
+    <div class="table-footer clearfix" v-if="paginate">
+      <div class="datatable-length pull-left">
         <label>
           <span>{{rowsPerPageText}}</span>
           <span v-if="perPage" class="perpage-count">{{perPage}}</span>
@@ -62,7 +65,7 @@
           </select>
         </label>
       </div>
-      <div class="pagination-controls">
+      <div class="pagination-controls pull-right">
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
           <span class="chevron left"></span>
           <span class="label">{{prevText}}</span>
@@ -89,6 +92,7 @@
       perPage: {},
       sortable: {default: true},
       paginate: {default: false},
+      lineNumbers: {default: false},
       globalSearch: {default: false},
       defaultSortBy: {default: null},
       
@@ -263,7 +267,11 @@
           }
         }
         this.filteredRows = computedRows;
-      }
+      },
+
+      getCurrentIndex(index) {
+        return (this.currentPage - 1) * this.currentPerPage + index + 1;
+      },
     },
 
     watch: {
@@ -437,7 +445,7 @@
   table{
     border-collapse: collapse;
     background-color: transparent;
-    margin-bottom:  1rem;
+    margin-bottom:  20px;
   }
   .table{
     width: 100%;
@@ -445,25 +453,28 @@
   }
 
   .table.table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(0,0,0,.05);
+      background-color: rgba(35,41,53,.05);
   }
 
   .table.table-bordered td, .table-bordered th {
       border: 1px solid #DDD;
   }
 
-  .table thead th {
-    vertical-align: bottom;
-    /* border-bottom: 2px solid #eceeef; */
-    border-bottom:  2px solid #ddd;
-    padding: .75rem 1.5rem .75rem .75rem;
-    background-color: rgba(0,0,0,0.03);
-  }
-
-  .table td, .table th {
+  .table td, .table th:not(.line-numbers) {
     padding: .75rem .75rem .75rem .75rem;
     vertical-align: top;
     border-top: 1px solid #ddd;
+  }
+
+  .table.condensed td, .table.condensed th {
+    padding: .4rem .4rem .4rem .4rem;
+  }
+
+  .table thead th, .table.condensed thead th {
+    vertical-align: bottom;
+    border-bottom:  2px solid #ddd;
+    padding-right: 1.5rem;
+    background-color: rgba(35,41,53,0.03);
   }
 
   tr.clickable {
@@ -472,7 +483,7 @@
 
   .table input{
     display: block;
-    width: 97%;
+    width: calc(100% - 24px);
     height: 34px;
     padding: 6px 12px;
     font-size: 14px;
@@ -482,8 +493,8 @@
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-box-shadow: inset 0 1px 1px rgba(35,41,53,.075);
+    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
@@ -512,7 +523,7 @@
 
   table th.sorting:hover:after{
     display: inline-block;
-    border-bottom-color: rgba(0,0,0,0.25);
+    border-bottom-color: rgba(35,41,53,0.25);
   }
 
   table th.sorting-asc:after,
@@ -545,19 +556,20 @@
 ************************************************/
 
   .table-footer{
-    background-color: rgba(0,0,0, 0.03);
-    border: 1px solid #eceeef;
+    /* background-color: rgba(35,41,53, 0.03); */
+    background-color: rgba(35,41,53,0.05);
+    border: 1px solid #DDD;
     margin-bottom:  2rem;
+    margin-top:  -20px;
     padding:  1rem;
-    border-radius: 8px;
-    text-align: right;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
     font-size: 14px;
     color:  rgba(0, 0, 0, 0.44);
   }
 
   .table-footer>div{
     display: inline-block;
-    margin-left:  32px;
   }
 
   .pagination-controls>*{
@@ -566,9 +578,14 @@
 
   .pagination-controls a{
     text-decoration: none;
-    color:  #3796EC;
+    color: rgba(0, 0, 0, 0.66);
     font-size: 14px;
     font-weight: 600;
+    opacity: 0.8;
+  }
+
+  .pagination-controls a:hover{
+    opacity: 1;
   }
 
   .pagination-controls a span{
@@ -578,7 +595,7 @@
 
   .pagination-controls .info{
     margin:  0px 15px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     color:  rgba(0, 0, 0, 0.40);
   }
@@ -587,8 +604,8 @@
     width:  24px;
     height:  24px;
     border-radius: 15%;
-    border:  1px solid rgba(0,0,0,0.2);
-    background-color: #fff;
+    /* border:  1px solid rgba(35,41,53,0.2);
+    background-color: #fff; */
     position:  relative;
     margin:  0px 8px;
   }
@@ -631,7 +648,13 @@
   .table-footer .perpage-count{
     color:  rgba(0, 0, 0, 0.55);
     font-weight: bold;
-    margin-left:  10px;
+  }
+
+  @media only screen and (max-width: 750px) {
+    /* on small screens hide the info */
+    .pagination-controls .info{
+      display:  none;
+    }
   }
 
   /* Global Search  
@@ -650,7 +673,18 @@
     margin-top:  8px;
     opacity: 0.5;
   }
-  .global-search-input{
-   
+  table .global-search-input{
+   width:  calc(100% - 30px);
   }
+
+  /* Line numbers 
+  **********************************************/
+  table th.line-numbers, .table.condensed th.line-numbers{
+    background-color: rgba(35,41,53,0.05);
+    padding-left:  3px;
+    padding-right:  3px;
+    word-wrap: break-word;
+    width: 45px;
+  }
+
 </style>
