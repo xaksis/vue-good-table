@@ -29,14 +29,13 @@ Vue.use(VueGoodTable);
 
 ```html
 <template>
-  <div class="myclass">
+  <div>
     <vue-good-table
-      title="Test Table"
+      title="Demo Table"
       :columns="columns"
       :rows="rows"
-      :paginate="true">
-      
-    </vue-good-table>
+      :paginate="true"
+      :lineNumbers="true"/>
   </div>
 </template>
 
