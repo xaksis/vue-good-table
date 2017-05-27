@@ -294,6 +294,9 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 #### .table .table-stripped
 ![Table Bordered Striped Screenshot](README/images/table-bordered-striped.png)
 
+#### .table .table-stripped .table-bordered .condensed
+![Table Bordered Striped Screenshot](README/images/condensed.png)
+
 
 ## Authors
 
