@@ -92,7 +92,7 @@ export default {
 ```
 This should result in the screenshot seen above
 
-Note: vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example: 
+<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example: 
 ```html
 <vue-good-table
   title="Dynamic Table"
