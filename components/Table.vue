@@ -40,13 +40,15 @@
       <tbody>
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-          <td v-for="(column, i) in columns" :class="getDataStyle(i)" v-if="!column.html">
+          <slot name="table-row" :row="row">
+            <td v-if="!column.html" v-for="(column, i) in columns" :class="getDataStyle(i)">
             {{ collectFormatted(row, column) }}
-          </td>
-          <td v-for="(column, i) in columns" :class="getDataStyle(i)" v-html="collect(row, column.field)" v-if="column.html">
-          </td>
-          <slot name="tbody-tr" :row="row"></slot>
+            </td>
+            <td v-if="column.html" v-for="(column, i) in columns" :class="getDataStyle(i)" v-html="collect(row, column.field)">
+            </td>
+          </slot>
         </tr>
+        
       </tbody>
     </table>
 
@@ -685,6 +687,7 @@
     padding-right:  3px;
     word-wrap: break-word;
     width: 45px;
+    text-align: center;
   }
 
 </style>

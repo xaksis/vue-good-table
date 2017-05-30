@@ -92,6 +92,25 @@ export default {
 ```
 This should result in the screenshot seen above
 
+Note: vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example: 
+```html
+<vue-good-table
+  title="Dynamic Table"
+  :columns="columns"
+  :rows="rows"
+  :lineNumbers="true"
+  :defaultSortBy="{field: 'age', type: 'asec'}"
+  :globalSearch="true"
+  :paginate="true"
+  styleClass="table condensed table-bordered table-striped">
+  <template slot="table-row" scope="props">
+    <td>{{ props.row.name }}</td>
+    <td class="fancy">{{ props.row.age }}</td>
+    <td>{{ props.row.btn }}</td>
+  </template>
+</vue-good-table>
+```
+
 ### Component Options
 
 <table>
