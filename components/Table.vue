@@ -41,10 +41,9 @@
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
           <slot name="table-row" :row="row">
-            <td v-if="!column.html" v-for="(column, i) in columns" :class="getDataStyle(i)">
-            {{ collectFormatted(row, column) }}
-            </td>
-            <td v-if="column.html" v-for="(column, i) in columns" :class="getDataStyle(i)" v-html="collect(row, column.field)">
+            <td v-for="(column, i) in columns" :class="getDataStyle(i)">
+              <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+              <span v-if="column.html" v-html="collect(row, column.field)"></span>
             </td>
           </slot>
         </tr>
