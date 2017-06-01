@@ -481,7 +481,7 @@ import moment from 'moment';
   }
 
   .table td, .table th:not(.line-numbers) {
-    padding: .75rem .75rem .75rem .75rem;
+    padding: .75rem 1.5rem .75rem .75rem;
     vertical-align: top;
     border-top: 1px solid #ddd;
   }
