@@ -278,7 +278,7 @@ This should result in the screenshot seen above
           <li>number - right aligned</li>
           <li>decimal - right aligned, 2 decimal places</li>
           <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
-          <li>date - expects a string representation of date</li>
+          <li>date - expects a string representation of date eg <code>'20170530'</code></li>
         </ul>
       </td>
     </tr>
