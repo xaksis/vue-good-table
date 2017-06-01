@@ -66,6 +66,14 @@ export default {
           filterable: true,
         },
         {
+          label: 'Created On',
+          field: 'createdAt',
+          type: 'date',
+          inputFormat: 'YYYYMMDD',
+          outputFormat: 'MMM Do YY',
+          filterable: false,
+        },
+        {
           label: 'Percent',
           field: 'btn',
           type: 'percentage',
