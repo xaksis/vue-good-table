@@ -17,5 +17,8 @@
     "datatable"
   ],
   "author": "Akshay Anand",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.18.1"
+  }
 }

@@ -278,8 +278,19 @@ This should result in the screenshot seen above
           <li>number - right aligned</li>
           <li>decimal - right aligned, 2 decimal places</li>
           <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
+          <li>date - expects a string representation of date eg <code>'20170530'</code></li>
         </ul>
       </td>
+    </tr>
+    <tr>
+      <td>inputFormat <strong>(if type is date)</strong></td>
+      <td>provide the format to parse date string</td>
+      <td>String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code></td>
+    </tr>
+    <tr>
+      <td>outputFormat <strong>(if type is date)</strong></td>
+      <td>provide the format for output date</td>
+      <td>String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code></td>
     </tr>
     <tr>
       <td>filterable (optional)</td>

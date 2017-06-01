@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import moment from 'moment';
   export default {
     name: 'vue-good-table',
     props: {
@@ -182,6 +183,14 @@
           return parseFloat(v * 100).toFixed(2) + '%';
         }
 
+        function formatDate(v) {
+          // convert to string
+          v = v + '';
+
+          // user moment to convert to date
+          return moment(v, column.inputFormat).format(column.outputFormat);
+        }
+
 
         var value = this.collect(obj, column.field);
 
@@ -192,6 +201,8 @@
             return formatDecimal(value);
           case 'percentage':
             return formatPercent(value);
+          case 'date':
+            return formatDate(value);
           default:
             return value;
         }
@@ -224,6 +235,7 @@
           case 'number':
           case 'percentage':
           case 'decimal': 
+          case 'date':
             classString = 'right-align ';
           break;
           default:
@@ -325,11 +337,18 @@
 
             const cook = (x) => {
               x = this.collect(x, this.columns[this.sortColumn].field);
+              
               if (typeof(x) === 'string') {
                 x = x.toLowerCase();
                 if (this.columns[this.sortColumn].numeric)
                   x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
               }
+
+              //take care of dates too. 
+              if (this.columns[this.sortColumn].field === 'date') {
+                x = moment(x + '', this.columns[this.sortColumn].inputFormat);
+              }
+
               return x;
             }
 
@@ -462,7 +481,7 @@
   }
 
   .table td, .table th:not(.line-numbers) {
-    padding: .75rem .75rem .75rem .75rem;
+    padding: .75rem 1.5rem .75rem .75rem;
     vertical-align: top;
     border-top: 1px solid #ddd;
   }
