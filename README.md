@@ -133,7 +133,9 @@ This should result in the screenshot seen above
     <tr>
       <td>title</td>
       <td>Title shows up above the table</td>
-      <td>String, <code>"Test Table"</code></td>
+      <td>String, <code>"Test Table"</code><br>
+        If not set, the title region is not created.
+      </td>
     </tr>
     <tr>
       <td>columns</td>
