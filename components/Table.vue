@@ -1,7 +1,7 @@
 <template>
   <div class="good-table">
     <div class="table-header clearfix">
-      <h2 class="table-title pull-left">{{title}}</h2>
+      <h2 v-if="title" class="table-title pull-left">{{title}}</h2>
       <div class="actions pull-right">
       </div>
     </div>
