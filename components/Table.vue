@@ -345,7 +345,7 @@ import moment from 'moment';
               }
 
               //take care of dates too. 
-              if (this.columns[this.sortColumn].field === 'date') {
+              if (this.columns[this.sortColumn].type === 'date') {
                 x = moment(x + '', this.columns[this.sortColumn].inputFormat);
               }
 
