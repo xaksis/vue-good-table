@@ -317,6 +317,11 @@ This should result in the screenshot seen above
       <td>provide a width value for this column</td>
       <td>example: <code>width: '50px'</code></td>
     </tr>
+    <tr>
+      <td>visible (optional)</td>
+      <td>Indicates whether this column will be rendered. Column data will still be available to, e.g., <code>onClick</code>.</td>
+      <td>Boolean</td>
+    </tr>
   </tbody>
 </table>
 
