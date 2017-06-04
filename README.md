@@ -25,6 +25,11 @@ import VueGoodTable from 'vue-good-table';
 Vue.use(VueGoodTable);
 ```
 
+## Live Demo
+
+[vue-good-table Demo Site](https://xaksis.github.io/vue-good-demos/#/simple-table)
+
+
 ## Example Usage
 
 ```html
