@@ -82,7 +82,8 @@
 </template>
 
 <script>
-import moment from 'moment';
+import parse from 'date-fns/parse';
+import format from 'date-fns/format';
   export default {
     name: 'vue-good-table',
     props: {
@@ -187,8 +188,8 @@ import moment from 'moment';
           // convert to string
           v = v + '';
 
-          // user moment to convert to date
-          return moment(v, column.inputFormat).format(column.outputFormat);
+          // convert to date
+          return format(parse(v, column.inputFormat), column.outputFormat);
         }
 
 
@@ -346,7 +347,7 @@ import moment from 'moment';
 
               //take care of dates too. 
               if (this.columns[this.sortColumn].type === 'date') {
-                x = moment(x + '', this.columns[this.sortColumn].inputFormat);
+                x = parse(x + '', this.columns[this.sortColumn].inputFormat);
               }
 
               return x;

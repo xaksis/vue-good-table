@@ -19,6 +19,6 @@
   "author": "Akshay Anand",
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.18.1"
+    "date-fns": "^1.28.5"
   }
 }
