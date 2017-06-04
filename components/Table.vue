@@ -20,6 +20,7 @@
         <tr>
           <th v-if="lineNumbers" class="line-numbers"></th>
           <th v-for="(column, index) in columns"
+              v-if="showColumn(column)"
             @click="sort(index)"
             :class="columnHeaderClass(column, index)"
             :style="{width: column.width ? column.width : 'auto'}">
@@ -41,7 +42,9 @@
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
           <slot name="table-row" :row="row">
-            <td v-for="(column, i) in columns" :class="getDataStyle(i)">
+            <td v-for="(column, i) in columns"
+                v-if="showColumn(column)"
+                :class="getDataStyle(i)">
               <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
               <span v-if="column.html" v-html="collect(row, column.field)"></span>
             </td>
@@ -141,6 +144,14 @@ import format from 'date-fns/format';
           this.sortType = 'asc';
           this.sortColumn = index;
         }
+      },
+
+      //Don't show columns with visible property as false.
+      showColumn(column) {
+        if ( column.hasOwnProperty('visible') ) {
+          return column.visible;
+        }
+        return true;
       },
 
       click(row, index) {
