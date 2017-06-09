@@ -3,6 +3,10 @@ A simple, clean data table for VueJS (2.x) with essential features like sorting,
 
 ![Basic Screenshot](README/images/screenshot.png)
 
+## Live Demo
+
+[vue-good-table Demo Site](https://xaksis.github.io/vue-good-demos/#/simple-table)
+
 ## Getting Started
 
 ### Prerequisites
@@ -24,10 +28,6 @@ import VueGoodTable from 'vue-good-table';
 
 Vue.use(VueGoodTable);
 ```
-
-## Live Demo
-
-[vue-good-table Demo Site](https://xaksis.github.io/vue-good-demos/#/simple-table)
 
 
 ## Example Usage
@@ -346,6 +346,7 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ## Authors
 
 * **Akshay Anand** - *Initial work* - [xaksis](https://github.com/xaksis)
+* **Cristi Jora** - [cristijora](https://github.com/cristijora)
 
 ## License
 
