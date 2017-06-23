@@ -232,16 +232,20 @@ import format from 'date-fns/format';
       //---------------------------------------------------------
       getDataStyle(index) {
         var classString = '';
-        switch (this.columns[index].type) {
-          case 'number':
-          case 'percentage':
-          case 'decimal': 
-          case 'date':
-            classString = 'right-align ';
-          break;
-          default:
-            classString = 'left-align ';
+        if (this.columns[index].hasOwnProperty('class')) {
+          classString = this.columns[index].class;
+        } else {
+          switch (this.columns[index].type) {
+            case 'number':
+            case 'percentage':
+            case 'decimal': 
+            case 'date':
+              classString = 'right-align ';
             break;
+            default:
+              classString = 'left-align ';
+              break;
+          }
         }
         return classString;
       },
