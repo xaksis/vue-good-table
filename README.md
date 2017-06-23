@@ -62,6 +62,7 @@ export default {
           field: 'name',
           html: false,
           filterable: true,
+          class: 'my-custom-class'
         },
         {
           label: 'Age',
@@ -321,6 +322,11 @@ This should result in the screenshot seen above
       <td>width (optional)</td>
       <td>provide a width value for this column</td>
       <td>example: <code>width: '50px'</code></td>
+    </tr>
+    <tr>
+      <td>class (optional)</td>
+      <td>provide custom class(es) to the td</td>
+      <td>example: <code>class: 'text-center'</code></td>
     </tr>
   </tbody>
 </table>
