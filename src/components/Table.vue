@@ -119,11 +119,13 @@ import format from 'date-fns/format';
 
     methods: {
       nextPage() {
+        if(this.currentPerPage == -1) return;
         if (this.processedRows.length > this.currentPerPage * this.currentPage)
           ++this.currentPage;
       },
 
       previousPage() {
+        
         if (this.currentPage > 1)
           --this.currentPage;
       },
@@ -411,6 +413,9 @@ import format from 'date-fns/format';
         infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
         infoStr += ' of ';
         infoStr += this.processedRows.length;
+        if(this.currentPerPage == -1){
+          return '1 - ' + this.processedRows.length + ' of ' + this.processedRows.length;
+        }
         return infoStr;
       },
     },
