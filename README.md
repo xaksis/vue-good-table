@@ -190,10 +190,10 @@ This should result in the screenshot seen above
       <td>Function to run when a row is clicked</td>
       <td>
 <pre lang="javascript">
-<vue-good-table
-      :columns="columns"
-      :onClick="onClickFn"
-      :rows="rows"/>
+&lt;vue-good-table
+      :columns=&quot;columns&quot;
+      :onClick=&quot;onClickFn&quot;
+      :rows=&quot;rows&quot;/&gt;
 // data
 data() {
   return {
