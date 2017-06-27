@@ -386,9 +386,11 @@ import format from 'date-fns/format';
         if (this.paginate) {
           var pageStart = (this.currentPage - 1) * this.currentPerPage;
 
-          //in case of filtering we might be on a page that is
+          // in case of filtering we might be on a page that is
           // not relevant anymore
-          if (pageStart >= this.processedRows.length) {
+          // also, if setting to all, current page will not be valid
+          if (pageStart >= this.processedRows.length 
+            || this.currentPerPage == -1) {
             this.currentPage = 1;
             pageStart = 0;
           }
