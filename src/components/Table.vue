@@ -7,13 +7,13 @@
     </div>
     <table ref="table" :class="styleClass">
       <thead>
-        <tr v-if="globalSearch">
+        <tr v-if="embeddedSearch">
           <td :colspan="lineNumbers ? columns.length + 1: columns.length">
             <div class="global-search">
               <span class="global-search-icon">
                 <img src="../images/search_icon.png" alt="Search Icon" />
               </span>
-              <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" />
+              <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="searchQuery" />
             </div>
           </td>
         </tr>
@@ -47,7 +47,6 @@
             </td>
           </slot>
         </tr>
-        
       </tbody>
     </table>
 
@@ -97,8 +96,10 @@ import format from 'date-fns/format';
       paginate: {default: false},
       lineNumbers: {default: false},
       globalSearch: {default: false},
+      searchQuery: {default: ''},
+      embeddedSearch: {default: false},
       defaultSortBy: {default: null},
-      
+
       //text options
       globalSearchPlaceholder: {default: 'Search Table'},
       nextText: {default: 'Next'},
@@ -111,7 +112,6 @@ import format from 'date-fns/format';
       currentPerPage: 10,
       sortColumn: -1,
       sortType: 'asc',
-      globalSearchTerm: '',
       columnFilters: {},
       filteredRows: [],
       timer: null,
@@ -150,12 +150,12 @@ import format from 'date-fns/format';
           this.onClick(row, index);
       },
 
-      // field can be: 
-      // 1. function 
+      // field can be:
+      // 1. function
       // 2. regular property - ex: 'prop'
       // 3. nested property path - ex: 'nested.prop'
       collect(obj, field) {
-        
+
         //utility function to get nested property
         function dig(obj, selector) {
           var result = obj;
@@ -237,7 +237,7 @@ import format from 'date-fns/format';
         switch (this.columns[index].type) {
           case 'number':
           case 'percentage':
-          case 'decimal': 
+          case 'decimal':
           case 'date':
             classString = 'right-align ';
           break;
@@ -248,18 +248,17 @@ import format from 'date-fns/format';
         return classString;
       },
 
-      //since vue doesn't detect property addition and deletion, we 
+      //since vue doesn't detect property addition and deletion, we
       // need to create helper function to set property etc
       updateFilters(column, value) {
         const _this = this;
         if (this.timer) clearTimeout(this.timer);
         this.timer = setTimeout(function(){
-          _this.$set(_this.columnFilters, column.field, value)  
+          _this.$set(_this.columnFilters, column.field, value)
         }, 400);
-        
       },
 
-      //method to filter rows 
+      //method to filter rows
       filterRows() {
         var computedRows = JSON.parse(JSON.stringify(this.rows));
         if(this.hasFilterRow) {
@@ -274,7 +273,7 @@ import format from 'date-fns/format';
                     //in case of numeric value we need to do an exact
                     //match for now`
                     return row[col.field] == this.columnFilters[col.field];
-                  default: 
+                  default:
                     //text value lets test starts with
                     return (row[col.field]).toLowerCase().startsWith((this.columnFilters[col.field]).toLowerCase());
                 }
@@ -312,7 +311,7 @@ import format from 'date-fns/format';
     },
 
     computed: {
-      // to create a filter row, we need to 
+      // to create a filter row, we need to
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow(){
@@ -326,8 +325,8 @@ import format from 'date-fns/format';
         return false;
       },
 
-      // this is done everytime sortColumn 
-      // or sort type changes 
+      // this is done everytime sortColumn
+      // or sort type changes
       //----------------------------------------
       processedRows() {
         var computedRows = this.filteredRows;
@@ -340,14 +339,14 @@ import format from 'date-fns/format';
 
             const cook = (x) => {
               x = this.collect(x, this.columns[this.sortColumn].field);
-              
+
               if (typeof(x) === 'string') {
                 x = x.toLowerCase();
                 if (this.columns[this.sortColumn].numeric)
                   x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
               }
 
-              //take care of dates too. 
+              //take care of dates too.
               if (this.columns[this.sortColumn].type === 'date') {
                 x = parse(x + '', this.columns[this.sortColumn].inputFormat);
               }
@@ -363,12 +362,12 @@ import format from 'date-fns/format';
         }
 
         // take care of the global filter here also
-        if (this.globalSearch && !!this.globalSearchTerm) {
+        if (this.globalSearch && !!this.searchQuery) {
           var filteredRows = [];
           for (var row of this.rows) {
             for(var col of this.columns) {
               if (String(this.collectFormatted(row, col)).toLowerCase()
-                  .includes(this.globalSearchTerm.toLowerCase())) {
+                  .includes(this.searchQuery.toLowerCase())) {
                 filteredRows.push(row);
                 break;
               }
@@ -397,7 +396,7 @@ import format from 'date-fns/format';
 
           //calculate page end now
           var pageEnd = paginatedRows.length + 1;
-          
+
           //if the setting is set to 'all'
           if (this.currentPerPage != -1) {
             pageEnd = this.currentPage * this.currentPerPage;
@@ -658,7 +657,7 @@ import format from 'date-fns/format';
     border-left:  6px solid rgba(0, 0, 0, 0.66);
     margin-left:  -3px;
   }
-  
+
   .table-footer select {
     display: inline-block;
     background-color: transparent;
@@ -685,7 +684,7 @@ import format from 'date-fns/format';
     }
   }
 
-  /* Global Search  
+  /* Global Search
   **********************************************/
   .global-search{
     position:  relative;
@@ -705,7 +704,7 @@ import format from 'date-fns/format';
    width:  calc(100% - 30px);
   }
 
-  /* Line numbers 
+  /* Line numbers
   **********************************************/
   table th.line-numbers, .table.condensed th.line-numbers{
     background-color: rgba(35,41,53,0.05);

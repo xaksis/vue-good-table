@@ -105,7 +105,7 @@ export default {
 ```
 This should result in the screenshot seen above
 
-<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example: 
+<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example:
 ```html
 <vue-good-table
   title="Dynamic Table"
@@ -166,7 +166,7 @@ This should result in the screenshot seen above
 <pre lang="javascript">
   [
     {
-      id:1, 
+      id:1,
       name:"John",
       age:"20"
     },
@@ -222,6 +222,16 @@ data() {
       <td>Boolean <em>default: false</em></td>
     </tr>
     <tr>
+      <td>embeddedSearch</td>
+      <td>Gives a search bar on top of the table that can be used for sorting. Must have `globalSearch` set to true.</td>
+      <td>Boolean <em>default: false</em></td>
+    </tr>
+    <tr>
+      <td>searchQuery</td>
+      <td>bind a string to be used as a search query. Must have `globalSearch` set to true</td>
+      <td>String <em>default: ''</em></td>
+    </tr>
+    <tr>
       <td>lineNumbers</td>
       <td>Enable sorting by clicking column</td>
       <td>Boolean <em>default: false</em></td>
@@ -232,7 +242,7 @@ data() {
       <td>Object, example:
 <pre lang="javascript">
 {
-  field: 'name', 
+  field: 'name',
   type: 'asc' //asc or desc (default: 'asc')
 }
 </pre>
@@ -285,7 +295,7 @@ data() {
       <td>field (required)</td>
       <td>Row object property that this column corresponds to</td>
       <td>
-        Could be: 
+        Could be:
         <ul>
           <li>String <code>eg: 'name'</code> - simple row property name</li>
           <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
@@ -298,7 +308,7 @@ data() {
       <td>type (optional)</td>
       <td>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</td>
       <td>
-        Possible values: 
+        Possible values:
         <ul>
           <li>number - right aligned</li>
           <li>decimal - right aligned, 2 decimal places</li>
