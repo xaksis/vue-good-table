@@ -3,6 +3,8 @@
     <vue-good-table
       :columns="columns"
       :paginate="true"
+      :globalSearch="true"
+      searchTrigger="enter"
       :rows="rows"/>
   </div>
 </template>
@@ -38,15 +40,6 @@
           {name: "Chris", age: "55"},
           {name: "Dan", age: "40"},
           {name: "John", age: "20"},
-          {name: "Jane", age: "24"},
-          {name: "Susan", age: "16"},
-          {name: "Chris", age: "55"},
-          {name: "Dan", age: "40"},
-          {name: "John", age: "20"},
-          {name: "Jane", age: "24"},
-          {name: "Susan", age: "16"},
-          {name: "Chris", age: "55"},
-          {name: "Dan", age: "40"},
         ],
       };
     },

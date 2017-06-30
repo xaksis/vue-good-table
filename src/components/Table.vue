@@ -13,7 +13,7 @@
               <span class="global-search-icon">
                 <img src="../images/search_icon.png" alt="Search Icon" />
               </span>
-              <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" />
+              <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
             </div>
           </td>
         </tr>
@@ -96,10 +96,13 @@ import format from 'date-fns/format';
       sortable: {default: true},
       paginate: {default: false},
       lineNumbers: {default: false},
-      globalSearch: {default: false},
       defaultSortBy: {default: null},
       
-      //text options
+      // search
+      globalSearch: {default: false},
+      searchTrigger: {default: null},
+      
+      // text options
       globalSearchPlaceholder: {default: 'Search Table'},
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
@@ -115,6 +118,7 @@ import format from 'date-fns/format';
       columnFilters: {},
       filteredRows: [],
       timer: null,
+      forceSearch: false,
     }),
 
     methods: {
@@ -148,6 +152,12 @@ import format from 'date-fns/format';
       click(row, index) {
         if (this.onClick)
           this.onClick(row, index);
+      },
+
+      searchTable() {
+        if(this.searchTrigger == 'enter') {
+          this.forceSearch = true;
+        }
       },
 
       // field can be: 
@@ -312,6 +322,27 @@ import format from 'date-fns/format';
     },
 
     computed: {
+
+      // 
+      globalSearchAllowed() {
+        console.log('allowed or not');
+        if (this.globalSearch 
+          && !!this.globalSearchTerm 
+          && this.searchTrigger != 'enter'){
+          console.log('returning true');
+          return true;
+        }
+
+        if (this.forceSearch){
+          console.log('force search true');
+          this.forceSearch = false;
+          return true;
+        }
+
+        console.log('retrning false');
+        return false;
+      },
+
       // to create a filter row, we need to 
       // make sure that there is atleast 1 column
       // that requires filtering
@@ -330,6 +361,7 @@ import format from 'date-fns/format';
       // or sort type changes 
       //----------------------------------------
       processedRows() {
+        console.log('precessing...');
         var computedRows = this.filteredRows;
 
         //taking care of sort here
@@ -361,9 +393,10 @@ import format from 'date-fns/format';
             return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
           })
         }
+        console.log(computedRows);
 
         // take care of the global filter here also
-        if (this.globalSearch && !!this.globalSearchTerm) {
+        if (this.globalSearchAllowed) {
           var filteredRows = [];
           for (var row of this.rows) {
             for(var col of this.columns) {
@@ -375,6 +408,12 @@ import format from 'date-fns/format';
             }
           }
           computedRows = filteredRows;
+        }
+
+        // if the filtering is event based, we need to maintain filter
+        // rows
+        if (this.searchTrigger == 'enter') {
+          this.filteredRows = computedRows;
         }
 
         return computedRows;
@@ -427,6 +466,7 @@ import format from 'date-fns/format';
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
+
       //take care of default sort on mount
       if (this.defaultSortBy) {
         for (let [index, col] of this.columns.entries()) {
