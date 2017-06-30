@@ -2,6 +2,8 @@
   <div>
     <vue-good-table
       :columns="columns"
+      :paginate="true"
+      :globalSearch="true"
       :rows="rows"/>
   </div>
 </template>
@@ -36,6 +38,7 @@
           {name: "Susan", age: "16"},
           {name: "Chris", age: "55"},
           {name: "Dan", age: "40"},
+          {name: "John", age: "20"},
         ],
       };
     },

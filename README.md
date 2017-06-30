@@ -224,6 +224,11 @@ data() {
       <td>Boolean <em>default: false</em></td>
     </tr>
     <tr>
+      <td>searchTrigger (used with global search)</td>
+      <td>allows specifying searching on enter key rather than live search for large records</td>
+      <td>String <em>searchTrigger="enter"</em></td>
+    </tr>
+    <tr>
       <td>lineNumbers</td>
       <td>Enable sorting by clicking column</td>
       <td>Boolean <em>default: false</em></td>
