@@ -297,8 +297,11 @@ import format from 'date-fns/format';
           },
           deep: true,
       },
-      rows() {
-        this.filterRows();
+      rows: {
+        handler: function(newObj){
+          this.filterRows();
+        },
+        deep: true,
       },
       perPage() {
         if (this.perPage) {
