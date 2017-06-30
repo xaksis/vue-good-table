@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.6.0
+ * vue-good-table v1.7.0
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -985,8 +985,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     sortable: { default: true },
     paginate: { default: false },
     lineNumbers: { default: false },
-    globalSearch: { default: false },
     defaultSortBy: { default: null },
+
+    globalSearch: { default: false },
+    searchTrigger: { default: null },
 
     globalSearchPlaceholder: { default: 'Search Table' },
     nextText: { default: 'Next' },
@@ -1003,7 +1005,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       globalSearchTerm: '',
       columnFilters: {},
       filteredRows: [],
-      timer: null
+      timer: null,
+      forceSearch: false,
+      sortChanged: false
     };
   },
 
@@ -1027,9 +1031,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.sortType = 'asc';
         this.sortColumn = index;
       }
+      this.sortChanged = true;
     },
     click: function click(row, index) {
       if (this.onClick) this.onClick(row, index);
+    },
+    searchTable: function searchTable() {
+      if (this.searchTrigger == 'enter') {
+        this.forceSearch = true;
+      }
     },
     collect: function collect(obj, field) {
       function dig(obj, selector) {
@@ -1084,21 +1094,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           classString += 'sorting-asc ';
         }
       }
-      classString += this.getDataStyle(index);
+      classString += this.getDataStyle(index, 'th');
       return classString;
     },
-    getDataStyle: function getDataStyle(index) {
+    getDataStyle: function getDataStyle(index, type) {
       var classString = '';
-      switch (this.columns[index].type) {
-        case 'number':
-        case 'percentage':
-        case 'decimal':
-        case 'date':
-          classString = 'right-align ';
-          break;
-        default:
-          classString = 'left-align ';
-          break;
+      if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
+        classString = this.columns[index][type + 'Class'];
+      } else {
+        switch (this.columns[index].type) {
+          case 'number':
+          case 'percentage':
+          case 'decimal':
+          case 'date':
+            classString = 'right-align ';
+            break;
+          default:
+            classString = 'left-align ';
+            break;
+        }
       }
       return classString;
     },
@@ -1165,8 +1179,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       deep: true
     },
-    rows: function rows() {
-      this.filterRows();
+    rows: {
+      handler: function handler(newObj) {
+        this.filterRows();
+      },
+      deep: true
     },
     perPage: function perPage() {
       if (this.perPage) {
@@ -1178,6 +1195,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   computed: {
+    globalSearchAllowed: function globalSearchAllowed() {
+      if (this.globalSearch && !!this.globalSearchTerm && this.searchTrigger != 'enter') {
+        return true;
+      }
+
+      if (this.forceSearch) {
+        this.forceSearch = false;
+        return true;
+      }
+
+      return false;
+    },
     hasFilterRow: function hasFilterRow() {
       if (!this.globalSearch) {
         var _iteratorNormalCompletion2 = true;
@@ -1214,7 +1243,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var computedRows = this.filteredRows;
 
-      if (this.sortable !== false) {
+      if (this.sortable !== false && this.sortChanged) {
+
+        this.sortChanged = false;
+
         computedRows = computedRows.sort(function (x, y) {
           if (!_this3.columns[_this3.sortColumn]) return 0;
 
@@ -1240,7 +1272,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
       }
 
-      if (this.globalSearch && !!this.globalSearchTerm) {
+      if (this.globalSearchAllowed) {
         var filteredRows = [];
         var _iteratorNormalCompletion3 = true;
         var _didIteratorError3 = false;
@@ -1295,6 +1327,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         computedRows = filteredRows;
       }
 
+      if (this.searchTrigger == 'enter') {
+        this.filteredRows = computedRows;
+      }
+
       return computedRows;
     },
     paginated: function paginated() {
@@ -1303,7 +1339,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (this.paginate) {
         var pageStart = (this.currentPage - 1) * this.currentPerPage;
 
-        if (pageStart >= this.processedRows.length) {
+        if (pageStart >= this.processedRows.length || this.currentPerPage == -1) {
           this.currentPage = 1;
           pageStart = 0;
         }
@@ -1355,6 +1391,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (col.field === this.defaultSortBy.field) {
             this.sortColumn = index;
             this.sortType = this.defaultSortBy.type || 'asc';
+            this.sortChanged = true;
             break;
           }
         }
@@ -1965,7 +2002,7 @@ exports = module.exports = __webpack_require__(67)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Utility styles\n************************************************/\n.right-align[data-v-d89f00e8]{\n  text-align: right;\n}\n.left-align[data-v-d89f00e8]{\n  text-align: left;\n}\n.pull-left[data-v-d89f00e8]{\n  float:  left !important;\n}\n.pull-right[data-v-d89f00e8]{\n  float:  right !important;\n}\n.clearfix[data-v-d89f00e8]::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n\n/* Table specific styles\n************************************************/\ntable[data-v-d89f00e8]{\n    border-collapse: collapse;\n    background-color: transparent;\n    margin-bottom:  20px;\n}\n.table[data-v-d89f00e8]{\n    width: 100%;\n    max-width: 100%;\n}\n.table.table-striped tbody tr[data-v-d89f00e8]:nth-of-type(odd) {\n      background-color: rgba(35,41,53,.05);\n}\n.table.table-bordered td[data-v-d89f00e8], .table-bordered th[data-v-d89f00e8] {\n      border: 1px solid #DDD;\n}\n.table td[data-v-d89f00e8], .table th[data-v-d89f00e8]:not(.line-numbers) {\n    padding: .75rem 1.5rem .75rem .75rem;\n    vertical-align: top;\n    border-top: 1px solid #ddd;\n}\n.table.condensed td[data-v-d89f00e8], .table.condensed th[data-v-d89f00e8] {\n    padding: .4rem .4rem .4rem .4rem;\n}\n.table thead th[data-v-d89f00e8], .table.condensed thead th[data-v-d89f00e8] {\n    vertical-align: bottom;\n    border-bottom:  2px solid #ddd;\n    padding-right: 1.5rem;\n    background-color: rgba(35,41,53,0.03);\n}\ntr.clickable[data-v-d89f00e8] {\n    cursor: pointer;\n}\n.table input[data-v-d89f00e8]{\n    display: block;\n    width: calc(100% - 24px);\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;\n}\ntable th.sorting-asc[data-v-d89f00e8],\n  table th.sorting-desc[data-v-d89f00e8] {\n    color: rgba(0, 0, 0, 0.66);\n    position: relative;\n}\ntable th.sorting[data-v-d89f00e8]:after,\n  table th.sorting-asc[data-v-d89f00e8]:after  {\n    font-family: 'Material Icons';\n    position:  absolute;\n    height:  0px;\n    width:  0px;\n    content: '';\n    display: none;\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: 6px solid rgba(0, 0, 0, 0.66);\n    margin-top:  6px;\n    margin-left:  5px;\n}\ntable th.sorting[data-v-d89f00e8]:hover:after{\n    display: inline-block;\n    border-bottom-color: rgba(35,41,53,0.25);\n}\ntable th.sorting-asc[data-v-d89f00e8]:after,\n  table th.sorting-desc[data-v-d89f00e8]:after {\n    display: inline-block;\n}\ntable th.sorting-desc[data-v-d89f00e8]:after {\n    border-top:  6px solid rgba(0, 0, 0, 0.66);\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: none;\n    margin-top:  8px;\n}\n\n/* Table header specific styles\n************************************************/\n.table-header[data-v-d89f00e8]{\n  padding:  .75rem;\n}\n.table-header .table-title[data-v-d89f00e8]{\n  margin:  0px;\n  font-size: 18px;\n}\n\n\n/* Table footer specific styles\n************************************************/\n.table-footer[data-v-d89f00e8]{\n    /* background-color: rgba(35,41,53, 0.03); */\n    background-color: rgba(35,41,53,0.05);\n    border: 1px solid #DDD;\n    margin-bottom:  2rem;\n    margin-top:  -20px;\n    padding:  1rem;\n    border-bottom-right-radius: 5px;\n    border-bottom-left-radius: 5px;\n    font-size: 14px;\n    color:  rgba(0, 0, 0, 0.44);\n}\n.table-footer>div[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls>*[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls a[data-v-d89f00e8]{\n    text-decoration: none;\n    color: rgba(0, 0, 0, 0.66);\n    font-size: 14px;\n    font-weight: 600;\n    opacity: 0.8;\n}\n.pagination-controls a[data-v-d89f00e8]:hover{\n    opacity: 1;\n}\n.pagination-controls a span[data-v-d89f00e8]{\n    display: inline-block;\n    vertical-align: middle;\n}\n.pagination-controls .info[data-v-d89f00e8]{\n    margin:  0px 15px;\n    font-size: 13px;\n    font-weight: bold;\n    color:  rgba(0, 0, 0, 0.40);\n}\n.pagination-controls a .chevron[data-v-d89f00e8]{\n    width:  24px;\n    height:  24px;\n    border-radius: 15%;\n    /* border:  1px solid rgba(35,41,53,0.2);\n    background-color: #fff; */\n    position:  relative;\n    margin:  0px 8px;\n}\n.pagination-controls .chevron[data-v-d89f00e8]::after{\n    content:  '';\n    position:  absolute;\n    display:  block;\n    left:  50%;\n    top:  50%;\n    margin-top:  -6px;\n    border-top: 6px solid transparent;\n    border-bottom: 6px solid transparent;\n}\n.pagination-controls .chevron.left[data-v-d89f00e8]::after{\n    border-right:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.pagination-controls .chevron.right[data-v-d89f00e8]::after{\n    border-left:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.table-footer select[data-v-d89f00e8] {\n    display: inline-block;\n    background-color: transparent;\n    width: auto;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    height: auto;\n    font-size: 14px;\n    margin-left: 8px;\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n.table-footer .perpage-count[data-v-d89f00e8]{\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n@media only screen and (max-width: 750px) {\n    /* on small screens hide the info */\n.pagination-controls .info[data-v-d89f00e8]{\n      display:  none;\n}\n}\n\n  /* Global Search  \n  **********************************************/\n.global-search[data-v-d89f00e8]{\n    position:  relative;\n    padding-left: 40px;\n}\n.global-search-icon[data-v-d89f00e8]{\n    position:  absolute;\n    left:  0px;\n    max-width:  32px;\n}\n.global-search-icon > img[data-v-d89f00e8]{\n    max-width:  100%;\n    margin-top:  8px;\n    opacity: 0.5;\n}\ntable .global-search-input[data-v-d89f00e8]{\n   width:  calc(100% - 30px);\n}\n\n  /* Line numbers \n  **********************************************/\ntable th.line-numbers[data-v-d89f00e8], .table.condensed th.line-numbers[data-v-d89f00e8]{\n    background-color: rgba(35,41,53,0.05);\n    padding-left:  3px;\n    padding-right:  3px;\n    word-wrap: break-word;\n    width: 45px;\n    text-align: center;\n}\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Utility styles\n************************************************/\n.right-align[data-v-d89f00e8]{\n  text-align: right;\n}\n.left-align[data-v-d89f00e8]{\n  text-align: left;\n}\n.pull-left[data-v-d89f00e8]{\n  float:  left !important;\n}\n.pull-right[data-v-d89f00e8]{\n  float:  right !important;\n}\n.clearfix[data-v-d89f00e8]::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n\n/* Table specific styles\n************************************************/\ntable[data-v-d89f00e8]{\n    border-collapse: collapse;\n    background-color: transparent;\n    margin-bottom:  20px;\n}\n.table[data-v-d89f00e8]{\n    width: 100%;\n    max-width: 100%;\n}\n.table.table-striped tbody tr[data-v-d89f00e8]:nth-of-type(odd) {\n      background-color: rgba(35,41,53,.05);\n}\n.table.table-bordered td[data-v-d89f00e8], .table-bordered th[data-v-d89f00e8] {\n      border: 1px solid #DDD;\n}\n.table td[data-v-d89f00e8], .table th[data-v-d89f00e8]:not(.line-numbers) {\n    padding: .75rem 1.5rem .75rem .75rem;\n    vertical-align: top;\n    border-top: 1px solid #ddd;\n}\n.table.condensed td[data-v-d89f00e8], .table.condensed th[data-v-d89f00e8] {\n    padding: .4rem .4rem .4rem .4rem;\n}\n.table thead th[data-v-d89f00e8], .table.condensed thead th[data-v-d89f00e8] {\n    vertical-align: bottom;\n    border-bottom:  2px solid #ddd;\n    padding-right: 1.5rem;\n    background-color: rgba(35,41,53,0.03);\n}\ntr.clickable[data-v-d89f00e8] {\n    cursor: pointer;\n}\n.table input[data-v-d89f00e8]{\n    display: block;\n    width: calc(100% - 24px);\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;\n}\ntable th.sorting-asc[data-v-d89f00e8],\n  table th.sorting-desc[data-v-d89f00e8] {\n    color: rgba(0, 0, 0, 0.66);\n    position: relative;\n}\ntable th.sorting[data-v-d89f00e8]:after,\n  table th.sorting-asc[data-v-d89f00e8]:after  {\n    font-family: 'Material Icons';\n    position:  absolute;\n    height:  0px;\n    width:  0px;\n    content: '';\n    display: none;\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: 6px solid rgba(0, 0, 0, 0.66);\n    margin-top:  6px;\n    margin-left:  5px;\n}\ntable th.sorting[data-v-d89f00e8]:hover:after{\n    display: inline-block;\n    border-bottom-color: rgba(35,41,53,0.25);\n}\ntable th.sorting-asc[data-v-d89f00e8]:after,\n  table th.sorting-desc[data-v-d89f00e8]:after {\n    display: inline-block;\n}\ntable th.sorting-desc[data-v-d89f00e8]:after {\n    border-top:  6px solid rgba(0, 0, 0, 0.66);\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: none;\n    margin-top:  8px;\n}\n\n/* Table header specific styles\n************************************************/\n.table-header[data-v-d89f00e8]{\n  padding:  .75rem;\n}\n.table-header .table-title[data-v-d89f00e8]{\n  margin:  0px;\n  font-size: 18px;\n}\n\n\n/* Table footer specific styles\n************************************************/\n.table-footer[data-v-d89f00e8]{\n    /* background-color: rgba(35,41,53, 0.03); */\n    background-color: rgba(35,41,53,0.05);\n    border: 1px solid #DDD;\n    margin-bottom:  2rem;\n    margin-top:  -20px;\n    padding:  1rem;\n    border-bottom-right-radius: 5px;\n    border-bottom-left-radius: 5px;\n    font-size: 14px;\n    color:  rgba(0, 0, 0, 0.44);\n}\n.table-footer>div[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls>*[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls a[data-v-d89f00e8]{\n    text-decoration: none;\n    color: rgba(0, 0, 0, 0.66);\n    font-size: 14px;\n    font-weight: 600;\n    opacity: 0.8;\n}\n.pagination-controls a[data-v-d89f00e8]:hover{\n    opacity: 1;\n}\n.pagination-controls a span[data-v-d89f00e8]{\n    display: inline-block;\n    vertical-align: middle;\n}\n.pagination-controls .info[data-v-d89f00e8]{\n    margin:  0px 15px;\n    font-size: 13px;\n    font-weight: bold;\n    color:  rgba(0, 0, 0, 0.40);\n}\n.pagination-controls a .chevron[data-v-d89f00e8]{\n    width:  24px;\n    height:  24px;\n    border-radius: 15%;\n    /* border:  1px solid rgba(35,41,53,0.2);\n    background-color: #fff; */\n    position:  relative;\n    margin:  0px 8px;\n}\n.pagination-controls .chevron[data-v-d89f00e8]::after{\n    content:  '';\n    position:  absolute;\n    display:  block;\n    left:  50%;\n    top:  50%;\n    margin-top:  -6px;\n    border-top: 6px solid transparent;\n    border-bottom: 6px solid transparent;\n}\n.pagination-controls .chevron.left[data-v-d89f00e8]::after{\n    border-right:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.pagination-controls .chevron.right[data-v-d89f00e8]::after{\n    border-left:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.table-footer select[data-v-d89f00e8] {\n    display: inline-block;\n    background-color: transparent;\n    width: auto;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    height: auto;\n    font-size: 14px;\n    margin-left: 8px;\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n.table-footer .perpage-count[data-v-d89f00e8]{\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n@media only screen and (max-width: 750px) {\n    /* on small screens hide the info */\n.pagination-controls .info[data-v-d89f00e8]{\n      display:  none;\n}\n}\n\n  /* Global Search  \n  **********************************************/\n.global-search[data-v-d89f00e8]{\n    position:  relative;\n    padding-left: 40px;\n}\n.global-search-icon[data-v-d89f00e8]{\n    position:  absolute;\n    left:  0px;\n    max-width:  32px;\n}\n.global-search-icon > img[data-v-d89f00e8]{\n    max-width:  100%;\n    margin-top:  8px;\n    opacity: 0.5;\n}\ntable .global-search-input[data-v-d89f00e8]{\n   width:  calc(100% - 30px);\n}\n\n  /* Line numbers \n  **********************************************/\ntable th.line-numbers[data-v-d89f00e8], .table.condensed th.line-numbers[data-v-d89f00e8]{\n    background-color: rgba(35,41,53,0.05);\n    padding-left:  3px;\n    padding-right:  3px;\n    word-wrap: break-word;\n    width: 45px;\n    text-align: center;\n}\n\n", ""]);
 
 // exports
 
@@ -3084,6 +3121,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": (_vm.globalSearchTerm)
     },
     on: {
+      "keyup": function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+        _vm.searchTable()
+      },
       "input": function($event) {
         if ($event.target.composing) { return; }
         _vm.globalSearchTerm = $event.target.value
@@ -3131,7 +3172,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "line-numbers"
     }, [_vm._v(_vm._s(_vm.getCurrentIndex(index)))]) : _vm._e(), _vm._v(" "), _vm._t("table-row", _vm._l((_vm.columns), function(column, i) {
       return _c('td', {
-        class: _vm.getDataStyle(i)
+        class: _vm.getDataStyle(i, 'td')
       }, [(!column.html) ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(row, column)))]) : _vm._e(), _vm._v(" "), (column.html) ? _c('span', {
         domProps: {
           "innerHTML": _vm._s(_vm.collect(row, column.field))
