@@ -4,7 +4,6 @@
       :columns="columns"
       :paginate="true"
       :globalSearch="true"
-      searchTrigger="enter"
       :rows="rows"/>
   </div>
 </template>

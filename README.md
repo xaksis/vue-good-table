@@ -56,12 +56,14 @@ export default {
           type: 'number',
           html: false,
           width: '50px',
+          thClass: 'only-th-class',
         },
         {
           label: 'Name',
           field: 'name',
           html: false,
           filterable: true,
+          tdClass: 'text-center'
         },
         {
           label: 'Age',
@@ -331,6 +333,16 @@ data() {
       <td>width (optional)</td>
       <td>provide a width value for this column</td>
       <td>example: <code>width: '50px'</code></td>
+    </tr>
+    <tr>
+      <td>tdClass (optional)</td>
+      <td>provide custom class(es) to the td</td>
+      <td>example: <code>class: 'text-center'</code></td>
+    </tr>
+    <tr>
+      <td>thClass (optional)</td>
+      <td>provide custom class(es) to the th</td>
+      <td>example: <code>class: 'custom-th-style'</code></td>
     </tr>
   </tbody>
 </table>

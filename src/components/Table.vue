@@ -41,7 +41,7 @@
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
           <slot name="table-row" :row="row">
-            <td v-for="(column, i) in columns" :class="getDataStyle(i)">
+            <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')">
               <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
               <span v-if="column.html" v-html="collect(row, column.field)"></span>
             </td>
@@ -119,6 +119,7 @@ import format from 'date-fns/format';
       filteredRows: [],
       timer: null,
       forceSearch: false,
+      sortChanged: false,
     }),
 
     methods: {
@@ -147,6 +148,7 @@ import format from 'date-fns/format';
           this.sortType = 'asc';
           this.sortColumn = index;
         }
+        this.sortChanged = true;
       },
 
       click(row, index) {
@@ -236,24 +238,28 @@ import format from 'date-fns/format';
             classString += 'sorting-asc ';
           }
         }
-        classString += this.getDataStyle(index);
+        classString += this.getDataStyle(index, 'th');
         return classString;
       },
       // given column index, we can figure out what style classes
       // to apply to this data
       //---------------------------------------------------------
-      getDataStyle(index) {
+      getDataStyle(index, type) {
         var classString = '';
-        switch (this.columns[index].type) {
-          case 'number':
-          case 'percentage':
-          case 'decimal': 
-          case 'date':
-            classString = 'right-align ';
-          break;
-          default:
-            classString = 'left-align ';
+        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
+          classString = this.columns[index][type + 'Class'];
+        } else {
+          switch (this.columns[index].type) {
+            case 'number':
+            case 'percentage':
+            case 'decimal': 
+            case 'date':
+              classString = 'right-align ';
             break;
+            default:
+              classString = 'left-align ';
+              break;
+          }
         }
         return classString;
       },
@@ -307,8 +313,11 @@ import format from 'date-fns/format';
           },
           deep: true,
       },
-      rows() {
-        this.filterRows();
+      rows: {
+        handler: function(newObj){
+          this.filterRows();
+        },
+        deep: true,
       },
       perPage() {
         if (this.perPage) {
@@ -325,21 +334,17 @@ import format from 'date-fns/format';
 
       // 
       globalSearchAllowed() {
-        console.log('allowed or not');
         if (this.globalSearch 
           && !!this.globalSearchTerm 
           && this.searchTrigger != 'enter'){
-          console.log('returning true');
           return true;
         }
 
         if (this.forceSearch){
-          console.log('force search true');
           this.forceSearch = false;
           return true;
         }
 
-        console.log('retrning false');
         return false;
       },
 
@@ -361,11 +366,13 @@ import format from 'date-fns/format';
       // or sort type changes 
       //----------------------------------------
       processedRows() {
-        console.log('precessing...');
         var computedRows = this.filteredRows;
 
-        //taking care of sort here
-        if (this.sortable !== false) {
+        //taking care of sort here only if sort has changed
+        if (this.sortable !== false && this.sortChanged) {
+          
+          this.sortChanged = false;
+
           computedRows = computedRows.sort((x,y) => {
             if (!this.columns[this.sortColumn])
               return 0;
@@ -393,7 +400,6 @@ import format from 'date-fns/format';
             return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
           })
         }
-        console.log(computedRows);
 
         // take care of the global filter here also
         if (this.globalSearchAllowed) {
@@ -473,6 +479,7 @@ import format from 'date-fns/format';
           if (col.field === this.defaultSortBy.field) {
             this.sortColumn = index;
             this.sortType = this.defaultSortBy.type || 'asc';
+            this.sortChanged = true;
             break;
           }
         }
