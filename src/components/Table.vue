@@ -41,7 +41,7 @@
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
           <slot name="table-row" :row="row">
-            <td v-for="(column, i) in columns" :class="getDataStyle(i)">
+            <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')">
               <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
               <span v-if="column.html" v-html="collect(row, column.field)"></span>
             </td>
@@ -226,24 +226,28 @@ import format from 'date-fns/format';
             classString += 'sorting-asc ';
           }
         }
-        classString += this.getDataStyle(index);
+        classString += this.getDataStyle(index, 'th');
         return classString;
       },
       // given column index, we can figure out what style classes
       // to apply to this data
       //---------------------------------------------------------
-      getDataStyle(index) {
+      getDataStyle(index, type) {
         var classString = '';
-        switch (this.columns[index].type) {
-          case 'number':
-          case 'percentage':
-          case 'decimal': 
-          case 'date':
-            classString = 'right-align ';
-          break;
-          default:
-            classString = 'left-align ';
+        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
+          classString = this.columns[index][type + 'Class'];
+        } else {
+          switch (this.columns[index].type) {
+            case 'number':
+            case 'percentage':
+            case 'decimal': 
+            case 'date':
+              classString = 'right-align ';
             break;
+            default:
+              classString = 'left-align ';
+              break;
+          }
         }
         return classString;
       },
