@@ -1,9 +1,10 @@
 <template>
   <div>
+    <input type="text" v-model="searchTerm" />
     <vue-good-table
       :columns="columns"
       :paginate="true"
-      :globalSearch="true"
+      :externalSearchQuery="searchTerm"
       :rows="rows"/>
   </div>
 </template>
@@ -16,6 +17,7 @@
     name: 'test',
     data(){
       return {
+        searchTerm: null,
         columns: [
           {
             label: 'Name',

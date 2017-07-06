@@ -218,17 +218,7 @@ data() {
       <td>Allows applying your own classes to table</td>
       <td>String <em>default: 'table table-bordered'</em></td>
     </tr>
-    <tr>
-      <td>globalSearch</td>
-      <td>Allows a single search input for the whole table <em>Note: enabling this filter disables column filters</em></td>
-      <td>Boolean <em>default: false</em></td>
-    </tr>
-    <tr>
-      <td>searchTrigger (used with global search)</td>
-      <td>allows specifying searching on enter key rather than live search for large records</td>
-      <td>String <em>searchTrigger="enter"</em></td>
-    </tr>
-    <tr>
+        <tr>
       <td>lineNumbers</td>
       <td>Enable sorting by clicking column</td>
       <td>Boolean <em>default: false</em></td>
@@ -243,6 +233,44 @@ data() {
   type: 'asc' //asc or desc (default: 'asc')
 }
 </pre>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <strong>Search Options</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>globalSearch</td>
+      <td>Allows a single search input for the whole table <em>Note: enabling this filter disables column filters</em></td>
+      <td>Boolean <em>default: false</em></td>
+    </tr>
+    <tr>
+      <td>searchTrigger (used with global search)</td>
+      <td>allows specifying searching on enter key rather than live search for large records</td>
+      <td>String <em>searchTrigger="enter"</em></td>
+    </tr>
+    <tr>
+      <td>externalSearchQuery</td>
+      <td>Allows global search via your own input field</td>
+      <td>Usage: <br>
+<pre lang="html">
+    &lt;input type=&quot;text&quot; v-model=&quot;searchTerm&quot; /&gt;
+    &lt;vue-good-table
+      :columns=&quot;columns&quot;
+      :paginate=&quot;true&quot;
+      :externalSearchQuery=&quot;searchTerm&quot;
+      :rows=&quot;rows&quot;/&gt;
+</pre> 
+<pre lang="javascript">
+  // and in data
+  data(){
+      return {
+        searchTerm: '',
+        // rows, columns etc...
+      };
+  }
+</pre>  
       </td>
     </tr>
     <tr>
