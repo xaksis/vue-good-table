@@ -40,7 +40,7 @@
       <tbody>
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-          <slot name="table-row" :row="row">
+          <slot name="table-row" :row="row" :index="index">
             <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')">
               <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
               <span v-if="column.html" v-html="collect(row, column.field)"></span>
