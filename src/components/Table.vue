@@ -159,6 +159,7 @@ import format from 'date-fns/format';
       searchTable() {
         if(this.searchTrigger == 'enter') {
           this.forceSearch = true;
+          this.sortChanged = true;
         }
       },
 
@@ -366,10 +367,29 @@ import format from 'date-fns/format';
       // or sort type changes 
       //----------------------------------------
       processedRows() {
-        var computedRows = this.filteredRows;
+       var computedRows = this.filteredRows;
+
+        // take care of the global filter here also
+        if (this.globalSearchAllowed) {
+          var filteredRows = [];
+          for (var row of this.rows) {
+            for(var col of this.columns) {
+              if (String(this.collectFormatted(row, col)).toLowerCase()
+                  .includes(this.globalSearchTerm.toLowerCase())) {
+                filteredRows.push(row);
+                break;
+              }
+            }
+          }
+          computedRows = filteredRows;
+        }
 
         //taking care of sort here only if sort has changed
-        if (this.sortable !== false && this.sortChanged) {
+        if (this.sortable !== false && 
+
+          // if search trigger is enter then we only sort 
+          // when enter is hit
+          (this.searchTrigger != 'enter' || this.sortChanged)) {
           
           this.sortChanged = false;
 
@@ -399,21 +419,6 @@ import format from 'date-fns/format';
 
             return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
           })
-        }
-
-        // take care of the global filter here also
-        if (this.globalSearchAllowed) {
-          var filteredRows = [];
-          for (var row of this.rows) {
-            for(var col of this.columns) {
-              if (String(this.collectFormatted(row, col)).toLowerCase()
-                  .includes(this.globalSearchTerm.toLowerCase())) {
-                filteredRows.push(row);
-                break;
-              }
-            }
-          }
-          computedRows = filteredRows;
         }
 
         // if the filtering is event based, we need to maintain filter
