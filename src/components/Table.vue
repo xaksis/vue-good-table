@@ -7,7 +7,7 @@
     </div>
     <table ref="table" :class="styleClass">
       <thead>
-        <tr v-if="globalSearch">
+        <tr v-if="globalSearch && externalSearchQuery == null">
           <td :colspan="lineNumbers ? columns.length + 1: columns.length">
             <div class="global-search">
               <span class="global-search-icon">
@@ -101,6 +101,7 @@ import format from 'date-fns/format';
       // search
       globalSearch: {default: false},
       searchTrigger: {default: null},
+      externalSearchQuery: {default: null},
       
       // text options
       globalSearchPlaceholder: {default: 'Search Table'},
@@ -333,11 +334,20 @@ import format from 'date-fns/format';
 
     computed: {
 
+      searchTerm(){
+        return (this.externalSearchQuery != null) ? this.externalSearchQuery : this.globalSearchTerm;
+      },
+
       // 
       globalSearchAllowed() {
         if (this.globalSearch 
           && !!this.globalSearchTerm 
           && this.searchTrigger != 'enter'){
+          return true;
+        }
+
+        if (this.externalSearchQuery != null
+           && this.searchTrigger != 'enter'){
           return true;
         }
 
@@ -375,7 +385,7 @@ import format from 'date-fns/format';
           for (var row of this.rows) {
             for(var col of this.columns) {
               if (String(this.collectFormatted(row, col)).toLowerCase()
-                  .includes(this.globalSearchTerm.toLowerCase())) {
+                  .includes(this.searchTerm.toLowerCase())) {
                 filteredRows.push(row);
                 break;
               }
