@@ -22,7 +22,8 @@
           <th v-for="(column, index) in columns"
             @click="sort(index)"
             :class="columnHeaderClass(column, index)"
-            :style="{width: column.width ? column.width : 'auto'}">
+            :style="{width: column.width ? column.width : 'auto'}"
+            v-if="!column.hidden">
             <span>{{column.label}}</span>
           </th>
           <slot name="thead-tr"></slot>
@@ -41,7 +42,7 @@
         <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
           <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
           <slot name="table-row" :row="row" :index="index">
-            <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')">
+            <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
               <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
               <span v-if="column.html" v-html="collect(row, column.field)"></span>
             </td>
@@ -69,11 +70,11 @@
       <div class="pagination-controls pull-right">
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
           <span class="chevron left"></span>
-          <span class="label">{{prevText}}</span>
+          <span>{{prevText}}</span>
         </a>
         <div class="info">{{paginatedInfo}}</div>
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
-          <span class="label">{{nextText}}</span>
+          <span>{{nextText}}</span>
           <span class="chevron right"></span>
         </a>
       </div>
@@ -412,7 +413,7 @@ import format from 'date-fns/format';
               
               if (typeof(x) === 'string') {
                 x = x.toLowerCase();
-                if (this.columns[this.sortColumn].numeric)
+                if (this.columns[this.sortColumn].type == 'number')
                   x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
               }
 
