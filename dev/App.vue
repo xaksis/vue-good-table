@@ -3,7 +3,6 @@
     <vue-good-table
       :columns="columns"
       :paginate="true"
-      :lineNumbers="true"
       :rows="rows"/>
   </div>
 </template>
@@ -29,10 +28,10 @@
           },
         ],
         rows: [
-          {name: "John", age: "103"},
-          {name: "Jane", age: "114"},
-          {name: "Susan", age: "12"},
-          {name: "Chris", age: "121"},
+          {name: "John", age: "20"},
+          {name: "Jane", age: "24"},
+          {name: "Susan", age: "16"},
+          {name: "Chris", age: "55"},
           {name: "Dan", age: "40"},
           {name: "Cankut", age: "20"},
           {name: "Aylin", age: "24"},
