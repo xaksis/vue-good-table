@@ -23,6 +23,7 @@
             @click="sort(index)"
             :class="columnHeaderClass(column, index)"
             :style="{width: column.width ? column.width : 'auto'}"
+            :colspan="column.colspan ? column.colspan : null"
             v-if="!column.hidden">
             <span>{{column.label}}</span>
           </th>
