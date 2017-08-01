@@ -658,7 +658,7 @@ import format from 'date-fns/format';
     background-color: rgba(35,41,53,0.05);
     border: 1px solid #DDD;
     margin-bottom:  2rem;
-    margin-top:  -20px;
+    margin-top:  0px;
     padding:  1rem;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
