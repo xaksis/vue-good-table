@@ -538,7 +538,7 @@ import format from 'date-fns/format';
   table{
     border-collapse: collapse;
     background-color: transparent;
-    margin-bottom:  20px;
+    margin-bottom:  0px;
   }
   .table{
     width: 100%;
