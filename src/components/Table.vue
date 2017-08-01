@@ -1,56 +1,58 @@
 <template>
   <div class="good-table">
-    <div class="table-header clearfix">
-      <h2 v-if="title" class="table-title pull-left">{{title}}</h2>
-      <div class="actions pull-right">
+    <div class="responsive">
+      <div class="table-header clearfix">
+        <h2 v-if="title" class="table-title pull-left">{{title}}</h2>
+        <div class="actions pull-right">
+        </div>
       </div>
-    </div>
-    <table ref="table" :class="styleClass">
-      <thead>
-        <tr v-if="globalSearch && externalSearchQuery == null">
-          <td :colspan="lineNumbers ? columns.length + 1: columns.length">
-            <div class="global-search">
-              <span class="global-search-icon">
-                <img src="../images/search_icon.png" alt="Search Icon" />
-              </span>
-              <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th v-if="lineNumbers" class="line-numbers"></th>
-          <th v-for="(column, index) in columns"
-            @click="sort(index)"
-            :class="columnHeaderClass(column, index)"
-            :style="{width: column.width ? column.width : 'auto'}"
-            v-if="!column.hidden">
-            <span>{{column.label}}</span>
-          </th>
-          <slot name="thead-tr"></slot>
-        </tr>
-        <tr v-if="hasFilterRow">
-          <th v-if="lineNumbers"></th>
-          <th v-for="(column, index) in columns">
-            <input v-if="column.filterable" type="text" class="form-control" v-bind:placeholder="'Filter ' + column.label"
-            v-bind:value="columnFilters[column.field]"
-            v-on:input="updateFilters(column, $event.target.value)">
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
-          <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-          <slot name="table-row" :row="row" :index="index">
-            <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
-              <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
-              <span v-if="column.html" v-html="collect(row, column.field)"></span>
+      <table ref="table" :class="styleClass">
+        <thead>
+          <tr v-if="globalSearch && externalSearchQuery == null">
+            <td :colspan="lineNumbers ? columns.length + 1: columns.length">
+              <div class="global-search">
+                <span class="global-search-icon">
+                  <img src="../images/search_icon.png" alt="Search Icon" />
+                </span>
+                <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
+              </div>
             </td>
-          </slot>
-        </tr>
-        
-      </tbody>
-    </table>
+          </tr>
+          <tr>
+            <th v-if="lineNumbers" class="line-numbers"></th>
+            <th v-for="(column, index) in columns"
+              @click="sort(index)"
+              :class="columnHeaderClass(column, index)"
+              :style="{width: column.width ? column.width : 'auto'}"
+              v-if="!column.hidden">
+              <span>{{column.label}}</span>
+            </th>
+            <slot name="thead-tr"></slot>
+          </tr>
+          <tr v-if="hasFilterRow">
+            <th v-if="lineNumbers"></th>
+            <th v-for="(column, index) in columns">
+              <input v-if="column.filterable" type="text" class="form-control" v-bind:placeholder="'Filter ' + column.label"
+              v-bind:value="columnFilters[column.field]"
+              v-on:input="updateFilters(column, $event.target.value)">
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
+            <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <slot name="table-row" :row="row" :index="index">
+              <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
+                <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+                <span v-if="column.html" v-html="collect(row, column.field)"></span>
+              </td>
+            </slot>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
 
     <div class="table-footer clearfix" v-if="paginate">
       <div class="datatable-length pull-left">
@@ -98,12 +100,12 @@ import format from 'date-fns/format';
       paginate: {default: false},
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
-      
+
       // search
       globalSearch: {default: false},
       searchTrigger: {default: null},
       externalSearchQuery: {default: null},
-      
+
       // text options
       globalSearchPlaceholder: {default: 'Search Table'},
       nextText: {default: 'Next'},
@@ -132,7 +134,7 @@ import format from 'date-fns/format';
       },
 
       previousPage() {
-        
+
         if (this.currentPage > 1)
           --this.currentPage;
       },
@@ -165,12 +167,12 @@ import format from 'date-fns/format';
         }
       },
 
-      // field can be: 
-      // 1. function 
+      // field can be:
+      // 1. function
       // 2. regular property - ex: 'prop'
       // 3. nested property path - ex: 'nested.prop'
       collect(obj, field) {
-        
+
         //utility function to get nested property
         function dig(obj, selector) {
           var result = obj;
@@ -255,7 +257,7 @@ import format from 'date-fns/format';
           switch (this.columns[index].type) {
             case 'number':
             case 'percentage':
-            case 'decimal': 
+            case 'decimal':
             case 'date':
               classString = 'right-align ';
             break;
@@ -267,18 +269,18 @@ import format from 'date-fns/format';
         return classString;
       },
 
-      //since vue doesn't detect property addition and deletion, we 
+      //since vue doesn't detect property addition and deletion, we
       // need to create helper function to set property etc
       updateFilters(column, value) {
         const _this = this;
         if (this.timer) clearTimeout(this.timer);
         this.timer = setTimeout(function(){
-          _this.$set(_this.columnFilters, column.field, value)  
+          _this.$set(_this.columnFilters, column.field, value)
         }, 400);
-        
+
       },
 
-      //method to filter rows 
+      //method to filter rows
       filterRows() {
         var computedRows = JSON.parse(JSON.stringify(this.rows));
         if(this.hasFilterRow) {
@@ -293,7 +295,7 @@ import format from 'date-fns/format';
                     //in case of numeric value we need to do an exact
                     //match for now`
                     return row[col.field] == this.columnFilters[col.field];
-                  default: 
+                  default:
                     //text value lets test starts with
                     return (row[col.field]).toLowerCase().startsWith((this.columnFilters[col.field]).toLowerCase());
                 }
@@ -339,10 +341,10 @@ import format from 'date-fns/format';
         return (this.externalSearchQuery != null) ? this.externalSearchQuery : this.globalSearchTerm;
       },
 
-      // 
+      //
       globalSearchAllowed() {
-        if (this.globalSearch 
-          && !!this.globalSearchTerm 
+        if (this.globalSearch
+          && !!this.globalSearchTerm
           && this.searchTrigger != 'enter'){
           return true;
         }
@@ -360,7 +362,7 @@ import format from 'date-fns/format';
         return false;
       },
 
-      // to create a filter row, we need to 
+      // to create a filter row, we need to
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow(){
@@ -374,8 +376,8 @@ import format from 'date-fns/format';
         return false;
       },
 
-      // this is done everytime sortColumn 
-      // or sort type changes 
+      // this is done everytime sortColumn
+      // or sort type changes
       //----------------------------------------
       processedRows() {
        var computedRows = this.filteredRows;
@@ -396,12 +398,12 @@ import format from 'date-fns/format';
         }
 
         //taking care of sort here only if sort has changed
-        if (this.sortable !== false && 
+        if (this.sortable !== false &&
 
-          // if search trigger is enter then we only sort 
+          // if search trigger is enter then we only sort
           // when enter is hit
           (this.searchTrigger != 'enter' || this.sortChanged)) {
-          
+
           this.sortChanged = false;
 
           computedRows = computedRows.sort((x,y) => {
@@ -410,14 +412,14 @@ import format from 'date-fns/format';
 
             const cook = (x) => {
               x = this.collect(x, this.columns[this.sortColumn].field);
-              
+
               if (typeof(x) === 'string') {
                 x = x.toLowerCase();
                 if (this.columns[this.sortColumn].type == 'number')
                   x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
               }
 
-              //take care of dates too. 
+              //take care of dates too.
               if (this.columns[this.sortColumn].type === 'date') {
                 x = parse(x + '', this.columns[this.sortColumn].inputFormat);
               }
@@ -450,7 +452,7 @@ import format from 'date-fns/format';
           // in case of filtering we might be on a page that is
           // not relevant anymore
           // also, if setting to all, current page will not be valid
-          if (pageStart >= this.processedRows.length 
+          if (pageStart >= this.processedRows.length
             || this.currentPerPage == -1) {
             this.currentPage = 1;
             pageStart = 0;
@@ -458,7 +460,7 @@ import format from 'date-fns/format';
 
           //calculate page end now
           var pageEnd = paginatedRows.length + 1;
-          
+
           //if the setting is set to 'all'
           if (this.currentPerPage != -1) {
             pageEnd = this.currentPage * this.currentPerPage;
@@ -630,6 +632,11 @@ import format from 'date-fns/format';
     margin-top:  8px;
   }
 
+.responsive {
+  width: 100%;
+  overflow-x: scroll;
+}
+
 /* Table header specific styles
 ************************************************/
 
@@ -721,7 +728,7 @@ import format from 'date-fns/format';
     border-left:  6px solid rgba(0, 0, 0, 0.66);
     margin-left:  -3px;
   }
-  
+
   .table-footer select {
     display: inline-block;
     background-color: transparent;
@@ -748,7 +755,7 @@ import format from 'date-fns/format';
     }
   }
 
-  /* Global Search  
+  /* Global Search
   **********************************************/
   .global-search{
     position:  relative;
@@ -768,7 +775,7 @@ import format from 'date-fns/format';
    width:  calc(100% - 30px);
   }
 
-  /* Line numbers 
+  /* Line numbers
   **********************************************/
   table th.line-numbers, .table.condensed th.line-numbers{
     background-color: rgba(35,41,53,0.05);
