@@ -294,6 +294,11 @@ data() {
       <td>Text for pagination 'Rows per page' label </td>
       <td>default: "Rows per page"</td>
     </tr>
+    <tr>
+      <td>ofText</td>
+      <td>Text for pagination 'x of y' label </td>
+      <td>default: "of"</td>
+    </tr>
   </tbody>
 </table>
 
