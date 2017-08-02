@@ -371,12 +371,12 @@ data() {
     <tr>
       <td>tdClass (optional)</td>
       <td>provide custom class(es) to the td</td>
-      <td>example: <code>class: 'text-center'</code></td>
+      <td>example: <code>tdClass: 'text-center'</code></td>
     </tr>
     <tr>
       <td>thClass (optional)</td>
       <td>provide custom class(es) to the th</td>
-      <td>example: <code>class: 'custom-th-style'</code></td>
+      <td>example: <code>thClass: 'custom-th-style'</code></td>
     </tr>
   </tbody>
 </table>
