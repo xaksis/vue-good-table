@@ -294,6 +294,11 @@ data() {
       <td>Text for pagination 'Rows per page' label </td>
       <td>default: "Rows per page"</td>
     </tr>
+    <tr>
+      <td>ofText</td>
+      <td>Text for pagination 'x of y' label </td>
+      <td>default: "of"</td>
+    </tr>
   </tbody>
 </table>
 
@@ -371,12 +376,12 @@ data() {
     <tr>
       <td>tdClass (optional)</td>
       <td>provide custom class(es) to the td</td>
-      <td>example: <code>class: 'text-center'</code></td>
+      <td>example: <code>tdClass: 'text-center'</code></td>
     </tr>
     <tr>
       <td>thClass (optional)</td>
       <td>provide custom class(es) to the th</td>
-      <td>example: <code>class: 'custom-th-style'</code></td>
+      <td>example: <code>thClass: 'custom-th-style'</code></td>
     </tr>
   </tbody>
 </table>

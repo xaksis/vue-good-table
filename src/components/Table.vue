@@ -1,11 +1,10 @@
 <template>
   <div class="good-table">
     <div class="responsive">
-      <div class="table-header clearfix">
-        <h2 v-if="title" class="table-title pull-left">{{title}}</h2>
+      <div v-if="title" class="table-header clearfix">
+        <h2 class="table-title pull-left">{{title}}</h2>
         <div class="actions pull-right">
         </div>
-      </div>
       <table ref="table" :class="styleClass">
         <thead>
           <tr v-if="globalSearch && externalSearchQuery == null">
@@ -111,6 +110,7 @@ import format from 'date-fns/format';
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
       rowsPerPageText: {default: 'Rows per page:'},
+      ofText: {default: 'of'},
     },
 
     data: () => ({
@@ -294,10 +294,14 @@ import format from 'date-fns/format';
                   case 'decimal':
                     //in case of numeric value we need to do an exact
                     //match for now`
-                    return row[col.field] == this.columnFilters[col.field];
-                  default:
+                    return this.collect(row, col.field) == this.columnFilters[col.field];
+                  default: 
                     //text value lets test starts with
-                    return (row[col.field]).toLowerCase().startsWith((this.columnFilters[col.field]).toLowerCase());
+                    return this.collect(row, col.field)
+                      .toLowerCase()
+                      .startsWith(
+                        (this.columnFilters[col.field]).toLowerCase()
+                      );
                 }
               });
             }
@@ -479,7 +483,7 @@ import format from 'date-fns/format';
         infoStr += ' of ';
         infoStr += this.processedRows.length;
         if(this.currentPerPage == -1){
-          return '1 - ' + this.processedRows.length + ' of ' + this.processedRows.length;
+          return '1 - ' + this.processedRows.length + ' ' + this.ofText + ' ' + this.processedRows.length;
         }
         return infoStr;
       },
