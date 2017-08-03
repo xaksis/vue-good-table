@@ -5,6 +5,7 @@
         <h2 class="table-title pull-left">{{title}}</h2>
         <div class="actions pull-right">
         </div>
+      </div>
       <table ref="table" :class="styleClass">
         <thead>
           <tr v-if="globalSearch && externalSearchQuery == null">
