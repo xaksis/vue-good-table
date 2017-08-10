@@ -121,6 +121,7 @@ This should result in the screenshot seen above
   </template>
 </vue-good-table>
 ```
+In addition to `prop.row` that contains the row object, `prop.index` contains the index for the table display row. And `prop.row.originalIndex` contains the original row index. You can access the original row object by using `row[prop.row.originalIndex]`.
 
 ### Component Options
 

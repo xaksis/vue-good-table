@@ -403,7 +403,7 @@ import format from 'date-fns/format';
         }
 
         //taking care of sort here only if sort has changed
-        if (this.sortable !== false &&
+        if (this.sortable !== false && this.sortColumn !== -1 &&
 
           // if search trigger is enter then we only sort
           // when enter is hit
@@ -492,6 +492,12 @@ import format from 'date-fns/format';
 
     mounted() {
       this.filteredRows = JSON.parse(JSON.stringify(this.rows));
+
+      // we need to preserve the original index of rows so lets do that
+      for(const [index, row] of this.filteredRows.entries()) {
+        row.originalIndex = index;
+      }
+
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
