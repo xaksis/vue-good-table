@@ -289,6 +289,14 @@ import format from 'date-fns/format';
             if (col.filterable && this.columnFilters[col.field]) {
               computedRows = computedRows.filter(row => {
 
+                // If column has a custom filter, use that.
+
+                if (col.filter) {
+                    return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
+                }
+
+                // Use default filters
+
                 switch(col.type) {
                   case 'number':
                   case 'percentage':
@@ -296,7 +304,7 @@ import format from 'date-fns/format';
                     //in case of numeric value we need to do an exact
                     //match for now`
                     return this.collect(row, col.field) == this.columnFilters[col.field];
-                  default: 
+                  default:
                     //text value lets test starts with
                     return this.collect(row, col.field)
                       .toLowerCase()
