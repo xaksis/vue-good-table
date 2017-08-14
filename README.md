@@ -102,7 +102,7 @@ export default {
 ```
 This should result in the screenshot seen above
 
-<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example: 
+<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example:
 ```html
 <vue-good-table
   title="Dynamic Table"
@@ -165,7 +165,7 @@ In addition to `prop.row` that contains the row object, `prop.index` contains th
 <pre lang="javascript">
   [
     {
-      id:1, 
+      id:1,
       name:"John",
       age:20
     },
@@ -226,7 +226,7 @@ data() {
       <td>Object, example:
 <pre lang="javascript">
 {
-  field: 'name', 
+  field: 'name',
   type: 'asc' //asc or desc (default: 'asc')
 }
 </pre>
@@ -258,7 +258,7 @@ data() {
       :paginate=&quot;true&quot;
       :externalSearchQuery=&quot;searchTerm&quot;
       :rows=&quot;rows&quot;/&gt;
-</pre> 
+</pre>
 <pre lang="javascript">
   // and in data
   data(){
@@ -267,7 +267,7 @@ data() {
         // rows, columns etc...
       };
   }
-</pre>  
+</pre>
       </td>
     </tr>
     <tr>
@@ -322,7 +322,7 @@ data() {
       <td>field (required)</td>
       <td>Row object property that this column corresponds to</td>
       <td>
-        Could be: 
+        Could be:
         <ul>
           <li>String <code>eg: 'name'</code> - simple row property name</li>
           <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
@@ -335,7 +335,7 @@ data() {
       <td>type (optional)</td>
       <td>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</td>
       <td>
-        Possible values: 
+        Possible values:
         <ul>
           <li>number - right aligned</li>
           <li>decimal - right aligned, 2 decimal places</li>
@@ -358,6 +358,20 @@ data() {
       <td>filterable (optional)</td>
       <td>provides the column with a filter input</td>
       <td>Boolean</td>
+    </tr>
+    <tr>
+      <td>filter (optional)</td>
+      <td>Custom filter, function of two variables: <code>function(data, filterString)</code>,
+      should return true if data matches the filterString, otherwise false.</td>
+      <td>
+      <pre lang="javascript">
+          filter: function(data, filterString) {
+            var x = parseInt(filterString)
+            return data >= x-5 && data <= x+5
+          }
+      </pre>
+      would create a filter matching numbers within 5 of the provided value.
+      <td>
     </tr>
     <tr>
       <td>html (optional)</td>
@@ -419,5 +433,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) f
 Inspiration taken from
 * MicroDroid's [vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable)
 * Bootstrap's [table styles](https://getbootstrap.com/)
-
-
