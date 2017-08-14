@@ -205,13 +205,9 @@ import format from 'date-fns/format';
         }
 
         function formatDate(v) {
-          // convert to string
-          v = v + '';
-
           // convert to date
           return format(parse(v, column.inputFormat), column.outputFormat);
         }
-
 
         var value = this.collect(obj, column.field);
 
