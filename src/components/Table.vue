@@ -327,7 +327,7 @@ import format from 'date-fns/format';
         if (typeof this.rowStyleClass === 'function') {
           let rowStyleClasses = this.rowStyleClass(row);
           if (rowStyleClasses) {
-            classes += ' ' + this.rowStyleClass(row);
+            classes += ' ' + rowStyleClasses;
           }
         }
 
