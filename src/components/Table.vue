@@ -40,7 +40,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
+          <tr v-for="(row, index) in paginated" :class="getRowStyleClass(row)" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row" :row="row" :index="index">
               <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
@@ -100,6 +100,7 @@ import format from 'date-fns/format';
       paginate: {default: false},
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
+      rowStyleClass: {default: null, type: [Function, String]},
 
       // search
       globalSearch: {default: false},
@@ -318,6 +319,20 @@ import format from 'date-fns/format';
       getCurrentIndex(index) {
         return (this.currentPage - 1) * this.currentPerPage + index + 1;
       },
+
+      getRowStyleClass(row) {
+        let classes = '';
+        this.onClick ? classes += 'clickable' : '';
+
+        if (typeof this.rowStyleClass === 'function') {
+          let rowStyleClasses = this.rowStyleClass(row);
+          if (rowStyleClasses) {
+            classes += ' ' + rowStyleClasses;
+          }
+        }
+
+        return classes;
+      }
     },
 
     watch: {
@@ -485,7 +500,7 @@ import format from 'date-fns/format';
         infoStr += (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
         infoStr += ' - ';
         infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
-        infoStr += ' of ';
+        infoStr += ' ' + this.ofText + ' ';
         infoStr += this.processedRows.length;
         if(this.currentPerPage == -1){
           return '1 - ' + this.processedRows.length + ' ' + this.ofText + ' ' + this.processedRows.length;
