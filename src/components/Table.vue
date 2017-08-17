@@ -485,7 +485,7 @@ import format from 'date-fns/format';
         infoStr += (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
         infoStr += ' - ';
         infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
-        infoStr += ' of ';
+        infoStr += ' ' + this.ofText + ' ';
         infoStr += this.processedRows.length;
         if(this.currentPerPage == -1){
           return '1 - ' + this.processedRows.length + ' ' + this.ofText + ' ' + this.processedRows.length;
