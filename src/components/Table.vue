@@ -1,6 +1,6 @@
 <template>
   <div class="good-table">
-    <div class="responsive">
+    <div :class="{'responsive': responsive}">
       <div v-if="title" class="table-header clearfix">
         <h2 class="table-title pull-left">{{title}}</h2>
         <div class="actions pull-right">
@@ -87,6 +87,7 @@
 <script>
 import parse from 'date-fns/parse';
 import format from 'date-fns/format';
+import compareAsc from 'date-fns/compare_asc';
   export default {
     name: 'vue-good-table',
     props: {
@@ -100,6 +101,7 @@ import format from 'date-fns/format';
       paginate: {default: false},
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
+      responsive: {default: true},
 
       // search
       globalSearch: {default: false},
@@ -211,7 +213,7 @@ import format from 'date-fns/format';
 
         var value = this.collect(obj, column.field);
 
-        if (!value) return '';
+        if (value === undefined) return '';
         //lets format the resultant data
         switch(column.type) {
           case 'decimal':
@@ -419,26 +421,29 @@ import format from 'date-fns/format';
             if (!this.columns[this.sortColumn])
               return 0;
 
-            const cook = (x) => {
-              x = this.collect(x, this.columns[this.sortColumn].field);
-
-              if (typeof(x) === 'string') {
-                x = x.toLowerCase();
-                if (this.columns[this.sortColumn].type == 'number')
-                  x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
-              }
+            const cook = (d) => {
+              d = this.collect(d, this.columns[this.sortColumn].field);
 
               //take care of dates too.
               if (this.columns[this.sortColumn].type === 'date') {
-                x = parse(x + '', this.columns[this.sortColumn].inputFormat);
+                d = parse(d + '', this.columns[this.sortColumn].inputFormat);
+              } else if (typeof(d) === 'string') {
+                d = d.toLowerCase();
+                if (this.columns[this.sortColumn].type == 'number')
+                  d = d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d);
               }
-
-              return x;
+              return d;
             }
 
             x = cook(x);
             y = cook(y);
 
+            // date comparison here
+            if (this.columns[this.sortColumn].type === 'date') {
+              return (compareAsc(x, y)) * (this.sortType === 'desc' ? -1 : 1);
+            }
+
+            // regular comparison here
             return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
           })
         }
