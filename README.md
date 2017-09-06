@@ -441,7 +441,7 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ## Authors
 
 * **Akshay Anand** - *Initial work* - [xaksis](https://github.com/xaksis)
-* **Cristi Jora** - [cristijora](https://github.com/cristijora)
+* [Other Contributors](https://github.com/xaksis/vue-good-table/graphs/contributors)
 
 ## License
 
