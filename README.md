@@ -122,10 +122,10 @@ This should result in the screenshot seen above
 </vue-good-table>
 ```
 **Note:** 
-* The original row object can be accessed via `prop.row`
-* The currently displayed table row index can be accessed via `prop.index` . 
-* The original row index can be accessed via `prop.row.originalIndex`. You can access the original row object by using `row[prop.row.originalIndex]`.
-* You can access the formatted row data (for example - formatted date) via `prop.formattedRow` 
+* The original row object can be accessed via `props.row`
+* The currently displayed table row index can be accessed via `props.index` . 
+* The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
+* You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
 
 ### Component Options
 
