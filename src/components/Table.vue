@@ -32,9 +32,19 @@
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns">
-              <input v-if="column.filterable" type="text" class="form-control" v-bind:placeholder="'Filter ' + column.label"
-              v-bind:value="columnFilters[column.field]"
-              v-on:input="updateFilters(column, $event.target.value)">
+               <div v-if="column.filterable">
+                  <input v-if="column.filterTextInput" 
+                        type="text" class="form-control" :placeholder="'Filter ' + column.label"
+                        :value="columnFilters[column.field]"
+                        v-on:input="updateFilters(column, $event.target.value)">
+                
+                <select v-if="column.filterDropdown" class="form-control"
+                        :value="columnFilters[column.field]"
+                        v-on:input="updateFilters(column, $event.target.value)">
+                          <option value=""></option>
+                          <option v-for="option in column.filterOptions" :value="option">{{ option }}</option>
+                </select>
+              </div>
             </th>
           </tr>
         </thead>
