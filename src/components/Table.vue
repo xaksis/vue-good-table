@@ -52,7 +52,7 @@
         <tbody>
           <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-            <slot name="table-row" :row="row" :index="index">
+            <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
               <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
@@ -237,6 +237,15 @@ import compareAsc from 'date-fns/compare_asc';
         }
       },
 
+      formattedRow(row) {
+        var formattedRow = {};
+        for(const col of this.columns) {
+          for(const key in row) {
+            formattedRow[key] = this.collectFormatted(row, col);
+          }
+        }
+        return formattedRow;
+      },
 
       // Get the necessary style-classes for the given column
       //--------------------------------------------------------

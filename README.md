@@ -116,12 +116,16 @@ This should result in the screenshot seen above
   <template slot="table-row" scope="props">
     <td>{{ props.row.name }}</td>
     <td class="fancy">{{ props.row.age }}</td>
-    <td>{{ props.row.btn }}</td>
+    <td>{{ props.formattedRow.date }}</td>
     <td>{{ props.index }}</td>
   </template>
 </vue-good-table>
 ```
-In addition to `prop.row` that contains the row object, `prop.index` contains the index for the table display row. And `prop.row.originalIndex` contains the original row index. You can access the original row object by using `row[prop.row.originalIndex]`.
+**Note:** 
+* The original row object can be accessed via `prop.row`
+* The currently displayed table row index can be accessed via `prop.index` . 
+* The original row index can be accessed via `prop.row.originalIndex`. You can access the original row object by using `row[prop.row.originalIndex]`.
+* You can access the formatted row data (for example - formatted date) via `prop.formattedRow` 
 
 ### Component Options
 
