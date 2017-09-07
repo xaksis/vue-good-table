@@ -144,12 +144,18 @@ import compareAsc from 'date-fns/compare_asc';
         if(this.currentPerPage == -1) return;
         if (this.processedRows.length > this.currentPerPage * this.currentPage)
           ++this.currentPage;
+        this.pageChanged();
       },
 
       previousPage() {
 
         if (this.currentPage > 1)
           --this.currentPage;
+        this.pageChanged();
+      },
+
+      pageChanged() {
+        this.$emit('pageChanged', {currentPage: this.currentPage, total: Math.floor(this.rows.length / this.currentPerPage)});
       },
 
       onTableLength(e) {
