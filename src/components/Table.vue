@@ -418,7 +418,7 @@ import compareAsc from 'date-fns/compare_asc';
           for (var row of this.rows) {
             for(var col of this.columns) {
               if (String(this.collectFormatted(row, col)).toLowerCase()
-                  .includes(this.searchTerm.toLowerCase())) {
+                  .search(this.searchTerm.toLowerCase()) > -1) {
                 filteredRows.push(row);
                 break;
               }
