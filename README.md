@@ -109,7 +109,7 @@ This should result in the screenshot seen above
   :columns="columns"
   :rows="rows"
   :lineNumbers="true"
-  :defaultSortBy="{field: 'age', type: 'asec'}"
+  :defaultSortBy="{field: 'age', type: 'asc'}"
   :globalSearch="true"
   :paginate="true"
   styleClass="table condensed table-bordered table-striped">
