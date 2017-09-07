@@ -289,10 +289,10 @@ data() {
       <td>event emitted on pagination change</td>
       <td>
       <pre lang="javascript">
-      <vue-good-table
+      &lt;vue-good-table
       :columns="columns"
       :pageChanged="onPageChange($event)"
-      :rows="rows"/>
+      :rows="rows"/&gt;
       data() {
       return {
        // rows, columns ...
