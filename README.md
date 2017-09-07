@@ -285,6 +285,27 @@ data() {
       <td>default: "Search Table"</td>
     </tr>
     <tr>
+      <td>pageChanged</td>
+      <td>event emitted on pagination change</td>
+      <td>
+      <pre lang="javascript">
+      <vue-good-table
+      :columns="columns"
+      :pageChanged="onPageChange($event)"
+      :rows="rows"/>
+      data() {
+      return {
+       // rows, columns ...
+        onPageChange: function(event){
+          // { currentPage: 1, total: 5 }
+          console.log(event);
+        },
+      };
+    }
+    </pre>
+      </td>
+    </tr>
+    <tr>
       <td>nextText</td>
       <td>Text for pagination 'Next' link </td>
       <td>default: "Next"</td>
