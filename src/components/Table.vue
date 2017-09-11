@@ -142,7 +142,7 @@ import compareAsc from 'date-fns/compare_asc';
 
     methods: {
       keyNavigation(e) { 
-         switch(e.keyCode) {
+        switch(e.keyCode) {
         case 37:
             this.previousPage();
             break;
