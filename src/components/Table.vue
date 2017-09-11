@@ -101,6 +101,7 @@ import compareAsc from 'date-fns/compare_asc';
   export default {
     name: 'vue-good-table',
     props: {
+      allowKeyboardNavigation: {default: false},
       styleClass: {default: 'table table-bordered'},
       title: '',
       columns: {},
@@ -140,6 +141,16 @@ import compareAsc from 'date-fns/compare_asc';
     }),
 
     methods: {
+      keyNavigation(e) { 
+         switch(e.keyCode) {
+        case 37:
+            this.previousPage();
+            break;
+        case 39:
+             this.nextPage();
+            break;
+        }   
+      },
       nextPage() {
         if(this.currentPerPage == -1) return;
         if (this.processedRows.length > this.currentPerPage * this.currentPage)
@@ -525,6 +536,9 @@ import compareAsc from 'date-fns/compare_asc';
     },
 
     mounted() {
+      if (this.allowKeyboardNavigation === true){
+        window.addEventListener('keyup', this.keyNavigation, false)
+      }
       this.filteredRows = JSON.parse(JSON.stringify(this.rows));
 
       // we need to preserve the original index of rows so lets do that
