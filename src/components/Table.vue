@@ -33,11 +33,11 @@
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns">
                <div v-if="column.filterable">
-                  <input v-if="column.filterTextInput" 
+                  <input v-if="column.filterTextInput"
                         type="text" class="form-control" :placeholder="'Filter ' + column.label"
                         :value="columnFilters[column.field]"
                         v-on:input="updateFilters(column, $event.target.value)">
-                
+
                 <select v-if="column.filterDropdown" class="form-control"
                         :value="columnFilters[column.field]"
                         v-on:input="updateFilters(column, $event.target.value)">
@@ -75,7 +75,7 @@
             <option value="30">30</option>
             <option value="40">40</option>
             <option value="50">50</option>
-            <option value="-1">All</option>
+            <option value="-1">{{allText}}</option>
           </select>
         </label>
       </div>
@@ -124,6 +124,7 @@ import compareAsc from 'date-fns/compare_asc';
       prevText: {default: 'Prev'},
       rowsPerPageText: {default: 'Rows per page:'},
       ofText: {default: 'of'},
+      allText: {default: 'All'},
     },
 
     data: () => ({
@@ -515,7 +516,7 @@ import compareAsc from 'date-fns/compare_asc';
         infoStr += (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
         infoStr += ' - ';
         infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
-        infoStr += ' of ';
+        infoStr += ' ' + this.ofText + ' ';
         infoStr += this.processedRows.length;
         if(this.currentPerPage == -1){
           return '1 - ' + this.processedRows.length + ' ' + this.ofText + ' ' + this.processedRows.length;
