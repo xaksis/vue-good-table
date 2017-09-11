@@ -184,6 +184,10 @@ This should result in the screenshot seen above
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>allowKeyboardNavigation</td>
+      <td>Allows for navigating pages with the arrows keys</td>
+      <td>Boolean</td>
+    <tr>
       <td>perPage</td>
       <td>Number of rows per page</td>
       <td>Integer (<em>default: 10</em>)</td>
