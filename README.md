@@ -127,6 +127,23 @@ This should result in the screenshot seen above
 * The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
 * You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
 
+## Empty state slot
+
+You can provide html for empty state slot as well. Example:
+
+```html
+<vue-good-table
+  title="Dynamic Table"
+  :columns="columns"
+  :rows="rows"
+  :lineNumbers="true"
+  styleClass="table condensed table-bordered table-striped">
+  <div slot="empty-state">
+    This will show up when there are no columns
+  </div>
+</vue-good-table>
+```
+
 ### Component Options
 
 <table>
