@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.12.0
+ * vue-good-table v1.12.1
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -3351,7 +3351,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       formattedRow: _vm.formattedRow(row),
       index: index
     })], 2)
-  }), _vm._v(" "), (_vm.columns.length === 0) ? _c('tr', [_vm._t("empty-state")], 2) : (_vm.processedRows.length === 0) ? _c('tr', [_vm._t("empty-state")], 2) : _vm._e()], 2)])]), _vm._v(" "), (_vm.paginate) ? _c('div', {
+  }), _vm._v(" "), (_vm.columns.length === 0) ? _c('tr', [_vm._t("emptystate")], 2) : (_vm.processedRows.length === 0) ? _c('tr', [_vm._t("emptystate")], 2) : _vm._e()], 2)])]), _vm._v(" "), (_vm.paginate) ? _c('div', {
     staticClass: "table-footer clearfix"
   }, [_c('div', {
     staticClass: "datatable-length pull-left"

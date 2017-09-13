@@ -60,11 +60,11 @@
             </slot>
           </tr>
           <tr v-if="columns.length === 0">
-            <slot name="empty-state">
+            <slot name="emptystate">
             </slot>
           </tr>
           <tr v-else-if="processedRows.length === 0">
-            <slot name="empty-state">
+            <slot name="emptystate">
             </slot>
           </tr>
         </tbody>

@@ -138,7 +138,7 @@ You can provide html for empty state slot as well. Example:
   :rows="rows"
   :lineNumbers="true"
   styleClass="table condensed table-bordered table-striped">
-  <div slot="empty-state">
+  <div slot="emptystate">
     This will show up when there are no columns
   </div>
 </vue-good-table>
