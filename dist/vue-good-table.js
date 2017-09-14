@@ -3503,20 +3503,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     getDataStyle: function getDataStyle(index, type) {
       var classString = '';
+      switch (this.columns[index].type) {
+        case 'number':
+        case 'percentage':
+        case 'decimal':
+        case 'date':
+          classString += 'right-align ';
+          break;
+        default:
+          classString += 'left-align ';
+          break;
+      }
       if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
+        classString += ' ';
         classString = this.columns[index][type + 'Class'];
-      } else {
-        switch (this.columns[index].type) {
-          case 'number':
-          case 'percentage':
-          case 'decimal':
-          case 'date':
-            classString = 'right-align ';
-            break;
-          default:
-            classString = 'left-align ';
-            break;
-        }
       }
       return classString;
     },
@@ -11612,7 +11612,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('span', [_vm._v(_vm._s(column.label))])]) : _vm._e()
   }), _vm._v(" "), _vm._t("thead-tr")], 2), _vm._v(" "), (_vm.hasFilterRow) ? _c('tr', [(_vm.lineNumbers) ? _c('th') : _vm._e(), _vm._v(" "), _vm._l((_vm.columns), function(column, index) {
-    return (!column.hidden) ? _c('th', [(column.filterable) ? _c('div', [(column.filterTextInput) ? _c('input', {
+    return (!column.hidden) ? _c('th', [(column.filterable) ? _c('div', [(!column.filterDropdown) ? _c('input', {
       staticClass: "form-control",
       attrs: {
         "type": "text",

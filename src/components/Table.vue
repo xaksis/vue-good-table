@@ -33,7 +33,7 @@
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns" v-if="!column.hidden">
                <div v-if="column.filterable">
-                  <input v-if="column.filterTextInput"
+                  <input v-if="!column.filterDropdown"
                         type="text" class="form-control" :placeholder="'Filter ' + column.label"
                         :value="columnFilters[column.field]"
                         v-on:input="updateFilters(column, $event.target.value)">
@@ -281,20 +281,20 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       //---------------------------------------------------------
       getDataStyle(index, type) {
         var classString = '';
-        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
-          classString = this.columns[index][type + 'Class'];
-        } else {
-          switch (this.columns[index].type) {
-            case 'number':
-            case 'percentage':
-            case 'decimal':
-            case 'date':
-              classString = 'right-align ';
+        switch (this.columns[index].type) {
+          case 'number':
+          case 'percentage':
+          case 'decimal':
+          case 'date':
+            classString += 'right-align ';
+          break;
+          default:
+            classString += 'left-align ';
             break;
-            default:
-              classString = 'left-align ';
-              break;
-          }
+        }
+        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
+          classString += ' ';
+          classString = this.columns[index][type + 'Class'];
         }
         return classString;
       },

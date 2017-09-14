@@ -398,21 +398,16 @@ data() {
     </tr>
     <tr>
       <td>filterable (optional)</td>
-      <td>enables filtering on column</td>
+      <td>enables filtering on column (By default, creates a text input)</td>
       <td>Boolean</td>
     </tr>
     <tr>
-      <td>filterTextInput (optional)</td>
-      <td>provides the column with a filter input</td>
+      <td>filterDropdown</td>
+      <td>provides a dropdown for filtering instead of a text input</td>
       <td>Boolean</td>
     </tr>
     <tr>
-      <td>filterDropdown (optional)</td>
-      <td>provides a dropdown for filtering</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>filterOptions (required for filterDropdown)</td>
+      <td>filterOptions <strong>required for filterDropdown</strong></td>
       <td>provides options to dropdown filter <code>filterOptions: ['Blue', 'Red', 'Yellow']</code></td>
       <td>Array</td>
     </tr>
