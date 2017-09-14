@@ -26,24 +26,19 @@
             field: 'age',
             type: 'number',
           },
+          {
+            label: 'Created at',
+            field: 'creationDateF',
+            type: 'date',
+            inputFormat: 'DD-MM-YYYY HH:mm:ss', //e.g. 07-09-2017 19:16:25
+            outputFormat: 'DD-MM-YYYY HH:mm:ss'
+          }
         ],
         rows: [
-          {name: "John", age: "20"},
-          {name: "Jane", age: "24"},
-          {name: "Susan", age: "16"},
-          {name: "Chris", age: "55"},
-          {name: "Dan", age: "40"},
-          {name: "Cankut", age: "20"},
-          {name: "Aylin", age: "24"},
-          {name: "Adam", age: "16"},
-          {name: "Zoe", age: "55"},
-          {name: "Niraj", age: "40"},
-          {name: "Abina", age: "20"},
-          {name: "Tiago", age: "20"},
+          {name: "John", age: "20", creationDateF: "07-09-2017 19:16:25"},
+          {name: "Jane", age: "24", creationDateF: "09-10-2017 19:16:25"},
         ],
       };
     },
   };
 </script>
-
-

@@ -457,7 +457,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
               //take care of dates too.
               if (this.columns[this.sortColumn].type === 'date') {
-                d = parse(d + '', this.columns[this.sortColumn].inputFormat);
+                d = parse(d + '', this.columns[this.sortColumn].inputFormat, new Date());
               } else if (typeof(d) === 'string') {
                 d = d.toLowerCase();
                 if (this.columns[this.sortColumn].type == 'number')
