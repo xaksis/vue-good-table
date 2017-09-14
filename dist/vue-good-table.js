@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.12.3
+ * vue-good-table v1.12.5
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -3724,7 +3724,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             d = _this3.collect(d, _this3.columns[_this3.sortColumn].field);
 
             if (_this3.columns[_this3.sortColumn].type === 'date') {
-              d = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_date_fns_esm__["b" /* parse */])(d + '', _this3.columns[_this3.sortColumn].inputFormat);
+              d = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_date_fns_esm__["b" /* parse */])(d + '', _this3.columns[_this3.sortColumn].inputFormat, new Date());
             } else if (typeof d === 'string') {
               d = d.toLowerCase();
               if (_this3.columns[_this3.sortColumn].type == 'number') d = d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d);
