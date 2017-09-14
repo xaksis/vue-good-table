@@ -31,7 +31,7 @@
           </tr>
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
-            <th v-for="(column, index) in columns">
+            <th v-for="(column, index) in columns" v-if="!column.hidden">
                <div v-if="column.filterable">
                   <input v-if="column.filterTextInput"
                         type="text" class="form-control" :placeholder="'Filter ' + column.label"
