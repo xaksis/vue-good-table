@@ -26,7 +26,7 @@
   "author": "Akshay Anand",
   "license": "MIT",
   "dependencies": {
-    "date-fns": "^1.28.5",
+    "date-fns": "^2.0.0-alpha.3",
     "stats-webpack-plugin": "^0.6.0"
   },
   "devDependencies": {

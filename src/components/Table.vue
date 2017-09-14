@@ -102,9 +102,7 @@
 </template>
 
 <script>
-import parse from 'date-fns/parse';
-import format from 'date-fns/format';
-import compareAsc from 'date-fns/compare_asc';
+import {format, parse, compareAsc} from 'date-fns/esm'
   export default {
     name: 'vue-good-table',
     props: {
@@ -232,7 +230,7 @@ import compareAsc from 'date-fns/compare_asc';
 
         function formatDate(v) {
           // convert to date
-          return format(parse(v, column.inputFormat), column.outputFormat);
+          return format(parse(v, column.inputFormat, new Date()), column.outputFormat);
         }
 
         var value = this.collect(obj, column.field);
