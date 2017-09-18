@@ -26,8 +26,7 @@
   "author": "Akshay Anand",
   "license": "MIT",
   "dependencies": {
-    "date-fns": "^2.0.0-alpha.3",
-    "stats-webpack-plugin": "^0.6.0"
+    "date-fns": "^2.0.0-alpha.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
@@ -84,6 +83,7 @@
     "shelljs": "^0.7.6",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
+    "stats-webpack-plugin": "^0.6.0",
     "url-loader": "^0.5.8",
     "vue": "^2.3.3",
     "vue-loader": "^12.1.0",
