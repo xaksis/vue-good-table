@@ -27,7 +27,6 @@
               v-if="!column.hidden">
                 <span v-if="column.labelHtml" v-html="column.label"></span>
                 <span v-else>{{column.label}}</span>
-              </span>
             </th>
             <slot name="thead-tr"></slot>
           </tr>
