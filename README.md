@@ -201,6 +201,11 @@ You can provide html for empty state slot as well. Example:
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>rtl</td>
+      <td>Enable RTL layout</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>perPage</td>
       <td>Number of rows per page</td>
       <td>Integer (<em>default: 10</em>)</td>
