@@ -612,6 +612,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     border-top: 1px solid #ddd;
   }
 
+  .rtl .table td, .rtl .table th:not(.line-numbers) {
+    padding: .75rem .75rem .75rem 1.5rem;
+  }
+
   .table.condensed td, .table.condensed th {
     padding: .4rem .4rem .4rem .4rem;
   }
@@ -621,6 +625,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     border-bottom:  2px solid #ddd;
     padding-right: 1.5rem;
     background-color: rgba(35,41,53,0.03);
+  }
+  .rtl .table thead th, .rtl .table.condensed thead th {
+    padding-left:  1.5rem;
+    padding-right:  .75rem;
   }
 
   tr.clickable {
@@ -665,6 +673,12 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     border-bottom: 6px solid rgba(0, 0, 0, 0.66);
     margin-top:  6px;
     margin-left:  5px;
+  }
+
+  .rtl table th.sorting:after,
+  .rtl table th.sorting-asc:after{
+    margin-right:  5px;
+    margin-left:  0px;
   }
 
   table th.sorting:hover:after{

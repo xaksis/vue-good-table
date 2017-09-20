@@ -1,6 +1,7 @@
 <template>
   <div>
     <vue-good-table
+      :rtl="false"
       :columns="columns"
       :paginate="true"
       :rows="rows"/>

@@ -202,8 +202,8 @@ You can provide html for empty state slot as well. Example:
     </tr>
     <tr>
       <td>rtl</td>
-      <td>Enable RTL layout</td>
-      <td>Boolean</td>
+      <td>Enable Right-To-Left layout for the table</td>
+      <td>Boolean (<em>default: false</em>)</td>
     </tr>
     <tr>
       <td>perPage</td>
