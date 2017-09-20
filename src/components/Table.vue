@@ -1,5 +1,5 @@
 <template>
-  <div class="good-table">
+  <div class="good-table" :class="{'rtl': rtl}">
     <div :class="{'responsive': responsive}">
       <div v-if="title" class="table-header clearfix">
         <h2 class="table-title pull-left">{{title}}</h2>
@@ -88,13 +88,13 @@
       </div>
       <div class="pagination-controls pull-right">
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
-          <span class="chevron left"></span>
+          <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
           <span>{{prevText}}</span>
         </a>
         <div class="info">{{paginatedInfo}}</div>
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
-          <span>{{nextText}}</span>
-          <span class="chevron right"></span>
+          <span >{{nextText}}</span>
+          <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
         </a>
       </div>
     </div>
@@ -117,6 +117,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
       responsive: {default: true},
+      rtl: {default: false},
 
       // search
       globalSearch: {default: false},
@@ -286,6 +287,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
           case 'percentage':
           case 'decimal':
           case 'date':
+          case 'text':
             classString += 'right-align ';
           break;
           default:
@@ -835,6 +837,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     word-wrap: break-word;
     width: 45px;
     text-align: center;
+  }
+
+  .good-table.rtl{
+    direction: rtl;
   }
 
 </style>
