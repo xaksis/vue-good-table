@@ -223,8 +223,9 @@ You can provide html for empty state slot as well. Example:
 data() {
   return {
    // rows, columns ...
-    onClickFn: function(){
-      console.log('something');
+    onClickFn: function(row, index){
+      console.log(row); //the object for the row that was clicked on
+      console.log(index); // index of the row that was clicked on
     },
   };
 }
