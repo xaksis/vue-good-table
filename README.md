@@ -127,6 +127,24 @@ This should result in the screenshot seen above
 * The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
 * You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
 
+## Custom columns
+Sometimes you might want to use custom column formatting. You can do that in the following way
+```html
+<vue-good-table
+  :columns="columns"
+  :paginate="true"
+  :rows="rows">
+  <template slot="table-column" scope="props">
+     <span v-if="props.column.label =='Name'">
+        <i class="fa fa-address-book"></i> {{props.column.label}}
+     </span>
+     <span v-else>
+        {{props.column.label}}
+     </span>
+  </template>
+</vue-good-table>
+```
+
 ## Empty state slot
 
 You can provide html for empty state slot as well. Example:
