@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.14.0
+ * vue-good-table v1.14.1
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
