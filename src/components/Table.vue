@@ -240,7 +240,13 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         var value = this.collect(obj, column.field);
 
         if (value === undefined) return '';
+
         //lets format the resultant data
+        if (typeof(column.formatOutput) === 'function') {
+          let callback = column.formatOutput;
+          return callback.call( this, value );
+        }
+
         switch(column.type) {
           case 'decimal':
             return formatDecimal(value);
