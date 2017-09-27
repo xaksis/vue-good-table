@@ -255,9 +255,9 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
       formattedRow(row) {
         var formattedRow = {};
-        for(const col of this.columns) {
-          for(const key in row) {
-            formattedRow[key] = this.collectFormatted(row, col);
+        for (const col of this.columns) {
+          if (col.field) {
+            formattedRow[col.field] = this.collectFormatted(row, col);
           }
         }
         return formattedRow;
