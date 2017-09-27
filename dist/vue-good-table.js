@@ -3466,8 +3466,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         for (var _iterator = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var col = _step.value;
 
-          for (var key in row) {
-            formattedRow[key] = this.collectFormatted(row, col);
+          if (col.field) {
+            formattedRow[col.field] = this.collectFormatted(row, col);
           }
         }
       } catch (err) {
