@@ -25,7 +25,9 @@
               :class="columnHeaderClass(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
               v-if="!column.hidden">
-              <span>{{column.label}}</span>
+              <slot name="table-column" :column="column">
+                <span>{{column.label}}</span>
+              </slot>
             </th>
             <slot name="thead-tr"></slot>
           </tr>
