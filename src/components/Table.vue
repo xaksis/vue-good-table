@@ -59,13 +59,14 @@
               </td>
             </slot>
           </tr>
-          <tr v-if="columns.length === 0">
-            <slot name="emptystate">
-            </slot>
-          </tr>
-          <tr v-else-if="processedRows.length === 0">
-            <slot name="emptystate">
-            </slot>
+          <tr v-if="processedRows.length === 0">
+            <td :colspan="columns.length">
+              <slot name="emptystate">
+                <div class="center-align text-disabled">
+                  No data for table.
+                </div>
+              </slot>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -571,6 +572,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
   text-align: left;
 }
 
+.center-align{
+  text-align: center;
+}
+
 .pull-left{
   float:  left !important;
 }
@@ -855,6 +860,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
   .good-table.rtl{
     direction: rtl;
+  }
+
+  .text-disabled{
+    color:  #aaa;
   }
 
 </style>
