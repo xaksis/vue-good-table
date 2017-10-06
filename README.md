@@ -278,6 +278,11 @@ data() {
       </td>
     </tr>
     <tr>
+      <td>responsive</td>
+      <td>Allows to specify if responsiveness will be set</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>pageChanged</td>
       <td>event emitted on pagination change</td>
       <td>
