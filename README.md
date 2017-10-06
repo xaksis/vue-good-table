@@ -278,6 +278,11 @@ data() {
       </td>
     </tr>
     <tr>
+      <td>responsive</td>
+      <td>Add responsive class to wrapper</td>
+      <td>Boolean <em>default: true</em></td>
+    </tr>
+    <tr>
       <td>pageChanged</td>
       <td>event emitted on pagination change</td>
       <td>
