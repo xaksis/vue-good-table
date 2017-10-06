@@ -603,6 +603,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
   .table{
     width: 100%;
     max-width: 100%;
+    table-layout: auto;
   }
 
   .table.table-striped tbody tr:nth-of-type(odd) {
