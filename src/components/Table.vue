@@ -1,6 +1,6 @@
 <template>
-  <div class="good-table">
-    <div class="responsive">
+  <div class="good-table" :class="{'rtl': rtl}">
+    <div :class="{'responsive': responsive}">
       <div v-if="title" class="table-header clearfix">
         <h2 class="table-title pull-left">{{title}}</h2>
         <div class="actions pull-right">
@@ -25,16 +25,28 @@
               :class="columnHeaderClass(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
               v-if="!column.hidden">
-              <span>{{column.label}}</span>
+              <slot name="table-column" :column="column">
+                <span>{{column.label}}</span>
+              </slot>
             </th>
             <slot name="thead-tr"></slot>
           </tr>
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
-            <th v-for="(column, index) in columns">
-              <input v-if="column.filterable" type="text" class="form-control" v-bind:placeholder="'Filter ' + column.label"
-              v-bind:value="columnFilters[column.field]"
-              v-on:input="updateFilters(column, $event.target.value)">
+            <th v-for="(column, index) in columns" v-if="!column.hidden">
+               <div v-if="column.filterable">
+                  <input v-if="!column.filterDropdown"
+                        type="text" class="form-control" :placeholder="'Filter ' + column.label"
+                        :value="columnFilters[column.field]"
+                        v-on:input="updateFilters(column, $event.target.value)">
+
+                <select v-if="column.filterDropdown" class="form-control"
+                        :value="columnFilters[column.field]"
+                        v-on:input="updateFilters(column, $event.target.value)">
+                          <option value=""></option>
+                          <option v-for="option in column.filterOptions" :value="option">{{ option }}</option>
+                </select>
+              </div>
             </th>
           </tr>
         </thead>
@@ -42,14 +54,22 @@
         <tbody>
           <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-            <slot name="table-row" :row="row" :index="index">
+            <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
               <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
             </slot>
           </tr>
-
+          <tr v-if="processedRows.length === 0">
+            <td :colspan="columns.length">
+              <slot name="emptystate">
+                <div class="center-align text-disabled">
+                  No data for table.
+                </div>
+              </slot>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -65,19 +85,19 @@
             <option value="30">30</option>
             <option value="40">40</option>
             <option value="50">50</option>
-            <option value="-1">All</option>
+            <option value="-1">{{allText}}</option>
           </select>
         </label>
       </div>
       <div class="pagination-controls pull-right">
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
-          <span class="chevron left"></span>
+          <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
           <span>{{prevText}}</span>
         </a>
         <div class="info">{{paginatedInfo}}</div>
         <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
-          <span>{{nextText}}</span>
-          <span class="chevron right"></span>
+          <span >{{nextText}}</span>
+          <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
         </a>
       </div>
     </div>
@@ -85,8 +105,7 @@
 </template>
 
 <script>
-import parse from 'date-fns/parse';
-import format from 'date-fns/format';
+import {format, parse, compareAsc} from 'date-fns/esm'
   export default {
     name: 'vue-good-table',
     props: {
@@ -100,6 +119,8 @@ import format from 'date-fns/format';
       paginate: {default: false},
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
+      responsive: {default: true},
+      rtl: {default: false},
 
       // search
       globalSearch: {default: false},
@@ -112,6 +133,7 @@ import format from 'date-fns/format';
       prevText: {default: 'Prev'},
       rowsPerPageText: {default: 'Rows per page:'},
       ofText: {default: 'of'},
+      allText: {default: 'All'},
     },
 
     data: () => ({
@@ -132,12 +154,18 @@ import format from 'date-fns/format';
         if(this.currentPerPage == -1) return;
         if (this.processedRows.length > this.currentPerPage * this.currentPage)
           ++this.currentPage;
+        this.pageChanged();
       },
 
       previousPage() {
 
         if (this.currentPage > 1)
           --this.currentPage;
+        this.pageChanged();
+      },
+
+      pageChanged() {
+        this.$emit('pageChanged', {currentPage: this.currentPage, total: Math.floor(this.rows.length / this.currentPerPage)});
       },
 
       onTableLength(e) {
@@ -205,17 +233,13 @@ import format from 'date-fns/format';
         }
 
         function formatDate(v) {
-          // convert to string
-          v = v + '';
-
           // convert to date
-          return format(parse(v, column.inputFormat), column.outputFormat);
+          return format(parse(v, column.inputFormat, new Date()), column.outputFormat);
         }
-
 
         var value = this.collect(obj, column.field);
 
-        if (!value) return '';
+        if (value === undefined) return '';
         //lets format the resultant data
         switch(column.type) {
           case 'decimal':
@@ -229,6 +253,15 @@ import format from 'date-fns/format';
         }
       },
 
+      formattedRow(row) {
+        var formattedRow = {};
+        for (const col of this.columns) {
+          if (col.field) {
+            formattedRow[col.field] = this.collectFormatted(row, col);
+          }
+        }
+        return formattedRow;
+      },
 
       // Get the necessary style-classes for the given column
       //--------------------------------------------------------
@@ -252,20 +285,21 @@ import format from 'date-fns/format';
       //---------------------------------------------------------
       getDataStyle(index, type) {
         var classString = '';
-        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
-          classString = this.columns[index][type + 'Class'];
-        } else {
-          switch (this.columns[index].type) {
-            case 'number':
-            case 'percentage':
-            case 'decimal':
-            case 'date':
-              classString = 'right-align ';
+        switch (this.columns[index].type) {
+          case 'number':
+          case 'percentage':
+          case 'decimal':
+          case 'date':
+          case 'text':
+            classString += 'right-align ';
+          break;
+          default:
+            classString += 'left-align ';
             break;
-            default:
-              classString = 'left-align ';
-              break;
-          }
+        }
+        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
+          classString += ' ';
+          classString = this.columns[index][type + 'Class'];
         }
         return classString;
       },
@@ -289,6 +323,14 @@ import format from 'date-fns/format';
             if (col.filterable && this.columnFilters[col.field]) {
               computedRows = computedRows.filter(row => {
 
+                // If column has a custom filter, use that.
+
+                if (col.filter) {
+                    return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
+                }
+
+                // Use default filters
+
                 switch(col.type) {
                   case 'number':
                   case 'percentage':
@@ -296,7 +338,7 @@ import format from 'date-fns/format';
                     //in case of numeric value we need to do an exact
                     //match for now`
                     return this.collect(row, col.field) == this.columnFilters[col.field];
-                  default: 
+                  default:
                     //text value lets test starts with
                     return this.collect(row, col.field)
                       .toLowerCase()
@@ -393,7 +435,7 @@ import format from 'date-fns/format';
           for (var row of this.rows) {
             for(var col of this.columns) {
               if (String(this.collectFormatted(row, col)).toLowerCase()
-                  .includes(this.searchTerm.toLowerCase())) {
+                  .search(this.searchTerm.toLowerCase()) > -1) {
                 filteredRows.push(row);
                 break;
               }
@@ -403,7 +445,7 @@ import format from 'date-fns/format';
         }
 
         //taking care of sort here only if sort has changed
-        if (this.sortable !== false &&
+        if (this.sortable !== false && this.sortColumn !== -1 &&
 
           // if search trigger is enter then we only sort
           // when enter is hit
@@ -415,26 +457,29 @@ import format from 'date-fns/format';
             if (!this.columns[this.sortColumn])
               return 0;
 
-            const cook = (x) => {
-              x = this.collect(x, this.columns[this.sortColumn].field);
-
-              if (typeof(x) === 'string') {
-                x = x.toLowerCase();
-                if (this.columns[this.sortColumn].type == 'number')
-                  x = x.indexOf('.') >= 0 ? parseFloat(x) : parseInt(x);
-              }
+            const cook = (d) => {
+              d = this.collect(d, this.columns[this.sortColumn].field);
 
               //take care of dates too.
               if (this.columns[this.sortColumn].type === 'date') {
-                x = parse(x + '', this.columns[this.sortColumn].inputFormat);
+                d = parse(d + '', this.columns[this.sortColumn].inputFormat, new Date());
+              } else if (typeof(d) === 'string') {
+                d = d.toLowerCase();
+                if (this.columns[this.sortColumn].type == 'number')
+                  d = d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d);
               }
-
-              return x;
+              return d;
             }
 
             x = cook(x);
             y = cook(y);
 
+            // date comparison here
+            if (this.columns[this.sortColumn].type === 'date') {
+              return (compareAsc(x, y)) * (this.sortType === 'desc' ? -1 : 1);
+            }
+
+            // regular comparison here
             return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
           })
         }
@@ -481,7 +526,7 @@ import format from 'date-fns/format';
         infoStr += (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
         infoStr += ' - ';
         infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
-        infoStr += ' of ';
+        infoStr += ' ' + this.ofText + ' ';
         infoStr += this.processedRows.length;
         if(this.currentPerPage == -1){
           return '1 - ' + this.processedRows.length + ' ' + this.ofText + ' ' + this.processedRows.length;
@@ -492,6 +537,12 @@ import format from 'date-fns/format';
 
     mounted() {
       this.filteredRows = JSON.parse(JSON.stringify(this.rows));
+
+      // we need to preserve the original index of rows so lets do that
+      for(const [index, row] of this.filteredRows.entries()) {
+        row.originalIndex = index;
+      }
+
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
@@ -521,6 +572,10 @@ import format from 'date-fns/format';
 
 .left-align{
   text-align: left;
+}
+
+.center-align{
+  text-align: center;
 }
 
 .pull-left{
@@ -564,6 +619,10 @@ import format from 'date-fns/format';
     border-top: 1px solid #ddd;
   }
 
+  .rtl .table td, .rtl .table th:not(.line-numbers) {
+    padding: .75rem .75rem .75rem 1.5rem;
+  }
+
   .table.condensed td, .table.condensed th {
     padding: .4rem .4rem .4rem .4rem;
   }
@@ -573,6 +632,10 @@ import format from 'date-fns/format';
     border-bottom:  2px solid #ddd;
     padding-right: 1.5rem;
     background-color: rgba(35,41,53,0.03);
+  }
+  .rtl .table thead th, .rtl .table.condensed thead th {
+    padding-left:  1.5rem;
+    padding-right:  .75rem;
   }
 
   tr.clickable {
@@ -617,6 +680,12 @@ import format from 'date-fns/format';
     border-bottom: 6px solid rgba(0, 0, 0, 0.66);
     margin-top:  6px;
     margin-left:  5px;
+  }
+
+  .rtl table th.sorting:after,
+  .rtl table th.sorting-asc:after{
+    margin-right:  5px;
+    margin-left:  0px;
   }
 
   table th.sorting:hover:after{
@@ -789,6 +858,14 @@ import format from 'date-fns/format';
     word-wrap: break-word;
     width: 45px;
     text-align: center;
+  }
+
+  .good-table.rtl{
+    direction: rtl;
+  }
+
+  .text-disabled{
+    color:  #aaa;
   }
 
 </style>

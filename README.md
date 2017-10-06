@@ -102,23 +102,63 @@ export default {
 ```
 This should result in the screenshot seen above
 
-<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example: 
+<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example:
 ```html
 <vue-good-table
   title="Dynamic Table"
   :columns="columns"
   :rows="rows"
   :lineNumbers="true"
-  :defaultSortBy="{field: 'age', type: 'asec'}"
+  :defaultSortBy="{field: 'age', type: 'asc'}"
   :globalSearch="true"
   :paginate="true"
   styleClass="table condensed table-bordered table-striped">
   <template slot="table-row" scope="props">
     <td>{{ props.row.name }}</td>
     <td class="fancy">{{ props.row.age }}</td>
-    <td>{{ props.row.btn }}</td>
+    <td>{{ props.formattedRow.date }}</td>
     <td>{{ props.index }}</td>
   </template>
+</vue-good-table>
+```
+**Note:** 
+* The original row object can be accessed via `props.row`
+* The currently displayed table row index can be accessed via `props.index` . 
+* The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
+* You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
+
+## Custom columns
+Sometimes you might want to use custom column formatting. You can do that in the following way
+```html
+<vue-good-table
+  :columns="columns"
+  :paginate="true"
+  :rows="rows">
+  <template slot="table-column" scope="props">
+     <span v-if="props.column.label =='Name'">
+        <i class="fa fa-address-book"></i> {{props.column.label}}
+     </span>
+     <span v-else>
+        {{props.column.label}}
+     </span>
+  </template>
+</vue-good-table>
+```
+
+## Empty state slot
+
+You can provide html for empty state slot as well. Example:
+
+```html
+<vue-good-table
+  title="Dynamic Table"
+  :columns="columns"
+  :rows="rows"
+  :lineNumbers="true"
+  styleClass="table condensed table-bordered table-striped">
+  <div slot="emptystate">
+    This will show up when there are no columns
+  </div>
 </vue-good-table>
 ```
 
@@ -164,7 +204,7 @@ This should result in the screenshot seen above
 <pre lang="javascript">
   [
     {
-      id:1, 
+      id:1,
       name:"John",
       age:20
     },
@@ -177,6 +217,11 @@ This should result in the screenshot seen above
       <td>paginate</td>
       <td>Enable Pagination for table</td>
       <td>Boolean</td>
+    </tr>
+    <tr>
+      <td>rtl</td>
+      <td>Enable Right-To-Left layout for the table</td>
+      <td>Boolean (<em>default: false</em>)</td>
     </tr>
     <tr>
       <td>perPage</td>
@@ -196,8 +241,9 @@ This should result in the screenshot seen above
 data() {
   return {
    // rows, columns ...
-    onClickFn: function(){
-      console.log('something');
+    onClickFn: function(row, index){
+      console.log(row); //the object for the row that was clicked on
+      console.log(index); // index of the row that was clicked on
     },
   };
 }
@@ -225,10 +271,31 @@ data() {
       <td>Object, example:
 <pre lang="javascript">
 {
-  field: 'name', 
+  field: 'name',
   type: 'asc' //asc or desc (default: 'asc')
 }
 </pre>
+      </td>
+    </tr>
+    <tr>
+      <td>pageChanged</td>
+      <td>event emitted on pagination change</td>
+      <td>
+      <pre lang="javascript">
+      &lt;vue-good-table
+      :columns="columns"
+      :pageChanged="onPageChange($event)"
+      :rows="rows"/&gt;
+      data() {
+      return {
+       // rows, columns ...
+        onPageChange: function(event){
+          // { currentPage: 1, total: 5 }
+          console.log(event);
+        },
+      };
+    }
+    </pre>
       </td>
     </tr>
     <tr>
@@ -257,7 +324,7 @@ data() {
       :paginate=&quot;true&quot;
       :externalSearchQuery=&quot;searchTerm&quot;
       :rows=&quot;rows&quot;/&gt;
-</pre> 
+</pre>
 <pre lang="javascript">
   // and in data
   data(){
@@ -266,7 +333,7 @@ data() {
         // rows, columns etc...
       };
   }
-</pre>  
+</pre>
       </td>
     </tr>
     <tr>
@@ -321,7 +388,7 @@ data() {
       <td>field (required)</td>
       <td>Row object property that this column corresponds to</td>
       <td>
-        Could be: 
+        Could be:
         <ul>
           <li>String <code>eg: 'name'</code> - simple row property name</li>
           <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
@@ -334,7 +401,7 @@ data() {
       <td>type (optional)</td>
       <td>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</td>
       <td>
-        Possible values: 
+        Possible values:
         <ul>
           <li>number - right aligned</li>
           <li>decimal - right aligned, 2 decimal places</li>
@@ -355,8 +422,32 @@ data() {
     </tr>
     <tr>
       <td>filterable (optional)</td>
-      <td>provides the column with a filter input</td>
+      <td>enables filtering on column (By default, creates a text input)</td>
       <td>Boolean</td>
+    </tr>
+    <tr>
+      <td>filterDropdown</td>
+      <td>provides a dropdown for filtering instead of a text input</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
+      <td>filterOptions <strong>required for filterDropdown</strong></td>
+      <td>provides options to dropdown filter <code>filterOptions: ['Blue', 'Red', 'Yellow']</code></td>
+      <td>Array</td>
+    </tr>
+    <tr>
+      <td>filter (optional)</td>
+      <td>Custom filter, function of two variables: <code>function(data, filterString)</code>,
+      should return true if data matches the filterString, otherwise false.</td>
+      <td>
+      <pre lang="javascript">
+          filter: function(data, filterString) {
+            var x = parseInt(filterString)
+            return data >= x-5 && data <= x+5
+          }
+      </pre>
+      would create a filter matching numbers within 5 of the provided value.
+      <td>
     </tr>
     <tr>
       <td>html (optional)</td>
@@ -407,7 +498,7 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ## Authors
 
 * **Akshay Anand** - *Initial work* - [xaksis](https://github.com/xaksis)
-* **Cristi Jora** - [cristijora](https://github.com/cristijora)
+* [Other Contributors](https://github.com/xaksis/vue-good-table/graphs/contributors)
 
 ## License
 
@@ -418,5 +509,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) f
 Inspiration taken from
 * MicroDroid's [vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable)
 * Bootstrap's [table styles](https://getbootstrap.com/)
-
-
