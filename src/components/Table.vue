@@ -36,7 +36,7 @@
             <th v-for="(column, index) in columns" v-if="!column.hidden">
                <div v-if="column.filterable">
                   <input v-if="!column.filterDropdown"
-                        type="text" class="form-control" :placeholder="'Filter ' + column.label"
+                        type="text" class="form-control" :placeholder="getSearchPlaceholder(column)"
                         :value="columnFilters[column.field]"
                         v-on:input="updateFilters(column, $event.target.value)">
 
@@ -351,6 +351,12 @@ import {format, parse, compareAsc} from 'date-fns/esm'
           }
         }
         this.filteredRows = computedRows;
+      },
+
+      //get search placeholder both if function or just a string
+      getSearchPlaceholder(column) {
+        const placeholder = column.placeholder || 'Filter ' + column.label
+        return placeholder
       },
 
       getCurrentIndex(index) {

@@ -121,11 +121,11 @@ This should result in the screenshot seen above
   </template>
 </vue-good-table>
 ```
-**Note:** 
+**Note:**
 * The original row object can be accessed via `props.row`
-* The currently displayed table row index can be accessed via `props.index` . 
+* The currently displayed table row index can be accessed via `props.index` .
 * The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
-* You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
+* You can access the formatted row data (for example - formatted date) via `props.formattedRow`
 
 ## Custom columns
 Sometimes you might want to use custom column formatting. You can do that in the following way
@@ -448,6 +448,11 @@ data() {
       </pre>
       would create a filter matching numbers within 5 of the provided value.
       <td>
+    </tr>
+    <tr>
+      <td>placeholder (optional)</td>
+      <td>provides a custom placeholder for column's filter.</td>
+      <td>example: <code>placeholder: 'Filter name'</code></td>
     </tr>
     <tr>
       <td>html (optional)</td>
