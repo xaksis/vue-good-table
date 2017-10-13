@@ -22,7 +22,7 @@
             <th v-if="lineNumbers" class="line-numbers"></th>
             <th v-for="(column, index) in columns"
               @click="sort(index)"
-              :class="columnHeaderClass(column, index)"
+              :class="getHeaderClasses(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
               v-if="!column.hidden">
               <slot name="table-column" :column="column">
@@ -55,7 +55,7 @@
           <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
+              <td v-for="(column, i) in columns" :class="getClasses(i, 'td')" v-if="!column.hidden">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
@@ -173,7 +173,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       },
 
       sort(index) {
-        if (!this.sortable)
+        if (!this.isSortableColumn(index))
           return;
         if (this.sortColumn === index) {
           this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
@@ -263,45 +263,49 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         return formattedRow;
       },
 
-      // Get the necessary style-classes for the given column
-      //--------------------------------------------------------
-      columnHeaderClass(column, index){
-        var classString = '';
-        if (this.sortable) {
-          classString += 'sorting ';
-        }
-        if (index === this.sortColumn) {
-          if (this.sortType === 'desc') {
-            classString += 'sorting-desc ';
-          } else {
-            classString += 'sorting-asc ';
-          }
-        }
-        classString += this.getDataStyle(index, 'th');
-        return classString;
+      /**
+       * Check if a column is sortable.
+       * @param {number} index
+       * @returns {boolean}
+       */
+      isSortableColumn (index) {
+        const sortable = this.columns[index].sortable
+        const isSortable = typeof sortable === 'boolean' ? sortable : this.sortable
+        return isSortable
       },
-      // given column index, we can figure out what style classes
-      // to apply to this data
-      //---------------------------------------------------------
-      getDataStyle(index, type) {
-        var classString = '';
-        switch (this.columns[index].type) {
-          case 'number':
-          case 'percentage':
-          case 'decimal':
-          case 'date':
-          case 'text':
-            classString += 'right-align ';
-          break;
-          default:
-            classString += 'left-align ';
-            break;
+
+      /**
+       * Get classes for the given header column.
+       * @param {{type: string}} column
+       * @param {number} index
+       * @returns {Object.<string, boolean>}
+       */
+      getHeaderClasses (column, index) {
+        const isSortable = this.isSortableColumn(index)
+        const isDescending = this.sortColumn === index && this.sortType === 'desc'
+        const classes = Object.assign({}, this.getClasses(index, 'th'), {
+          'sorting': isSortable,
+          'sorting-desc': isSortable && isDescending,
+          'sorting-asc': isSortable && !isDescending
+        })
+        return classes
+      },
+
+      /**
+       * Get classes for the given column index & element.
+       * @param {number} index
+       * @param {('tr' | 'th')} element
+       * @returns {Object.<string, boolean>}
+       */
+      getClasses (index, element) {
+        const custom = this.columns[index][element + 'Class']
+        const isRight = ['number', 'percentage', 'decimal', 'date', 'text'].includes(this.columns[index].type)
+        const classes = {
+          'right-align': isRight,
+          'left-align': !isRight,
+          [custom]: !!custom
         }
-        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
-          classString += ' ';
-          classString = this.columns[index][type + 'Class'];
-        }
-        return classString;
+        return classes
       },
 
       //since vue doesn't detect property addition and deletion, we
@@ -445,7 +449,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         }
 
         //taking care of sort here only if sort has changed
-        if (this.sortable !== false && this.sortColumn !== -1 &&
+        if (this.sortColumn !== -1 && this.isSortableColumn(this.sortColumn) &&
 
           // if search trigger is enter then we only sort
           // when enter is hit
