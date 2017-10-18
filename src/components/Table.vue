@@ -373,6 +373,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         return classes;
       }
     },
+
     watch: {
       columnFilters: {
           handler: function(newObj){
