@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.14.2
+ * vue-good-table v1.14.3
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -3353,7 +3353,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     defaultSortBy: { default: null },
     responsive: { default: true },
     rtl: { default: false },
-    rowStyleClass: { default: null, type: [Function, String] },
 
     globalSearch: { default: false },
     searchTrigger: { default: null },
@@ -3534,14 +3533,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       var computedRows = JSON.parse(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify___default()(this.rows));
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(computedRows.entries()), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var _ref = _step2.value;
+
+          var _ref2 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref, 2);
+
+          var index = _ref2[0];
+          var row = _ref2[1];
+
+          row.originalIndex = index;
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
       if (this.hasFilterRow) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator2 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var col = _step2.value;
+          for (var _iterator3 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var col = _step3.value;
 
             if (col.filterable && this.columnFilters[col.field]) {
               computedRows = computedRows.filter(function (row) {
@@ -3562,16 +3591,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+              _iterator3.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError3) {
+              throw _iteratorError3;
             }
           }
         }
@@ -3580,23 +3609,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     getCurrentIndex: function getCurrentIndex(index) {
       return (this.currentPage - 1) * this.currentPerPage + index + 1;
-    },
-    getRowStyleClass: function getRowStyleClass(row) {
-      var classes = '';
-      this.onClick ? classes += 'clickable' : '';
-      var rowStyleClasses = void 0;
-      if (typeof this.rowStyleClass === 'function') {
-        rowStyleClasses = this.rowStyleClass(row);
-      } else {
-        rowStyleClasses = this.rowStyleClass;
-      }
-      if (rowStyleClasses) {
-        classes += ' ' + rowStyleClasses;
-      }
-      return classes;
     }
   },
-	
+
   watch: {
     columnFilters: {
       handler: function handler(newObj) {
@@ -3641,75 +3656,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     hasFilterRow: function hasFilterRow() {
       if (!this.globalSearch) {
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          for (var _iterator3 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var col = _step3.value;
-
-            if (col.filterable) {
-              return true;
-            }
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-              _iterator3.return();
-            }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
-            }
-          }
-        }
-      }
-      return false;
-    },
-    processedRows: function processedRows() {
-      var _this3 = this;
-
-      var computedRows = this.filteredRows;
-
-      if (this.globalSearchAllowed) {
-        var filteredRows = [];
         var _iteratorNormalCompletion4 = true;
         var _didIteratorError4 = false;
         var _iteratorError4 = undefined;
 
         try {
-          for (var _iterator4 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.rows), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var row = _step4.value;
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
+          for (var _iterator4 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+            var col = _step4.value;
 
-            try {
-              for (var _iterator5 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                var col = _step5.value;
-
-                if (String(this.collectFormatted(row, col)).toLowerCase().search(this.searchTerm.toLowerCase()) > -1) {
-                  filteredRows.push(row);
-                  break;
-                }
-              }
-            } catch (err) {
-              _didIteratorError5 = true;
-              _iteratorError5 = err;
-            } finally {
-              try {
-                if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                  _iterator5.return();
-                }
-              } finally {
-                if (_didIteratorError5) {
-                  throw _iteratorError5;
-                }
-              }
+            if (col.filterable) {
+              return true;
             }
           }
         } catch (err) {
@@ -3723,6 +3679,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           } finally {
             if (_didIteratorError4) {
               throw _iteratorError4;
+            }
+          }
+        }
+      }
+      return false;
+    },
+    processedRows: function processedRows() {
+      var _this3 = this;
+
+      var computedRows = this.filteredRows;
+
+      if (this.globalSearchAllowed) {
+        var filteredRows = [];
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
+
+        try {
+          for (var _iterator5 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.rows), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var row = _step5.value;
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+              for (var _iterator6 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                var col = _step6.value;
+
+                if (String(this.collectFormatted(row, col)).toLowerCase().search(this.searchTerm.toLowerCase()) > -1) {
+                  filteredRows.push(row);
+                  break;
+                }
+              }
+            } catch (err) {
+              _didIteratorError6 = true;
+              _iteratorError6 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                  _iterator6.return();
+                }
+              } finally {
+                if (_didIteratorError6) {
+                  throw _iteratorError6;
+                }
+              }
+            }
+          }
+        } catch (err) {
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+              _iterator5.return();
+            }
+          } finally {
+            if (_didIteratorError5) {
+              throw _iteratorError5;
             }
           }
         }
@@ -3804,32 +3819,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     this.filteredRows = JSON.parse(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify___default()(this.rows));
 
-    var _iteratorNormalCompletion6 = true;
-    var _didIteratorError6 = false;
-    var _iteratorError6 = undefined;
+    var _iteratorNormalCompletion7 = true;
+    var _didIteratorError7 = false;
+    var _iteratorError7 = undefined;
 
     try {
-      for (var _iterator6 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.filteredRows.entries()), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-        var _ref = _step6.value;
+      for (var _iterator7 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.filteredRows.entries()), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+        var _ref3 = _step7.value;
 
-        var _ref2 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref, 2);
+        var _ref4 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref3, 2);
 
-        var index = _ref2[0];
-        var row = _ref2[1];
+        var index = _ref4[0];
+        var row = _ref4[1];
 
         row.originalIndex = index;
       }
     } catch (err) {
-      _didIteratorError6 = true;
-      _iteratorError6 = err;
+      _didIteratorError7 = true;
+      _iteratorError7 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion6 && _iterator6.return) {
-          _iterator6.return();
+        if (!_iteratorNormalCompletion7 && _iterator7.return) {
+          _iterator7.return();
         }
       } finally {
-        if (_didIteratorError6) {
-          throw _iteratorError6;
+        if (_didIteratorError7) {
+          throw _iteratorError7;
         }
       }
     }
@@ -3839,18 +3854,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
 
     if (this.defaultSortBy) {
-      var _iteratorNormalCompletion7 = true;
-      var _didIteratorError7 = false;
-      var _iteratorError7 = undefined;
+      var _iteratorNormalCompletion8 = true;
+      var _didIteratorError8 = false;
+      var _iteratorError8 = undefined;
 
       try {
-        for (var _iterator7 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns.entries()), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-          var _ref3 = _step7.value;
+        for (var _iterator8 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_get_iterator___default()(this.columns.entries()), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+          var _ref5 = _step8.value;
 
-          var _ref4 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref3, 2);
+          var _ref6 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref5, 2);
 
-          var _index = _ref4[0];
-          var col = _ref4[1];
+          var _index = _ref6[0];
+          var col = _ref6[1];
 
           if (col.field === this.defaultSortBy.field) {
             this.sortColumn = _index;
@@ -3860,16 +3875,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
         }
       } catch (err) {
-        _didIteratorError7 = true;
-        _iteratorError7 = err;
+        _didIteratorError8 = true;
+        _iteratorError8 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion7 && _iterator7.return) {
-            _iterator7.return();
+          if (!_iteratorNormalCompletion8 && _iterator8.return) {
+            _iterator8.return();
           }
         } finally {
-          if (_didIteratorError7) {
-            throw _iteratorError7;
+          if (_didIteratorError8) {
+            throw _iteratorError8;
           }
         }
       }
@@ -4468,7 +4483,7 @@ exports = module.exports = __webpack_require__(115)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Utility styles\n************************************************/\n.right-align[data-v-d89f00e8]{\n  text-align: right;\n}\n.left-align[data-v-d89f00e8]{\n  text-align: left;\n}\n.center-align[data-v-d89f00e8]{\n  text-align: center;\n}\n.pull-left[data-v-d89f00e8]{\n  float:  left !important;\n}\n.pull-right[data-v-d89f00e8]{\n  float:  right !important;\n}\n.clearfix[data-v-d89f00e8]::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n\n/* Table specific styles\n************************************************/\ntable[data-v-d89f00e8]{\n    border-collapse: collapse;\n    background-color: transparent;\n    margin-bottom:  0px;\n}\n.table[data-v-d89f00e8]{\n    width: 100%;\n    max-width: 100%;\n    table-layout: auto;\n}\n.table.table-striped tbody tr[data-v-d89f00e8]:nth-of-type(odd) {\n      background-color: rgba(35,41,53,.05);\n}\n.table.table-bordered td[data-v-d89f00e8], .table-bordered th[data-v-d89f00e8] {\n      border: 1px solid #DDD;\n}\n.table td[data-v-d89f00e8], .table th[data-v-d89f00e8]:not(.line-numbers) {\n    padding: .75rem 1.5rem .75rem .75rem;\n    vertical-align: top;\n    border-top: 1px solid #ddd;\n}\n.rtl .table td[data-v-d89f00e8], .rtl .table th[data-v-d89f00e8]:not(.line-numbers) {\n    padding: .75rem .75rem .75rem 1.5rem;\n}\n.table.condensed td[data-v-d89f00e8], .table.condensed th[data-v-d89f00e8] {\n    padding: .4rem .4rem .4rem .4rem;\n}\n.table thead th[data-v-d89f00e8], .table.condensed thead th[data-v-d89f00e8] {\n    vertical-align: bottom;\n    border-bottom:  2px solid #ddd;\n    padding-right: 1.5rem;\n    background-color: rgba(35,41,53,0.03);\n}\n.rtl .table thead th[data-v-d89f00e8], .rtl .table.condensed thead th[data-v-d89f00e8] {\n    padding-left:  1.5rem;\n    padding-right:  .75rem;\n}\ntr.clickable[data-v-d89f00e8] {\n    cursor: pointer;\n}\n.table input[data-v-d89f00e8]{\n    display: block;\n    width: calc(100% - 24px);\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;\n}\ntable th.sorting-asc[data-v-d89f00e8],\n  table th.sorting-desc[data-v-d89f00e8] {\n    color: rgba(0, 0, 0, 0.66);\n    position: relative;\n}\ntable th.sorting[data-v-d89f00e8]:after,\n  table th.sorting-asc[data-v-d89f00e8]:after  {\n    font-family: 'Material Icons';\n    position:  absolute;\n    height:  0px;\n    width:  0px;\n    content: '';\n    display: none;\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: 6px solid rgba(0, 0, 0, 0.66);\n    margin-top:  6px;\n    margin-left:  5px;\n}\n.rtl table th.sorting[data-v-d89f00e8]:after,\n  .rtl table th.sorting-asc[data-v-d89f00e8]:after{\n    margin-right:  5px;\n    margin-left:  0px;\n}\ntable th.sorting[data-v-d89f00e8]:hover:after{\n    display: inline-block;\n    border-bottom-color: rgba(35,41,53,0.25);\n}\ntable th.sorting-asc[data-v-d89f00e8]:after,\n  table th.sorting-desc[data-v-d89f00e8]:after {\n    display: inline-block;\n}\ntable th.sorting-desc[data-v-d89f00e8]:after {\n    border-top:  6px solid rgba(0, 0, 0, 0.66);\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: none;\n    margin-top:  8px;\n}\n.responsive[data-v-d89f00e8] {\n  width: 100%;\n  overflow-x: scroll;\n}\n\n/* Table header specific styles\n************************************************/\n.table-header[data-v-d89f00e8]{\n  padding:  .75rem;\n}\n.table-header .table-title[data-v-d89f00e8]{\n  margin:  0px;\n  font-size: 18px;\n}\n\n\n/* Table footer specific styles\n************************************************/\n.table-footer[data-v-d89f00e8]{\n    /* background-color: rgba(35,41,53, 0.03); */\n    background-color: rgba(35,41,53,0.05);\n    border: 1px solid #DDD;\n    margin-bottom:  2rem;\n    margin-top:  0px;\n    padding:  1rem;\n    border-bottom-right-radius: 5px;\n    border-bottom-left-radius: 5px;\n    font-size: 14px;\n    color:  rgba(0, 0, 0, 0.44);\n}\n.table-footer>div[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls>*[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls a[data-v-d89f00e8]{\n    text-decoration: none;\n    color: rgba(0, 0, 0, 0.66);\n    font-size: 14px;\n    font-weight: 600;\n    opacity: 0.8;\n}\n.pagination-controls a[data-v-d89f00e8]:hover{\n    opacity: 1;\n}\n.pagination-controls a span[data-v-d89f00e8]{\n    display: inline-block;\n    vertical-align: middle;\n}\n.pagination-controls .info[data-v-d89f00e8]{\n    margin:  0px 15px;\n    font-size: 13px;\n    font-weight: bold;\n    color:  rgba(0, 0, 0, 0.40);\n}\n.pagination-controls a .chevron[data-v-d89f00e8]{\n    width:  24px;\n    height:  24px;\n    border-radius: 15%;\n    /* border:  1px solid rgba(35,41,53,0.2);\n    background-color: #fff; */\n    position:  relative;\n    margin:  0px 8px;\n}\n.pagination-controls .chevron[data-v-d89f00e8]::after{\n    content:  '';\n    position:  absolute;\n    display:  block;\n    left:  50%;\n    top:  50%;\n    margin-top:  -6px;\n    border-top: 6px solid transparent;\n    border-bottom: 6px solid transparent;\n}\n.pagination-controls .chevron.left[data-v-d89f00e8]::after{\n    border-right:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.pagination-controls .chevron.right[data-v-d89f00e8]::after{\n    border-left:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.table-footer select[data-v-d89f00e8] {\n    display: inline-block;\n    background-color: transparent;\n    width: auto;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    height: auto;\n    font-size: 14px;\n    margin-left: 8px;\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n.table-footer .perpage-count[data-v-d89f00e8]{\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n@media only screen and (max-width: 750px) {\n    /* on small screens hide the info */\n.pagination-controls .info[data-v-d89f00e8]{\n      display:  none;\n}\n}\n\n  /* Global Search\n  **********************************************/\n.global-search[data-v-d89f00e8]{\n    position:  relative;\n    padding-left: 40px;\n}\n.global-search-icon[data-v-d89f00e8]{\n    position:  absolute;\n    left:  0px;\n    max-width:  32px;\n}\n.global-search-icon > img[data-v-d89f00e8]{\n    max-width:  100%;\n    margin-top:  8px;\n    opacity: 0.5;\n}\ntable .global-search-input[data-v-d89f00e8]{\n   width:  calc(100% - 30px);\n}\n\n  /* Line numbers\n  **********************************************/\ntable th.line-numbers[data-v-d89f00e8], .table.condensed th.line-numbers[data-v-d89f00e8]{\n    background-color: rgba(35,41,53,0.05);\n    padding-left:  3px;\n    padding-right:  3px;\n    word-wrap: break-word;\n    width: 45px;\n    text-align: center;\n}\n.good-table.rtl[data-v-d89f00e8]{\n    direction: rtl;\n}\n.text-disabled[data-v-d89f00e8]{\n    color:  #aaa;\n}\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Utility styles\n************************************************/\n.right-align[data-v-d89f00e8]{\n  text-align: right;\n}\n.left-align[data-v-d89f00e8]{\n  text-align: left;\n}\n.center-align[data-v-d89f00e8]{\n  text-align: center;\n}\n.pull-left[data-v-d89f00e8]{\n  float:  left !important;\n}\n.pull-right[data-v-d89f00e8]{\n  float:  right !important;\n}\n.clearfix[data-v-d89f00e8]::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n\n/* Table specific styles\n************************************************/\ntable[data-v-d89f00e8]{\n    border-collapse: collapse;\n    background-color: transparent;\n    margin-bottom:  0px;\n}\n.table[data-v-d89f00e8]{\n    width: 100%;\n    max-width: 100%;\n    table-layout: auto;\n}\n.table.table-striped tbody tr[data-v-d89f00e8]:nth-of-type(odd) {\n      background-color: rgba(35,41,53,.05);\n}\n.table.table-bordered td[data-v-d89f00e8], .table-bordered th[data-v-d89f00e8] {\n      border: 1px solid #DDD;\n}\n.table td[data-v-d89f00e8], .table th[data-v-d89f00e8]:not(.line-numbers) {\n    padding: .75rem 1.5rem .75rem .75rem;\n    vertical-align: top;\n    border-top: 1px solid #ddd;\n}\n.rtl .table td[data-v-d89f00e8], .rtl .table th[data-v-d89f00e8]:not(.line-numbers) {\n    padding: .75rem .75rem .75rem 1.5rem;\n}\n.table.condensed td[data-v-d89f00e8], .table.condensed th[data-v-d89f00e8] {\n    padding: .4rem .4rem .4rem .4rem;\n}\n.table thead th[data-v-d89f00e8], .table.condensed thead th[data-v-d89f00e8] {\n    vertical-align: bottom;\n    border-bottom:  2px solid #ddd;\n    padding-right: 1.5rem;\n    background-color: rgba(35,41,53,0.03);\n}\n.rtl .table thead th[data-v-d89f00e8], .rtl .table.condensed thead th[data-v-d89f00e8] {\n    padding-left:  1.5rem;\n    padding-right:  .75rem;\n}\ntr.clickable[data-v-d89f00e8] {\n    cursor: pointer;\n}\n.table input[data-v-d89f00e8]{\n    display: block;\n    width: calc(100% - 24px);\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;\n}\ntable th.sorting-asc[data-v-d89f00e8],\n  table th.sorting-desc[data-v-d89f00e8] {\n    color: rgba(0, 0, 0, 0.66);\n    position: relative;\n}\ntable th.sorting[data-v-d89f00e8]:after,\n  table th.sorting-asc[data-v-d89f00e8]:after  {\n    font-family: 'Material Icons';\n    position:  absolute;\n    height:  0px;\n    width:  0px;\n    content: '';\n    display: none;\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: 6px solid rgba(0, 0, 0, 0.66);\n    margin-top:  6px;\n    margin-left:  5px;\n}\n.rtl table th.sorting[data-v-d89f00e8]:after,\n  .rtl table th.sorting-asc[data-v-d89f00e8]:after{\n    margin-right:  5px;\n    margin-left:  0px;\n}\ntable th.sorting[data-v-d89f00e8]:hover:after{\n    display: inline-block;\n    border-bottom-color: rgba(35,41,53,0.25);\n}\ntable th.sorting-asc[data-v-d89f00e8]:after,\n  table th.sorting-desc[data-v-d89f00e8]:after {\n    display: inline-block;\n}\ntable th.sorting-desc[data-v-d89f00e8]:after {\n    border-top:  6px solid rgba(0, 0, 0, 0.66);\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: none;\n    margin-top:  8px;\n}\n.responsive[data-v-d89f00e8] {\n  width: 100%;\n  overflow-x: scroll;\n}\n\n/* Table header specific styles\n************************************************/\n.table-header[data-v-d89f00e8]{\n  padding:  .75rem;\n}\n.table-header .table-title[data-v-d89f00e8]{\n  margin:  0px;\n  font-size: 18px;\n}\n\n\n/* Table footer specific styles\n************************************************/\n.table-footer[data-v-d89f00e8]{\n    /* background-color: rgba(35,41,53, 0.03); */\n    background-color: rgba(35,41,53,0.05);\n    border: 1px solid #DDD;\n    margin-bottom:  2rem;\n    margin-top:  0px;\n    padding:  1rem;\n    border-bottom-right-radius: 5px;\n    border-bottom-left-radius: 5px;\n    font-size: 14px;\n    color:  rgba(0, 0, 0, 0.44);\n}\n.table-footer>div[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls>*[data-v-d89f00e8]{\n    display: inline-block;\n}\n.pagination-controls a[data-v-d89f00e8]{\n    text-decoration: none;\n    color: rgba(0, 0, 0, 0.66);\n    font-size: 14px;\n    font-weight: 600;\n    opacity: 0.8;\n}\n.pagination-controls a[data-v-d89f00e8]:hover{\n    opacity: 1;\n}\n.pagination-controls a span[data-v-d89f00e8]{\n    display: inline-block;\n    vertical-align: middle;\n}\n.pagination-controls .info[data-v-d89f00e8]{\n    margin:  0px 15px;\n    font-size: 13px;\n    font-weight: bold;\n    color:  rgba(0, 0, 0, 0.40);\n}\n.pagination-controls a .chevron[data-v-d89f00e8]{\n    width:  24px;\n    height:  24px;\n    border-radius: 15%;\n    /* border:  1px solid rgba(35,41,53,0.2);\n    background-color: #fff; */\n    position:  relative;\n    margin:  0px 8px;\n}\n.pagination-controls .chevron[data-v-d89f00e8]::after{\n    content:  '';\n    position:  absolute;\n    display:  block;\n    left:  50%;\n    top:  50%;\n    margin-top:  -6px;\n    border-top: 6px solid transparent;\n    border-bottom: 6px solid transparent;\n}\n.pagination-controls .chevron.left[data-v-d89f00e8]::after{\n    border-right:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.pagination-controls .chevron.right[data-v-d89f00e8]::after{\n    border-left:  6px solid rgba(0, 0, 0, 0.66);\n    margin-left:  -3px;\n}\n.table-footer select[data-v-d89f00e8] {\n    display: inline-block;\n    background-color: transparent;\n    width: auto;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    height: auto;\n    font-size: 14px;\n    margin-left: 8px;\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n.table-footer .perpage-count[data-v-d89f00e8]{\n    color:  rgba(0, 0, 0, 0.55);\n    font-weight: bold;\n}\n@media only screen and (max-width: 750px) {\n    /* on small screens hide the info */\n.pagination-controls .info[data-v-d89f00e8]{\n      display:  none;\n}\n}\n\n  /* Global Search\n  **********************************************/\n.global-search[data-v-d89f00e8]{\n    position:  relative;\n    padding-left: 40px;\n}\n.global-search-icon[data-v-d89f00e8]{\n    position:  absolute;\n    left:  0px;\n    max-width:  32px;\n}\n.global-search-icon > img[data-v-d89f00e8]{\n    max-width:  100%;\n    margin-top:  8px;\n    opacity: 0.5;\n}\ntable .global-search-input[data-v-d89f00e8]{\n   width:  calc(100% - 30px);\n}\n\n  /* Line numbers\n  **********************************************/\ntable th.line-numbers[data-v-d89f00e8], .table.condensed th.line-numbers[data-v-d89f00e8]{\n    background-color: rgba(35,41,53,0.05);\n    padding-left:  3px;\n    padding-right:  3px;\n    word-wrap: break-word;\n    width: 45px;\n    text-align: center;\n}\n.good-table.rtl[data-v-d89f00e8]{\n    direction: rtl;\n}\n.text-disabled[data-v-d89f00e8]{\n    color:  #aaa;\n}\n\n", ""]);
 
 // exports
 
@@ -11671,6 +11686,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })], 2) : _vm._e()]) : _vm._e()]) : _vm._e()
   })], 2) : _vm._e()]), _vm._v(" "), _c('tbody', [_vm._l((_vm.paginated), function(row, index) {
     return _c('tr', {
+      class: _vm.onClick ? 'clickable' : '',
       on: {
         "click": function($event) {
           _vm.click(row, index)
