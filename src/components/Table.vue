@@ -52,7 +52,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
+          <tr v-for="(row, index) in paginated" :class="getRowStyleClass(row)" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
@@ -123,6 +123,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       defaultSortBy: {default: null},
       responsive: {default: true},
       rtl: {default: false},
+      rowStyleClass: {default: null, type: [Function, String]},
 
       // search
       globalSearch: {default: false},
@@ -369,6 +370,21 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       getCurrentIndex(index) {
         return (this.currentPage - 1) * this.currentPerPage + index + 1;
       },
+
+      getRowStyleClass(row) {
+        let classes = '';
+        this.onClick ? classes += 'clickable' : '';
+        let rowStyleClasses;
+        if (typeof this.rowStyleClass === 'function') {
+          rowStyleClasses = this.rowStyleClass(row);
+        } else {
+          rowStyleClasses = this.rowStyleClass;
+        }
+        if (rowStyleClasses) {
+          classes += ' ' + rowStyleClasses;
+        }
+        return classes;
+      }
     },
 
     watch: {
