@@ -54,12 +54,14 @@
         <tbody>
           <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
               <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
             </slot>
+            <slot name="table-row-after" :row="row" :index="index"></slot>
           </tr>
           <tr v-if="processedRows.length === 0">
             <td :colspan="columns.length">
