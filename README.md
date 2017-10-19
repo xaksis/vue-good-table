@@ -127,6 +127,26 @@ This should result in the screenshot seen above
 * The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
 * You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
 
+## Additional Columns
+If you want the table to do all your rendering and want to add some columns to the beginning or end of the row, you can use additional slots: 
+```html
+<vue-good-table
+  :columns="columns"
+  :paginate="true"
+  :rows="rows">
+<template slot="table-row-before" slot-scope="props">
+  <td><input type="checkbox" /></td>
+</template>
+<!-- all the regular row items will be populated here-->
+<template slot="table-row-after" slot-scope="props">
+  <td><button @click="doSomething(props.index)">show</button></td>
+</template>
+</vue-good-table>
+```
+**Note**
+Make sure you add the columns in the columns array for the additional <code>td</code> that you create.
+
+
 ## Custom columns
 Sometimes you might want to use custom column formatting. You can do that in the following way
 ```html
@@ -260,7 +280,27 @@ data() {
       <td>Allows applying your own classes to table</td>
       <td>String <em>default: 'table table-bordered'</em></td>
     </tr>
-        <tr>
+    <tr>
+      <td>rowStyleClass</td>
+      <td>Allows providing custom styles for rows</td>
+      <td>it can be: 
+        <ul>
+          <li>string: 'my-class'</li>
+          <li>function: 
+<pre lang="javascript">
+myStyleFn(row){ 
+  // if row has something return a specific class 
+  if(row.fancy) {
+    return 'fancy-class';
+  }
+  return '';
+}
+</pre>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
       <td>lineNumbers</td>
       <td>Enable sorting by clicking column</td>
       <td>Boolean <em>default: false</em></td>
@@ -437,8 +477,20 @@ data() {
     </tr>
     <tr>
       <td>filterOptions <strong>required for filterDropdown</strong></td>
-      <td>provides options to dropdown filter <code>filterOptions: ['Blue', 'Red', 'Yellow']</code></td>
-      <td>Array</td>
+      <td>provides options to dropdown filter
+      </td>
+      <td>
+        array: 
+        <code>filterOptions: ['Blue', 'Red', 'Yellow']</code>
+          or
+      <pre lang="javascript">
+          filterOptions: [  
+            { value: 'n', text: 'Inactive' },  
+            { value: 'y', text: 'Active' },  
+            { value: 'c', text: 'Check' }  
+          ],
+      </pre>
+      </td>
     </tr>
     <tr>
       <td>filter (optional)</td>

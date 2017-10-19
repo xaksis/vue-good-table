@@ -34,18 +34,37 @@
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns" v-if="!column.hidden">
-               <div v-if="column.filterable">
-                  <input v-if="!column.filterDropdown"
-                        type="text" class="form-control" :placeholder="getPlaceholder(column)"
-                        :value="columnFilters[column.field]"
-                        v-on:input="updateFilters(column, $event.target.value)">
+              <div v-if="column.filterable" :class="columnHeaderClass(column, index)">
+                <input v-if="!column.filterDropdown"
+                  type="text" 
+                  class="" 
+                  :placeholder="getPlaceholder(column)"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)" />
 
-                <select v-if="column.filterDropdown" class="form-control"
-                        :value="columnFilters[column.field]"
-                        v-on:input="updateFilters(column, $event.target.value)">
-                          <option value=""></option>
-                          <option v-for="option in column.filterOptions" :value="option">{{ option }}</option>
+                <!-- options are a list of primitives -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'" 
+                  class=""
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
+                    <option value=""></option>
+                    <option 
+                      v-for="option in column.filterOptions" 
+                      :value="option">
+                      {{ option }}
+                    </option>
                 </select>
+
+                <!-- options are a list of objects with text and value -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'" 
+                  class=""  
+                  :value="columnFilters[column.field]"  
+                  v-on:input="updateFilters(column, $event.target.value)">  
+                  <option value=""></option> 
+                  <option v-for="option in column.filterOptions" 
+                  :value="option.value">{{ option.text }}</option>  
+                </select>
+
               </div>
             </th>
           </tr>
@@ -153,6 +172,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     }),
 
     methods: {
+
       nextPage() {
         if(this.currentPerPage == -1) return;
         if (this.processedRows.length > this.currentPerPage * this.currentPage)
@@ -672,9 +692,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     cursor: pointer;
   }
 
-  .table input{
+  .table input, .table select{
+    box-sizing: border-box;
     display: block;
-    width: calc(100% - 24px);
+    width: calc(100%);
     height: 34px;
     padding: 6px 12px;
     font-size: 14px;
