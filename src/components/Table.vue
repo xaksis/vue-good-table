@@ -318,6 +318,11 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       //method to filter rows
       filterRows() {
         var computedRows = JSON.parse(JSON.stringify(this.rows));
+        // we need to preserve the original index of rows so lets do that
+        for(const [index, row] of computedRows.entries()) {
+          row.originalIndex = index;
+        }
+
         if(this.hasFilterRow) {
           for (var col of this.columns){
             if (col.filterable && this.columnFilters[col.field]) {
@@ -609,6 +614,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
   .table{
     width: 100%;
     max-width: 100%;
+    table-layout: auto;
   }
 
   .table.table-striped tbody tr:nth-of-type(odd) {
