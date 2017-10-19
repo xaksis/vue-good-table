@@ -20,6 +20,8 @@
           {
             label: 'Name',
             field: 'name',
+            filterable: true,
+            placeholder: 'Filter by name'
           },
           {
             label: 'Age',
