@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.15.0
+ * vue-good-table v1.15.1
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -11696,7 +11696,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "value": ""
       }
-    }), _vm._v(" "), _vm._l((column.filterOptions), function(option) {
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l((column.filterOptions), function(option) {
       return _c('option', {
         domProps: {
           "value": option
@@ -11715,7 +11715,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "value": ""
       }
-    }), _vm._v(" "), _vm._l((column.filterOptions), function(option) {
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l((column.filterOptions), function(option) {
       return _c('option', {
         domProps: {
           "value": option.value
