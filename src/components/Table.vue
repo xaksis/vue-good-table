@@ -36,33 +36,33 @@
             <th v-for="(column, index) in columns" v-if="!column.hidden">
               <div v-if="column.filterable" :class="columnHeaderClass(column, index)">
                 <input v-if="!column.filterDropdown"
-                  type="text" 
-                  class="" 
+                  type="text"
+                  class=""
                   :placeholder="getPlaceholder(column)"
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)" />
 
                 <!-- options are a list of primitives -->
-                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'" 
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
                   class=""
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
-                    <option value=""></option>
-                    <option 
-                      v-for="option in column.filterOptions" 
+                    <option value="">{{ getPlaceholder(column) }}</option>
+                    <option
+                      v-for="option in column.filterOptions"
                       :value="option">
                       {{ option }}
                     </option>
                 </select>
 
                 <!-- options are a list of objects with text and value -->
-                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'" 
-                  class=""  
-                  :value="columnFilters[column.field]"  
-                  v-on:input="updateFilters(column, $event.target.value)">  
-                  <option value=""></option> 
-                  <option v-for="option in column.filterOptions" 
-                  :value="option.value">{{ option.text }}</option>  
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
+                  class=""
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
+                  <option value="">{{ getPlaceholder(column) }}</option>
+                  <option v-for="option in column.filterOptions"
+                  :value="option.value">{{ option.text }}</option>
                 </select>
 
               </div>
