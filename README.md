@@ -438,7 +438,18 @@ myStyleFn(row){
           <li>String <code>eg: 'name'</code> - simple row property name</li>
           <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
           </li>
-          <li>Function - a function that returns a value to be displayed based on the row object</li>
+          <li>Function - a function that returns a value to be displayed based on the row object
+<pre lang="javascript">
+  {
+    field: fieldFn
+  }
+  
+  // in methods
+  fieldFn(rowObj) {
+    // do something with the row object
+  }
+</pre>
+          </li>
         </ul>
       </td>
     </tr>
