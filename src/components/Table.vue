@@ -75,7 +75,7 @@
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden">
+              <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
@@ -313,11 +313,15 @@ import {format, parse, compareAsc} from 'date-fns/esm'
           case 'percentage':
           case 'decimal':
           case 'date':
-          case 'text':
             classString += 'right-align ';
           break;
           default:
-            classString += 'left-align ';
+            if(!this.rtl) {
+              classString += 'left-align ';
+            } else {
+              // if right to left is enabled this is the default
+              classString += 'right-align ';
+            }
             break;
         }
         if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
