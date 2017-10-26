@@ -156,6 +156,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       rowsPerPageText: {default: 'Rows per page:'},
       ofText: {default: 'of'},
       allText: {default: 'All'},
+      filterPlaceholderText: {default: 'Filter '}
     },
 
     data: () => ({
@@ -387,7 +388,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
       //get column's defined placeholder or default one
       getPlaceholder(column) {
-        const placeholder = column.placeholder || 'Filter ' + column.label
+        const placeholder = column.placeholder || this.filterPlaceholderText + column.label
         return placeholder
       },
 
