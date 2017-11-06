@@ -34,32 +34,53 @@
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns" v-if="!column.hidden">
-               <div v-if="column.filterable">
-                  <input v-if="!column.filterDropdown"
-                        type="text" class="form-control" :placeholder="'Filter ' + column.label"
-                        :value="columnFilters[column.field]"
-                        v-on:input="updateFilters(column, $event.target.value)">
+              <div v-if="column.filterable" :class="columnHeaderClasses(column, index)">
+                <input v-if="!column.filterDropdown"
+                  type="text"
+                  class=""
+                  :placeholder="getPlaceholder(column)"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)" />
 
-                <select v-if="column.filterDropdown" class="form-control"
-                        :value="columnFilters[column.field]"
-                        v-on:input="updateFilters(column, $event.target.value)">
-                          <option value=""></option>
-                          <option v-for="option in column.filterOptions" :value="option">{{ option }}</option>
+                <!-- options are a list of primitives -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
+                  class=""
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
+                    <option value="">{{ getPlaceholder(column) }}</option>
+                    <option
+                      v-for="option in column.filterOptions"
+                      :value="option">
+                      {{ option }}
+                    </option>
                 </select>
+
+                <!-- options are a list of objects with text and value -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
+                  class=""
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
+                  <option value="">{{ getPlaceholder(column) }}</option>
+                  <option v-for="option in column.filterOptions"
+                  :value="option.value">{{ option.text }}</option>
+                </select>
+
               </div>
             </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr v-for="(row, index) in paginated" :class="onClick ? 'clickable' : ''" @click="click(row, index)">
+          <tr v-for="(row, index) in paginated" :class="getRowStyleClass(row)" @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td v-for="(column, i) in columns" :class="getClasses(i, 'td')" v-if="!column.hidden">
+              <td v-for="(column, i) in columns" :class="getClasses(i, 'td')" v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
             </slot>
+            <slot name="table-row-after" :row="row" :index="index"></slot>
           </tr>
           <tr v-if="processedRows.length === 0">
             <td :colspan="columns.length">
@@ -121,6 +142,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       defaultSortBy: {default: null},
       responsive: {default: true},
       rtl: {default: false},
+      rowStyleClass: {default: null, type: [Function, String]},
 
       // search
       globalSearch: {default: false},
@@ -150,6 +172,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     }),
 
     methods: {
+
       nextPage() {
         if(this.currentPerPage == -1) return;
         if (this.processedRows.length > this.currentPerPage * this.currentPage)
@@ -308,6 +331,11 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       //method to filter rows
       filterRows() {
         var computedRows = JSON.parse(JSON.stringify(this.rows));
+        // we need to preserve the original index of rows so lets do that
+        for(const [index, row] of computedRows.entries()) {
+          row.originalIndex = index;
+        }
+
         if(this.hasFilterRow) {
           for (var col of this.columns){
             if (col.filterable && this.columnFilters[col.field]) {
@@ -343,9 +371,30 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         this.filteredRows = computedRows;
       },
 
+      //get column's defined placeholder or default one
+      getPlaceholder(column) {
+        const placeholder = column.placeholder || 'Filter ' + column.label
+        return placeholder
+      },
+
       getCurrentIndex(index) {
         return (this.currentPage - 1) * this.currentPerPage + index + 1;
       },
+
+      getRowStyleClass(row) {
+        let classes = '';
+        this.onClick ? classes += 'clickable' : '';
+        let rowStyleClasses;
+        if (typeof this.rowStyleClass === 'function') {
+          rowStyleClasses = this.rowStyleClass(row);
+        } else {
+          rowStyleClasses = this.rowStyleClass;
+        }
+        if (rowStyleClasses) {
+          classes += ' ' + rowStyleClasses;
+        }
+        return classes;
+      }
     },
 
     watch: {
@@ -593,6 +642,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
   .table{
     width: 100%;
     max-width: 100%;
+    table-layout: auto;
   }
 
   .table.table-striped tbody tr:nth-of-type(odd) {
@@ -632,9 +682,10 @@ import {format, parse, compareAsc} from 'date-fns/esm'
     cursor: pointer;
   }
 
-  .table input{
+  .table input, .table select{
+    box-sizing: border-box;
     display: block;
-    width: calc(100% - 24px);
+    width: calc(100%);
     height: 34px;
     padding: 6px 12px;
     font-size: 14px;
