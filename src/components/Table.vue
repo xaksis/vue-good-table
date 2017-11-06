@@ -263,49 +263,35 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         return formattedRow;
       },
 
-      /**
-       * Check if a column is sortable.
-       * @param {number} index
-       * @returns {boolean}
-       */
-      isSortableColumn (index) {
-        const sortable = this.columns[index].sortable
-        const isSortable = typeof sortable === 'boolean' ? sortable : this.sortable
-        return isSortable
+      //Check if a column is sortable.
+      isSortableColumn(index) {
+        const sortable = this.columns[index].sortable;
+        const isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
+        return isSortable;
       },
 
-      /**
-       * Get classes for the given header column.
-       * @param {{type: string}} column
-       * @param {number} index
-       * @returns {Object.<string, boolean>}
-       */
-      getHeaderClasses (column, index) {
-        const isSortable = this.isSortableColumn(index)
-        const isDescending = this.sortColumn === index && this.sortType === 'desc'
+      //Get classes for the given header column.
+      getHeaderClasses(column, index) {
+        const isSortable = this.isSortableColumn(index);
+        const isDescending = this.sortColumn === index && this.sortType === 'desc';
         const classes = Object.assign({}, this.getClasses(index, 'th'), {
           'sorting': isSortable,
           'sorting-desc': isSortable && isDescending,
           'sorting-asc': isSortable && !isDescending
-        })
-        return classes
+        });
+        return classes;
       },
 
-      /**
-       * Get classes for the given column index & element.
-       * @param {number} index
-       * @param {('tr' | 'th')} element
-       * @returns {Object.<string, boolean>}
-       */
-      getClasses (index, element) {
-        const custom = this.columns[index][element + 'Class']
-        const isRight = ['number', 'percentage', 'decimal', 'date', 'text'].includes(this.columns[index].type)
+      //Get classes for the given column index & element.
+      getClasses(index, element) {
+        const { type, [element + 'Class']: custom } = this.columns[index];
+        const isRight = ['number', 'percentage', 'decimal', 'date', 'text'].includes(type);
         const classes = {
           'right-align': isRight,
           'left-align': !isRight,
           [custom]: !!custom
-        }
-        return classes
+        };
+        return classes;
       },
 
       //since vue doesn't detect property addition and deletion, we
