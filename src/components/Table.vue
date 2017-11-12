@@ -1,11 +1,13 @@
 <template>
   <div class="good-table" :class="{'rtl': rtl}">
     <div :class="{'responsive': responsive}">
-      <div v-if="title" class="table-header clearfix">
-        <h2 class="table-title pull-left">{{title}}</h2>
-        <div class="actions pull-right">
+      <slot name="table-title">
+        <div v-if="title" class="table-header clearfix">
+          <h2 class="table-title pull-left">{{title}}</h2>
+          <div class="actions pull-right">
+          </div>
         </div>
-      </div>
+      </slot>
       <table ref="table" :class="styleClass">
         <thead>
           <tr v-if="globalSearch && externalSearchQuery == null">
