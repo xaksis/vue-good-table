@@ -374,7 +374,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
                     //text value lets test starts with
                     return this.collect(row, col.field)
                       .toLowerCase()
-                      .startsWith(
+                      .includes(
                         (this.columnFilters[col.field]).toLowerCase()
                       );
                 }
