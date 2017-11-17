@@ -154,11 +154,8 @@
     /* background-color: rgba(35,41,53, 0.03); */
     background-color: rgba(35,41,53,0.05);
     border: 1px solid #DDD;
-    margin-bottom:  2rem;
-    margin-top:  0px;
+    margin:  0;
     padding:  1rem;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
     font-size: 14px;
     color:  rgba(0, 0, 0, 0.44);
   }
