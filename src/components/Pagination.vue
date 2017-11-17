@@ -15,12 +15,14 @@
       </label>
     </div>
     <div class="pagination-controls pull-right">
-      <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
+      <a href="javascript:undefined" class="page-btn"  :class="{ disabled: !prevIsPossible }"
+         @click.prevent.stop="previousPage" tabindex="0">
         <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
         <span>{{prevText}}</span>
       </a>
       <div class="info">{{paginatedInfo}}</div>
-      <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
+      <a href="javascript:undefined" class="page-btn"
+         :class="{ disabled: !nextIsPossible }" @click.prevent.stop="nextPage" tabindex="0">
         <span>{{nextText}}</span>
         <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
       </a>
@@ -54,7 +56,7 @@
 
       nextPage() {
         if(this.currentPerPage === -1) return;
-        if (this.total > this.currentPerPage * this.currentPage)
+        if (this.nextIsPossible)
           ++this.currentPage;
         this.pageChanged();
       },
@@ -92,7 +94,6 @@
     },
 
     computed: {
-
       paginatedInfo() {
         if (this.currentPerPage === -1) {
           return `1 - ${this.total} ${this.ofText} ${this.total}`;
@@ -100,6 +101,12 @@
         const first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
         const last = Math.min(this.total, this.currentPerPage * this.currentPage);
         return `${first} - ${last} ${this.ofText} ${this.total}`;
+      },
+      nextIsPossible() {
+        return (this.total > this.currentPerPage * this.currentPage);
+      },
+      prevIsPossible() {
+        return this.currentPage > 1;
       }
     },
 
@@ -170,6 +177,12 @@
     font-size: 14px;
     font-weight: 600;
     opacity: 0.8;
+  }
+
+  .pagination-controls a.disabled,
+  .pagination-controls a.disabled:hover {
+    cursor: not-allowed;
+    opacity: 0.4;
   }
 
   .pagination-controls a:hover{
