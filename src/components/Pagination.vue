@@ -4,7 +4,7 @@
       <label>
         <span>{{rowsPerPageText}}</span>
         <span v-if="perPage" class="perpage-count">{{perPage}}</span>
-        <select v-if="!perPage" class="browser-default" v-model="currentPerPage">
+        <select v-if="!perPage" class="browser-default" @change="perPageChanged">
           <option value="10">10</option>
           <option value="20">20</option>
           <option value="30">30</option>
@@ -21,7 +21,7 @@
       </a>
       <div class="info">{{paginatedInfo}}</div>
       <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
-        <span >{{nextText}}</span>
+        <span>{{nextText}}</span>
         <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
       </a>
     </div>
@@ -69,7 +69,10 @@
         this.$emit('page-changed', {currentPage: this.currentPage});
       },
 
-      perPageChanged() {
+      perPageChanged(event) {
+        if (event) {
+          this.currentPerPage = parseInt(event.target.value);
+        }
         this.$emit('per-page-changed', {currentPerPage: this.currentPerPage});
       }
 
@@ -91,13 +94,13 @@
     computed: {
 
       paginatedInfo() {
-        if(this.currentPerPage === -1){
+        if (this.currentPerPage === -1) {
           return `1 - ${this.total} ${this.ofText} ${this.total}`;
         }
         const first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
         const last = Math.min(this.total, this.currentPerPage * this.currentPage);
         return `${first} - ${last} ${this.ofText} ${this.total}`;
-      },
+      }
     },
 
     mounted() {
