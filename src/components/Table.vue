@@ -43,7 +43,7 @@
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns" v-if="!column.hidden">
-              <div v-if="column.filterable" :class="columnHeaderClasses(column, index)">
+              <div v-if="column.filterable" :class="getHeaderClasses(column, index)">
                 <input v-if="!column.filterDropdown"
                   type="text"
                   class=""
@@ -285,7 +285,8 @@
       //Get classes for the given column index & element.
       getClasses(index, element) {
         const { type, [element + 'Class']: custom } = this.columns[index];
-        const isRight = ['number', 'percentage', 'decimal', 'date', 'text'].includes(type);
+        let isRight = ['number', 'percentage', 'decimal', 'date'].includes(type);
+        if (this.rtl) isRight = true;
         const classes = {
           'right-align': isRight,
           'left-align': !isRight,
