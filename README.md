@@ -239,6 +239,11 @@ You can provide html for empty state slot as well. Example:
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>paginateOnTop</td>
+      <td>Add pagination on top of the table as opposed to the default bottom</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>rtl</td>
       <td>Enable Right-To-Left layout for the table</td>
       <td>Boolean (<em>default: false</em>)</td>
