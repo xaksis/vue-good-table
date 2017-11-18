@@ -477,6 +477,11 @@ myStyleFn(row){
       <td>String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code></td>
     </tr>
     <tr>
+      <td>sortable (optional)</td>
+      <td>enable/disable sorting on columns. This property is higher priority than globle sortable property</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>filterable (optional)</td>
       <td>enables filtering on column (By default, creates a text input)</td>
       <td>Boolean</td>
