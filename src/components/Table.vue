@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import {format, parse, compareAsc} from 'date-fns/esm'
+  import {format, parse, compareAsc, isValid} from 'date-fns/esm'
   export default {
     name: 'vue-good-table',
     props: {
@@ -542,6 +542,12 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
             // date comparison here
             if (this.columns[this.sortColumn].type === 'date') {
+              if (!isValid(x)) {
+                return -1 * (this.sortType === 'desc' ? -1 : 1);
+              }
+              if (!isValid(y)) {
+                return (this.sortType === 'desc' ? -1 : 1);
+              }
               return (compareAsc(x, y)) * (this.sortType === 'desc' ? -1 : 1);
             }
 
