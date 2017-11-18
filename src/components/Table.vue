@@ -21,6 +21,7 @@
           <tr>
             <th v-if="lineNumbers" class="line-numbers"></th>
             <th v-for="(column, index) in columns"
+              :key="column.field"
               @click="sort(index)"
               :class="columnHeaderClass(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
@@ -33,7 +34,9 @@
           </tr>
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
-            <th v-for="(column, index) in columns" v-if="!column.hidden">
+            <th v-for="(column, index) in columns"
+              :key="column.field"
+              v-if="!column.hidden">
               <div v-if="column.filterable" :class="columnHeaderClass(column, index)">
                 <input v-if="!column.filterDropdown"
                   type="text"
@@ -50,6 +53,7 @@
                     <option value="">{{ getPlaceholder(column) }}</option>
                     <option
                       v-for="option in column.filterOptions"
+                      :key="option"
                       :value="option">
                       {{ option }}
                     </option>
@@ -61,21 +65,30 @@
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
                   <option value="">{{ getPlaceholder(column) }}</option>
-                  <option v-for="option in column.filterOptions"
-                  :value="option.value">{{ option.text }}</option>
+                  <option 
+                    v-for="option in column.filterOptions"
+                    :key="option"
+                    :value="option.value">{{ option.text }}</option>
                 </select>
-
               </div>
             </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr v-for="(row, index) in paginated" :class="getRowStyleClass(row)" @click="click(row, index)">
+          <tr 
+            v-for="(row, index) in paginated"
+            :key="index"
+            :class="getRowStyleClass(row)" 
+            @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden && column.field">
+              <td 
+                v-for="(column, i) in columns"
+                :key="column.field" 
+                :class="getDataStyle(i, 'td')"
+                v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>

@@ -482,6 +482,11 @@ myStyleFn(row){
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>placeholder</td>
+      <td>placeholder to use for filter input</td>
+      <td>String</td>
+    </tr>
+    <tr>
       <td>filterDropdown</td>
       <td>provides a dropdown for filtering instead of a text input</td>
       <td>Boolean</td>
