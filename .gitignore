@@ -1,11 +1,6 @@
 .DS_Store
-npm-debug.log
 node_modules/
+*.log
 .idea/
-/demos/demo1/dist/
-/demos/demo1/package.json
-/demos/demo1/webpack.config.js
-/demos/demo2/dist/
-/demos/demo2/package.json
-/demos/demo2/webpack.config.js
-
+.vscode/
+demos/
