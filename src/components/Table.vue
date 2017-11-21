@@ -46,7 +46,7 @@
             <th v-for="(column, index) in columns"
               :key="column.field"
               v-if="!column.hidden">
-              <div v-if="column.filterable" 
+              <div v-if="column.filterable"
                 :class="getHeaderClasses(column, index)">
                 <input v-if="!column.filterDropdown"
                   type="text"
@@ -75,7 +75,7 @@
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
                   <option value="">{{ getPlaceholder(column) }}</option>
-                  <option 
+                  <option
                     v-for="option in column.filterOptions"
                     :key="option"
                     :value="option.value">{{ option.text }}</option>
@@ -86,17 +86,17 @@
         </thead>
 
         <tbody>
-          <tr 
+          <tr
             v-for="(row, index) in paginated"
             :key="index"
-            :class="getRowStyleClass(row)" 
+            :class="getRowStyleClass(row)"
             @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td 
+              <td
                 v-for="(column, i) in columns"
-                :key="column.field" 
+                :key="column.field"
                 :class="getClasses(i, 'td')"
                 v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
@@ -131,7 +131,7 @@
 <script>
   import {format, parse, compareAsc, isValid} from 'date-fns/esm'
   import VueGoodPagination from './Pagination.vue'
-  
+
   export default {
     name: 'vue-good-table',
     components: {
@@ -321,11 +321,7 @@
 
       //method to filter rows
       filterRows() {
-        var computedRows = JSON.parse(JSON.stringify(this.rows));
-        // we need to preserve the original index of rows so lets do that
-        for(const [index, row] of computedRows.entries()) {
-          row.originalIndex = index;
-        }
+        var computedRows = this.originalRows;
 
         if(this.hasFilterRow) {
           for (var col of this.columns){
@@ -454,7 +450,7 @@
         // take care of the global filter here also
         if (this.globalSearchAllowed) {
           var filteredRows = [];
-          for (var row of this.rows) {
+          for (var row of this.originalRows) {
             for(var col of this.columns) {
               if (String(this.collectFormatted(row, col)).toLowerCase()
                   .search(this.searchTerm.toLowerCase()) > -1) {
@@ -547,16 +543,22 @@
           paginatedRows = paginatedRows.slice(pageStart, pageEnd);
         }
         return paginatedRows;
-      }
+      },
+
+      originalRows() {
+        const rows = JSON.parse(JSON.stringify(this.rows));
+
+        // we need to preserve the original index of rows so lets do that
+        for(const [index, row] of rows.entries()) {
+          row.originalIndex = index;
+        }
+
+        return rows;
+      },
     },
 
     mounted() {
-      this.filteredRows = JSON.parse(JSON.stringify(this.rows));
-
-      // we need to preserve the original index of rows so lets do that
-      for(const [index, row] of this.filteredRows.entries()) {
-        row.originalIndex = index;
-      }
+      this.filteredRows = this.originalRows;
 
       if (this.perPage) {
         this.currentPerPage = this.perPage;
