@@ -123,7 +123,13 @@
         :rtl="rtl"
         :total="processedRows.length"
         @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"></vue-good-pagination>
+        @per-page-changed="perPageChanged"
+        :nextText="nextText"
+        :prevText="prevText"
+        :rowsPerPageText="rowsPerPageText"
+        :ofText="ofText"
+        :allText="allText"
+        ></vue-good-pagination>
     </div>
   </div>
 </template>
@@ -159,7 +165,13 @@
       externalSearchQuery: {default: null},
 
       // text options
-      globalSearchPlaceholder: {default: 'Search Table'}
+      globalSearchPlaceholder: {default: 'Search Table'},
+
+      nextText: {default: 'Next'},
+      prevText: {default: 'Prev'},
+      rowsPerPageText: {default: 'Rows per page:'},
+      ofText: {default: 'of'},
+      allText: {default: 'All'}
     },
 
     data: () => ({
