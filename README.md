@@ -239,6 +239,11 @@ You can provide html for empty state slot as well. Example:
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>paginateOnTop</td>
+      <td>Add pagination on top of the table as opposed to the default bottom</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>rtl</td>
       <td>Enable Right-To-Left layout for the table</td>
       <td>Boolean (<em>default: false</em>)</td>
@@ -477,9 +482,19 @@ myStyleFn(row){
       <td>String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code></td>
     </tr>
     <tr>
+      <td>sortable (optional)</td>
+      <td>enable/disable sorting on columns. This property is higher priority than globle sortable property</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>filterable (optional)</td>
       <td>enables filtering on column (By default, creates a text input)</td>
       <td>Boolean</td>
+    </tr>
+    <tr>
+      <td>placeholder</td>
+      <td>placeholder to use for filter input</td>
+      <td>String</td>
     </tr>
     <tr>
       <td>filterDropdown</td>

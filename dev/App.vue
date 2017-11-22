@@ -1,6 +1,10 @@
 <template>
   <div>
-    <vue-good-table :columns="columns" :rows="rows" :line-numbers="true">
+    <vue-good-table
+      :paginate="true"
+      :columns="columns" 
+      :rows="rows" 
+      :line-numbers="true">
       <template slot="table-row-before" scope="props">
         <td><input type="checkbox" /></td>
       </template>
@@ -21,7 +25,8 @@
       return {
         columns: [
           {
-            label: ''
+            label: '',
+            sortable: false,
           },
           {
             label: 'Name',
@@ -34,7 +39,8 @@
             type: 'number',
           }, 
           {
-            label: ''
+            label: '',
+            sortable: false,
           },
         ],
         rows: [
@@ -56,6 +62,18 @@
           }, {
             name: "John",
             age: "20"
+          }, {
+            name: "Jane",
+            age: "24"
+          }, {
+            name: "Susan",
+            age: "16"
+          }, {
+            name: "Chris",
+            age: "55"
+          }, {
+            name: "Dan",
+            age: "40"
           }, {
             name: "Jane",
             age: "24"

@@ -6,6 +6,15 @@
         <div class="actions pull-right">
         </div>
       </div>
+
+      <vue-good-pagination
+        v-if="paginate && paginateOnTop"
+        :perPage="perPage"
+        :rtl="rtl"
+        :total="processedRows.length"
+        @page-changed="pageChanged"
+        @per-page-changed="perPageChanged"></vue-good-pagination>
+
       <table ref="table" :class="styleClass">
         <thead>
           <tr v-if="globalSearch && externalSearchQuery == null">
@@ -21,8 +30,9 @@
           <tr>
             <th v-if="lineNumbers" class="line-numbers"></th>
             <th v-for="(column, index) in columns"
+              :key="column.field"
               @click="sort(index)"
-              :class="columnHeaderClass(column, index)"
+              :class="getHeaderClasses(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
               v-if="!column.hidden">
               <slot name="table-column" :column="column">
@@ -33,8 +43,11 @@
           </tr>
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
-            <th v-for="(column, index) in columns" v-if="!column.hidden">
-              <div v-if="column.filterable" :class="columnHeaderClass(column, index)">
+            <th v-for="(column, index) in columns"
+              :key="column.field"
+              v-if="!column.hidden">
+              <div v-if="column.filterable" 
+                :class="getHeaderClasses(column, index)">
                 <input v-if="!column.filterDropdown"
                   type="text"
                   class=""
@@ -50,6 +63,7 @@
                     <option value="">{{ getPlaceholder(column) }}</option>
                     <option
                       v-for="option in column.filterOptions"
+                      :key="option"
                       :value="option">
                       {{ option }}
                     </option>
@@ -61,21 +75,30 @@
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
                   <option value="">{{ getPlaceholder(column) }}</option>
-                  <option v-for="option in column.filterOptions"
-                  :value="option.value">{{ option.text }}</option>
+                  <option 
+                    v-for="option in column.filterOptions"
+                    :key="option"
+                    :value="option.value">{{ option.text }}</option>
                 </select>
-
               </div>
             </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr v-for="(row, index) in paginated" :class="getRowStyleClass(row)" @click="click(row, index)">
+          <tr 
+            v-for="(row, index) in paginated"
+            :key="index"
+            :class="getRowStyleClass(row)" 
+            @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td v-for="(column, i) in columns" :class="getDataStyle(i, 'td')" v-if="!column.hidden && column.field">
+              <td 
+                v-for="(column, i) in columns"
+                :key="column.field" 
+                :class="getClasses(i, 'td')"
+                v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
@@ -93,42 +116,27 @@
           </tr>
         </tbody>
       </table>
-    </div>
 
-    <div class="table-footer clearfix" v-if="paginate">
-      <div class="datatable-length pull-left">
-        <label>
-          <span>{{rowsPerPageText}}</span>
-          <span v-if="perPage" class="perpage-count">{{perPage}}</span>
-          <select v-if="!perPage" class="browser-default" @change="onTableLength">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
-            <option value="50">50</option>
-            <option value="-1">{{allText}}</option>
-          </select>
-        </label>
-      </div>
-      <div class="pagination-controls pull-right">
-        <a href="javascript:undefined" class="page-btn" @click.prevent.stop="previousPage" tabindex="0">
-          <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
-          <span>{{prevText}}</span>
-        </a>
-        <div class="info">{{paginatedInfo}}</div>
-        <a href="javascript:undefined" class="page-btn" @click.prevent.stop="nextPage" tabindex="0">
-          <span >{{nextText}}</span>
-          <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
-        </a>
-      </div>
+      <vue-good-pagination
+        v-if="paginate && !paginateOnTop"
+        :perPage="perPage"
+        :rtl="rtl"
+        :total="processedRows.length"
+        @page-changed="pageChanged"
+        @per-page-changed="perPageChanged"></vue-good-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import {format, parse, compareAsc} from 'date-fns/esm'
+  import {format, parse, compareAsc, isValid} from 'date-fns/esm'
+  import VueGoodPagination from './Pagination.vue'
+  
   export default {
     name: 'vue-good-table',
+    components: {
+      VueGoodPagination
+    },
     props: {
       styleClass: {default: 'table table-bordered'},
       title: '',
@@ -138,6 +146,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       perPage: {},
       sortable: {default: true},
       paginate: {default: false},
+      paginateOnTop: {default: false},
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
       responsive: {default: true},
@@ -150,12 +159,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
       externalSearchQuery: {default: null},
 
       // text options
-      globalSearchPlaceholder: {default: 'Search Table'},
-      nextText: {default: 'Next'},
-      prevText: {default: 'Prev'},
-      rowsPerPageText: {default: 'Rows per page:'},
-      ofText: {default: 'of'},
-      allText: {default: 'All'},
+      globalSearchPlaceholder: {default: 'Search Table'}
     },
 
     data: () => ({
@@ -173,30 +177,17 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
     methods: {
 
-      nextPage() {
-        if(this.currentPerPage == -1) return;
-        if (this.processedRows.length > this.currentPerPage * this.currentPage)
-          ++this.currentPage;
-        this.pageChanged();
-      },
-
-      previousPage() {
-
-        if (this.currentPage > 1)
-          --this.currentPage;
-        this.pageChanged();
-      },
-
-      pageChanged() {
+      pageChanged(pagination) {
+        this.currentPage = pagination.currentPage;
         this.$emit('pageChanged', {currentPage: this.currentPage, total: Math.floor(this.rows.length / this.currentPerPage)});
       },
 
-      onTableLength(e) {
-        this.currentPerPage = e.target.value;
+      perPageChanged(pagination) {
+        this.currentPerPage = pagination.currentPerPage;
       },
 
       sort(index) {
-        if (!this.sortable)
+        if (!this.isSortableColumn(index))
           return;
         if (this.sortColumn === index) {
           this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
@@ -286,49 +277,35 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         return formattedRow;
       },
 
-      // Get the necessary style-classes for the given column
-      //--------------------------------------------------------
-      columnHeaderClass(column, index){
-        var classString = '';
-        if (this.sortable) {
-          classString += 'sorting ';
-        }
-        if (index === this.sortColumn) {
-          if (this.sortType === 'desc') {
-            classString += 'sorting-desc ';
-          } else {
-            classString += 'sorting-asc ';
-          }
-        }
-        classString += this.getDataStyle(index, 'th');
-        return classString;
+      //Check if a column is sortable.
+      isSortableColumn(index) {
+        const sortable = this.columns[index].sortable;
+        const isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
+        return isSortable;
       },
-      // given column index, we can figure out what style classes
-      // to apply to this data
-      //---------------------------------------------------------
-      getDataStyle(index, type) {
-        var classString = '';
-        switch (this.columns[index].type) {
-          case 'number':
-          case 'percentage':
-          case 'decimal':
-          case 'date':
-            classString += 'right-align ';
-          break;
-          default:
-            if(!this.rtl) {
-              classString += 'left-align ';
-            } else {
-              // if right to left is enabled this is the default
-              classString += 'right-align ';
-            }
-            break;
-        }
-        if (typeof type !== 'undefined' && this.columns[index].hasOwnProperty(type + 'Class')) {
-          classString += ' ';
-          classString = this.columns[index][type + 'Class'];
-        }
-        return classString;
+
+      //Get classes for the given header column.
+      getHeaderClasses(column, index) {
+        const isSortable = this.isSortableColumn(index);
+        const classes = Object.assign({}, this.getClasses(index, 'th'), {
+          'sorting': isSortable,
+          'sorting-desc': isSortable && this.sortColumn === index && this.sortType === 'desc',
+          'sorting-asc': isSortable && this.sortColumn === index && this.sortType === 'asc',
+        });
+        return classes;
+      },
+
+      //Get classes for the given column index & element.
+      getClasses(index, element) {
+        const { type, [element + 'Class']: custom } = this.columns[index];
+        let isRight = ['number', 'percentage', 'decimal', 'date'].includes(type);
+        if (this.rtl) isRight = true;
+        const classes = {
+          'right-align': isRight,
+          'left-align': !isRight,
+          [custom]: !!custom
+        };
+        return classes;
       },
 
       //since vue doesn't detect property addition and deletion, we
@@ -416,21 +393,13 @@ import {format, parse, compareAsc} from 'date-fns/esm'
           handler: function(newObj){
             this.filterRows();
           },
-          deep: true,
+          deep: true
       },
       rows: {
         handler: function(newObj){
           this.filterRows();
         },
-        deep: true,
-      },
-      perPage() {
-        if (this.perPage) {
-          this.currentPerPage = this.perPage;
-        }else{
-          //reset to default
-          this.currentPerPage = 10;
-        }
+        deep: true
       }
 
     },
@@ -498,11 +467,11 @@ import {format, parse, compareAsc} from 'date-fns/esm'
         }
 
         //taking care of sort here only if sort has changed
-        if (this.sortable !== false && this.sortColumn !== -1 &&
+        if (this.sortColumn !== -1 && this.isSortableColumn(this.sortColumn) &&
 
           // if search trigger is enter then we only sort
           // when enter is hit
-          (this.searchTrigger != 'enter' || this.sortChanged)) {
+          (this.searchTrigger !== 'enter' || this.sortChanged)) {
 
           this.sortChanged = false;
 
@@ -518,7 +487,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
                 d = parse(d + '', this.columns[this.sortColumn].inputFormat, new Date());
               } else if (typeof(d) === 'string') {
                 d = d.toLowerCase();
-                if (this.columns[this.sortColumn].type == 'number')
+                if (this.columns[this.sortColumn].type === 'number')
                   d = d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d);
               }
               return d;
@@ -529,6 +498,12 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
             // date comparison here
             if (this.columns[this.sortColumn].type === 'date') {
+              if (!isValid(x)) {
+                return -1 * (this.sortType === 'desc' ? -1 : 1);
+              }
+              if (!isValid(y)) {
+                return (this.sortType === 'desc' ? -1 : 1);
+              }
               return (compareAsc(x, y)) * (this.sortType === 'desc' ? -1 : 1);
             }
 
@@ -539,7 +514,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
 
         // if the filtering is event based, we need to maintain filter
         // rows
-        if (this.searchTrigger == 'enter') {
+        if (this.searchTrigger === 'enter') {
           this.filteredRows = computedRows;
         }
 
@@ -556,7 +531,7 @@ import {format, parse, compareAsc} from 'date-fns/esm'
           // not relevant anymore
           // also, if setting to all, current page will not be valid
           if (pageStart >= this.processedRows.length
-            || this.currentPerPage == -1) {
+            || this.currentPerPage === -1) {
             this.currentPage = 1;
             pageStart = 0;
           }
@@ -565,27 +540,14 @@ import {format, parse, compareAsc} from 'date-fns/esm'
           var pageEnd = paginatedRows.length + 1;
 
           //if the setting is set to 'all'
-          if (this.currentPerPage != -1) {
+          if (this.currentPerPage !== -1) {
             pageEnd = this.currentPage * this.currentPerPage;
           }
 
           paginatedRows = paginatedRows.slice(pageStart, pageEnd);
         }
         return paginatedRows;
-      },
-
-      paginatedInfo() {
-        var infoStr = '';
-        infoStr += (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
-        infoStr += ' - ';
-        infoStr += Math.min(this.processedRows.length, this.currentPerPage * this.currentPage);
-        infoStr += ' ' + this.ofText + ' ';
-        infoStr += this.processedRows.length;
-        if(this.currentPerPage == -1){
-          return '1 - ' + this.processedRows.length + ' ' + this.ofText + ' ' + this.processedRows.length;
-        }
-        return infoStr;
-      },
+      }
     },
 
     mounted() {
@@ -777,112 +739,6 @@ import {format, parse, compareAsc} from 'date-fns/esm'
   margin:  0px;
   font-size: 18px;
 }
-
-
-/* Table footer specific styles
-************************************************/
-
-  .table-footer{
-    /* background-color: rgba(35,41,53, 0.03); */
-    background-color: rgba(35,41,53,0.05);
-    border: 1px solid #DDD;
-    margin-bottom:  2rem;
-    margin-top:  0px;
-    padding:  1rem;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    font-size: 14px;
-    color:  rgba(0, 0, 0, 0.44);
-  }
-
-  .table-footer>div{
-    display: inline-block;
-  }
-
-  .pagination-controls>*{
-    display: inline-block;
-  }
-
-  .pagination-controls a{
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.66);
-    font-size: 14px;
-    font-weight: 600;
-    opacity: 0.8;
-  }
-
-  .pagination-controls a:hover{
-    opacity: 1;
-  }
-
-  .pagination-controls a span{
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  .pagination-controls .info{
-    margin:  0px 15px;
-    font-size: 13px;
-    font-weight: bold;
-    color:  rgba(0, 0, 0, 0.40);
-  }
-
-  .pagination-controls a .chevron{
-    width:  24px;
-    height:  24px;
-    border-radius: 15%;
-    /* border:  1px solid rgba(35,41,53,0.2);
-    background-color: #fff; */
-    position:  relative;
-    margin:  0px 8px;
-  }
-
-  .pagination-controls .chevron::after{
-    content:  '';
-    position:  absolute;
-    display:  block;
-    left:  50%;
-    top:  50%;
-    margin-top:  -6px;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-  }
-
-  .pagination-controls .chevron.left::after{
-    border-right:  6px solid rgba(0, 0, 0, 0.66);
-    margin-left:  -3px;
-  }
-
-  .pagination-controls .chevron.right::after{
-    border-left:  6px solid rgba(0, 0, 0, 0.66);
-    margin-left:  -3px;
-  }
-
-  .table-footer select {
-    display: inline-block;
-    background-color: transparent;
-    width: auto;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    height: auto;
-    font-size: 14px;
-    margin-left: 8px;
-    color:  rgba(0, 0, 0, 0.55);
-    font-weight: bold;
-  }
-
-  .table-footer .perpage-count{
-    color:  rgba(0, 0, 0, 0.55);
-    font-weight: bold;
-  }
-
-  @media only screen and (max-width: 750px) {
-    /* on small screens hide the info */
-    .pagination-controls .info{
-      display:  none;
-    }
-  }
 
   /* Global Search
   **********************************************/
