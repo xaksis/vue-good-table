@@ -18,7 +18,7 @@
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
         :ofText="ofText"
-        :allText="allText"></vue-good-pagination></vue-good-pagination>
+        :allText="allText"></vue-good-pagination>
 
       <table ref="table" :class="styleClass">
         <thead>
