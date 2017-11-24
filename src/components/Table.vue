@@ -13,7 +13,12 @@
         :rtl="rtl"
         :total="processedRows.length"
         @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"></vue-good-pagination>
+        @per-page-changed="perPageChanged"
+        :nextText="nextText"
+        :prevText="prevText"
+        :rowsPerPageText="rowsPerPageText"
+        :ofText="ofText"
+        :allText="allText"></vue-good-pagination></vue-good-pagination>
 
       <table ref="table" :class="styleClass">
         <thead>
