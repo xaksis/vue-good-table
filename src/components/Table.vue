@@ -86,7 +86,17 @@
         </thead>
 
         <tbody>
+          <tr v-if="loading">
+            <td :colspan="columns.length">
+              <slot name="loading">
+                <div class="center-align text-disabled">
+                  Loading ...
+                </div>
+              </slot>
+            </td>
+          </tr>
           <tr 
+            v-else
             v-for="(row, index) in paginated"
             :key="index"
             :class="getRowStyleClass(row)" 
@@ -105,7 +115,7 @@
             </slot>
             <slot name="table-row-after" :row="row" :index="index"></slot>
           </tr>
-          <tr v-if="processedRows.length === 0">
+          <tr v-if="processedRows.length === 0 && !loading">
             <td :colspan="columns.length">
               <slot name="emptystate">
                 <div class="center-align text-disabled">
@@ -159,7 +169,10 @@
       externalSearchQuery: {default: null},
 
       // text options
-      globalSearchPlaceholder: {default: 'Search Table'}
+      globalSearchPlaceholder: {default: 'Search Table'},
+
+      // state
+      loading: {default: false, type: Boolean}
     },
 
     data: () => ({
