@@ -1,9 +1,11 @@
 <template>
   <div class="good-table" :class="{'rtl': rtl}">
     <div :class="{'responsive': responsive}">
-      <div v-if="title" class="table-header clearfix">
+      <div v-if="title || $slots['table-actions']" class="table-header clearfix">
         <h2 class="table-title pull-left">{{title}}</h2>
         <div class="actions pull-right">
+          <slot name="table-actions">
+          </slot>
         </div>
       </div>
 
@@ -13,7 +15,12 @@
         :rtl="rtl"
         :total="processedRows.length"
         @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"></vue-good-pagination>
+        @per-page-changed="perPageChanged"
+        :nextText="nextText"
+        :prevText="prevText"
+        :rowsPerPageText="rowsPerPageText"
+        :ofText="ofText"
+        :allText="allText"></vue-good-pagination>
 
       <table ref="table" :class="styleClass">
         <thead>
@@ -46,7 +53,7 @@
             <th v-for="(column, index) in columns"
               :key="column.field"
               v-if="!column.hidden">
-              <div v-if="column.filterable" 
+              <div v-if="column.filterable"
                 :class="getHeaderClasses(column, index)">
                 <input v-if="!column.filterDropdown"
                   type="text"
@@ -75,7 +82,7 @@
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
                   <option value="">{{ getPlaceholder(column) }}</option>
-                  <option 
+                  <option
                     v-for="option in column.filterOptions"
                     :key="option"
                     :value="option.value">{{ option.text }}</option>
@@ -86,6 +93,7 @@
         </thead>
 
         <tbody>
+
           <tr v-if="loading">
             <td :colspan="columns.length">
               <slot name="loading">
@@ -99,14 +107,14 @@
             v-else
             v-for="(row, index) in paginated"
             :key="index"
-            :class="getRowStyleClass(row)" 
+            :class="getRowStyleClass(row)"
             @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <slot name="table-row-before" :row="row" :index="index"></slot>
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td 
+              <td
                 v-for="(column, i) in columns"
-                :key="column.field" 
+                :key="column.field"
                 :class="getClasses(i, 'td')"
                 v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
@@ -133,7 +141,13 @@
         :rtl="rtl"
         :total="processedRows.length"
         @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"></vue-good-pagination>
+        @per-page-changed="perPageChanged"
+        :nextText="nextText"
+        :prevText="prevText"
+        :rowsPerPageText="rowsPerPageText"
+        :ofText="ofText"
+        :allText="allText"
+        ></vue-good-pagination>
     </div>
   </div>
 </template>
@@ -141,7 +155,7 @@
 <script>
   import {format, parse, compareAsc, isValid} from 'date-fns/esm'
   import VueGoodPagination from './Pagination.vue'
-  
+
   export default {
     name: 'vue-good-table',
     components: {
@@ -173,6 +187,12 @@
 
       // state
       loading: {default: false, type: Boolean}
+
+      nextText: {default: 'Next'},
+      prevText: {default: 'Prev'},
+      rowsPerPageText: {default: 'Rows per page:'},
+      ofText: {default: 'of'},
+      allText: {default: 'All'}
     },
 
     data: () => ({
@@ -334,11 +354,7 @@
 
       //method to filter rows
       filterRows() {
-        var computedRows = JSON.parse(JSON.stringify(this.rows));
-        // we need to preserve the original index of rows so lets do that
-        for(const [index, row] of computedRows.entries()) {
-          row.originalIndex = index;
-        }
+        var computedRows = this.originalRows;
 
         if(this.hasFilterRow) {
           for (var col of this.columns){
@@ -364,7 +380,7 @@
                     //text value lets test starts with
                     return this.collect(row, col.field)
                       .toLowerCase()
-                      .startsWith(
+                      .includes(
                         (this.columnFilters[col.field]).toLowerCase()
                       );
                 }
@@ -467,7 +483,7 @@
         // take care of the global filter here also
         if (this.globalSearchAllowed) {
           var filteredRows = [];
-          for (var row of this.rows) {
+          for (var row of this.originalRows) {
             for(var col of this.columns) {
               if (String(this.collectFormatted(row, col)).toLowerCase()
                   .search(this.searchTerm.toLowerCase()) > -1) {
@@ -560,16 +576,22 @@
           paginatedRows = paginatedRows.slice(pageStart, pageEnd);
         }
         return paginatedRows;
-      }
+      },
+
+      originalRows() {
+        const rows = JSON.parse(JSON.stringify(this.rows));
+
+        // we need to preserve the original index of rows so lets do that
+        for(const [index, row] of rows.entries()) {
+          row.originalIndex = index;
+        }
+
+        return rows;
+      },
     },
 
     mounted() {
-      this.filteredRows = JSON.parse(JSON.stringify(this.rows));
-
-      // we need to preserve the original index of rows so lets do that
-      for(const [index, row] of this.filteredRows.entries()) {
-        row.originalIndex = index;
-      }
+      this.filteredRows = this.originalRows;
 
       if (this.perPage) {
         this.currentPerPage = this.perPage;
