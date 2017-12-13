@@ -144,6 +144,15 @@
 <script>
   import {format, parse, compareAsc, isValid} from 'date-fns/esm'
   import VueGoodPagination from './Pagination.vue'
+  import each from 'lodash.foreach'
+  import defaultType from './types/default'
+
+  let dataTypes = {};
+  let coreDataTypes = require.context("./types", false, /^\.\/([\w-_]+)\.js$/);
+  each(coreDataTypes.keys(), (key) => {
+		let compName = key.replace(/^\.\//, "").replace(/\.js/, "");
+		dataTypes[compName] = coreDataTypes(key).default;
+  });
 
   export default {
     name: 'vue-good-table',
@@ -192,6 +201,7 @@
       timer: null,
       forceSearch: false,
       sortChanged: false,
+      dataTypes: dataTypes || {},
     }),
 
     methods: {
@@ -256,39 +266,17 @@
       },
 
       collectFormatted(obj, column) {
-        //helper functions within collect
-        function formatDecimal(v) {
-          return parseFloat(Math.round(v * 100) / 100).toFixed(2);
-        }
-
-        function formatPercent(v) {
-          return parseFloat(v * 100).toFixed(2) + '%';
-        }
-
-        function formatDate(v) {
-          // convert to date
-          return format(parse(v, column.inputFormat, new Date()), column.outputFormat);
-        }
-
         var value = this.collect(obj, column.field);
-
+ 
         if (value === undefined) return '';
         //lets format the resultant data
-        switch(column.type) {
-          case 'decimal':
-            return formatDecimal(value);
-          case 'percentage':
-            return formatPercent(value);
-          case 'date':
-            return formatDate(value);
-          default:
-            return value;
-        }
+        var type = column.typeDef
+        return type.format(value, column);
       },
 
       formattedRow(row) {
         var formattedRow = {};
-        for (const col of this.columns) {
+        for (const col of this.typedColumns) {
           if (col.field) {
             formattedRow[col.field] = this.collectFormatted(row, col);
           }
@@ -316,8 +304,8 @@
 
       //Get classes for the given column index & element.
       getClasses(index, element) {
-        const { type, [element + 'Class']: custom } = this.columns[index];
-        let isRight = ['number', 'percentage', 'decimal', 'date'].includes(type);
+        const { typeDef, [element + 'Class']: custom } = this.typedColumns[index];
+        let isRight = typeDef.isRight;
         if (this.rtl) isRight = true;
         const classes = {
           'right-align': isRight,
@@ -343,32 +331,17 @@
         var computedRows = this.originalRows;
 
         if(this.hasFilterRow) {
-          for (var col of this.columns){
+          for (var col of this.typedColumns){
             if (col.filterable && this.columnFilters[col.field]) {
               computedRows = computedRows.filter(row => {
 
                 // If column has a custom filter, use that.
-
                 if (col.filter) {
-                    return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
-                }
-
-                // Use default filters
-
-                switch(col.type) {
-                  case 'number':
-                  case 'percentage':
-                  case 'decimal':
-                    //in case of numeric value we need to do an exact
-                    //match for now`
-                    return this.collect(row, col.field) == this.columnFilters[col.field];
-                  default:
-                    //text value lets test starts with
-                    return this.collect(row, col.field)
-                      .toLowerCase()
-                      .includes(
-                        (this.columnFilters[col.field]).toLowerCase()
-                      );
+                  return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
+                }else{
+                  // Use default filters
+                  var typeDef = col.typeDef
+                  return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
                 }
               });
             }
@@ -492,38 +465,13 @@
 
           computedRows = computedRows.sort((x,y) => {
             if (!this.columns[this.sortColumn])
-              return 0;
+               return 0;
 
-            const cook = (d) => {
-              d = this.collect(d, this.columns[this.sortColumn].field);
-
-              //take care of dates too.
-              if (this.columns[this.sortColumn].type === 'date') {
-                d = parse(d + '', this.columns[this.sortColumn].inputFormat, new Date());
-              } else if (typeof(d) === 'string') {
-                d = d.toLowerCase();
-                if (this.columns[this.sortColumn].type === 'number')
-                  d = d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d);
-              }
-              return d;
-            }
-
-            x = cook(x);
-            y = cook(y);
-
-            // date comparison here
-            if (this.columns[this.sortColumn].type === 'date') {
-              if (!isValid(x)) {
-                return -1 * (this.sortType === 'desc' ? -1 : 1);
-              }
-              if (!isValid(y)) {
-                return (this.sortType === 'desc' ? -1 : 1);
-              }
-              return (compareAsc(x, y)) * (this.sortType === 'desc' ? -1 : 1);
-            }
-
-            // regular comparison here
-            return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
+            let xvalue = this.collect(x, this.columns[this.sortColumn].field)
+            let yvalue = this.collect(y, this.columns[this.sortColumn].field)
+            var typeDef = this.typedColumns[this.sortColumn].typeDef
+            return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
+              * (this.sortType === 'desc' ? -1 : 1) 
           })
         }
 
@@ -568,12 +516,20 @@
         const rows = JSON.parse(JSON.stringify(this.rows));
 
         // we need to preserve the original index of rows so lets do that
-        for(const [index, row] of rows.entries()) {
-          row.originalIndex = index;
+        for(let index = 0; index < rows.length; index++){
+          rows[index].originalIndex = index;
         }
 
         return rows;
       },
+
+      typedColumns() {
+        const columns = Object.assign(this.columns, []);
+        for(let column of columns){
+          column.typeDef = this.dataTypes[column.type] || defaultType
+        }
+        return columns
+      }
     },
 
     mounted() {
@@ -585,7 +541,8 @@
 
       //take care of default sort on mount
       if (this.defaultSortBy) {
-        for (let [index, col] of this.columns.entries()) {
+        for(let index = 0; index < this.columns.length; index++){
+          let col = this.columns[index]
           if (col.field === this.defaultSortBy.field) {
             this.sortColumn = index;
             this.sortType = this.defaultSortBy.type || 'asc';
