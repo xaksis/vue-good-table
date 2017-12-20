@@ -28,7 +28,7 @@
             <td :colspan="lineNumbers ? columns.length + 1: columns.length">
               <div class="global-search">
                 <span class="global-search-icon">
-                  <img src="../images/search_icon.png" alt="Search Icon" />
+                  <div class="magnifying-glass"></div>
                 </span>
                 <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
               </div>
@@ -756,5 +756,34 @@
   .text-disabled{
     color:  #aaa;
   }
+
+/* magnifying glass css */
+.magnifying-glass
+{
+  margin-top: 3px;
+  display: block;
+  width: 22px;
+  height: 22px;
+  border: 3px solid #ccc;
+  position: relative;
+  border-radius: 50%;
+}
+.magnifying-glass::before
+{
+  content: "";
+  display: block;
+  position: absolute;
+  right: -10px;
+  bottom: -6px;
+  background: #ccc;
+  width: 10px;
+  height: 5px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+}
 
 </style>
