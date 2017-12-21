@@ -84,11 +84,10 @@ describe('Table.vue', () => {
       })
     })
 
-    it('should sort on the default by default', () => {
+    it('should sort on the default by default', async () => {
       vm = mount(VueGoodTable, {propsData: {rows: rows, columns: columns, defaultSortBy: {field: 'age'}}}).vm
-      vm.$nextTick(() => {
-        vm.sortColumn.should.equal(1)
-      })
+      await vm.$nextTick()
+      vm.sortColumn.should.equal(1)
     })
 
     it('should call sort if click on first header item', (done) => {
