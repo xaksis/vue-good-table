@@ -1,4 +1,4 @@
-import decimalType from '../../../../src/components/types/decimal'
+import decimalType from '@/components/types/decimal'
 import { expect } from 'chai'
 
 describe('decimal type', () => {

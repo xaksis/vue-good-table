@@ -1,5 +1,4 @@
-import numberType from '../../../../src/components/types/number'
-import { expect } from 'chai'
+import numberType from '@/components/types/number'
 
 describe('number type', () => {
   describe('compare', () => {

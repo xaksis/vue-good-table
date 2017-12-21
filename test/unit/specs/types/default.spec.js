@@ -1,5 +1,4 @@
-import defaultType from '../../../../src/components/types/default'
-import { expect } from 'chai'
+import defaultType from '@/components/types/default'
 
 describe('default type', () => {
   describe('compare', () => {

@@ -1,5 +1,4 @@
-import dateType from '../../../../src/components/types/date'
-import { expect } from 'chai'
+import dateType from '@/components/types/date'
 
 describe('date type', () => {
   describe('compare', () => {
