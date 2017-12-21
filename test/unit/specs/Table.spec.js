@@ -1,13 +1,6 @@
-import {expect} from 'chai'
 import sinon from 'sinon'
-import Vue from 'vue'
-import VueGoodTable from '../../../src/components/Table.vue'
-
-function mount (Component, propsData) {
-  const Ctor = Vue.extend(Component)
-  const vm = new Ctor({propsData}).$mount()
-  return vm
-}
+import { mount } from 'vue-test-utils'
+import VueGoodTable from '@/components/Table.vue'
 
 const columns = [
   {
@@ -34,105 +27,103 @@ const rows = [
 ]
 
 describe('Table.vue', () => {
+  let wrapper, vm
+  beforeEach(() => {
+    wrapper = mount(VueGoodTable, {
+      attachToDocument: true,
+      propsData: {
+        rows: rows,
+        columns: columns
+      }
+    })
+    vm = wrapper.vm
+  })
   it('should render correct contents', (done) => {
-    const title = 'Good table'
-    const vm = mount(VueGoodTable, {title: title, rows: rows, columns: columns})
     vm.$nextTick(() => {
-      let tableRows = vm.$el.querySelectorAll('tbody tr')
-      expect(tableRows.length).to.equal(rows.length)
+      let tableRows = wrapper.findAll('tbody tr')
+      tableRows.length.should.equal(rows.length)
       done()
     })
   })
 
   describe('global search', () => {
-    it('should render less records', (done) => {
-      const vm = mount(VueGoodTable, {
+    it('should render less records', async () => {
+      wrapper = mount(VueGoodTable, {propsData: {
         globalSearch: true,
         rows: rows,
-        columns: columns})
-      vm.$nextTick(() => {
-        var searchElt = vm.$el.querySelector('.global-search-input')
-        searchElt.value = 'jo'
-        var e = document.createEvent('HTMLEvents')
-        e.initEvent('input', false, true)
-        searchElt.dispatchEvent(e)
-        vm.$nextTick(() => {
-          let tableRows = vm.$el.querySelectorAll('tbody tr')
-          expect(tableRows.length).to.be.below(rows.length)
-          done()
-        })
-      })
+        columns: columns}})
+      await wrapper.vm.$nextTick()
+      var searchElt = wrapper.find('.global-search-input')
+      searchElt.element.value = 'jo'
+      searchElt.trigger('input')
+      await wrapper.vm.$nextTick()
+      let tableRows = wrapper.findAll('tbody tr')
+      tableRows.length.should.be.below(rows.length)
     })
   })
 
   describe('sort', () => {
+    let originalCompare
+    beforeEach(() => {
+      originalCompare = wrapper.vm.$data.dataTypes.number.compare
+    })
+
+    afterEach(() => {
+      wrapper.vm.$data.dataTypes.number.compare = originalCompare
+    })
+
     it('should call compare once per combination (touch each value at least once)', (done) => {
       var compareSpy = sinon.stub()
-      const vm = mount(VueGoodTable, {
-        rows: rows,
-        columns: columns
-      })
-      var originalCompare = vm.$data.dataTypes.number.compare
       vm.$data.dataTypes.number.compare = compareSpy
       vm.$nextTick(() => {
         vm.sort(1)
         vm.$nextTick(() => {
-          expect(compareSpy.callCount).to.above(rows.length - 2)
+          compareSpy.callCount.should.be.above(rows.length - 2)
           done()
-          vm.$data.dataTypes.number.compare = originalCompare
         })
       })
     })
 
     it('should sort on the default by default', () => {
-      const vm = mount(VueGoodTable, {rows: rows, columns: columns, defaultSortBy: {field: 'age'}})
+      vm = mount(VueGoodTable, {propsData: {rows: rows, columns: columns, defaultSortBy: {field: 'age'}}}).vm
       vm.$nextTick(() => {
-        expect(vm.sortColumn).to.equal(1)
+        vm.sortColumn.should.equal(1)
       })
     })
 
     it('should call sort if click on first header item', (done) => {
-      const vm = mount(VueGoodTable, {rows: rows, columns: columns})
       let sortSpy = sinon.stub(vm, 'sort')
       vm.$nextTick(() => {
         vm.$el.querySelector('thead th').click()
         vm.$nextTick(() => {
-          expect(sortSpy.calledWith(0)).to.equal(true)
+          sortSpy.calledWith(0).should.be.true
           done()
         })
       })
     })
 
-    it('should call sort if click on second header item', (done) => {
-      const vm = mount(VueGoodTable, {rows: rows, columns: columns})
+    it('should call sort if click on second header item', async () => {
       let sortSpy = sinon.stub(vm, 'sort')
-      vm.$nextTick(() => {
-        vm.$el.querySelector('thead th:nth-child(2)').click()
-        vm.$nextTick(() => {
-          expect(sortSpy.calledWith(1)).to.equal(true)
-          done()
-        })
-      })
+      await vm.$nextTick()
+      vm.$el.querySelector('thead th:nth-child(2)').click()
+      await vm.$nextTick()
+      sortSpy.calledWith(1).should.be.true
     })
   })
 
   describe('filter', () => {
-    it('should remove some rows when filtering', (done) => {
+    it('should remove some rows when filtering', async () => {
       columns[0].filterable = true
-      const vm = mount(VueGoodTable, {rows: rows, columns: columns, paginated: false})
-      vm.$nextTick(() => {
-        var searchElt = vm.$el.querySelector('input[type=text]')
-        searchElt.value = 'jo'
-        var e = document.createEvent('HTMLEvents')
-        e.initEvent('input', false, true)
-        searchElt.dispatchEvent(e)
-        vm.$nextTick(() => {
-          setTimeout(() => {
-            expect(vm.$el.querySelectorAll('tbody tr').length).to.be.below(rows.length).and.above(1)
-            done()
-          }, 420)
-        })
-      })
+      const wrapper = mount(VueGoodTable, {propsData: {rows: rows, columns: columns, paginated: false}})
+      const vm = wrapper.vm
+      await vm.$nextTick()
+      var searchElt = wrapper.find('input[type=text]')
+      searchElt.element.value = 'jo'
+      searchElt.trigger('input')
+      await vm.$nextTick()
+      setTimeout(() => {
+        wrapper.findAll('tbody tr').length.should.be.below(rows.length).and.above(1)
+      }, 420)
     })
   })
 })
