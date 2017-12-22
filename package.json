@@ -1,6 +1,6 @@
 {
   "name": "vue-good-table",
-  "version": "1.17.1",
+  "version": "1.18.0",
   "description": "A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc",
   "main": "dist/vue-good-table.js",
   "module": "src/index.js",
