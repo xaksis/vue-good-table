@@ -679,7 +679,7 @@
     cursor: pointer;
   }
 
-  .table input, .table select{
+  .table input[type="text"], .table select{
     box-sizing: border-box;
     display: block;
     width: calc(100%);
