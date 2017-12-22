@@ -34,7 +34,10 @@ var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({sourceMap: true,extract: true})
   },
-  entry: ["babel-polyfill", path.join(__dirname, '../src', "index.js")],
+  entry: [
+    "babel-polyfill", 
+    path.join(__dirname, '../src', "index.js")
+  ],
   output: {
     path: path.join(__dirname, '..', "dist"),
     filename: jsFileName,

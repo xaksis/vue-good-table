@@ -37,7 +37,7 @@
           <tr>
             <th v-if="lineNumbers" class="line-numbers"></th>
             <th v-for="(column, index) in columns"
-              :key="column.field"
+              :key="column.label"
               @click="sort(index)"
               :class="getHeaderClasses(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
@@ -51,7 +51,7 @@
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns"
-              :key="column.field"
+              :key="column.label"
               v-if="!column.hidden">
               <div v-if="column.filterable"
                 :class="getHeaderClasses(column, index)">
@@ -103,7 +103,7 @@
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
               <td
                 v-for="(column, i) in columns"
-                :key="column.field"
+                :key="column.label"
                 :class="getClasses(i, 'td')"
                 v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>

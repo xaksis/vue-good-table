@@ -5,10 +5,10 @@
       :columns="columns" 
       :rows="rows" 
       :line-numbers="true">
-      <template slot="table-row-before" scope="props">
+      <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
       </template>
-      <template slot="table-row-after" scope="props">
+      <template slot="table-row-after" slot-scope="props">
         <td><a class="button lightbox" :href="'test_detail.php?id=' + props.row.id" >detail</a></td>
       </template>
     </vue-good-table>
