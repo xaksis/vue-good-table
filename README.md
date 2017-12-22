@@ -369,6 +369,24 @@ myStyleFn(row){
       <td>String <em>searchTrigger="enter"</em></td>
     </tr>
     <tr>
+      <td>globalSearchFn</td>
+      <td>Specify your own search function for global search</td>
+      <td>Provide a function that takes in cell values and returns true if it matches, false if it doesn't match
+<pre lang="javascript">
+  &lt;vue-good-table
+  :columns="columns"
+  :globalSearchFn="searchFn"
+  :rows="rows"/&gt;
+// in js
+methods: {
+  searchFn(value){
+    return value === 'my value';
+  },
+}
+</pre>
+      </td>
+    </tr>
+    <tr>
       <td>externalSearchQuery</td>
       <td>Allows global search via your own input field</td>
       <td>Usage<br>

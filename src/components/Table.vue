@@ -179,7 +179,7 @@
       globalSearch: {default: false},
       searchTrigger: {default: null},
       externalSearchQuery: {default: null},
-
+      globalSearchFn: {type: Function, default: null},
       // text options
       globalSearchPlaceholder: {default: 'Search Table'},
 
@@ -444,11 +444,23 @@
           var filteredRows = [];
           for (var row of this.originalRows) {
             for(var col of this.columns) {
-              if (String(this.collectFormatted(row, col)).toLowerCase()
+              
+              // if a search function is provided, 
+              // use that for searching, otherwise, 
+              // use the default search behavior
+              if (this.globalSearchFn) {
+                const foundMatch = this.globalSearchFn(this.collectFormatted(row, col));
+                if (foundMatch) {
+                  filteredRows.push(row);
+                  break;
+                }
+              } else {
+                if (String(this.collectFormatted(row, col)).toLowerCase()
                   .search(this.searchTerm.toLowerCase()) > -1) {
-                filteredRows.push(row);
-                break;
-              }
+                  filteredRows.push(row);
+                  break;
+                }
+              }              
             }
           }
           computedRows = filteredRows;
