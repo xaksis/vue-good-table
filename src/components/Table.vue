@@ -455,7 +455,11 @@
               // use that for searching, otherwise, 
               // use the default search behavior
               if (this.globalSearchFn) {
-                const foundMatch = this.globalSearchFn(this.collectFormatted(row, col));
+                const foundMatch = this.globalSearchFn(
+                  row, 
+                  col,
+                  this.collectFormatted(row, col), 
+                  this.searchTerm);
                 if (foundMatch) {
                   filteredRows.push(row);
                   break;

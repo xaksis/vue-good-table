@@ -379,7 +379,7 @@ myStyleFn(row){
   :rows="rows"/&gt;
 // in js
 methods: {
-  searchFn(value){
+  searchFn(row, col, cellValue, searchTerm){
     return value === 'my value';
   },
 }
