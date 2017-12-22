@@ -445,6 +445,12 @@
           for (var row of this.originalRows) {
             for(var col of this.columns) {
               
+              //if col has search disabled, 
+              //skip the column.
+              if (col.globalSearchDisabled) {
+                continue;
+              }
+
               // if a search function is provided, 
               // use that for searching, otherwise, 
               // use the default search behavior

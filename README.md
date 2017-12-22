@@ -515,6 +515,11 @@ methods: {
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>globalSearchDisabled (optional)</td>
+      <td>if true, the column will be ignored by global search</td>
+      <td>Boolean</td>
+    </tr>
+    <tr>
       <td>placeholder</td>
       <td>placeholder to use for filter input</td>
       <td>String</td>
