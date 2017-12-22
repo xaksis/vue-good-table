@@ -29,6 +29,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "date-fns": "^2.0.0-alpha.3",
+    "lodash.clone": "^4.5.0",
     "lodash.foreach": "^4.5.0"
   },
   "devDependencies": {
