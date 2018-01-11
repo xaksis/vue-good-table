@@ -1,5 +1,7 @@
 <template>
   <div>
+    <button @click="addRow">Add Row</button>
+    <button @click="editRow">edit Row</button>
     <vue-good-table
       :paginate="true"
       :columns="columns" 
@@ -103,6 +105,15 @@
     methods: {
       onClick() {
         console.log('clicked');
+      },
+      addRow() {
+        this.rows.push({
+          name: 'Chris' + Math.random(),
+          age: 20,
+        });
+      },
+      editRow() {
+        this.$set(this.rows[12], 'age', 300);
       }
     }
   };

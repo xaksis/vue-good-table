@@ -23563,7 +23563,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "line-numbers"
   }) : _vm._e(), _vm._v(" "), _vm._l((_vm.columns), function(column, index) {
     return (!column.hidden) ? _c('th', {
-      key: column.label,
+      key: index,
       class: _vm.getHeaderClasses(column, index),
       style: ({
         width: column.width ? column.width : 'auto'
@@ -23578,7 +23578,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })], 2) : _vm._e()
   }), _vm._v(" "), _vm._t("thead-tr")], 2), _vm._v(" "), (_vm.hasFilterRow) ? _c('tr', [(_vm.lineNumbers) ? _c('th') : _vm._e(), _vm._v(" "), _vm._l((_vm.columns), function(column, index) {
     return (!column.hidden) ? _c('th', {
-      key: column.label
+      key: index
     }, [(column.filterable) ? _c('div', {
       class: _vm.getHeaderClasses(column, index)
     }, [(!column.filterDropdown) ? _c('input', {
@@ -23604,12 +23604,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_c('option', {
+      key: "-1",
       attrs: {
         "value": ""
       }
-    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l((column.filterOptions), function(option) {
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l((column.filterOptions), function(option, i) {
       return _c('option', {
-        key: option,
+        key: i,
         domProps: {
           "value": option
         }
@@ -23624,12 +23625,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_c('option', {
+      key: "-1",
       attrs: {
         "value": ""
       }
-    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l((column.filterOptions), function(option) {
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l((column.filterOptions), function(option, i) {
       return _c('option', {
-        key: option,
+        key: i,
         domProps: {
           "value": option.value
         }
@@ -23651,7 +23653,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       index: index
     }), _vm._v(" "), _vm._t("table-row", _vm._l((_vm.columns), function(column, i) {
       return (!column.hidden && column.field) ? _c('td', {
-        key: column.label,
+        key: i,
         class: _vm.getClasses(i, 'td')
       }, [(!column.html) ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(row, column)))]) : _vm._e(), _vm._v(" "), (column.html) ? _c('span', {
         domProps: {
