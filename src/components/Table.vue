@@ -37,7 +37,7 @@
           <tr>
             <th v-if="lineNumbers" class="line-numbers"></th>
             <th v-for="(column, index) in columns"
-              :key="column.label"
+              :key="index"
               @click="sort(index)"
               :class="getHeaderClasses(column, index)"
               :style="{width: column.width ? column.width : 'auto'}"
@@ -51,7 +51,7 @@
           <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns"
-              :key="column.label"
+              :key="index"
               v-if="!column.hidden">
               <div v-if="column.filterable"
                 :class="getHeaderClasses(column, index)">
@@ -67,10 +67,10 @@
                   class=""
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
-                    <option value="">{{ getPlaceholder(column) }}</option>
+                    <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                     <option
-                      v-for="option in column.filterOptions"
-                      :key="option"
+                      v-for="(option, i) in column.filterOptions"
+                      :key="i"
                       :value="option">
                       {{ option }}
                     </option>
@@ -81,10 +81,10 @@
                   class=""
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)">
-                  <option value="">{{ getPlaceholder(column) }}</option>
+                  <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                   <option
-                    v-for="option in column.filterOptions"
-                    :key="option"
+                    v-for="(option, i) in column.filterOptions"
+                    :key="i"
                     :value="option.value">{{ option.text }}</option>
                 </select>
               </div>
@@ -103,7 +103,7 @@
             <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
               <td
                 v-for="(column, i) in columns"
-                :key="column.label"
+                :key="i"
                 :class="getClasses(i, 'td')"
                 v-if="!column.hidden && column.field">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
@@ -267,7 +267,7 @@
 
       collectFormatted(obj, column) {
         var value = this.collect(obj, column.field);
- 
+
         if (value === undefined) return '';
         //lets format the resultant data
         var type = column.typeDef
@@ -444,7 +444,7 @@
           var filteredRows = [];
           for (var row of this.originalRows) {
             for(var col of this.columns) {
-              
+
               //if col has search disabled, 
               //skip the column.
               if (col.globalSearchDisabled) {
@@ -456,9 +456,9 @@
               // use the default search behavior
               if (this.globalSearchFn) {
                 const foundMatch = this.globalSearchFn(
-                  row, 
+                  row,
                   col,
-                  this.collectFormatted(row, col), 
+                  this.collectFormatted(row, col),
                   this.searchTerm);
                 if (foundMatch) {
                   filteredRows.push(row);
@@ -470,7 +470,7 @@
                   filteredRows.push(row);
                   break;
                 }
-              }              
+              }
             }
           }
           computedRows = filteredRows;
@@ -493,7 +493,7 @@
             let yvalue = this.collect(y, this.columns[this.sortColumn].field)
             var typeDef = this.typedColumns[this.sortColumn].typeDef
             return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
-              * (this.sortType === 'desc' ? -1 : 1) 
+              * (this.sortType === 'desc' ? -1 : 1)
           })
         }
 
