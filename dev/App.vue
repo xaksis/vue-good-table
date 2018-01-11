@@ -32,6 +32,16 @@
             label: 'Name',
             field: 'name',
             type: 'text',
+            filterable: true,
+            sortable: true,
+            filterDropdown: true,
+            filterOptions: [
+              { value: 'Chris', text: 'Chris' },
+              { value: 'Jane', text: 'Jane' },
+              { value: 'Dan', text: 'Dan' },
+              { value: 'Susan', text: 'Susan' },
+              { value: 'John', text: 'John' },
+            ],
           }, 
           {
             label: 'Age',
