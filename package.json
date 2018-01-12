@@ -1,8 +1,9 @@
 {
   "name": "vue-good-table",
-  "version": "1.18.4",
+  "version": "1.18.3",
   "description": "A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc",
   "main": "dist/vue-good-table.js",
+  "module": "src/index.js",
   "scripts": {
     "bundle:min": "cross-env MINIFY=true webpack --progress --config build/webpack.bundle.conf.js",
     "bundle:full": "cross-env MINIFY=false webpack --progress --config build/webpack.bundle.conf.js",
