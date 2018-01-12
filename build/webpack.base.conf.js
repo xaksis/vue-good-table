@@ -10,7 +10,6 @@ function resolve (dir) {
 module.exports = {
   entry: {
     app: [
-      'babel-polyfill',
       './dev/main.js'
     ]
   },
@@ -43,6 +42,10 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        query: {
+          presets: ["env", "stage-3"],
+          plugins: ['transform-runtime']
+        },
         include: [resolve('src'), resolve('test')]
       },
       {
