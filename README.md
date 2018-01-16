@@ -510,6 +510,31 @@ methods: {
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>sortFn (optional)</td>
+      <td>custom sort function. If you want to supply your own sort function you can use this property to supply it.</td>
+      <td>
+  Function
+<pre lang="javascript">
+// in data
+column: [
+  {
+    label: 'Name',
+    field: 'name',
+    sortable: true,
+    sortFn: this.sortFn,
+  }
+  //...
+],
+// in methods
+methods: {
+  sortFn(x, y, col) {
+    return (x < y ? -1 : (x > y ? 1 : 0));
+  }
+}  
+</pre>
+      </td>
+    </tr>
+    <tr>
       <td>filterable (optional)</td>
       <td>enables filtering on column (By default, creates a text input)</td>
       <td>Boolean</td>
@@ -551,12 +576,12 @@ methods: {
       <td>Custom filter, function of two variables: <code>function(data, filterString)</code>,
       should return true if data matches the filterString, otherwise false.</td>
       <td>
-      <pre lang="javascript">
-          filter: function(data, filterString) {
-            var x = parseInt(filterString)
-            return data >= x-5 && data <= x+5
-          }
-      </pre>
+<pre lang="javascript">
+    filter: function(data, filterString) {
+      var x = parseInt(filterString)
+      return data >= x-5 && data <= x+5
+    }
+</pre>
       would create a filter matching numbers within 5 of the provided value.
       <td>
     </tr>

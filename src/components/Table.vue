@@ -489,12 +489,21 @@
             if (!this.columns[this.sortColumn])
                return 0;
 
-            let xvalue = this.collect(x, this.columns[this.sortColumn].field)
-            let yvalue = this.collect(y, this.columns[this.sortColumn].field)
-            var typeDef = this.typedColumns[this.sortColumn].typeDef
+            let xvalue = this.collect(x, this.columns[this.sortColumn].field);
+            let yvalue = this.collect(y, this.columns[this.sortColumn].field);
+
+            // if user has provided a custom sort, use that instead of 
+            // built-in sort
+            const sortFn = this.columns[this.sortColumn].sortFn;
+            if (sortFn && typeof sortFn === 'function') {
+              return sortFn(xvalue, yvalue, this.columns[this.sortColumn]) * (this.sortType === 'desc' ? -1 : 1);
+            }
+
+            // built in sort 
+            var typeDef = this.typedColumns[this.sortColumn].typeDef;
             return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
-              * (this.sortType === 'desc' ? -1 : 1)
-          })
+              * (this.sortType === 'desc' ? -1 : 1);
+          });
         }
 
         // if the filtering is event based, we need to maintain filter

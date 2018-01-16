@@ -36,6 +36,7 @@
             type: 'text',
             filterable: true,
             sortable: true,
+            sortFn: this.sortFn,
             filterDropdown: true,
             filterOptions: [
               { value: 'Chris', text: 'Chris' },
@@ -114,6 +115,9 @@
       },
       editRow() {
         this.$set(this.rows[12], 'age', 300);
+      },
+      sortFn(x, y, col) {
+        return (x < y ? -1 : (x > y ? 1 : 0));
       }
     }
   };
