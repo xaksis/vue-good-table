@@ -467,16 +467,16 @@ methods: {
           <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
           </li>
           <li>Function - a function that returns a value to be displayed based on the row object
-<pre lang="javascript">
-  {
-    field: fieldFn
-  }
-  
-  // in methods
-  fieldFn(rowObj) {
-    // do something with the row object
-  }
-</pre>
+  <pre lang="javascript">
+    {
+      field: fieldFn
+    }
+    
+    // in methods
+    fieldFn(rowObj) {
+      // do something with the row object
+    }
+  </pre>
           </li>
         </ul>
       </td>
@@ -511,27 +511,29 @@ methods: {
     </tr>
     <tr>
       <td>sortFn (optional)</td>
-      <td>custom sort function. If you want to supply your own sort function you can use this property to supply it.</td>
       <td>
-  Function
-<pre lang="javascript">
-// in data
-column: [
-  {
-    label: 'Name',
-    field: 'name',
-    sortable: true,
-    sortFn: this.sortFn,
-  }
-  //...
-],
-// in methods
-methods: {
-  sortFn(x, y, col) {
-    return (x < y ? -1 : (x > y ? 1 : 0));
-  }
-}  
-</pre>
+        custom sort function. If you want to supply your own sort function you can use this property to supply it.
+      </td>
+      <td>
+      Function
+      <pre lang="javascript">
+      // in data
+      column: [
+        {
+          label: 'Name',
+          field: 'name',
+          sortable: true,
+          sortFn: this.sortFn,
+        }
+        //...
+      ],
+      // in methods
+      methods: {
+        sortFn(x, y, col) {
+          return (x < y ? -1 : (x > y ? 1 : 0));
+        }
+      }  
+      </pre>
       </td>
     </tr>
     <tr>
