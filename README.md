@@ -583,7 +583,7 @@ methods: {
     }
 </pre>
       would create a filter matching numbers within 5 of the provided value.
-      <td>
+      </td>
     </tr>
     <tr>
       <td>html (optional)</td>
