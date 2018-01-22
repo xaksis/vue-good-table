@@ -506,7 +506,7 @@ methods: {
     </tr>
     <tr>
       <td>sortable (optional)</td>
-      <td>enable/disable sorting on columns. This property is higher priority than globle sortable property</td>
+      <td>enable/disable sorting on columns. This property is higher priority than global sortable property</td>
       <td>Boolean</td>
     </tr>
     <tr>
