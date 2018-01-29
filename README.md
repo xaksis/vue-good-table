@@ -338,16 +338,14 @@ myStyleFn(row){
       <td>
       <pre lang="javascript">
       &lt;vue-good-table
+      @pageChanged="onPageChange"
       :columns="columns"
-      :pageChanged="onPageChange($event)"
       :rows="rows"/&gt;
-      data() {
-      return {
-       // rows, columns ...
-        onPageChange: function(event){
-          // { currentPage: 1, total: 5 }
-          console.log(event);
-        },
+      //...
+      methods: function () {
+        onPageChange: function (evt) {
+          console.log(evt); // { currentPage: 1, total: 5 }
+        }
       };
     }
     </pre>
