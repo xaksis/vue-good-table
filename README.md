@@ -118,7 +118,7 @@ This should result in the screenshot seen above
   :globalSearch="true"
   :paginate="true"
   styleClass="table condensed table-bordered table-striped">
-  <template slot="table-row" scope="props">
+  <template slot="table-row" slot-scope="props">
     <td>{{ props.row.name }}</td>
     <td class="fancy">{{ props.row.age }}</td>
     <td>{{ props.formattedRow.date }}</td>
@@ -159,7 +159,7 @@ Sometimes you might want to use custom column formatting. You can do that in the
   :columns="columns"
   :paginate="true"
   :rows="rows">
-  <template slot="table-column" scope="props">
+  <template slot="table-column" slot-scope="props">
      <span v-if="props.column.label =='Name'">
         <i class="fa fa-address-book"></i> {{props.column.label}}
      </span>
