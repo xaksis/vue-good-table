@@ -333,23 +333,45 @@ myStyleFn(row){
       <td>Boolean <em>default: true</em></td>
     </tr>
     <tr>
+      <td colspan="3">
+        <strong>Events</strong>
+      </td>
+    </tr>
+    <tr>
       <td>pageChanged</td>
       <td>event emitted on pagination change</td>
       <td>
       <pre lang="javascript">
-      &lt;vue-good-table
-      :columns="columns"
-      :pageChanged="onPageChange($event)"
-      :rows="rows"/&gt;
-      data() {
-      return {
-       // rows, columns ...
-        onPageChange: function(event){
-          // { currentPage: 1, total: 5 }
-          console.log(event);
-        },
-      };
-    }
+&lt;vue-good-table
+    @pageChanged="onPageChange"
+    :columns="columns"
+    :rows="rows"/&gt;
+// ...
+methods: {
+  onPageChange: function (evt) {
+    // { currentPage: 1, currentPerPage: 10, total: 5 }
+    console.log(evt);
+  }
+}
+    </pre>
+      </td>
+    </tr>
+    <tr>
+      <td>perPageChanged</td>
+      <td>event emitted on pagination change</td>
+      <td>
+      <pre lang="javascript">
+&lt;vue-good-table
+    @perPageChanged="onPerPageChange"
+    :columns="columns"
+    :rows="rows"/&gt;
+// ...
+methods: {
+  onPerPageChange: function (evt) {
+    // { currentPage: 1, currentPerPage: 10, total: 5 }
+    console.log(evt);
+  }
+}
     </pre>
       </td>
     </tr>
