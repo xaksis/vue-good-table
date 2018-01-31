@@ -205,14 +205,24 @@
     }),
 
     methods: {
+      pageChangedEvent() {
+        return {
+          currentPage: this.currentPage,
+          currentPerPage: this.currentPerPage,
+          total: Math.floor(this.rows.length / this.currentPerPage)
+        };
+      },
 
       pageChanged(pagination) {
         this.currentPage = pagination.currentPage;
-        this.$emit('pageChanged', {currentPage: this.currentPage, total: Math.floor(this.rows.length / this.currentPerPage)});
+        const pageChangedEvent = this.pageChangedEvent();
+        this.$emit('pageChanged', pageChangedEvent);
       },
 
       perPageChanged(pagination) {
         this.currentPerPage = pagination.currentPerPage;
+        const perPageChangedEvent = this.pageChangedEvent();
+        this.$emit('perPageChanged', perPageChangedEvent);
       },
 
       sort(index) {
