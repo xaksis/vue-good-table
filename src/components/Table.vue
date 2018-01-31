@@ -475,8 +475,8 @@
                   break;
                 }
               } else {
-                if (String(this.collectFormatted(row, col)).toLowerCase()
-                  .search(this.searchTerm.toLowerCase()) > -1) {
+                if (String(diacriticless(this.collectFormatted(row, col))).toLowerCase()
+                  .search(diacriticless(this.searchTerm.toLowerCase())) > -1) {
                   filteredRows.push(row);
                   break;
                 }
