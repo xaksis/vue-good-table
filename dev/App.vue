@@ -5,7 +5,8 @@
     <vue-good-table
       :paginate="true"
       :columns="columns" 
-      :rows="rows" 
+      :rows="rows"
+      :globalSearch="true"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
@@ -51,6 +52,37 @@
             field: 'age',
             type: 'number',
           }, 
+          {
+            label: 'Age',
+            field: 'age',
+            type: 'number',
+          }, 
+          {
+            label: 'Age',
+            field: 'age',
+            type: 'number',
+          }, 
+          {
+            label: 'Age',
+            field: 'age',
+            type: 'number',
+          }, 
+          {
+            label: 'Age',
+            field: 'age',
+            type: 'number',
+          }, 
+          {
+            label: 'Age',
+            field: 'age',
+            type: 'number',
+          }, 
+          {
+            label: 'Age',
+            field: 'age',
+            type: 'number',
+          }, 
+
           {
             label: '',
             sortable: false,
