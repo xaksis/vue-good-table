@@ -118,7 +118,7 @@ This should result in the screenshot seen above
   :globalSearch="true"
   :paginate="true"
   styleClass="table condensed table-bordered table-striped">
-  <template slot="table-row" scope="props">
+  <template slot="table-row" slot-scope="props">
     <td>{{ props.row.name }}</td>
     <td class="fancy">{{ props.row.age }}</td>
     <td>{{ props.formattedRow.date }}</td>
@@ -159,7 +159,7 @@ Sometimes you might want to use custom column formatting. You can do that in the
   :columns="columns"
   :paginate="true"
   :rows="rows">
-  <template slot="table-column" scope="props">
+  <template slot="table-column" slot-scope="props">
      <span v-if="props.column.label =='Name'">
         <i class="fa fa-address-book"></i> {{props.column.label}}
      </span>
@@ -333,23 +333,45 @@ myStyleFn(row){
       <td>Boolean <em>default: true</em></td>
     </tr>
     <tr>
+      <td colspan="3">
+        <strong>Events</strong>
+      </td>
+    </tr>
+    <tr>
       <td>pageChanged</td>
       <td>event emitted on pagination change</td>
       <td>
       <pre lang="javascript">
-      &lt;vue-good-table
-      :columns="columns"
-      :pageChanged="onPageChange($event)"
-      :rows="rows"/&gt;
-      data() {
-      return {
-       // rows, columns ...
-        onPageChange: function(event){
-          // { currentPage: 1, total: 5 }
-          console.log(event);
-        },
-      };
-    }
+&lt;vue-good-table
+    @pageChanged="onPageChange"
+    :columns="columns"
+    :rows="rows"/&gt;
+// ...
+methods: {
+  onPageChange: function (evt) {
+    // { currentPage: 1, currentPerPage: 10, total: 5 }
+    console.log(evt);
+  }
+}
+    </pre>
+      </td>
+    </tr>
+    <tr>
+      <td>perPageChanged</td>
+      <td>event emitted on pagination change</td>
+      <td>
+      <pre lang="javascript">
+&lt;vue-good-table
+    @perPageChanged="onPerPageChange"
+    :columns="columns"
+    :rows="rows"/&gt;
+// ...
+methods: {
+  onPerPageChange: function (evt) {
+    // { currentPage: 1, currentPerPage: 10, total: 5 }
+    console.log(evt);
+  }
+}
     </pre>
       </td>
     </tr>
