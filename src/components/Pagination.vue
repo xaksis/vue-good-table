@@ -5,12 +5,13 @@
         <span>{{rowsPerPageText}}</span>
         <!-- <span v-if="perPage" class="perpage-count">{{perPage}}</span> -->
         <select class="browser-default" @change="perPageChanged">
-          <option v-if="perPage" :value="perPage">{{perPage}}</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
+          <option
+            v-for="option in getRowsPerPageDropdown()"
+            v-bind:key="'rows-dropdown-option-' + option"
+            :selected="(perPage && currentPerPage === option) || currentPerPage === option"
+            :value="option">
+            {{ option }}
+          </option>
           <option value="-1">{{allText}}</option>
         </select>
       </label>
@@ -39,6 +40,7 @@
       total: {default: null},
       perPage: {},
       rtl: {default: false},
+      rowsPerPageDropdown: {default: function(){ return [] }},
 
       // text options
       nextText: {default: 'Next'},
@@ -50,7 +52,8 @@
 
     data: () => ({
       currentPage: 1,
-      currentPerPage: 10
+      currentPerPage: 10,
+      defaultRowsPerPageDropdown: [10,20,30,40,50]
     }),
 
     methods: {
@@ -77,6 +80,18 @@
           this.currentPerPage = parseInt(event.target.value);
         }
         this.$emit('per-page-changed', {currentPerPage: this.currentPerPage});
+      },
+
+      hasCustomRowPerPageDropdown() {
+        return this.rowsPerPageDropdown.length !== 0 || typeof this.perPage !== 'undefined';
+      },
+
+      getCustomRowsPerPageDropdown() {
+        return this.rowsPerPageDropdown
+      },
+
+      getRowsPerPageDropdown() {
+        return this.hasCustomRowPerPageDropdown() ? this.getCustomRowsPerPageDropdown() : this.defaultRowsPerPageDropdown;
       }
 
     },
