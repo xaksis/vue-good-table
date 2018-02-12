@@ -100,6 +100,10 @@
         this.perPageChanged();
       },
 
+      customRowsPerPageDropdown() {
+        this.rowsPerPageOptions = this.customRowsPerPageDropdown
+      }
+
     },
 
     computed: {
