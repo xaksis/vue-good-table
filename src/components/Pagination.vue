@@ -40,7 +40,7 @@
       total: {default: null},
       perPage: {},
       rtl: {default: false},
-      rowsPerPageDropdown: {default: function(){ return [] }},
+      customRowsPerPageDropdown: {default: function(){ return [] }},
 
       // text options
       nextText: {default: 'Next'},
@@ -53,6 +53,7 @@
     data: () => ({
       currentPage: 1,
       currentPerPage: 10,
+      rowsPerPageOptions: [],
       defaultRowsPerPageDropdown: [10,20,30,40,50]
     }),
 
@@ -82,16 +83,8 @@
         this.$emit('per-page-changed', {currentPerPage: this.currentPerPage});
       },
 
-      hasCustomRowPerPageDropdown() {
-        return this.rowsPerPageDropdown.length !== 0 || typeof this.perPage !== 'undefined';
-      },
-
-      getCustomRowsPerPageDropdown() {
-        return this.rowsPerPageDropdown
-      },
-
       getRowsPerPageDropdown() {
-        return this.hasCustomRowPerPageDropdown() ? this.getCustomRowsPerPageDropdown() : this.defaultRowsPerPageDropdown;
+        return this.rowsPerPageOptions
       }
 
     },
@@ -105,7 +98,7 @@
           this.currentPerPage = 10;
         }
         this.perPageChanged();
-      }
+      },
 
     },
 
@@ -127,8 +120,15 @@
     },
 
     mounted() {
+      this.rowsPerPageOptions = this.defaultRowsPerPageDropdown
+
       if (this.perPage) {
         this.currentPerPage = this.perPage;
+        this.rowsPerPageOptions.push(this.perPage)
+      }
+
+      if (this.customRowsPerPageDropdown.length !== 0) {
+        this.rowsPerPageOptions = this.customRowsPerPageDropdown
       }
     }
   }

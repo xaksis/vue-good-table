@@ -133,7 +133,7 @@
         :nextText="nextText"
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
-        :rowsPerPageDropdown="rowsPerPageDropdown"
+        :customRowsPerPageDropdown="customRowsPerPageDropdown"
         :ofText="ofText"
         :allText="allText"
         ></vue-good-pagination>
@@ -160,7 +160,7 @@
       VueGoodPagination
     },
     props: {
-      rowsPerPageDropdown: {default: function(){ return [] }},
+      customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'table table-bordered'},
       title: '',
       columns: {},
