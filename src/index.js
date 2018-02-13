@@ -1,7 +1,7 @@
 import GoodTable from './components/Table.vue';
 
-const GoodTablePlugin = {
-  install: function (Vue) {
+var GoodTablePlugin = {
+  install: function (Vue, options) {
     Vue.component(GoodTable.name, GoodTable);
   }
 };
