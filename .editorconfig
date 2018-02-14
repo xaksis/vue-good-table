@@ -1,0 +1,21 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# defaults for all files
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown files uses two trailing spaces to indicate a <br>
+[*.{md}]
+trim_trailing_whitespace = false
+
+# 4 space indentation
+[*.{sass,scss,css}]
+indent_size = 4

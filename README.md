@@ -461,6 +461,11 @@ methods: {
       <td>Text for pagination 'x of y' label </td>
       <td>default: "of"</td>
     </tr>
+    <tr>
+      <td>allText</td>
+      <td>Text for the last option in the items per page dropdown</td>
+      <td>default: "All"</td>
+    </tr>
   </tbody>
 </table>
 
