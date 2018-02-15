@@ -142,7 +142,6 @@
 </template>
 
 <script>
-  import {format, parse, compareAsc, isValid} from 'date-fns/esm'
   import VueGoodPagination from './Pagination.vue'
   import each from 'lodash.foreach'
   import defaultType from './types/default'
@@ -390,13 +389,13 @@
 
     watch: {
       columnFilters: {
-          handler: function(newObj){
+          handler: function() {
             this.filterRows();
           },
           deep: true
       },
       rows: {
-        handler: function(newObj){
+        handler: function() {
           this.filterRows();
         },
         deep: true
@@ -462,14 +461,14 @@
           for (var row of this.originalRows) {
             for(var col of this.columns) {
 
-              //if col has search disabled, 
+              //if col has search disabled,
               //skip the column.
               if (col.globalSearchDisabled) {
                 continue;
               }
 
-              // if a search function is provided, 
-              // use that for searching, otherwise, 
+              // if a search function is provided,
+              // use that for searching, otherwise,
               // use the default search behavior
               if (this.globalSearchFn) {
                 const foundMatch = this.globalSearchFn(
@@ -509,14 +508,14 @@
             let xvalue = this.collect(x, this.columns[this.sortColumn].field);
             let yvalue = this.collect(y, this.columns[this.sortColumn].field);
 
-            // if user has provided a custom sort, use that instead of 
+            // if user has provided a custom sort, use that instead of
             // built-in sort
             const sortFn = this.columns[this.sortColumn].sortFn;
             if (sortFn && typeof sortFn === 'function') {
               return sortFn(xvalue, yvalue, this.columns[this.sortColumn]) * (this.sortType === 'desc' ? -1 : 1);
             }
 
-            // built in sort 
+            // built in sort
             var typeDef = this.typedColumns[this.sortColumn].typeDef;
             return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
               * (this.sortType === 'desc' ? -1 : 1);
