@@ -18,6 +18,7 @@
         :nextText="nextText"
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
+        :customRowsPerPageDropdown="customRowsPerPageDropdown"
         :ofText="ofText"
         :allText="allText"></vue-good-pagination>
       <div :class="{'responsive': responsive}">

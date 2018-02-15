@@ -101,7 +101,8 @@
       },
 
       customRowsPerPageDropdown() {
-        this.rowsPerPageOptions = this.customRowsPerPageDropdown
+        if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
+          this.rowsPerPageOptions = this.customRowsPerPageDropdown
       }
 
     },
