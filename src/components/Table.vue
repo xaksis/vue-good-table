@@ -478,10 +478,20 @@
                   break;
                 }
               } else {
-                if (String(diacriticless(this.collectFormatted(row, col))).toLowerCase()
-                  .search(diacriticless(this.searchTerm.toLowerCase())) > -1) {
-                  filteredRows.push(row);
-                  break;
+                // lets get the formatted row/col value
+                let tableValue = this.collectFormatted(row, col);
+                if(typeof(tableValue) !== 'undefined' && tableValue !== null) {
+                  // table value
+                  tableValue = diacriticless(String(tableValue).toLowerCase());
+
+                  // search term
+                  let searchTerm = diacriticless(this.searchTerm.toLowerCase());
+
+                  // comparison
+                  if (tableValue.search(searchTerm) > -1) {
+                    filteredRows.push(row);
+                    break;
+                  }
                 }
               }
             }

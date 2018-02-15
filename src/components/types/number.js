@@ -13,7 +13,7 @@ number.compare = function compareNumbers (x, y) {
   function cook (d) {
     // if d is null or undefined we give it the smallest 
     // possible value
-    if (!d) return -Infinity;
+    if (d === undefined || d === null) return -Infinity;
     return d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d)
   }
 
