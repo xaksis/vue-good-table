@@ -117,7 +117,7 @@
             age: "20"
           }, {
             name: "Jane",
-            age: "24"
+            age: null,
           }, {
             name: "Susan",
             age: "16"

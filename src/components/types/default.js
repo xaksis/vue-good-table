@@ -8,9 +8,11 @@ export default {
       .startsWith((filter).toLowerCase());
     return v;
   },
-  compare: function compare(x, y) {
-    function cook(d) {
-      return d.toLowerCase();
+
+  compare: function compare (x, y) {
+    function cook (d) {
+      if (!d) return '';
+      return d.toLowerCase()
     }
     x = cook(x);
     y = cook(y);

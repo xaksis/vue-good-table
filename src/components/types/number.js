@@ -9,9 +9,13 @@ number.filterPredicate = function defaultFilter(rowval, filter) {
   return number.compare(rowval, filter) === 0;
 };
 
-number.compare = function compareNumbers(x, y) {
-  function cook(d) {
-    return d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d);
+
+number.compare = function compareNumbers (x, y) {
+  function cook (d) {
+    // if d is null or undefined we give it the smallest 
+    // possible value
+    if (d === undefined || d === null) return -Infinity;
+    return d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d)
   }
 
   x = typeof x === 'number' ? x : cook(x);
