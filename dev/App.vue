@@ -7,6 +7,7 @@
       :columns="columns" 
       :rows="rows"
       :globalSearch="true"
+      :customRowsPerPageDropdown="testing"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
@@ -24,8 +25,15 @@
   Vue.use(VueGoodTable);
   export default {
     name: 'test',
+    mounted(){
+      var that = this
+      setTimeout(function(){
+        that.testing = [50,100,300]
+      }, 5000)
+    },
     data(){
       return {
+        testing: [5,10,15],
         columns: [
           {
             label: '',

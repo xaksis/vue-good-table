@@ -5,12 +5,13 @@
         <span>{{rowsPerPageText}}</span>
         <!-- <span v-if="perPage" class="perpage-count">{{perPage}}</span> -->
         <select class="browser-default" @change="perPageChanged">
-          <option v-if="perPage" :value="perPage">{{perPage}}</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
+          <option
+            v-for="option in getRowsPerPageDropdown()"
+            v-bind:key="'rows-dropdown-option-' + option"
+            :selected="(perPage && currentPerPage === option) || currentPerPage === option"
+            :value="option">
+            {{ option }}
+          </option>
           <option value="-1">{{allText}}</option>
         </select>
       </label>
@@ -39,6 +40,7 @@
       total: {default: null},
       perPage: {},
       rtl: {default: false},
+      customRowsPerPageDropdown: {default: function(){ return [] }},
 
       // text options
       nextText: {default: 'Next'},
@@ -50,7 +52,9 @@
 
     data: () => ({
       currentPage: 1,
-      currentPerPage: 10
+      currentPerPage: 10,
+      rowsPerPageOptions: [],
+      defaultRowsPerPageDropdown: [10,20,30,40,50]
     }),
 
     methods: {
@@ -77,6 +81,10 @@
           this.currentPerPage = parseInt(event.target.value);
         }
         this.$emit('per-page-changed', {currentPerPage: this.currentPerPage});
+      },
+
+      getRowsPerPageDropdown() {
+        return this.rowsPerPageOptions
       }
 
     },
@@ -90,6 +98,11 @@
           this.currentPerPage = 10;
         }
         this.perPageChanged();
+      },
+
+      customRowsPerPageDropdown() {
+        if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
+          this.rowsPerPageOptions = this.customRowsPerPageDropdown
       }
 
     },
@@ -112,9 +125,15 @@
     },
 
     mounted() {
+      this.rowsPerPageOptions = this.defaultRowsPerPageDropdown
+
       if (this.perPage) {
         this.currentPerPage = this.perPage;
+        this.rowsPerPageOptions.push(this.perPage)
       }
+
+      if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
+          this.rowsPerPageOptions = this.customRowsPerPageDropdown
     }
   }
 </script>

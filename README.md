@@ -259,6 +259,11 @@ You can provide html for empty state slot as well. Example:
       <td>Integer (<em>default: 10</em>)</td>
     </tr>
     <tr>
+      <td>customRowsPerPageDropdown</td>
+      <td>Customize the dropdown options for the amount of items per page</td>
+      <td>Array (<em>default: [10,20,30,40,50]</em>)</td>
+    </tr>
+    <tr>
       <td>onClick</td>
       <td>Function to run when a row is clicked</td>
       <td>

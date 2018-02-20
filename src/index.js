@@ -13,5 +13,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default GoodTablePlugin;
 export {
-   GoodTable as VueGoodTable
+  GoodTable as VueGoodTable,
 };

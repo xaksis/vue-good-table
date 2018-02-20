@@ -1,34 +1,33 @@
-import { format, parse, isValid, compareAsc } from 'date-fns/esm'
-import clone from 'lodash.clone'
-import def from './default'
+import { format, parse, isValid, compareAsc } from 'date-fns/esm';
+import clone from 'lodash.clone';
+import def from './default';
 
-var date = clone(def)
+const date = clone(def);
 
-date.isRight = true
+date.isRight = true;
 
-date.compare = function compare (x, y, column) {
-  function cook (d) {
+date.compare = function compare(x, y, column) {
+  function cook(d) {
     if (column && column.inputFormat) {
-      return parse(d + '', '' + column.inputFormat, new Date())
-    } else {
-      return d
+      return parse(`${d}`, `${column.inputFormat}`, new Date());
     }
+    return d;
   }
-  x = cook(x)
-  y = cook(y)
+  x = cook(x);
+  y = cook(y);
   if (!isValid(x)) {
-    return -1
+    return -1;
   }
   if (!isValid(y)) {
-    return 1
+    return 1;
   }
-  return compareAsc(x, y)
-}
+  return compareAsc(x, y);
+};
 
-date.format = function formatDate (v, column) {
+date.format = function formatDate(v, column) {
   // convert to date
-  var date = parse(v, column.inputFormat, new Date())
-  return format(date, column.outputFormat)
-}
+  const date = parse(v, column.inputFormat, new Date());
+  return format(date, column.outputFormat);
+};
 
-export default date
+export default date;

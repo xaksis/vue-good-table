@@ -1,13 +1,14 @@
-import clone from 'lodash.clone'
-import def from './default'
+import clone from 'lodash.clone';
+import def from './default';
 
-var number = clone(def)
+const number = clone(def);
 
-number.isRight = true
+number.isRight = true;
 
-number.filterPredicate = function defaultFilter (rowval, filter) {
-  return number.compare(rowval, filter) === 0
-}
+number.filterPredicate = function defaultFilter(rowval, filter) {
+  return number.compare(rowval, filter) === 0;
+};
+
 
 number.compare = function compareNumbers (x, y) {
   function cook (d) {
@@ -17,9 +18,9 @@ number.compare = function compareNumbers (x, y) {
     return d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d)
   }
 
-  x = typeof x === 'number' ? x : cook(x)
-  y = typeof y === 'number' ? y : cook(y)
-  return (x < y ? -1 : (x > y ? 1 : 0))
-}
+  x = typeof x === 'number' ? x : cook(x);
+  y = typeof y === 'number' ? y : cook(y);
+  return (x < y ? -1 : (x > y ? 1 : 0));
+};
 
-export default number
+export default number;
