@@ -356,6 +356,7 @@
                 if (col.filter) {
                   return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
                 }else{
+                  
                   // Use default filters
                   var typeDef = col.typeDef
                   return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
