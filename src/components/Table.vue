@@ -340,7 +340,6 @@
         this.timer = setTimeout(function(){
           _this.$set(_this.columnFilters, column.field, value)
         }, 400);
-
       },
 
       //method to filter rows
@@ -356,7 +355,7 @@
                 if (col.filter) {
                   return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
                 }else{
-                  
+
                   // Use default filters
                   var typeDef = col.typeDef
                   return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
@@ -391,6 +390,18 @@
           classes += ' ' + rowStyleClasses;
         }
         return classes;
+      },
+
+      populateInitialFilters() {
+        for (const col of this.columns) {
+          // lets see if there are initial 
+          // filters supplied by user
+          if(typeof(col.filterValue) !== 'undefined' 
+            && col.filterValue !== null) {
+            this.updateFilters(col, col.filterValue);
+            this.$set(col, 'filterValue', undefined);
+          }
+        }
       }
     },
 
@@ -406,8 +417,13 @@
           this.filterRows();
         },
         deep: true
+      },
+      columns: {
+        handler: function() {
+          this.populateInitialFilters();
+        },
+        deep: true
       }
-
     },
 
     computed: {
@@ -598,6 +614,9 @@
 
     mounted() {
       this.filteredRows = this.originalRows;
+
+      // take care of initial filters
+      this.populateInitialFilters();
 
       if (this.perPage) {
         this.currentPerPage = this.perPage;

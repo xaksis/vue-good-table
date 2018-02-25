@@ -2,6 +2,7 @@
   <div>
     <button @click="addRow">Add Row</button>
     <button @click="editRow">edit Row</button>
+    <button @click="addFilter">Add Filter</button>
     <vue-good-table
       :paginate="true"
       :columns="columns" 
@@ -61,6 +62,7 @@
             filterable: true,
             sortable: true,
             sortFn: this.sortFn,
+            filterValue: 'Dan',
           }, 
           {
             label: 'Age',
@@ -199,6 +201,10 @@
       },
       formatAge(value) {
         return `lala${value}lala`;
+      },
+      addFilter() {
+        this.$set(this.columns[2], 'filterValue', 'Jane');
+        console.log(this.columns);
       }
     }
   };
