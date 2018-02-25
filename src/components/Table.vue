@@ -181,9 +181,9 @@
       searchTrigger: {default: null},
       externalSearchQuery: {default: null},
       globalSearchFn: {type: Function, default: null},
+      
       // text options
       globalSearchPlaceholder: {default: 'Search Table'},
-
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
       rowsPerPageText: {default: 'Rows per page:'},
@@ -277,11 +277,17 @@
       },
 
       collectFormatted(obj, column) {
-        var value = this.collect(obj, column.field);
-
+        let value = this.collect(obj, column.field);
         if (value === undefined) return '';
+
+        // if user has supplied custom formatter, 
+        // use that here
+        if (column.formatFn && typeof column.formatFn === 'function') {
+          return column.formatFn(value);
+        }
+
         //lets format the resultant data
-        var type = column.typeDef
+        let type = column.typeDef
         return type.format(value, column);
       },
 
@@ -819,8 +825,8 @@
 {
   margin-top: 3px;
   display: block;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border: 3px solid #ccc;
   position: relative;
   border-radius: 50%;
