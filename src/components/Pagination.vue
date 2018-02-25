@@ -57,7 +57,53 @@
       defaultRowsPerPageDropdown: [10,20,30,40,50]
     }),
 
+    watch: {
+      perPage() {
+        if (this.perPage) {
+          this.currentPerPage = this.perPage;
+        }else{
+          //reset to default
+          this.currentPerPage = 10;
+        }
+        this.perPageChanged();
+      },
+
+      customRowsPerPageDropdown() {
+        if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
+          this.rowsPerPageOptions = this.customRowsPerPageDropdown
+      }
+
+    },
+
+    computed: {
+      paginatedInfo() {
+        if (this.currentPerPage === -1) {
+          return `1 - ${this.total} ${this.ofText} ${this.total}`;
+        }
+        let first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
+
+        if (first > this.total) {
+          // this probably happened as a result of filtering 
+          this.currentPage = 1;
+          first = 1;
+        }
+        
+        const last = Math.min(this.total, this.currentPerPage * this.currentPage);
+        return `${first} - ${last} ${this.ofText} ${this.total}`;
+      },
+      nextIsPossible() {
+        return (this.total > this.currentPerPage * this.currentPage);
+      },
+      prevIsPossible() {
+        return this.currentPage > 1;
+      }
+    },
+
     methods: {
+
+      reset() {
+
+      },
 
       nextPage() {
         if(this.currentPerPage === -1) return;
@@ -89,41 +135,6 @@
 
     },
 
-    watch: {
-      perPage() {
-        if (this.perPage) {
-          this.currentPerPage = this.perPage;
-        }else{
-          //reset to default
-          this.currentPerPage = 10;
-        }
-        this.perPageChanged();
-      },
-
-      customRowsPerPageDropdown() {
-        if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
-          this.rowsPerPageOptions = this.customRowsPerPageDropdown
-      }
-
-    },
-
-    computed: {
-      paginatedInfo() {
-        if (this.currentPerPage === -1) {
-          return `1 - ${this.total} ${this.ofText} ${this.total}`;
-        }
-        const first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
-        const last = Math.min(this.total, this.currentPerPage * this.currentPage);
-        return `${first} - ${last} ${this.ofText} ${this.total}`;
-      },
-      nextIsPossible() {
-        return (this.total > this.currentPerPage * this.currentPage);
-      },
-      prevIsPossible() {
-        return this.currentPage > 1;
-      }
-    },
-
     mounted() {
       this.rowsPerPageOptions = this.defaultRowsPerPageDropdown
 
@@ -132,7 +143,7 @@
         this.rowsPerPageOptions.push(this.perPage)
       }
 
-      if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
+      if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.length !== 0))
           this.rowsPerPageOptions = this.customRowsPerPageDropdown
     }
   }

@@ -6,8 +6,8 @@
       :paginate="true"
       :columns="columns" 
       :rows="rows"
+      :paginateOnTop="true"
       :globalSearch="true"
-      :customRowsPerPageDropdown="testing"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
@@ -27,13 +27,13 @@
     name: 'test',
     mounted(){
       var that = this
-      setTimeout(function(){
-        that.testing = [50,100,300]
-      }, 5000)
+      // setTimeout(function(){
+      //   that.testing = [50,100,300]
+      // }, 5000)
     },
     data(){
       return {
-        testing: [5,10,15],
+        testing: [2,7,12],
         columns: [
           {
             label: '',
@@ -109,6 +109,36 @@
           }, {
             name: "Chris",
             age: "55"
+          }, {
+            name: "Dan",
+            age: "40"
+          }, {
+            name: "John",
+            age: "20"
+          }, {
+            name: "Jane",
+            age: null,
+          }, {
+            name: "Susan",
+            age: "16"
+          }, {
+            name: "Chris",
+            age: "55"
+          }, {
+            name: "Dan",
+            age: "40"
+          }, {
+            name: "Jane",
+            age: "24"
+          }, {
+            name: "Susan",
+            age: "16"
+          }, {
+            name: "Chris",
+            age: "55"
+          }, {
+            name: "Dan",
+            age: "40"
           }, {
             name: "Dan",
             age: "40"
