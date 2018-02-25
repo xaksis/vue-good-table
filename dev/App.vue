@@ -2,12 +2,12 @@
   <div>
     <button @click="addRow">Add Row</button>
     <button @click="editRow">edit Row</button>
+    <button @click="addFilter">Add Filter</button>
     <vue-good-table
       :paginate="true"
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="true"
-      :globalSearch="true"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
@@ -54,6 +54,15 @@
               { value: 'Susan', text: 'Susan' },
               { value: 'John', text: 'John' },
             ],
+          }, 
+          {
+            label: 'Name2',
+            field: 'name',
+            type: 'text',
+            filterable: true,
+            sortable: true,
+            sortFn: this.sortFn,
+            filterValue: 'Dan',
           }, 
           {
             label: 'Age',
@@ -147,7 +156,7 @@
             name: "John",
             age: "20"
           }, {
-            name: "Jane",
+            name: null,
             age: null,
           }, {
             name: "Susan",
@@ -192,6 +201,10 @@
       },
       formatAge(value) {
         return `lala${value}lala`;
+      },
+      addFilter() {
+        this.$set(this.columns[2], 'filterValue', 'Jane');
+        console.log(this.columns);
       }
     }
   };
