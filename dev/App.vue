@@ -59,6 +59,7 @@
             label: 'Age',
             field: 'age',
             type: 'number',
+            formatFn: this.formatAge,
           }, 
           {
             label: 'Age',
@@ -188,6 +189,9 @@
       },
       sortFn(x, y, col) {
         return (x < y ? -1 : (x > y ? 1 : 0));
+      },
+      formatAge(value) {
+        return `lala${value}lala`;
       }
     }
   };
