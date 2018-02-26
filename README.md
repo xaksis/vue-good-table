@@ -259,6 +259,11 @@ You can provide html for empty state slot as well. Example:
       <td>Integer (<em>default: 10</em>)</td>
     </tr>
     <tr>
+      <td>customRowsPerPageDropdown</td>
+      <td>Customize the dropdown options for the amount of items per page</td>
+      <td>Array (<em>default: [10,20,30,40,50]</em>)</td>
+    </tr>
+    <tr>
       <td>onClick</td>
       <td>Function to run when a row is clicked</td>
       <td>
@@ -569,6 +574,11 @@ methods: {
       <td>Boolean</td>
     </tr>
     <tr>
+      <td>filterValue (optional)</td>
+      <td>allows specifying a pre-defined value for column filter</td>
+      <td>String</td>
+    </tr>
+    <tr>
       <td>globalSearchDisabled (optional)</td>
       <td>if true, the column will be ignored by global search</td>
       <td>Boolean</td>
@@ -612,6 +622,18 @@ methods: {
     }
 </pre>
       would create a filter matching numbers within 5 of the provided value.
+      </td>
+    </tr>
+    <tr>
+      <td>formatFn (optional)</td>
+      <td>Allows for custom format of values, <code>function(value)</code>,
+      should return the formatted value to display.</td>
+      <td>
+<pre lang="javascript">
+    formatFn: function(value) {
+      return '$' + value;
+    }
+</pre>
       </td>
     </tr>
     <tr>
