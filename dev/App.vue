@@ -20,9 +20,6 @@
 </template>
 
 <script>
-  import Vue from 'vue';
-  import VueGoodTable from '../src/index';
-  Vue.use(VueGoodTable);
   export default {
     name: 'test',
     mounted(){

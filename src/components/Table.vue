@@ -147,11 +147,13 @@
   import defaultType from './types/default'
   import diacriticless from 'diacriticless'
 
+  // here we load each data type module.
   let dataTypes = {};
-  let coreDataTypes = require.context("./types", false, /^\.\/([\w-_]+)\.js$/);
-  each(coreDataTypes.keys(), (key) => {
+  import * as CoreDataTypes from './types/index'; 
+  let coreDataTypes = CoreDataTypes.default;
+  each(Object.keys(coreDataTypes), (key) => {
 		let compName = key.replace(/^\.\//, "").replace(/\.js/, "");
-		dataTypes[compName] = coreDataTypes(key).default;
+		dataTypes[compName] = coreDataTypes[key].default;
   });
 
   export default {

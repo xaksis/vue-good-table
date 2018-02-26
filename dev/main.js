@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import App from './App'
+import VueGoodTable from '../dist/vue-good-table.cjs'
+// import VueGoodTable from '../src'
+
+Vue.use(VueGoodTable);
 
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  template: '<App/>',
-  components: { App },
+  render: h => h(App)
 })
