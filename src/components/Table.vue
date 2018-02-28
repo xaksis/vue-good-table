@@ -21,6 +21,15 @@
         :customRowsPerPageDropdown="customRowsPerPageDropdown"
         :ofText="ofText"
         :allText="allText"></vue-good-pagination>
+      
+      <div class="vgt-global-search">
+        <div class="vgt-global-search__actions">
+          <slot name="table-actions">
+            
+          </slot>
+        </div>
+      </div>
+
       <div :class="{'responsive': responsive}">
         <table ref="table" :class="tableStyleClasses" >
           <thead>
