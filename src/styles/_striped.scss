@@ -1,0 +1,5 @@
+.vgt-table{
+  &.striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(34, 41, 56, 0.03);
+  }
+}

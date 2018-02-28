@@ -1,0 +1,5 @@
+.vgt-table{
+  &.bordered td, &.bordered th {
+      border: 1px solid $border-color;
+  }
+}

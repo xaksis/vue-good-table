@@ -9,6 +9,7 @@
       :rows="rows"
       :paginateOnTop="true"
       :globalSearch="true"
+      styleClass="vgt-table bordered striped condensed"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>

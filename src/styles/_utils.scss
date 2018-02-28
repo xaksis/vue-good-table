@@ -1,0 +1,32 @@
+/* Utility styles
+************************************************/
+.vgt-right-align{
+  text-align: right;
+}
+
+.vgt-left-align{
+  text-align: left;
+}
+
+.vgt-center-align{
+  text-align: center;
+}
+
+.vgt-pull-left{
+  float:  left !important;
+}
+
+.vgt-pull-right{
+  float:  right !important;
+}
+
+.vgt-clearfix::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+.vgt-responsive {
+  width: 100%;
+  overflow-x: scroll;
+}

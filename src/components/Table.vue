@@ -1,8 +1,8 @@
 <template>
-  <div class="good-table" :class="{'rtl': rtl}">
-      <div v-if="title || $slots['table-actions']" class="table-header clearfix">
-        <h2 class="table-title pull-left">{{title}}</h2>
-        <div class="actions pull-right">
+  <div class="vgt-wrap" :class="{'rtl': rtl}">
+      <div v-if="title || $slots['table-actions']" class="table-header vgt-clearfix">
+        <h2 class="table-title vgt-pull-left">{{title}}</h2>
+        <div class="actions vgt-pull-right">
           <slot name="table-actions">
           </slot>
         </div>
@@ -25,12 +25,12 @@
       <div class="vgt-global-search">
         <div class="vgt-global-search__actions">
           <slot name="table-actions">
-            
+
           </slot>
         </div>
       </div>
 
-      <div :class="{'responsive': responsive}">
+      <div :class="{'vgt-responsive': responsive}">
         <table ref="table" :class="tableStyleClasses" >
           <thead>
             <tr v-if="globalSearch && externalSearchQuery == null">
@@ -39,7 +39,7 @@
                   <span class="global-search-icon">
                     <div class="magnifying-glass"></div>
                   </span>
-                  <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
+                  <input type="text" class="vgt-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
                 </div>
               </td>
             </tr>
@@ -66,14 +66,14 @@
                   :class="getHeaderClasses(column, index)">
                   <input v-if="!column.filterDropdown"
                     type="text"
-                    class=""
+                    class="vgt-input"
                     :placeholder="getPlaceholder(column)"
                     :value="columnFilters[column.field]"
                     v-on:input="updateFilters(column, $event.target.value)" />
 
                   <!-- options are a list of primitives -->
                   <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
-                    class=""
+                    class="vgt-select"
                     :value="columnFilters[column.field]"
                     v-on:input="updateFilters(column, $event.target.value)">
                       <option value="" key="-1">{{ getPlaceholder(column) }}</option>
@@ -87,7 +87,7 @@
 
                   <!-- options are a list of objects with text and value -->
                   <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
-                    class=""
+                    class="vgt-select"
                     :value="columnFilters[column.field]"
                     v-on:input="updateFilters(column, $event.target.value)">
                     <option value="" key="-1">{{ getPlaceholder(column) }}</option>
@@ -124,7 +124,7 @@
             <tr v-if="processedRows.length === 0">
               <td :colspan="columns.length">
                 <slot name="emptystate">
-                  <div class="center-align text-disabled">
+                  <div class="vgt-center-align text-disabled">
                     No data for table.
                   </div>
                 </slot>
@@ -172,7 +172,7 @@
     },
     props: {
       customRowsPerPageDropdown: {default: function(){ return [] }},
-      styleClass: {default: 'table table-bordered'},
+      styleClass: {default: 'vgt-table bordered'},
       title: '',
       columns: {},
       rows: {},
@@ -336,8 +336,8 @@
         let isRight = typeDef.isRight;
         if (this.rtl) isRight = true;
         const classes = {
-          'right-align': isRight,
-          'left-align': !isRight,
+          'vgt-right-align': isRight,
+          'vgt-left-align': !isRight,
           [custom]: !!custom
         };
         return classes;
@@ -649,235 +649,6 @@
   }
 </script>
 
-<style lang="scss" scoped>
-
-/* Utility styles
-************************************************/
-.right-align{
-  text-align: right;
-}
-
-.left-align{
-  text-align: left;
-}
-
-.center-align{
-  text-align: center;
-}
-
-.pull-left{
-  float:  left !important;
-}
-
-.pull-right{
-  float:  right !important;
-}
-
-.clearfix::after {
-  display: block;
-  content: "";
-  clear: both;
-}
-
-/* Table specific styles
-************************************************/
-
-  table{
-    border-collapse: collapse;
-    background-color: transparent;
-    margin-bottom:  0px;
-  }
-  .table{
-    width: 100%;
-    max-width: 100%;
-    table-layout: auto;
-  }
-
-  .table.table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(35,41,53,.05);
-  }
-
-  .table.table-bordered td, .table-bordered th {
-      border: 1px solid #DDD;
-  }
-
-  .table td, .table th:not(.line-numbers) {
-    padding: .75rem 1.5rem .75rem .75rem;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-  }
-
-  .rtl .table td, .rtl .table th:not(.line-numbers) {
-    padding: .75rem .75rem .75rem 1.5rem;
-  }
-
-  .table.condensed td, .table.condensed th {
-    padding: .4rem .4rem .4rem .4rem;
-  }
-
-  .table thead th, .table.condensed thead th {
-    vertical-align: bottom;
-    border-bottom:  2px solid #ddd;
-    padding-right: 1.5rem;
-    background-color: rgba(35,41,53,0.03);
-  }
-  .rtl .table thead th, .rtl .table.condensed thead th {
-    padding-left:  1.5rem;
-    padding-right:  .75rem;
-  }
-
-  tr.clickable {
-    cursor: pointer;
-  }
-
-  .table input[type="text"], .table select{
-    box-sizing: border-box;
-    display: block;
-    width: calc(100%);
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(35,41,53,.075);
-    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-  }
-
-  table th.sorting-asc,
-  table th.sorting-desc {
-    color: rgba(0, 0, 0, 0.66);
-    position: relative;
-  }
-
-  table th.sorting:after,
-  table th.sorting-asc:after  {
-    font-family: 'Material Icons';
-    position:  absolute;
-    height:  0px;
-    width:  0px;
-    content: '';
-    display: none;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid rgba(0, 0, 0, 0.66);
-    margin-top:  6px;
-    margin-left:  5px;
-  }
-
-  .rtl table th.sorting:after,
-  .rtl table th.sorting-asc:after{
-    margin-right:  5px;
-    margin-left:  0px;
-  }
-
-  table th.sorting:hover:after{
-    display: inline-block;
-    border-bottom-color: rgba(35,41,53,0.25);
-  }
-
-  table th.sorting-asc:after,
-  table th.sorting-desc:after {
-    display: inline-block;
-  }
-
-  table th.sorting-desc:after {
-    border-top:  6px solid rgba(0, 0, 0, 0.66);
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: none;
-    margin-top:  8px;
-  }
-
-.responsive {
-  width: 100%;
-  overflow-x: scroll;
-}
-
-/* Table header specific styles
-************************************************/
-
-.table-header{
-  padding:  .75rem;
-}
-
-.table-header .table-title{
-  margin:  0px;
-  font-size: 18px;
-}
-
-  /* Global Search
-  **********************************************/
-  .global-search{
-    position:  relative;
-    padding-left: 40px;
-  }
-  .global-search-icon{
-    position:  absolute;
-    left:  0px;
-    max-width:  32px;
-  }
-  .global-search-icon > img{
-    max-width:  100%;
-    margin-top:  8px;
-    opacity: 0.5;
-  }
-  table .global-search-input{
-   width:  calc(100% - 30px);
-  }
-
-  /* Line numbers
-  **********************************************/
-  table th.line-numbers, .table.condensed th.line-numbers{
-    background-color: rgba(35,41,53,0.05);
-    padding-left:  3px;
-    padding-right:  3px;
-    word-wrap: break-word;
-    width: 45px;
-    text-align: center;
-  }
-
-  .good-table.rtl{
-    direction: rtl;
-  }
-
-  .text-disabled{
-    color:  #aaa;
-  }
-
-/* magnifying glass css */
-.magnifying-glass
-{
-  margin-top: 3px;
-  display: block;
-  width: 18px;
-  height: 18px;
-  border: 3px solid #ccc;
-  position: relative;
-  border-radius: 50%;
-}
-.magnifying-glass::before
-{
-  content: "";
-  display: block;
-  position: absolute;
-  right: -10px;
-  bottom: -6px;
-  background: #ccc;
-  width: 10px;
-  height: 5px;
-  border-radius: 2px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-}
-
+<style lang="scss">
+@import '../styles/style';
 </style>
