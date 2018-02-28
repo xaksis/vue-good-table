@@ -19,6 +19,7 @@ module.exports = {
   compress: 'umd',
   plugins: ['vue'],
   vue: {
-    css: true,
+    css: 'dist/vue-good-table.css',
+    cssSourceMap: false
   }
 }

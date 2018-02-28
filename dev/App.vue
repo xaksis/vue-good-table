@@ -8,6 +8,7 @@
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="true"
+      :globalSearch="true"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
