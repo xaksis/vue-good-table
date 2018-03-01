@@ -1,157 +1,143 @@
 <template>
   <div class="vgt-wrap" :class="{'rtl': rtl}">
-      <div v-if="title || $slots['table-actions']" class="table-header vgt-clearfix">
-        <h2 class="table-title vgt-pull-left">{{title}}</h2>
-        <div class="actions vgt-pull-right">
-          <slot name="table-actions">
-          </slot>
-        </div>
-      </div>
-
-      <vue-good-pagination
-        v-if="paginate && paginateOnTop"
-        :perPage="perPage"
-        :rtl="rtl"
-        :total="processedRows.length"
-        @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"
-        :nextText="nextText"
-        :prevText="prevText"
-        :rowsPerPageText="rowsPerPageText"
-        :customRowsPerPageDropdown="customRowsPerPageDropdown"
-        :ofText="ofText"
-        :allText="allText"></vue-good-pagination>
+    <vue-good-pagination
+      v-if="paginate && paginateOnTop"
+      :perPage="perPage"
+      :rtl="rtl"
+      :total="processedRows.length"
+      @page-changed="pageChanged"
+      @per-page-changed="perPageChanged"
+      :nextText="nextText"
+      :prevText="prevText"
+      :rowsPerPageText="rowsPerPageText"
+      :customRowsPerPageDropdown="customRowsPerPageDropdown"
+      :ofText="ofText"
+      :allText="allText"></vue-good-pagination>
       
-      <div class="vgt-global-search">
-        <div class="vgt-global-search__actions">
-          <slot name="table-actions">
+    <vgt-global-search
+      @on-enter="searchTable"
+      v-model="globalSearchTerm"
+      :search-enabled="searchEnabled && externalSearchQuery == null"
+      :global-search-placeholder="globalSearchPlaceholder">
+      <template slot="internal-table-actions">
+        <slot name="table-actions">
+        </slot>
+      </template>
+    </vgt-global-search>
 
-          </slot>
-        </div>
-      </div>
+    <div :class="{'vgt-responsive': responsive}">
+      <table ref="table" :class="tableStyleClasses" >
+        <thead>
+          <tr>
+            <th v-if="lineNumbers" class="line-numbers"></th>
+            <th v-for="(column, index) in columns"
+              :key="index"
+              @click="sort(index)"
+              :class="getHeaderClasses(column, index)"
+              :style="{width: column.width ? column.width : 'auto'}"
+              v-if="!column.hidden">
+              <slot name="table-column" :column="column">
+                <span>{{column.label}}</span>
+              </slot>
+            </th>
+            <slot name="thead-tr"></slot>
+          </tr>
+          <tr v-if="hasFilterRow">
+            <th v-if="lineNumbers"></th>
+            <th v-for="(column, index) in columns"
+              :key="index"
+              v-if="!column.hidden">
+              <div v-if="column.filterable"
+                :class="getHeaderClasses(column, index)">
+                <input v-if="!column.filterDropdown"
+                  type="text"
+                  class="vgt-input"
+                  :placeholder="getPlaceholder(column)"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)" />
 
-      <div :class="{'vgt-responsive': responsive}">
-        <table ref="table" :class="tableStyleClasses" >
-          <thead>
-            <tr v-if="globalSearch && externalSearchQuery == null">
-              <td :colspan="lineNumbers ? columns.length + 1: columns.length">
-                <div class="global-search">
-                  <span class="global-search-icon">
-                    <div class="magnifying-glass"></div>
-                  </span>
-                  <input type="text" class="vgt-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th v-if="lineNumbers" class="line-numbers"></th>
-              <th v-for="(column, index) in columns"
-                :key="index"
-                @click="sort(index)"
-                :class="getHeaderClasses(column, index)"
-                :style="{width: column.width ? column.width : 'auto'}"
-                v-if="!column.hidden">
-                <slot name="table-column" :column="column">
-                  <span>{{column.label}}</span>
-                </slot>
-              </th>
-              <slot name="thead-tr"></slot>
-            </tr>
-            <tr v-if="hasFilterRow">
-              <th v-if="lineNumbers"></th>
-              <th v-for="(column, index) in columns"
-                :key="index"
-                v-if="!column.hidden">
-                <div v-if="column.filterable"
-                  :class="getHeaderClasses(column, index)">
-                  <input v-if="!column.filterDropdown"
-                    type="text"
-                    class="vgt-input"
-                    :placeholder="getPlaceholder(column)"
-                    :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)" />
-
-                  <!-- options are a list of primitives -->
-                  <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
-                    class="vgt-select"
-                    :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
-                      <option value="" key="-1">{{ getPlaceholder(column) }}</option>
-                      <option
-                        v-for="(option, i) in column.filterOptions"
-                        :key="i"
-                        :value="option">
-                        {{ option }}
-                      </option>
-                  </select>
-
-                  <!-- options are a list of objects with text and value -->
-                  <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
-                    class="vgt-select"
-                    :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
+                <!-- options are a list of primitives -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
+                  class="vgt-select"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
                     <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                     <option
                       v-for="(option, i) in column.filterOptions"
                       :key="i"
-                      :value="option.value">{{ option.text }}</option>
-                  </select>
-                </div>
-              </th>
-            </tr>
-          </thead>
+                      :value="option">
+                      {{ option }}
+                    </option>
+                </select>
 
-          <tbody>
-            <tr
-              v-for="(row, index) in paginated"
-              :key="index"
-              :class="getRowStyleClass(row)"
-              @click="click(row, index)">
-              <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-              <slot name="table-row-before" :row="row" :index="index"></slot>
-              <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-                <td
-                  v-for="(column, i) in columns"
-                  :key="i"
-                  :class="getClasses(i, 'td')"
-                  v-if="!column.hidden && column.field">
-                  <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
-                  <span v-if="column.html" v-html="collect(row, column.field)"></span>
-                </td>
-              </slot>
-              <slot name="table-row-after" :row="row" :index="index"></slot>
-            </tr>
-            <tr v-if="processedRows.length === 0">
-              <td :colspan="columns.length">
-                <slot name="emptystate">
-                  <div class="vgt-center-align text-disabled">
-                    No data for table.
-                  </div>
-                </slot>
+                <!-- options are a list of objects with text and value -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
+                  class="vgt-select"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
+                  <option value="" key="-1">{{ getPlaceholder(column) }}</option>
+                  <option
+                    v-for="(option, i) in column.filterOptions"
+                    :key="i"
+                    :value="option.value">{{ option.text }}</option>
+                </select>
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            v-for="(row, index) in paginated"
+            :key="index"
+            :class="getRowStyleClass(row)"
+            @click="click(row, index)">
+            <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <slot name="table-row-before" :row="row" :index="index"></slot>
+            <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
+              <td
+                v-for="(column, i) in columns"
+                :key="i"
+                :class="getClasses(i, 'td')"
+                v-if="!column.hidden && column.field">
+                <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+                <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <vue-good-pagination
-        v-if="paginate && !paginateOnTop"
-        :perPage="perPage"
-        :rtl="rtl"
-        :total="processedRows.length"
-        @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"
-        :nextText="nextText"
-        :prevText="prevText"
-        :rowsPerPageText="rowsPerPageText"
-        :customRowsPerPageDropdown="customRowsPerPageDropdown"
-        :ofText="ofText"
-        :allText="allText"
-        ></vue-good-pagination>
+            </slot>
+            <slot name="table-row-after" :row="row" :index="index"></slot>
+          </tr>
+          <tr v-if="processedRows.length === 0">
+            <td :colspan="columns.length">
+              <slot name="emptystate">
+                <div class="vgt-center-align text-disabled">
+                  No data for table.
+                </div>
+              </slot>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <vue-good-pagination
+      v-if="paginate && !paginateOnTop"
+      :perPage="perPage"
+      :rtl="rtl"
+      :total="processedRows.length"
+      @page-changed="pageChanged"
+      @per-page-changed="perPageChanged"
+      :nextText="nextText"
+      :prevText="prevText"
+      :rowsPerPageText="rowsPerPageText"
+      :customRowsPerPageDropdown="customRowsPerPageDropdown"
+      :ofText="ofText"
+      :allText="allText"
+      ></vue-good-pagination>
   </div>
 </template>
 
 <script>
   import VueGoodPagination from './Pagination.vue'
+  import VgtGlobalSearch from './VgtGlobalSearch.vue'
   import each from 'lodash.foreach'
   import defaultType from './types/default'
   import diacriticless from 'diacriticless'
@@ -167,13 +153,9 @@
 
   export default {
     name: 'vue-good-table',
-    components: {
-      VueGoodPagination
-    },
     props: {
       customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'vgt-table bordered'},
-      title: '',
       columns: {},
       rows: {},
       onClick: {},
@@ -188,10 +170,10 @@
       rowStyleClass: {default: null, type: [Function, String]},
 
       // search
-      globalSearch: {default: false},
+      searchEnabled: {default: false},
       searchTrigger: {default: null},
       externalSearchQuery: {default: null},
-      globalSearchFn: {type: Function, default: null},
+      searchFn: {type: Function, default: null},
       
       // text options
       globalSearchPlaceholder: {default: 'Search Table'},
@@ -450,7 +432,7 @@
 
       //
       globalSearchAllowed() {
-        if (this.globalSearch
+        if (this.searchEnabled
           && !!this.globalSearchTerm
           && this.searchTrigger != 'enter'){
           return true;
@@ -473,7 +455,7 @@
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow(){
-        if (!this.globalSearch) {
+        if (!this.searchEnabled) {
           for(var col of this.columns){
             if(col.filterable){
               return true;
@@ -504,8 +486,8 @@
               // if a search function is provided,
               // use that for searching, otherwise,
               // use the default search behavior
-              if (this.globalSearchFn) {
-                const foundMatch = this.globalSearchFn(
+              if (this.searchFn) {
+                const foundMatch = this.searchFn(
                   row,
                   col,
                   this.collectFormatted(row, col),
@@ -645,7 +627,12 @@
           }
         }
       }
-    }
+    },
+    
+    components: {
+      'vue-good-pagination': VueGoodPagination,
+      'vgt-global-search': VgtGlobalSearch,
+    },
   }
 </script>
 
