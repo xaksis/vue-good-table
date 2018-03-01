@@ -42,7 +42,14 @@
             </th>
             <slot name="thead-tr"></slot>
           </tr>
-          <tr v-if="hasFilterRow">
+          <vgt-filter-row
+            @filter-changed="filterRows"
+            :global-search-enabled="searchEnabled"
+            :line-numbers="lineNumbers"
+            :columns="columns"
+            :typed-columns="typedColumns">
+          </vgt-filter-row>
+          <!-- <tr v-if="hasFilterRow">
             <th v-if="lineNumbers"></th>
             <th v-for="(column, index) in columns"
               :key="index"
@@ -56,7 +63,6 @@
                   :value="columnFilters[column.field]"
                   v-on:input="updateFilters(column, $event.target.value)" />
 
-                <!-- options are a list of primitives -->
                 <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
                   class="vgt-select"
                   :value="columnFilters[column.field]"
@@ -70,7 +76,6 @@
                     </option>
                 </select>
 
-                <!-- options are a list of objects with text and value -->
                 <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
                   class="vgt-select"
                   :value="columnFilters[column.field]"
@@ -83,7 +88,7 @@
                 </select>
               </div>
             </th>
-          </tr>
+          </tr> -->
         </thead>
 
         <tbody>
@@ -138,6 +143,7 @@
 <script>
   import VueGoodPagination from './Pagination.vue'
   import VgtGlobalSearch from './VgtGlobalSearch.vue'
+  import VgtFilterRow from './VgtFilterRow.vue'
   import each from 'lodash.foreach'
   import defaultType from './types/default'
   import diacriticless from 'diacriticless'
@@ -190,9 +196,8 @@
       sortColumn: -1,
       sortType: 'asc',
       globalSearchTerm: '',
-      columnFilters: {},
       filteredRows: [],
-      timer: null,
+      columnFilters: {},
       forceSearch: false,
       sortChanged: false,
       dataTypes: dataTypes || {},
@@ -325,45 +330,35 @@
         return classes;
       },
 
-      //since vue doesn't detect property addition and deletion, we
-      // need to create helper function to set property etc
-      updateFilters(column, value) {
-        const _this = this;
-        if (this.timer) clearTimeout(this.timer);
-        this.timer = setTimeout(function(){
-          _this.$set(_this.columnFilters, column.field, value)
-        }, 400);
-      },
-
       //method to filter rows
-      filterRows() {
-        var computedRows = this.originalRows;
+      filterRows(columnFilters) {
+        // this is only called from the filter component
+        // which is only shown if there is a filter row
+        this.columnFilters = columnFilters;
+        let computedRows = this.originalRows;
 
-        if(this.hasFilterRow) {
-          for (var col of this.typedColumns){
-            if (col.filterable && this.columnFilters[col.field]) {
-              computedRows = computedRows.filter(row => {
+        for (let col of this.typedColumns){
+          if (this.columnFilters[col.field]) {
+            computedRows = computedRows.filter(row => {
+              
+              // If column has a custom filter, use that.
+              if (col.filterOptions 
+                && typeof(col.filterOptions.filterFn) === 'function' )  {
+                
+                return col.filterOptions.filterFn(
+                  this.collect(row, col.field), 
+                  this.columnFilters[col.field]
+                );
+              }else{
 
-                // If column has a custom filter, use that.
-                if (col.filter) {
-                  return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
-                }else{
-
-                  // Use default filters
-                  var typeDef = col.typeDef
-                  return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
-                }
-              });
-            }
+                // Use default filters
+                var typeDef = col.typeDef
+                return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
+              }
+            });
           }
         }
         this.filteredRows = computedRows;
-      },
-
-      //get column's defined placeholder or default one
-      getPlaceholder(column) {
-        const placeholder = column.placeholder || 'Filter ' + column.label
-        return placeholder
       },
 
       getCurrentIndex(index) {
@@ -384,39 +379,15 @@
         }
         return classes;
       },
-
-      populateInitialFilters() {
-        for (const col of this.columns) {
-          // lets see if there are initial 
-          // filters supplied by user
-          if(typeof(col.filterValue) !== 'undefined' 
-            && col.filterValue !== null) {
-            this.updateFilters(col, col.filterValue);
-            this.$set(col, 'filterValue', undefined);
-          }
-        }
-      }
     },
 
     watch: {
-      columnFilters: {
-          handler: function() {
-            this.filterRows();
-          },
-          deep: true
-      },
       rows: {
         handler: function() {
           this.filterRows();
         },
         deep: true
       },
-      columns: {
-        handler: function() {
-          this.populateInitialFilters();
-        },
-        deep: true
-      }
     },
 
     computed: {
@@ -447,20 +418,6 @@
           return true;
         }
 
-        return false;
-      },
-
-      // to create a filter row, we need to
-      // make sure that there is atleast 1 column
-      // that requires filtering
-      hasFilterRow(){
-        if (!this.searchEnabled) {
-          for(var col of this.columns){
-            if(col.filterable){
-              return true;
-            }
-          }
-        }
         return false;
       },
 
@@ -607,9 +564,6 @@
     mounted() {
       this.filteredRows = this.originalRows;
 
-      // take care of initial filters
-      this.populateInitialFilters();
-
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
@@ -631,6 +585,7 @@
     components: {
       'vue-good-pagination': VueGoodPagination,
       'vgt-global-search': VgtGlobalSearch,
+      'vgt-filter-row': VgtFilterRow,
     },
   }
 </script>
