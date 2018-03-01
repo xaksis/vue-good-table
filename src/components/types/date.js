@@ -8,8 +8,8 @@ date.isRight = true;
 
 date.compare = function compare(x, y, column) {
   function cook(d) {
-    if (column && column.inputFormat) {
-      return parse(`${d}`, `${column.inputFormat}`, new Date());
+    if (column && column.dateInputFormat) {
+      return parse(`${d}`, `${column.dateInputFormat}`, new Date());
     }
     return d;
   }
@@ -26,8 +26,8 @@ date.compare = function compare(x, y, column) {
 
 date.format = function formatDate(v, column) {
   // convert to date
-  const date = parse(v, column.inputFormat, new Date());
-  return format(date, column.outputFormat);
+  const date = parse(v, column.dateInputFormat, new Date());
+  return format(date, column.dateOutputFormat);
 };
 
 export default date;

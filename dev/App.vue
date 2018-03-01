@@ -10,7 +10,7 @@
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="true"
+      :searchEnabled="false"
       styleClass="vgt-table bordered striped condensed"
       :line-numbers="true">
       <!-- <template slot="table-actions">
@@ -49,62 +49,44 @@
             label: 'Name',
             field: 'name',
             type: 'text',
-            filterable: true,
             sortable: true,
             sortFn: this.sortFn,
-            filterDropdown: true,
-            filterOptions: [
-              { value: 'Chris', text: 'Chris' },
-              { value: 'Jane', text: 'Jane' },
-              { value: 'Dan', text: 'Dan' },
-              { value: 'Susan', text: 'Susan' },
-              { value: 'John', text: 'John' },
-            ],
+            filterOptions: {
+              enabled: true,
+              placeholder: 'Filter Here',
+              filterDropdownItems: [
+                { value: 'Chris', text: 'Chris' },
+                { value: 'Jane', text: 'Jane' },
+                { value: 'Dan', text: 'Dan' },
+                { value: 'Susan', text: 'Susan' },
+                { value: 'John', text: 'John' },
+              ],
+            }
           }, 
           {
             label: 'Name2',
             field: 'name',
             type: 'text',
-            filterable: true,
             sortable: true,
             sortFn: this.sortFn,
             filterValue: 'Dan',
+            filterOptions: {
+              enabled: true,
+              placeholder: 'Filter name2',
+              filterValue: 'Dan',
+            }
           }, 
           {
             label: 'Age',
             field: 'age',
             type: 'number',
-            formatFn: this.formatAge,
-          }, 
-          {
-            label: 'Age',
-            field: 'age',
-            type: 'number',
-          }, 
-          {
-            label: 'Age',
-            field: 'age',
-            type: 'number',
-          }, 
-          {
-            label: 'Age',
-            field: 'age',
-            type: 'number',
-          }, 
-          {
-            label: 'Age',
-            field: 'age',
-            type: 'number',
-          }, 
-          {
-            label: 'Age',
-            field: 'age',
-            type: 'number',
-          }, 
-          {
-            label: 'Age',
-            field: 'age',
-            type: 'number',
+            filterOptions: {
+              enabled: true,
+              filterFn: function(data, filterString) {
+                var x = parseInt(filterString)
+                return data >= x-10 && data <= x+10
+              }
+            },
           }, 
 
           {
