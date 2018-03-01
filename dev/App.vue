@@ -11,7 +11,7 @@
       :rows="rows"
       :paginateOnTop="false"
       :searchEnabled="true"
-      styleClass="vgt-table striped"
+      styleClass="vgt-table striped bordered"
       :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>
