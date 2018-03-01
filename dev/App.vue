@@ -10,7 +10,7 @@
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="false"
+      :searchEnabled="true"
       styleClass="vgt-table bordered striped condensed"
       :line-numbers="true">
       <!-- <template slot="table-actions">

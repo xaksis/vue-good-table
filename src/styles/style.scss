@@ -5,9 +5,14 @@
 @import './table-th';
 @import './input';
 
-// bordered table
+// table enhancements
 @import './bordered';
 @import './striped';
 @import './rtl';
 @import './condensed';
+
+// controls on top
 @import './control-bar';
+
+// table footer
+@import './table-footer';

@@ -21,7 +21,7 @@
       display: block;
       width: 16px;
       height: 16px;
-      border: 2px solid $border-color;
+      border: 2px solid darken($border-color, 2%);
       position: relative;
       border-radius: 50%;
       &:before{
@@ -30,7 +30,7 @@
         position: absolute;
         right: -7px;
         bottom: -5px;
-        background: $border-color;
+        background: darken($border-color, 2%);
         width: 8px;
         height: 4px;
         border-radius: 2px;

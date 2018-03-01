@@ -179,7 +179,7 @@
       searchPlaceholder: {default: 'Search Table'},
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
-      rowsPerPageText: {default: 'Rows per page:'},
+      rowsPerPageText: {default: 'Rows per page'},
       ofText: {default: 'of'},
       allText: {default: 'All'}
     },
@@ -422,7 +422,6 @@
     computed: {
       tableStyleClasses() {
         let classes = this.styleClass;
-        classes += this.responsive? ' responsive' : '';
         return classes;
       },
 
