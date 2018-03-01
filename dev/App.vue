@@ -10,9 +10,9 @@
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="false"
-      styleClass="vgt-table bordered striped condensed"
-      :line-numbers="true">
+      :searchEnabled="true"
+      styleClass="vgt-table striped"
+      :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
@@ -81,7 +81,7 @@
             field: 'age',
             type: 'number',
             filterOptions: {
-              enabled: true,
+              enabled: false,
               filterFn: function(data, filterString) {
                 var x = parseInt(filterString)
                 return data >= x-10 && data <= x+10

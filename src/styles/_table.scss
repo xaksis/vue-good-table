@@ -4,6 +4,7 @@ table.vgt-table{
   width: 100%;
   max-width: 100%;
   table-layout: auto;
+  border: 1px solid $border-color;
   & td {
     padding: .75rem .75rem .75rem .75rem;
     vertical-align: top;
