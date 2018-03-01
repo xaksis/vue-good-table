@@ -18,7 +18,7 @@
       @on-enter="searchTable"
       v-model="globalSearchTerm"
       :search-enabled="searchEnabled && externalSearchQuery == null"
-      :global-search-placeholder="globalSearchPlaceholder">
+      :global-search-placeholder="searchPlaceholder">
       <template slot="internal-table-actions">
         <slot name="table-actions">
         </slot>
@@ -176,7 +176,7 @@
       searchFn: {type: Function, default: null},
       
       // text options
-      globalSearchPlaceholder: {default: 'Search Table'},
+      searchPlaceholder: {default: 'Search Table'},
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
       rowsPerPageText: {default: 'Rows per page:'},
