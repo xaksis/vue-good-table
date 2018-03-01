@@ -3,13 +3,20 @@
     <button @click="addRow">Add Row</button>
     <button @click="editRow">edit Row</button>
     <button @click="addFilter">Add Filter</button>
+    <input type="text" v-model="searchQuery">
     <vue-good-table
+      style="margin-top: 30px"
       :paginate="true"
       :columns="columns" 
       :rows="rows"
-      :paginateOnTop="true"
-      :globalSearch="true"
+      :paginateOnTop="false"
+      :searchEnabled="true"
+      styleClass="vgt-table bordered striped condensed"
       :line-numbers="true">
+      <!-- <template slot="table-actions">
+        <button class="button">Hello</button>
+        <button class="button">Hi</button>
+      </template> -->
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
       </template>
@@ -31,6 +38,7 @@
     },
     data(){
       return {
+        searchQuery: '',
         testing: [2,7,12],
         columns: [
           {

@@ -1,157 +1,143 @@
 <template>
-  <div class="good-table" :class="{'rtl': rtl}">
-      <div v-if="title || $slots['table-actions']" class="table-header clearfix">
-        <h2 class="table-title pull-left">{{title}}</h2>
-        <div class="actions pull-right">
-          <slot name="table-actions">
-          </slot>
-        </div>
-      </div>
-
-      <vue-good-pagination
-        v-if="paginate && paginateOnTop"
-        :perPage="perPage"
-        :rtl="rtl"
-        :total="processedRows.length"
-        @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"
-        :nextText="nextText"
-        :prevText="prevText"
-        :rowsPerPageText="rowsPerPageText"
-        :customRowsPerPageDropdown="customRowsPerPageDropdown"
-        :ofText="ofText"
-        :allText="allText"></vue-good-pagination>
+  <div class="vgt-wrap" :class="{'rtl': rtl}">
+    <vue-good-pagination
+      v-if="paginate && paginateOnTop"
+      :perPage="perPage"
+      :rtl="rtl"
+      :total="processedRows.length"
+      @page-changed="pageChanged"
+      @per-page-changed="perPageChanged"
+      :nextText="nextText"
+      :prevText="prevText"
+      :rowsPerPageText="rowsPerPageText"
+      :customRowsPerPageDropdown="customRowsPerPageDropdown"
+      :ofText="ofText"
+      :allText="allText"></vue-good-pagination>
       
-      <div class="vgt-global-search">
-        <div class="vgt-global-search__actions">
-          <slot name="table-actions">
-            
-          </slot>
-        </div>
-      </div>
+    <vgt-global-search
+      @on-enter="searchTable"
+      v-model="globalSearchTerm"
+      :search-enabled="searchEnabled && externalSearchQuery == null"
+      :global-search-placeholder="searchPlaceholder">
+      <template slot="internal-table-actions">
+        <slot name="table-actions">
+        </slot>
+      </template>
+    </vgt-global-search>
 
-      <div :class="{'responsive': responsive}">
-        <table ref="table" :class="tableStyleClasses" >
-          <thead>
-            <tr v-if="globalSearch && externalSearchQuery == null">
-              <td :colspan="lineNumbers ? columns.length + 1: columns.length">
-                <div class="global-search">
-                  <span class="global-search-icon">
-                    <div class="magnifying-glass"></div>
-                  </span>
-                  <input type="text" class="form-control global-search-input" :placeholder="globalSearchPlaceholder" v-model="globalSearchTerm" @keyup.enter="searchTable()" />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th v-if="lineNumbers" class="line-numbers"></th>
-              <th v-for="(column, index) in columns"
-                :key="index"
-                @click="sort(index)"
-                :class="getHeaderClasses(column, index)"
-                :style="{width: column.width ? column.width : 'auto'}"
-                v-if="!column.hidden">
-                <slot name="table-column" :column="column">
-                  <span>{{column.label}}</span>
-                </slot>
-              </th>
-              <slot name="thead-tr"></slot>
-            </tr>
-            <tr v-if="hasFilterRow">
-              <th v-if="lineNumbers"></th>
-              <th v-for="(column, index) in columns"
-                :key="index"
-                v-if="!column.hidden">
-                <div v-if="column.filterable"
-                  :class="getHeaderClasses(column, index)">
-                  <input v-if="!column.filterDropdown"
-                    type="text"
-                    class=""
-                    :placeholder="getPlaceholder(column)"
-                    :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)" />
+    <div :class="{'vgt-responsive': responsive}">
+      <table ref="table" :class="tableStyleClasses" >
+        <thead>
+          <tr>
+            <th v-if="lineNumbers" class="line-numbers"></th>
+            <th v-for="(column, index) in columns"
+              :key="index"
+              @click="sort(index)"
+              :class="getHeaderClasses(column, index)"
+              :style="{width: column.width ? column.width : 'auto'}"
+              v-if="!column.hidden">
+              <slot name="table-column" :column="column">
+                <span>{{column.label}}</span>
+              </slot>
+            </th>
+            <slot name="thead-tr"></slot>
+          </tr>
+          <tr v-if="hasFilterRow">
+            <th v-if="lineNumbers"></th>
+            <th v-for="(column, index) in columns"
+              :key="index"
+              v-if="!column.hidden">
+              <div v-if="column.filterable"
+                :class="getHeaderClasses(column, index)">
+                <input v-if="!column.filterDropdown"
+                  type="text"
+                  class="vgt-input"
+                  :placeholder="getPlaceholder(column)"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)" />
 
-                  <!-- options are a list of primitives -->
-                  <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
-                    class=""
-                    :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
-                      <option value="" key="-1">{{ getPlaceholder(column) }}</option>
-                      <option
-                        v-for="(option, i) in column.filterOptions"
-                        :key="i"
-                        :value="option">
-                        {{ option }}
-                      </option>
-                  </select>
-
-                  <!-- options are a list of objects with text and value -->
-                  <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
-                    class=""
-                    :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
+                <!-- options are a list of primitives -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
+                  class="vgt-select"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
                     <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                     <option
                       v-for="(option, i) in column.filterOptions"
                       :key="i"
-                      :value="option.value">{{ option.text }}</option>
-                  </select>
-                </div>
-              </th>
-            </tr>
-          </thead>
+                      :value="option">
+                      {{ option }}
+                    </option>
+                </select>
 
-          <tbody>
-            <tr
-              v-for="(row, index) in paginated"
-              :key="index"
-              :class="getRowStyleClass(row)"
-              @click="click(row, index)">
-              <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-              <slot name="table-row-before" :row="row" :index="index"></slot>
-              <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-                <td
-                  v-for="(column, i) in columns"
-                  :key="i"
-                  :class="getClasses(i, 'td')"
-                  v-if="!column.hidden && column.field">
-                  <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
-                  <span v-if="column.html" v-html="collect(row, column.field)"></span>
-                </td>
-              </slot>
-              <slot name="table-row-after" :row="row" :index="index"></slot>
-            </tr>
-            <tr v-if="processedRows.length === 0">
-              <td :colspan="columns.length">
-                <slot name="emptystate">
-                  <div class="center-align text-disabled">
-                    No data for table.
-                  </div>
-                </slot>
+                <!-- options are a list of objects with text and value -->
+                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
+                  class="vgt-select"
+                  :value="columnFilters[column.field]"
+                  v-on:input="updateFilters(column, $event.target.value)">
+                  <option value="" key="-1">{{ getPlaceholder(column) }}</option>
+                  <option
+                    v-for="(option, i) in column.filterOptions"
+                    :key="i"
+                    :value="option.value">{{ option.text }}</option>
+                </select>
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            v-for="(row, index) in paginated"
+            :key="index"
+            :class="getRowStyleClass(row)"
+            @click="click(row, index)">
+            <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <slot name="table-row-before" :row="row" :index="index"></slot>
+            <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
+              <td
+                v-for="(column, i) in columns"
+                :key="i"
+                :class="getClasses(i, 'td')"
+                v-if="!column.hidden && column.field">
+                <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+                <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <vue-good-pagination
-        v-if="paginate && !paginateOnTop"
-        :perPage="perPage"
-        :rtl="rtl"
-        :total="processedRows.length"
-        @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"
-        :nextText="nextText"
-        :prevText="prevText"
-        :rowsPerPageText="rowsPerPageText"
-        :customRowsPerPageDropdown="customRowsPerPageDropdown"
-        :ofText="ofText"
-        :allText="allText"
-        ></vue-good-pagination>
+            </slot>
+            <slot name="table-row-after" :row="row" :index="index"></slot>
+          </tr>
+          <tr v-if="processedRows.length === 0">
+            <td :colspan="columns.length">
+              <slot name="emptystate">
+                <div class="vgt-center-align text-disabled">
+                  No data for table.
+                </div>
+              </slot>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <vue-good-pagination
+      v-if="paginate && !paginateOnTop"
+      :perPage="perPage"
+      :rtl="rtl"
+      :total="processedRows.length"
+      @page-changed="pageChanged"
+      @per-page-changed="perPageChanged"
+      :nextText="nextText"
+      :prevText="prevText"
+      :rowsPerPageText="rowsPerPageText"
+      :customRowsPerPageDropdown="customRowsPerPageDropdown"
+      :ofText="ofText"
+      :allText="allText"
+      ></vue-good-pagination>
   </div>
 </template>
 
 <script>
   import VueGoodPagination from './Pagination.vue'
+  import VgtGlobalSearch from './VgtGlobalSearch.vue'
   import each from 'lodash.foreach'
   import defaultType from './types/default'
   import diacriticless from 'diacriticless'
@@ -167,13 +153,9 @@
 
   export default {
     name: 'vue-good-table',
-    components: {
-      VueGoodPagination
-    },
     props: {
       customRowsPerPageDropdown: {default: function(){ return [] }},
-      styleClass: {default: 'table table-bordered'},
-      title: '',
+      styleClass: {default: 'vgt-table bordered'},
       columns: {},
       rows: {},
       onClick: {},
@@ -188,16 +170,16 @@
       rowStyleClass: {default: null, type: [Function, String]},
 
       // search
-      globalSearch: {default: false},
+      searchEnabled: {default: false},
       searchTrigger: {default: null},
       externalSearchQuery: {default: null},
-      globalSearchFn: {type: Function, default: null},
+      searchFn: {type: Function, default: null},
       
       // text options
-      globalSearchPlaceholder: {default: 'Search Table'},
+      searchPlaceholder: {default: 'Search Table'},
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
-      rowsPerPageText: {default: 'Rows per page:'},
+      rowsPerPageText: {default: 'Rows per page'},
       ofText: {default: 'of'},
       allText: {default: 'All'}
     },
@@ -336,8 +318,8 @@
         let isRight = typeDef.isRight;
         if (this.rtl) isRight = true;
         const classes = {
-          'right-align': isRight,
-          'left-align': !isRight,
+          'vgt-right-align': isRight,
+          'vgt-left-align': !isRight,
           [custom]: !!custom
         };
         return classes;
@@ -440,7 +422,6 @@
     computed: {
       tableStyleClasses() {
         let classes = this.styleClass;
-        classes += this.responsive? ' responsive' : '';
         return classes;
       },
 
@@ -450,7 +431,7 @@
 
       //
       globalSearchAllowed() {
-        if (this.globalSearch
+        if (this.searchEnabled
           && !!this.globalSearchTerm
           && this.searchTrigger != 'enter'){
           return true;
@@ -473,7 +454,7 @@
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow(){
-        if (!this.globalSearch) {
+        if (!this.searchEnabled) {
           for(var col of this.columns){
             if(col.filterable){
               return true;
@@ -504,8 +485,8 @@
               // if a search function is provided,
               // use that for searching, otherwise,
               // use the default search behavior
-              if (this.globalSearchFn) {
-                const foundMatch = this.globalSearchFn(
+              if (this.searchFn) {
+                const foundMatch = this.searchFn(
                   row,
                   col,
                   this.collectFormatted(row, col),
@@ -645,239 +626,15 @@
           }
         }
       }
-    }
+    },
+    
+    components: {
+      'vue-good-pagination': VueGoodPagination,
+      'vgt-global-search': VgtGlobalSearch,
+    },
   }
 </script>
 
-<style lang="scss" scoped>
-
-/* Utility styles
-************************************************/
-.right-align{
-  text-align: right;
-}
-
-.left-align{
-  text-align: left;
-}
-
-.center-align{
-  text-align: center;
-}
-
-.pull-left{
-  float:  left !important;
-}
-
-.pull-right{
-  float:  right !important;
-}
-
-.clearfix::after {
-  display: block;
-  content: "";
-  clear: both;
-}
-
-/* Table specific styles
-************************************************/
-
-  table{
-    border-collapse: collapse;
-    background-color: transparent;
-    margin-bottom:  0px;
-  }
-  .table{
-    width: 100%;
-    max-width: 100%;
-    table-layout: auto;
-  }
-
-  .table.table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(35,41,53,.05);
-  }
-
-  .table.table-bordered td, .table-bordered th {
-      border: 1px solid #DDD;
-  }
-
-  .table td, .table th:not(.line-numbers) {
-    padding: .75rem 1.5rem .75rem .75rem;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-  }
-
-  .rtl .table td, .rtl .table th:not(.line-numbers) {
-    padding: .75rem .75rem .75rem 1.5rem;
-  }
-
-  .table.condensed td, .table.condensed th {
-    padding: .4rem .4rem .4rem .4rem;
-  }
-
-  .table thead th, .table.condensed thead th {
-    vertical-align: bottom;
-    border-bottom:  2px solid #ddd;
-    padding-right: 1.5rem;
-    background-color: rgba(35,41,53,0.03);
-  }
-  .rtl .table thead th, .rtl .table.condensed thead th {
-    padding-left:  1.5rem;
-    padding-right:  .75rem;
-  }
-
-  tr.clickable {
-    cursor: pointer;
-  }
-
-  .table input[type="text"], .table select{
-    box-sizing: border-box;
-    display: block;
-    width: calc(100%);
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(35,41,53,.075);
-    box-shadow: inset 0 1px 1px rgba(35,41,53,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-  }
-
-  table th.sorting-asc,
-  table th.sorting-desc {
-    color: rgba(0, 0, 0, 0.66);
-    position: relative;
-  }
-
-  table th.sorting:after,
-  table th.sorting-asc:after  {
-    font-family: 'Material Icons';
-    position:  absolute;
-    height:  0px;
-    width:  0px;
-    content: '';
-    display: none;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid rgba(0, 0, 0, 0.66);
-    margin-top:  6px;
-    margin-left:  5px;
-  }
-
-  .rtl table th.sorting:after,
-  .rtl table th.sorting-asc:after{
-    margin-right:  5px;
-    margin-left:  0px;
-  }
-
-  table th.sorting:hover:after{
-    display: inline-block;
-    border-bottom-color: rgba(35,41,53,0.25);
-  }
-
-  table th.sorting-asc:after,
-  table th.sorting-desc:after {
-    display: inline-block;
-  }
-
-  table th.sorting-desc:after {
-    border-top:  6px solid rgba(0, 0, 0, 0.66);
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: none;
-    margin-top:  8px;
-  }
-
-.responsive {
-  width: 100%;
-  overflow-x: scroll;
-}
-
-/* Table header specific styles
-************************************************/
-
-.table-header{
-  padding:  .75rem;
-}
-
-.table-header .table-title{
-  margin:  0px;
-  font-size: 18px;
-}
-
-  /* Global Search
-  **********************************************/
-  .global-search{
-    position:  relative;
-    padding-left: 40px;
-  }
-  .global-search-icon{
-    position:  absolute;
-    left:  0px;
-    max-width:  32px;
-  }
-  .global-search-icon > img{
-    max-width:  100%;
-    margin-top:  8px;
-    opacity: 0.5;
-  }
-  table .global-search-input{
-   width:  calc(100% - 30px);
-  }
-
-  /* Line numbers
-  **********************************************/
-  table th.line-numbers, .table.condensed th.line-numbers{
-    background-color: rgba(35,41,53,0.05);
-    padding-left:  3px;
-    padding-right:  3px;
-    word-wrap: break-word;
-    width: 45px;
-    text-align: center;
-  }
-
-  .good-table.rtl{
-    direction: rtl;
-  }
-
-  .text-disabled{
-    color:  #aaa;
-  }
-
-/* magnifying glass css */
-.magnifying-glass
-{
-  margin-top: 3px;
-  display: block;
-  width: 18px;
-  height: 18px;
-  border: 3px solid #ccc;
-  position: relative;
-  border-radius: 50%;
-}
-.magnifying-glass::before
-{
-  content: "";
-  display: block;
-  position: absolute;
-  right: -10px;
-  bottom: -6px;
-  background: #ccc;
-  width: 10px;
-  height: 5px;
-  border-radius: 2px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-}
-
+<style lang="scss">
+@import '../styles/style';
 </style>
