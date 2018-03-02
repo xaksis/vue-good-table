@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.20.0
+ * vue-good-table v2.0.0-alpha
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -10,14 +10,14 @@ import { compareAsc, format, isValid, parse } from 'date-fns/esm';
 import clone from 'lodash.clone';
 
 var VueGoodPagination = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-table-footer vgt-clearfix" }, [_c('div', { staticClass: "datatable-length vgt-pull-left" }, [_c('label', [_c('span', [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', { staticClass: "browser-default", on: { "change": _vm.perPageChanged } }, [_vm._l(_vm.getRowsPerPageDropdown(), function (option) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap__footer vgt-clearfix" }, [_c('div', { staticClass: "footer__row-count vgt-pull-left" }, [_c('span', { staticClass: "footer__row-count__label" }, [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', { staticClass: "footer__row-count__select", on: { "change": _vm.perPageChanged } }, [_vm._l(_vm.getRowsPerPageDropdown(), function (option) {
       return _c('option', { key: 'rows-dropdown-option-' + option, domProps: { "selected": _vm.perPage && _vm.currentPerPage === option || _vm.currentPerPage === option, "value": option } }, [_vm._v(" " + _vm._s(option) + " ")]);
-    }), _vm._v(" "), _c('option', { attrs: { "value": "-1" } }, [_vm._v(_vm._s(_vm.allText))])], 2)])]), _vm._v(" "), _c('div', { staticClass: "pagination-controls pull-right" }, [_c('a', { staticClass: "page-btn", class: { disabled: !_vm.prevIsPossible }, attrs: { "href": "javascript:undefined", "tabindex": "0" }, on: { "click": function ($event) {
+    }), _vm._v(" "), _c('option', { attrs: { "value": "-1" } }, [_vm._v(_vm._s(_vm.allText))])], 2)]), _vm._v(" "), _c('div', { staticClass: "footer__navigation vgt-pull-right" }, [_c('a', { staticClass: "footer__navigation__page-btn", class: { disabled: !_vm.prevIsPossible }, attrs: { "href": "javascript:undefined", "tabindex": "0" }, on: { "click": function ($event) {
           $event.preventDefault();$event.stopPropagation();_vm.previousPage($event);
-        } } }, [_c('span', { staticClass: "chevron", class: { 'left': !_vm.rtl, 'right': _vm.rtl } }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _c('div', { staticClass: "info" }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('a', { staticClass: "page-btn", class: { disabled: !_vm.nextIsPossible }, attrs: { "href": "javascript:undefined", "tabindex": "0" }, on: { "click": function ($event) {
+        } } }, [_c('span', { staticClass: "chevron", class: { 'left': !_vm.rtl, 'right': _vm.rtl } }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _c('div', { staticClass: "footer__navigation__info" }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('a', { staticClass: "footer__navigation__page-btn", class: { disabled: !_vm.nextIsPossible }, attrs: { "href": "javascript:undefined", "tabindex": "0" }, on: { "click": function ($event) {
           $event.preventDefault();$event.stopPropagation();_vm.nextPage($event);
         } } }, [_c('span', [_vm._v(_vm._s(_vm.nextText))]), _vm._v(" "), _c('span', { staticClass: "chevron", class: { 'right': !_vm.rtl, 'left': _vm.rtl } })])])]);
-  }, staticRenderFns: [], _scopeId: 'data-v-849a166c',
+  }, staticRenderFns: [],
   name: 'vue-good-pagination',
   props: {
     styleClass: { default: 'table table-bordered' },
@@ -128,6 +128,138 @@ var VueGoodPagination = { render: function () {
   }
 };
 
+var VgtGlobalSearch = { render: function () {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.showControlBar ? _c('div', { staticClass: "vgt-global-search vgt-clearfix" }, [_c('div', { staticClass: "vgt-global-search__input vgt-pull-left" }, [_vm.searchEnabled ? _c('span', { staticClass: "input__icon" }, [_c('div', { staticClass: "magnifying-glass" })]) : _vm._e(), _vm._v(" "), _vm.searchEnabled ? _c('input', { staticClass: "vgt-input vgt-pull-left", attrs: { "type": "text", "placeholder": _vm.globalSearchPlaceholder }, domProps: { "value": _vm.value }, on: { "input": function ($event) {
+          _vm.updateValue($event.target.value);
+        }, "keyup": function ($event) {
+          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key)) {
+            return null;
+          }_vm.entered($event.target.value);
+        } } }) : _vm._e()]), _vm._v(" "), _c('div', { staticClass: "vgt-global-search__actions vgt-pull-right" }, [_vm._t("internal-table-actions")], 2)]) : _vm._e();
+  }, staticRenderFns: [],
+  name: 'VgtGlobalSearch',
+  props: ['value', 'searchEnabled', 'globalSearchPlaceholder'],
+  data: function data() {
+    return {
+      globalSearchTerm: null
+    };
+  },
+  computed: {
+    showControlBar: function showControlBar() {
+      return this.searchEnabled || this.$slots['internal-table-actions'];
+    }
+  },
+  methods: {
+    updateValue: function updateValue(value) {
+      this.$emit('input', value);
+    },
+    entered: function entered(value) {
+      this.$emit('on-enter', value);
+    }
+  }
+};
+
+var VgtFilterRow = { render: function () {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+      return !column.hidden ? _c('th', { key: index }, [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', { staticClass: "vgt-input", attrs: { "type": "text", "placeholder": _vm.getPlaceholder(column) }, domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
+            _vm.updateFilters(column, $event.target.value);
+          } } }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c('select', { staticClass: "vgt-select", domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
+            _vm.updateFilters(column, $event.target.value);
+          } } }, [_c('option', { key: "-1", attrs: { "value": "" } }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
+        return _c('option', { key: i, domProps: { "value": option } }, [_vm._v(" " + _vm._s(option) + " ")]);
+      })], 2) : _vm._e(), _vm._v(" "), _vm.isDropdownObjects(column) ? _c('select', { staticClass: "vgt-select", domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
+            _vm.updateFilters(column, $event.target.value);
+          } } }, [_c('option', { key: "-1", attrs: { "value": "" } }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
+        return _c('option', { key: i, domProps: { "value": option.value } }, [_vm._v(_vm._s(option.text))]);
+      })], 2) : _vm._e()]) : _vm._e()]) : _vm._e();
+    })], 2) : _vm._e();
+  }, staticRenderFns: [], _scopeId: 'data-v-2949d74f',
+  name: 'VgtFilterRow',
+  props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled'],
+  watch: {
+    columns: {
+      handler: function () {
+        this.populateInitialFilters();
+      },
+      deep: true
+    }
+  },
+  data: function data() {
+    return {
+      columnFilters: {},
+      timer: null
+    };
+  },
+  computed: {
+    // to create a filter row, we need to
+    // make sure that there is atleast 1 column
+    // that requires filtering
+    hasFilterRow: function hasFilterRow() {
+      var this$1 = this;
+
+      if (!this.globalSearchEnabled) {
+        for (var col of this$1.columns) {
+          if (col.filterOptions && col.filterOptions.enabled) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+  },
+  methods: {
+    isFilterable: function isFilterable(column) {
+      return column.filterOptions && column.filterOptions.enabled;
+    },
+
+    isDropdown: function isDropdown(column) {
+      return this.isFilterable(column) && column.filterOptions.filterDropdownItems && column.filterOptions.filterDropdownItems.length;
+    },
+
+    isDropdownObjects: function isDropdownObjects(column) {
+      return this.isDropdown(column) && typeof column.filterOptions.filterDropdownItems[0] === 'object';
+    },
+
+    isDropdownArray: function isDropdownArray(column) {
+      return this.isDropdown(column) && typeof column.filterOptions.filterDropdownItems[0] !== 'object';
+    },
+
+    //get column's defined placeholder or default one
+    getPlaceholder: function getPlaceholder(column) {
+      var placeholder = this.isFilterable(column) && column.filterOptions.placeholder || 'Filter ' + column.label;
+      return placeholder;
+    },
+
+    //since vue doesn't detect property addition and deletion, we
+    // need to create helper function to set property etc
+    updateFilters: function updateFilters(column, value) {
+      var _this = this;
+      if (this.timer) { clearTimeout(this.timer); }
+      this.timer = setTimeout(function () {
+        _this.$set(_this.columnFilters, column.field, value);
+        _this.$emit('filter-changed', _this.columnFilters);
+      }, 400);
+    },
+
+    populateInitialFilters: function populateInitialFilters() {
+      var this$1 = this;
+
+      for (var col of this$1.columns) {
+        // lets see if there are initial 
+        // filters supplied by user
+        if (this$1.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
+          this$1.updateFilters(col, col.filterOptions.filterValue);
+          this$1.$set(col, 'filterValue', undefined);
+        }
+      }
+    }
+  },
+  mounted: function mounted() {
+    // take care of initial filters
+    this.populateInitialFilters();
+  }
+};
+
 var defaultType = {
   format: function defaultFormat(x) {
     return x;
@@ -165,8 +297,8 @@ date.isRight = true;
 
 date.compare = function compare(x, y, column) {
   function cook(d) {
-    if (column && column.inputFormat) {
-      return parse(("" + d), ("" + (column.inputFormat)), new Date());
+    if (column && column.dateInputFormat) {
+      return parse(("" + d), ("" + (column.dateInputFormat)), new Date());
     }
     return d;
   }
@@ -183,8 +315,8 @@ date.compare = function compare(x, y, column) {
 
 date.format = function formatDate(v, column) {
   // convert to date
-  var date = parse(v, column.inputFormat, new Date());
-  return format(date, column.outputFormat);
+  var date = parse(v, column.dateInputFormat, new Date());
+  return format(date, column.dateOutputFormat);
 };
 
 
@@ -259,50 +391,26 @@ each(Object.keys(coreDataTypes), function (key) {
 });
 
 var GoodTable = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "good-table", class: { 'rtl': _vm.rtl } }, [_vm.title || _vm.$slots['table-actions'] ? _c('div', { staticClass: "table-header vgt-clearfix" }, [_c('h2', { staticClass: "table-title vgt-pull-left" }, [_vm._v(_vm._s(_vm.title))]), _vm._v(" "), _c('div', { staticClass: "actions vgt-pull-right" }, [_vm._t("table-actions")], 2)]) : _vm._e(), _vm._v(" "), _vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "vgt-global-search" }, [_c('div', { staticClass: "vgt-global-search__actions" }, [_vm._t("table-actions")], 2)]), _vm._v(" "), _c('div', { class: { 'responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_vm.globalSearch && _vm.externalSearchQuery == null ? _c('tr', [_c('td', { attrs: { "colspan": _vm.lineNumbers ? _vm.columns.length + 1 : _vm.columns.length } }, [_c('div', { staticClass: "global-search" }, [_vm._m(0), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.globalSearchTerm, expression: "globalSearchTerm" }], staticClass: "vgt-input", attrs: { "type": "text", "placeholder": _vm.globalSearchPlaceholder }, domProps: { "value": _vm.globalSearchTerm }, on: { "keyup": function ($event) {
-          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key)) {
-            return null;
-          }_vm.searchTable();
-        }, "input": function ($event) {
-          if ($event.target.composing) {
-            return;
-          }_vm.globalSearchTerm = $event.target.value;
-        } } })])])]) : _vm._e(), _vm._v(" "), _c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
+          _vm.globalSearchTerm = $$v;
+        }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
       return !column.hidden ? _c('th', { key: index$$1, class: _vm.getHeaderClasses(column, index$$1), style: { width: column.width ? column.width : 'auto' }, on: { "click": function ($event) {
             _vm.sort(index$$1);
           } } }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], { column: column })], 2) : _vm._e();
-    }), _vm._v(" "), _vm._t("thead-tr")], 2), _vm._v(" "), _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
-      return !column.hidden ? _c('th', { key: index$$1 }, [column.filterable ? _c('div', { class: _vm.getHeaderClasses(column, index$$1) }, [!column.filterDropdown ? _c('input', { staticClass: "vgt-input", attrs: { "type": "text", "placeholder": _vm.getPlaceholder(column) }, domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
-            _vm.updateFilters(column, $event.target.value);
-          } } }) : _vm._e(), _vm._v(" "), column.filterDropdown && typeof column.filterOptions[0] !== 'object' ? _c('select', { staticClass: "vgt-select", domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
-            _vm.updateFilters(column, $event.target.value);
-          } } }, [_c('option', { key: "-1", attrs: { "value": "" } }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions, function (option, i) {
-        return _c('option', { key: i, domProps: { "value": option } }, [_vm._v(" " + _vm._s(option) + " ")]);
-      })], 2) : _vm._e(), _vm._v(" "), column.filterDropdown && typeof column.filterOptions[0] === 'object' ? _c('select', { staticClass: "vgt-select", domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
-            _vm.updateFilters(column, $event.target.value);
-          } } }, [_c('option', { key: "-1", attrs: { "value": "" } }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions, function (option, i) {
-        return _c('option', { key: i, domProps: { "value": option.value } }, [_vm._v(_vm._s(option.text))]);
-      })], 2) : _vm._e()]) : _vm._e()]) : _vm._e();
-    })], 2) : _vm._e()]), _vm._v(" "), _c('tbody', [_vm._l(_vm.paginated, function (row, index$$1) {
+    }), _vm._v(" "), _vm._t("thead-tr")], 2), _vm._v(" "), _c('vgt-filter-row', { attrs: { "global-search-enabled": _vm.searchEnabled, "line-numbers": _vm.lineNumbers, "columns": _vm.columns, "typed-columns": _vm.typedColumns }, on: { "filter-changed": _vm.filterRows } })], 1), _vm._v(" "), _c('tbody', [_vm._l(_vm.paginated, function (row, index$$1) {
       return _c('tr', { key: index$$1, class: _vm.getRowStyleClass(row), on: { "click": function ($event) {
             _vm.click(row, index$$1);
           } } }, [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }, [_vm._v(_vm._s(_vm.getCurrentIndex(index$$1)))]) : _vm._e(), _vm._v(" "), _vm._t("table-row-before", null, { row: row, index: index$$1 }), _vm._v(" "), _vm._t("table-row", _vm._l(_vm.columns, function (column, i) {
         return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(row, column)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()]) : _vm._e();
       }), { row: row, formattedRow: _vm.formattedRow(row), index: index$$1 }), _vm._v(" "), _vm._t("table-row-after", null, { row: row, index: index$$1 })], 2);
     }), _vm._v(" "), _vm.processedRows.length === 0 ? _c('tr', [_c('td', { attrs: { "colspan": _vm.columns.length } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align text-disabled" }, [_vm._v(" No data for table. ")])])], 2)]) : _vm._e()], 2)])]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
-  }, staticRenderFns: [function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('span', { staticClass: "global-search-icon" }, [_c('div', { staticClass: "magnifying-glass" })]);
-  }],
+  }, staticRenderFns: [],
   name: 'vue-good-table',
-  components: {
-    VueGoodPagination: VueGoodPagination
-  },
   props: {
     customRowsPerPageDropdown: { default: function () {
         return [];
       } },
     styleClass: { default: 'vgt-table bordered' },
-    title: '',
     columns: {},
     rows: {},
     onClick: {},
@@ -317,16 +425,16 @@ var GoodTable = { render: function () {
     rowStyleClass: { default: null, type: [Function, String] },
 
     // search
-    globalSearch: { default: false },
+    searchEnabled: { default: false },
     searchTrigger: { default: null },
     externalSearchQuery: { default: null },
-    globalSearchFn: { type: Function, default: null },
+    searchFn: { type: Function, default: null },
 
     // text options
-    globalSearchPlaceholder: { default: 'Search Table' },
+    searchPlaceholder: { default: 'Search Table' },
     nextText: { default: 'Next' },
     prevText: { default: 'Prev' },
-    rowsPerPageText: { default: 'Rows per page:' },
+    rowsPerPageText: { default: 'Rows per page' },
     ofText: { default: 'of' },
     allText: { default: 'All' }
   },
@@ -337,9 +445,8 @@ var GoodTable = { render: function () {
     sortColumn: -1,
     sortType: 'asc',
     globalSearchTerm: '',
-    columnFilters: {},
     filteredRows: [],
-    timer: null,
+    columnFilters: {},
     forceSearch: false,
     sortChanged: false,
     dataTypes: dataTypes || {}
@@ -465,47 +572,35 @@ var GoodTable = { render: function () {
       return classes;
     },
 
-    //since vue doesn't detect property addition and deletion, we
-    // need to create helper function to set property etc
-    updateFilters: function updateFilters(column, value) {
-      var _this = this;
-      if (this.timer) { clearTimeout(this.timer); }
-      this.timer = setTimeout(function () {
-        _this.$set(_this.columnFilters, column.field, value);
-      }, 400);
-    },
-
     //method to filter rows
-    filterRows: function filterRows() {
+    filterRows: function filterRows(columnFilters) {
       var this$1 = this;
 
+      // this is only called from the filter component
+      // which is only shown if there is a filter row
+      this.columnFilters = columnFilters;
       var computedRows = this.originalRows;
 
-      if (this.hasFilterRow) {
-        for (var col of this$1.typedColumns) {
-          if (col.filterable && this$1.columnFilters[col.field]) {
-            computedRows = computedRows.filter(function (row) {
+      var loop = function () {
+        if (this$1.columnFilters[col.field]) {
+          computedRows = computedRows.filter(function (row) {
 
-              // If column has a custom filter, use that.
-              if (col.filter) {
-                return col.filter(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
-              } else {
+            // If column has a custom filter, use that.
+            if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
 
-                // Use default filters
-                var typeDef = col.typeDef;
-                return typeDef.filterPredicate(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
-              }
-            });
-          }
+              return col.filterOptions.filterFn(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
+            } else {
+
+              // Use default filters
+              var typeDef = col.typeDef;
+              return typeDef.filterPredicate(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
+            }
+          });
         }
-      }
-      this.filteredRows = computedRows;
-    },
+      };
 
-    //get column's defined placeholder or default one
-    getPlaceholder: function getPlaceholder(column) {
-      var placeholder = column.placeholder || 'Filter ' + column.label;
-      return placeholder;
+      for (var col of this$1.typedColumns) loop();
+      this.filteredRows = computedRows;
     },
 
     getCurrentIndex: function getCurrentIndex(index$$1) {
@@ -525,38 +620,13 @@ var GoodTable = { render: function () {
         classes += ' ' + rowStyleClasses;
       }
       return classes;
-    },
-
-    populateInitialFilters: function populateInitialFilters() {
-      var this$1 = this;
-
-      for (var col of this$1.columns) {
-        // lets see if there are initial 
-        // filters supplied by user
-        if (typeof col.filterValue !== 'undefined' && col.filterValue !== null) {
-          this$1.updateFilters(col, col.filterValue);
-          this$1.$set(col, 'filterValue', undefined);
-        }
-      }
     }
   },
 
   watch: {
-    columnFilters: {
-      handler: function () {
-        this.filterRows();
-      },
-      deep: true
-    },
     rows: {
       handler: function () {
         this.filterRows();
-      },
-      deep: true
-    },
-    columns: {
-      handler: function () {
-        this.populateInitialFilters();
       },
       deep: true
     }
@@ -565,7 +635,6 @@ var GoodTable = { render: function () {
   computed: {
     tableStyleClasses: function tableStyleClasses() {
       var classes = this.styleClass;
-      classes += this.responsive ? ' responsive' : '';
       return classes;
     },
 
@@ -575,7 +644,7 @@ var GoodTable = { render: function () {
 
     //
     globalSearchAllowed: function globalSearchAllowed() {
-      if (this.globalSearch && !!this.globalSearchTerm && this.searchTrigger != 'enter') {
+      if (this.searchEnabled && !!this.globalSearchTerm && this.searchTrigger != 'enter') {
         return true;
       }
 
@@ -588,22 +657,6 @@ var GoodTable = { render: function () {
         return true;
       }
 
-      return false;
-    },
-
-    // to create a filter row, we need to
-    // make sure that there is atleast 1 column
-    // that requires filtering
-    hasFilterRow: function hasFilterRow() {
-      var this$1 = this;
-
-      if (!this.globalSearch) {
-        for (var col of this$1.columns) {
-          if (col.filterable) {
-            return true;
-          }
-        }
-      }
       return false;
     },
 
@@ -630,8 +683,8 @@ var GoodTable = { render: function () {
             // if a search function is provided,
             // use that for searching, otherwise,
             // use the default search behavior
-            if (this$1.globalSearchFn) {
-              var foundMatch = this$1.globalSearchFn(row, col, this$1.collectFormatted(row, col), this$1.searchTerm);
+            if (this$1.searchFn) {
+              var foundMatch = this$1.searchFn(row, col, this$1.collectFormatted(row, col), this$1.searchTerm);
               if (foundMatch) {
                 filteredRows.push(row);
                 break;
@@ -749,9 +802,6 @@ var GoodTable = { render: function () {
 
     this.filteredRows = this.originalRows;
 
-    // take care of initial filters
-    this.populateInitialFilters();
-
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
@@ -768,6 +818,12 @@ var GoodTable = { render: function () {
         }
       }
     }
+  },
+
+  components: {
+    'vue-good-pagination': VueGoodPagination,
+    'vgt-global-search': VgtGlobalSearch,
+    'vgt-filter-row': VgtFilterRow
   }
 };
 

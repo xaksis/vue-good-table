@@ -69,7 +69,6 @@
             type: 'text',
             sortable: true,
             sortFn: this.sortFn,
-            filterValue: 'Dan',
             filterOptions: {
               enabled: true,
               placeholder: 'Filter name2',
