@@ -13,13 +13,14 @@
       @on-row-click="onRowClick"
       style="margin-top: 30px"
       styleClass="vgt-table striped bordered"
-      mode="local"
+      mode="remote"
+      :totalRows="300" 
       theme="nocturnal"
       :paginate="true"
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="true"
+      :searchEnabled="false"
       :customRowsPerPageDropdown="testing"
       :line-numbers="false">
       <!-- <template slot="table-actions">

@@ -4,7 +4,7 @@
       v-if="paginate && paginateOnTop"
       :perPage="perPage"
       :rtl="rtl"
-      :total="processedRows.length"
+      :total="totalRows || processedRows.length"
       @page-changed="pageChanged"
       @per-page-changed="perPageChanged"
       :nextText="nextText"
@@ -87,7 +87,7 @@
       v-if="paginate && !paginateOnTop"
       :perPage="perPage"
       :rtl="rtl"
-      :total="processedRows.length"
+      :total="totalRows || processedRows.length"
       @page-changed="pageChanged"
       @per-page-changed="perPageChanged"
       :nextText="nextText"
@@ -122,6 +122,7 @@
     props: {
       theme: {default: ''},
       mode: {default: 'local'}, // could be remote
+      totalRows: {}, // required if mode = 'remote'
       customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'vgt-table bordered'},
       columns: {},
