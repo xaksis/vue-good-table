@@ -1,5 +1,5 @@
 <template>
-  <div class="vgt-wrap" :class="{'rtl': rtl}">
+  <div class="vgt-wrap" :class="{'rtl': rtl, 'nocturnal': theme==='nocturnal'}">
     <vue-good-pagination
       v-if="paginate && paginateOnTop"
       :perPage="perPage"
@@ -120,6 +120,7 @@
   export default {
     name: 'vue-good-table',
     props: {
+      theme: {default: ''},
       mode: {default: 'local'}, // could be remote
       customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'vgt-table bordered'},
@@ -377,6 +378,7 @@
     computed: {
       tableStyleClasses() {
         let classes = this.styleClass;
+        classes += ' '+this.theme;
         return classes;
       },
 

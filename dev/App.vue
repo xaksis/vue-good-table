@@ -10,16 +10,18 @@
       @on-column-filter="onColumnFilter"
       @on-sort-change="onSortChange"
       @on-search="onSearch"
+      @on-row-click="onRowClick"
       style="margin-top: 30px"
       styleClass="vgt-table striped bordered"
       mode="local"
+      theme="nocturnal"
       :paginate="true"
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="false"
+      :searchEnabled="true"
       :customRowsPerPageDropdown="testing"
-      :line-numbers="true">
+      :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
@@ -177,6 +179,11 @@
 
       onSortChange(params) {
         console.log('on-sort-change:');
+        console.log(params);
+      },
+
+      onRowClick(params) {
+        console.log('on-row-click');
         console.log(params);
       }
     }
