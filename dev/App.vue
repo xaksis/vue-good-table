@@ -5,18 +5,25 @@
     <button @click="addFilter">Add Filter</button>
     <input type="text" v-model="searchQuery">
     <vue-good-table
+      @on-per-page-change="onPerPageChange"
+      @on-page-change="onPageChange"
+      @on-column-filter="onColumnFilter"
+      @on-sort-change="onSortChange"
+      @on-search="onSearch"
       style="margin-top: 30px"
+      styleClass="vgt-table striped bordered"
+      mode="local"
       :paginate="true"
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="true"
-      styleClass="vgt-table striped bordered"
-      :line-numbers="false">
-      <template slot="table-actions">
+      :searchEnabled="false"
+      :customRowsPerPageDropdown="testing"
+      :line-numbers="true">
+      <!-- <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
-      </template>
+      </template> -->
       <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
       </template>
@@ -72,7 +79,6 @@
             filterOptions: {
               enabled: true,
               placeholder: 'Filter name2',
-              filterValue: 'Dan',
             }
           }, 
           {
@@ -87,86 +93,36 @@
               }
             },
           }, 
-
+          {
+            label: 'Joined On',
+            field: 'joined',
+            type: 'date',
+            dateInputFormat: 'YYYYMMDD',
+            dateOutputFormat: 'MMM Do YYYY',
+          },
           {
             label: '',
             sortable: false,
           },
         ],
         rows: [
-          {
-            name: "John",
-            age: "20"
-          }, {
-            name: "Jane",
-            age: "24"
-          }, {
-            name: "Susan",
-            age: "16"
-          }, {
-            name: "Chris",
-            age: "55"
-          }, {
-            name: "Dan",
-            age: "40"
-          }, {
-            name: "John",
-            age: "20"
-          }, {
-            name: "Jane",
-            age: null,
-          }, {
-            name: "Susan",
-            age: "16"
-          }, {
-            name: "Chris",
-            age: "55"
-          }, {
-            name: "Dan",
-            age: "40"
-          }, {
-            name: "Jane",
-            age: "24"
-          }, {
-            name: "Susan",
-            age: "16"
-          }, {
-            name: "Chris",
-            age: "55"
-          }, {
-            name: "Dan",
-            age: "40"
-          }, {
-            name: "Dan",
-            age: "40"
-          }, {
-            name: "John",
-            age: "20"
-          }, {
-            name: null,
-            age: null,
-          }, {
-            name: "Susan",
-            age: "16"
-          }, {
-            name: "Chris",
-            age: "55"
-          }, {
-            name: "Dan",
-            age: "40"
-          }, {
-            name: "Jane",
-            age: "24"
-          }, {
-            name: "Susan",
-            age: "16"
-          }, {
-            name: "Chris",
-            age: "55"
-          }, {
-            name: "Dan",
-            age: "40"
-          }, 
+          {name:"John", age:20, joined: '20120201'},
+          {name:"Jane", age:24, joined: '20120305'},
+          {name:"Susan", age:16, joined: '20140823'},
+          {name:"Chris", age:55, joined: '20161109'},
+          {name:"Dan", age:40, joined: '20170612'},
+
+          {name:"Jay", age:20, joined: '20120201'},
+          {name:"Seah", age:24, joined: '20120305'},
+          {name:"Sarah", age:16, joined: '20140823'},
+          {name:"Mohit", age:55, joined: '20161109'},
+          {name:"Don", age:40, joined: '20170612'},
+
+          {name:"Ernesto", age:20, joined: '20120201'},
+          {name:"Clark", age:24, joined: '20120305'},
+          {name:"Monty", age:16, joined: '20140823'},
+          {name:"Priya", age:55, joined: '20161109'},
+          {name:"Sans", age:40, joined: '20170612'},
         ],
       };
     },
@@ -192,6 +148,36 @@
       addFilter() {
         this.$set(this.columns[2], 'filterValue', 'Jane');
         console.log(this.columns);
+      },
+
+      // events
+      //===================================================
+      onPerPageChange(evt) {
+        // { currentPage: 1, currentPerPage: 10, total: 5 }
+        console.log('per-page-changed:');
+        console.log(evt);
+      },
+
+      onPageChange(evt) {
+        // { currentPage: 1, currentPerPage: 10, total: 5 }
+        console.log('page-changed:');
+        console.log(evt);
+      },
+
+      onColumnFilter(params) {
+        // { currentPage: 1, currentPerPage: 10, total: 5 }
+        console.log('on-column-filters:');
+        console.log(params);
+      },
+
+      onSearch(params) {
+        console.log('on-search:');
+        console.log(params);
+      },
+
+      onSortChange(params) {
+        console.log('on-sort-change:');
+        console.log(params);
       }
     }
   };

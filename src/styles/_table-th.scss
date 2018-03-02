@@ -10,6 +10,11 @@
   & th.line-numbers {
     color: $text-color;
     border-right: 1px solid $border-color;
+    padding-left:  5px;
+    padding-right:  5px;
+    word-wrap: break-word;
+    max-width: 45px;
+    text-align: center;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
   }
   thead th{

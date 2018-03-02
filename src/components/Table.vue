@@ -49,46 +49,6 @@
             :columns="columns"
             :typed-columns="typedColumns">
           </vgt-filter-row>
-          <!-- <tr v-if="hasFilterRow">
-            <th v-if="lineNumbers"></th>
-            <th v-for="(column, index) in columns"
-              :key="index"
-              v-if="!column.hidden">
-              <div v-if="column.filterable"
-                :class="getHeaderClasses(column, index)">
-                <input v-if="!column.filterDropdown"
-                  type="text"
-                  class="vgt-input"
-                  :placeholder="getPlaceholder(column)"
-                  :value="columnFilters[column.field]"
-                  v-on:input="updateFilters(column, $event.target.value)" />
-
-                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
-                  class="vgt-select"
-                  :value="columnFilters[column.field]"
-                  v-on:input="updateFilters(column, $event.target.value)">
-                    <option value="" key="-1">{{ getPlaceholder(column) }}</option>
-                    <option
-                      v-for="(option, i) in column.filterOptions"
-                      :key="i"
-                      :value="option">
-                      {{ option }}
-                    </option>
-                </select>
-
-                <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
-                  class="vgt-select"
-                  :value="columnFilters[column.field]"
-                  v-on:input="updateFilters(column, $event.target.value)">
-                  <option value="" key="-1">{{ getPlaceholder(column) }}</option>
-                  <option
-                    v-for="(option, i) in column.filterOptions"
-                    :key="i"
-                    :value="option.value">{{ option.text }}</option>
-                </select>
-              </div>
-            </th>
-          </tr> -->
         </thead>
 
         <tbody>
@@ -160,6 +120,7 @@
   export default {
     name: 'vue-good-table',
     props: {
+      mode: {default: 'local'}, // could be remote
       customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'vgt-table bordered'},
       columns: {},
@@ -215,13 +176,13 @@
       pageChanged(pagination) {
         this.currentPage = pagination.currentPage;
         const pageChangedEvent = this.pageChangedEvent();
-        this.$emit('pageChanged', pageChangedEvent);
+        this.$emit('on-page-change', pageChangedEvent);
       },
 
       perPageChanged(pagination) {
         this.currentPerPage = pagination.currentPerPage;
         const perPageChangedEvent = this.pageChangedEvent();
-        this.$emit('perPageChanged', perPageChangedEvent);
+        this.$emit('on-per-page-change', perPageChangedEvent);
       },
 
       sort(index) {
@@ -233,15 +194,28 @@
           this.sortType = 'asc';
           this.sortColumn = index;
         }
+
+        this.$emit('on-sort-change', {
+          sortType: this.sortType,
+          columnIndex: this.sortColumn,
+        });
+
+        // if the mode is remote, we don't need to do anything 
+        // after this.
+        if(this.mode === 'remote') return;
         this.sortChanged = true;
       },
 
       click(row, index) {
+        this.$emit('on-row-click', {row: row, index: index});
         if (this.onClick)
           this.onClick(row, index);
       },
 
       searchTable() {
+        this.$emit('on-search', {
+          searchTerm: this.searchTerm,
+        });
         if(this.searchTrigger == 'enter') {
           this.forceSearch = true;
           this.sortChanged = true;
@@ -335,6 +309,16 @@
         // this is only called from the filter component
         // which is only shown if there is a filter row
         this.columnFilters = columnFilters;
+        
+        // if mode is remote, we don't do any filtering here. 
+        // we need to emit an event and that's that.
+        if (this.mode === 'remote') {
+          this.$emit('on-column-filter', {
+            columnFilters: this.columnFilters,
+          });
+          return;
+        }
+
         let computedRows = this.originalRows;
 
         for (let col of this.typedColumns){
@@ -425,7 +409,11 @@
       // or sort type changes
       //----------------------------------------
       processedRows() {
-       var computedRows = this.filteredRows;
+        // we only process rows when mode is local
+        var computedRows = this.filteredRows;
+        if(this.mode === 'remote'){
+          return computedRows;
+        }
 
         // take care of the global filter here also
         if (this.globalSearchAllowed) {
@@ -515,6 +503,10 @@
 
       paginated() {
         var paginatedRows = this.processedRows;
+
+        if (this.mode === 'remote') {
+          return paginatedRows;
+        }
 
         if (this.paginate) {
           var pageStart = (this.currentPage - 1) * this.currentPerPage;

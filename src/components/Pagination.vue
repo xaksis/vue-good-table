@@ -104,15 +104,17 @@
 
       nextPage() {
         if(this.currentPerPage === -1) return;
-        if (this.nextIsPossible)
+        if (this.nextIsPossible) {
           ++this.currentPage;
-        this.pageChanged();
+          this.pageChanged();
+        }
       },
 
       previousPage() {
-        if (this.currentPage > 1)
+        if (this.currentPage > 1) {
           --this.currentPage;
-        this.pageChanged();
+          this.pageChanged();
+        }
       },
 
       pageChanged() {
