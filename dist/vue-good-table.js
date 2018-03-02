@@ -1,5 +1,6 @@
 /**
  * vue-good-table v2.0.0-alpha
+ * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -91,13 +92,17 @@ var VueGoodPagination = { render: function () {
 
     nextPage: function nextPage() {
       if (this.currentPerPage === -1) { return; }
-      if (this.nextIsPossible) { ++this.currentPage; }
-      this.pageChanged();
+      if (this.nextIsPossible) {
+        ++this.currentPage;
+        this.pageChanged();
+      }
     },
 
     previousPage: function previousPage() {
-      if (this.currentPage > 1) { --this.currentPage; }
-      this.pageChanged();
+      if (this.currentPage > 1) {
+        --this.currentPage;
+        this.pageChanged();
+      }
     },
 
     pageChanged: function pageChanged() {
@@ -5422,7 +5427,7 @@ lodash_foreach(Object.keys(coreDataTypes), function (key) {
 });
 
 var GoodTable = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
           _vm.globalSearchTerm = $$v;
         }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
       return !column.hidden ? _c('th', { key: index$$1, class: _vm.getHeaderClasses(column, index$$1), style: { width: column.width ? column.width : 'auto' }, on: { "click": function ($event) {
@@ -5434,10 +5439,13 @@ var GoodTable = { render: function () {
           } } }, [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }, [_vm._v(_vm._s(_vm.getCurrentIndex(index$$1)))]) : _vm._e(), _vm._v(" "), _vm._t("table-row-before", null, { row: row, index: index$$1 }), _vm._v(" "), _vm._t("table-row", _vm._l(_vm.columns, function (column, i) {
         return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(row, column)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()]) : _vm._e();
       }), { row: row, formattedRow: _vm.formattedRow(row), index: index$$1 }), _vm._v(" "), _vm._t("table-row-after", null, { row: row, index: index$$1 })], 2);
-    }), _vm._v(" "), _vm.processedRows.length === 0 ? _c('tr', [_c('td', { attrs: { "colspan": _vm.columns.length } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align text-disabled" }, [_vm._v(" No data for table. ")])])], 2)]) : _vm._e()], 2)])]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
+    }), _vm._v(" "), _vm.processedRows.length === 0 ? _c('tr', [_c('td', { attrs: { "colspan": _vm.columns.length } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align text-disabled" }, [_vm._v(" No data for table. ")])])], 2)]) : _vm._e()], 2)])]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
   }, staticRenderFns: [],
   name: 'vue-good-table',
   props: {
+    theme: { default: '' },
+    mode: { default: 'local' }, // could be remote
+    totalRows: {}, // required if mode = 'remote'
     customRowsPerPageDropdown: { default: function () {
         return [];
       } },
@@ -5495,13 +5503,13 @@ var GoodTable = { render: function () {
     pageChanged: function pageChanged(pagination) {
       this.currentPage = pagination.currentPage;
       var pageChangedEvent = this.pageChangedEvent();
-      this.$emit('pageChanged', pageChangedEvent);
+      this.$emit('on-page-change', pageChangedEvent);
     },
 
     perPageChanged: function perPageChanged(pagination) {
       this.currentPerPage = pagination.currentPerPage;
       var perPageChangedEvent = this.pageChangedEvent();
-      this.$emit('perPageChanged', perPageChangedEvent);
+      this.$emit('on-per-page-change', perPageChangedEvent);
     },
 
     sort: function sort(index$$1) {
@@ -5512,14 +5520,27 @@ var GoodTable = { render: function () {
         this.sortType = 'asc';
         this.sortColumn = index$$1;
       }
+
+      this.$emit('on-sort-change', {
+        sortType: this.sortType,
+        columnIndex: this.sortColumn
+      });
+
+      // if the mode is remote, we don't need to do anything 
+      // after this.
+      if (this.mode === 'remote') { return; }
       this.sortChanged = true;
     },
 
     click: function click(row, index$$1) {
+      this.$emit('on-row-click', { row: row, index: index$$1 });
       if (this.onClick) { this.onClick(row, index$$1); }
     },
 
     searchTable: function searchTable() {
+      this.$emit('on-search', {
+        searchTerm: this.searchTerm
+      });
       if (this.searchTrigger == 'enter') {
         this.forceSearch = true;
         this.sortChanged = true;
@@ -5610,6 +5631,16 @@ var GoodTable = { render: function () {
       // this is only called from the filter component
       // which is only shown if there is a filter row
       this.columnFilters = columnFilters;
+
+      // if mode is remote, we don't do any filtering here. 
+      // we need to emit an event and that's that.
+      if (this.mode === 'remote') {
+        this.$emit('on-column-filter', {
+          columnFilters: this.columnFilters
+        });
+        return;
+      }
+
       var computedRows = this.originalRows;
 
       var loop = function () {
@@ -5666,6 +5697,7 @@ var GoodTable = { render: function () {
   computed: {
     tableStyleClasses: function tableStyleClasses() {
       var classes = this.styleClass;
+      classes += ' ' + this.theme;
       return classes;
     },
 
@@ -5697,7 +5729,11 @@ var GoodTable = { render: function () {
     processedRows: function processedRows() {
       var this$1 = this;
 
+      // we only process rows when mode is local
       var computedRows = this.filteredRows;
+      if (this.mode === 'remote') {
+        return computedRows;
+      }
 
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
@@ -5781,6 +5817,10 @@ var GoodTable = { render: function () {
 
     paginated: function paginated() {
       var paginatedRows = this.processedRows;
+
+      if (this.mode === 'remote') {
+        return paginatedRows;
+      }
 
       if (this.paginate) {
         var pageStart = (this.currentPage - 1) * this.currentPerPage;
