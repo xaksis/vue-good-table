@@ -56,6 +56,9 @@ table.vgt-table {
   text-align: center;
   background: linear-gradient(#F4F5F8, #F1F3F6); }
 
+.vgt-table th.filter-th {
+  padding: .75rem .75rem .75rem .75rem; }
+
 .vgt-table thead th {
   color: #606266;
   vertical-align: bottom;
@@ -67,21 +70,21 @@ table.vgt-table {
     position: relative; }
     .vgt-table thead th.sorting-asc:after, .vgt-table thead th.sorting-desc:after {
       content: '';
-      display: inline-block;
+      display: block;
       position: absolute;
       height: 0px;
       width: 0px;
+      right: 6px;
+      top: 50%;
+      margin-top: -3px;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-bottom: 6px solid #409eff;
-      margin-top: 4px;
-      margin-left: 5px; }
+      border-bottom: 6px solid #409eff; }
   .vgt-table thead th.sorting-desc:after {
     border-top: 6px solid #409eff;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: none;
-    margin-top: 6px; }
+    border-bottom: none; }
 
 .vgt-input, .vgt-select {
   width: 100%;
@@ -89,6 +92,7 @@ table.vgt-table {
   line-height: 1;
   display: block;
   font-size: 14px;
+  font-weight: regular;
   padding: 6px 12px;
   color: #606266;
   border-radius: 4px;

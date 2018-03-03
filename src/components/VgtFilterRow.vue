@@ -1,7 +1,7 @@
 <template>
 <tr v-if="hasFilterRow">
   <th v-if="lineNumbers"></th>
-  <th 
+  <th class="filter-th"
     v-for="(column, index) in columns" :key="index"
     v-if="!column.hidden">
 

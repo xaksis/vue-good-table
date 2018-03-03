@@ -172,7 +172,7 @@ var VgtGlobalSearch = { render: function () {
 
 var VgtFilterRow = { render: function () {
     var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
-      return !column.hidden ? _c('th', { key: index }, [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', { staticClass: "vgt-input", attrs: { "type": "text", "placeholder": _vm.getPlaceholder(column) }, domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
+      return !column.hidden ? _c('th', { key: index, staticClass: "filter-th" }, [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', { staticClass: "vgt-input", attrs: { "type": "text", "placeholder": _vm.getPlaceholder(column) }, domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
             _vm.updateFilters(column, $event.target.value);
           } } }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c('select', { staticClass: "vgt-select", domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
             _vm.updateFilters(column, $event.target.value);
