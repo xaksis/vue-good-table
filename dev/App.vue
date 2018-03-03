@@ -12,27 +12,26 @@
       @on-search="onSearch"
       @on-row-click="onRowClick"
       style="margin-top: 30px"
-      styleClass="vgt-table striped bordered"
-      mode="remote"
-      :totalRows="300" 
-      theme="nocturnal"
+      styleClass="vgt-table bordered condensed"
+      mode="" 
+      theme=""
       :paginate="true"
+      :perPage="5"
       :columns="columns" 
       :rows="rows"
       :paginateOnTop="false"
       :searchEnabled="false"
-      :customRowsPerPageDropdown="testing"
       :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
       </template> -->
-      <template slot="table-row-before" slot-scope="props">
+      <!-- <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
-      </template>
-      <template slot="table-row-after" slot-scope="props">
+      </template> -->
+      <!-- <template slot="table-row-after" slot-scope="props">
         <td><a class="button lightbox" :href="'test_detail.php?id=' + props.row.id" >detail</a></td>
-      </template>
+      </template> -->
     </vue-good-table>
   </div>
 </template>
@@ -51,10 +50,10 @@
         searchQuery: '',
         testing: [2,7,12],
         columns: [
-          {
-            label: '',
-            sortable: false,
-          },
+          // {
+          //   label: '',
+          //   sortable: false,
+          // },
           {
             label: 'Name',
             field: 'name',
@@ -73,17 +72,17 @@
               ],
             }
           }, 
-          {
-            label: 'Name2',
-            field: 'name',
-            type: 'text',
-            sortable: true,
-            sortFn: this.sortFn,
-            filterOptions: {
-              enabled: true,
-              placeholder: 'Filter name2',
-            }
-          }, 
+          // {
+          //   label: 'Name2',
+          //   field: 'name',
+          //   type: 'text',
+          //   sortable: true,
+          //   sortFn: this.sortFn,
+          //   filterOptions: {
+          //     enabled: true,
+          //     placeholder: 'Filter name2',
+          //   }
+          // }, 
           {
             label: 'Age',
             field: 'age',
@@ -103,10 +102,10 @@
             dateInputFormat: 'YYYYMMDD',
             dateOutputFormat: 'MMM Do YYYY',
           },
-          {
-            label: '',
-            sortable: false,
-          },
+          // {
+          //   label: '',
+          //   sortable: false,
+          // },
         ],
         rows: [
           {name:"John", age:20, joined: '20120201'},
@@ -194,6 +193,9 @@
 <style lang="css">
   .row-style{
     background-color: red;
+  }
+  *{
+    font-family: 'Open Sans';
   }
 </style>
 

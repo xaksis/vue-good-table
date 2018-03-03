@@ -6,7 +6,7 @@
 
 A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc
 
-![Basic Screenshot](README/images/screenshot.png)
+![Basic Screenshot](README/images/vgt-table.png)
 
 ## Live Demo
 
@@ -33,7 +33,6 @@ A simple, clean data table for VueJS (2.x) with essential features like sorting,
     - [Column filter options](#column-filter-options)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
-    - [.vgt-table .bordered](#vgt-table-bordered)
     - [.vgt-table .stripped](#vgt-table-stripped)
     - [.vgt-table .condensed](#vgt-table-condensed)
 - [Theme](#theme)
@@ -700,22 +699,20 @@ filterOptions: [
 Vue-good-table allows providing your own css classes for the table via **styleClass** option but it also has in-built classes that you can make use of
 
 #### .vgt-table
-![Table Screenshot](README/images/table.png)
-
-#### .vgt-table .bordered
-![Table Bordered Screenshot](README/images/table-bordered.png)
+![Table Screenshot](README/images/vgt-table.regular.png)
 
 #### .vgt-table .stripped
-![Table Bordered Striped Screenshot](README/images/table-bordered-striped.png)
+![Table Bordered Striped Screenshot](README/images/vgt-table.png)
 
 #### .vgt-table .condensed
-![Table Bordered Striped Screenshot](README/images/condensed.png)
+![Table Bordered Striped Screenshot](README/images/vgt-table.condensed.png)
 
 
 ## Theme
 Vue-good-table currently comes in two themes
 ### default
 ### nocturnal `theme='nocturnal'`
+![Nocturnal Theme Screenshot](README/images/vgt-table.nocturnal.png)
 
 ## Advanced Customization
 
