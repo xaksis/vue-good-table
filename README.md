@@ -12,46 +12,78 @@ A simple, clean data table for VueJS (2.x) with essential features like sorting,
 
 [vue-good-table Demo Site](https://xaksis.github.io/vue-good-demos/#/simple-table)
 
+## Table of contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Getting Started](#getting-started)
+  - [Installing](#installing)
+  - [Example Usage](#example-usage)
+- [Configuration](#configuration)
+  - [Component Options](#component-options)
+    - [Table](#table)
+    - [Sort](#sort)
+    - [Pagination](#pagination)
+    - [Search](#search)
+    - [Style/Theme](#styletheme)
+    - [Text](#text)
+  - [Column Options](#column-options)
+    - [Column filter options](#column-filter-options)
+  - [Style Options](#style-options)
+    - [.vgt-table](#vgt-table)
+    - [.vgt-table .bordered](#vgt-table-bordered)
+    - [.vgt-table .stripped](#vgt-table-stripped)
+    - [.vgt-table .condensed](#vgt-table-condensed)
+- [Theme](#theme)
+  - [default](#default)
+  - [nocturnal `theme='nocturnal'`](#nocturnal-themenocturnal)
+- [Advanced Customization](#advanced-customization)
+  - [Custom row template](#custom-row-template)
+  - [Additional columns before or after](#additional-columns-before-or-after)
+  - [Custom column headers](#custom-column-headers)
+  - [Empty state slot](#empty-state-slot)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Getting Started
-
-### Prerequisites
-
-The plugin is meant to be used with existing Vue 2.x projects. It uses ES6 features so as long as your build process includes a transpiler, you're good to go.
-
 
 ### Installing
 
 Install with npm:
 ```
-npm install --save vue-good-table
+npm install --save vue-good-table@alpha
 ```
 
-import into project:
+Import into project:
 ```
 import Vue from 'vue';
+
 import VueGoodTable from 'vue-good-table';
+// import the styles 
+import 'vue-good-table/dist/vue-good-table.css'
 
 Vue.use(VueGoodTable);
 ```
 
-
-## Example Usage
-
+### Example Usage
 ```html
 <template>
   <div>
     <vue-good-table
-      title="Demo Table"
       :columns="columns"
       :rows="rows"
-      :paginate="true"
-      :lineNumbers="true"/>
+      :paginate="true"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'test',
+  name: 'my-component',
   data(){
     return {
       columns: [
@@ -107,17 +139,592 @@ export default {
 ```
 This should result in the screenshot seen above
 
-<strong>Note:</strong> vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example:
-```html
-<vue-good-table
-  title="Dynamic Table"
+## Configuration
+### Component Options
+#### Table
+  <div class="option">
+    <div class="option__name">
+      <strong>columns</strong> <i class="tag">Array of column objects</i>
+    </div>
+    <div class="option__description">
+      <p>Array containing objects that describe table columns</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">[
+    {
+      label: 'Name',
+      field: 'name',
+      filterable: true,
+    }
+    //...
+]</code></pre>      
+    </div>
+  </div>
+  <div class="option">
+    <div class="option__name">
+      <strong>rows</strong> <i class="tag">Array of row objects</i>
+    </div>
+    <div class="option__description">
+      <p>Array containing row objects</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">[
+    {
+      id:1,
+      name:"John",
+      age:20
+    },
+    //...
+]</code></pre>      
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>rtl</strong> <i class="tag">Boolean (default: false)</i>
+    </div>
+    <div class="option__description">
+      <p>Enable Right-To-Left layout for the table</p>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>lineNumbers</strong> <i class="tag">Boolean (default: false)</i>
+    </div>
+    <div class="option__description">
+      <p>Show line number for each row</p>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>responsive</strong> <i class="tag">Boolean (default: true)</i>
+    </div>
+    <div class="option__description">
+      <p>Add responsive class to wrapper</p>
+    </div>
+  </div>
+
+#### Sort
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>sortable</strong> <i class="tag">Boolean (default: true)</i>
+    </div>
+    <div class="option__description">
+      <p>Enable sorting table by clicking on column</p>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>defaultSortBy</strong> <i class="tag">Object</i>
+    </div>
+    <div class="option__description">
+      <p>Allows specifying a default sort for the table on wakeup</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">{
+  field: 'name',
+  type: 'asc' //asc or desc (default: 'asc')
+}</code></pre>      
+    </div>
+  </div>
+
+#### Pagination
+  <div class="option">
+    <div class="option__name">
+      <strong>paginate</strong> <i class="tag">Boolean</i>
+    </div>
+    <div class="option__description">
+      <p>Enable Pagination for table</p>
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>paginateOnTop</strong> <i class="tag">Boolean</i>
+    </div>
+    <div class="option__description">
+      <p>Add pagination on top of the table (default position is bottom)</p>
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>perPage</strong> <i class="tag">Integer (default: 10)</i>
+    </div>
+    <div class="option__description">
+      <p>Number of rows per page</p>
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>customRowsPerPageDropdown</strong> <i class="tag">Array (default: [10,20,30,40,50])</i>
+    </div>
+    <div class="option__description">
+      <p>Customize the dropdown options for the amount of items per page</p>
+    </div>
+  </div>
+
+#### Search
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>searchEnabled</strong> <i class="tag">Boolean (default: false)</i>
+    </div>
+    <div class="option__description">
+      <p>Allows a single search input for the whole table *Note: enabling this filter disables column filters*</p>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>searchTrigger</strong> <i class="tag">String (default: '')</i>
+    </div>
+    <div class="option__description">
+      <p>Allows user to specify if they want search to trigger on enter event of the input. By default search happens on the fly</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">searchTrigger='enter'</code></pre>      
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>searchFn</strong> <i class="tag">Function</i>
+    </div>
+    <div class="option__description">
+      <p>Allows you to specify your own search function for the global search</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">&lt;vue-good-table
   :columns="columns"
   :rows="rows"
-  :lineNumbers="true"
-  :defaultSortBy="{field: 'age', type: 'asc'}"
-  :globalSearch="true"
-  :paginate="true"
-  styleClass="table condensed table-bordered table-striped">
+  :searchEnabled="true"
+  :globalSearchFn="searchFn"/&gt;
+// in js
+methods: {
+  searchFn(row, col, cellValue, searchTerm){
+    return value === 'my value';
+  },
+}</code></pre>      
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>searchPlaceholder</strong> <i class="tag">String (default: 'Filter Table')</i>
+    </div>
+    <div class="option__description">
+      <p>Text for global search input place holder</p>
+    </div>
+    <div class="option__example">   
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>externalSearchQuery</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>Allows global search via your own input field</p>
+    </div>
+    <div class="option__example">   
+<pre v-highlightjs><code class="javascript">&lt;input type=&quot;text&quot; v-model=&quot;searchTerm&quot; /&gt;
+&lt;vue-good-table
+  :columns=&quot;columns&quot;
+  :paginate=&quot;true&quot;
+  :externalSearchQuery=&quot;searchTerm&quot;
+  :rows=&quot;rows&quot;/&gt;
+// and in data
+data(){
+    return {
+      searchTerm: '',
+      // rows, columns etc...
+    };
+}</code></pre> 
+    </div>
+  </div>
+
+#### Style/Theme
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>styleClass</strong> <i class="tag">String (default: 'vgt-table bordered')</i>
+    </div>
+    <div class="option__description">
+      <p>Allows applying your own classes to table</p>
+      <p>other in-built classes: condensed, striped, bordered</p>
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>rowStyleClass</strong> <i class="tag">String or Function</i>
+    </div>
+    <div class="option__description">
+      <p>Allows providing custom styles for rows</p>
+    </div>
+    <div class="option__example">
+it can be a string: 'my-class' or: 
+<pre v-highlightjs><code class="javascript">myStyleFn(row){ 
+  // if row has something return a specific class 
+  if(row.fancy) {
+    return 'fancy-class';
+  }
+  return '';
+}</code></pre>      
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>theme</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>Allows using other themes</p>
+      <p>in-built theme: 'nocturnal'</p>
+    </div>
+  </div>
+
+#### Text
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>nextText</strong> <i class="tag">String (default: 'Next')</i>
+    </div>
+    <div class="option__description">
+      <p>Text for pagination 'Next' link</p>
+    </div>
+    <div class="option__example">   
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>prevText</strong> <i class="tag">String (default: 'Prev')</i>
+    </div>
+    <div class="option__description">
+      <p>Text for pagination 'Prev' link</p>
+    </div>
+    <div class="option__example"> 
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>rowsPerPageText</strong> <i class="tag">String (default: 'Rows per page')</i>
+    </div>
+    <div class="option__description">
+      <p>Text for pagination 'Rows per page' label</p>
+    </div>
+    <div class="option__example">   
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>ofText</strong> <i class="tag">String (default: 'of')</i>
+    </div>
+    <div class="option__description">
+      <p>Text for pagination 'x of y' label</p>
+    </div>
+    <div class="option__example">   
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>allText</strong> <i class="tag">String (default: 'All')</i>
+    </div>
+    <div class="option__description">
+      <p>Text for the last option in the items per page dropdown</p>
+    </div>
+    <div class="option__example">   
+    </div>
+  </div>
+
+### Column Options
+Each column objects can contain the following configuration options:
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>label</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>Text to put on column header</p>
+    </div>
+    <div class="option__example">
+it can be a string: 'my-class' or: 
+<pre v-highlightjs><code class="javascript">{ 
+  label: 'name'
+}</code></pre>      
+    </div>
+  </div>
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>field</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>Row object property that this column corresponds to</p>
+    </div>
+    <div class="option__example">
+Can be:
+  <ul>
+    <li>String <code>eg: 'name'</code> - simple row property name</li>
+    <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
+    </li>
+    <li>Function - a function that returns a value to be displayed based on the row object
+<pre v-highlightjs><code class="javascript">{
+  field: fieldFn
+}
+// in methods
+fieldFn(rowObj) {
+  // do something with the row object
+}</code></pre> 
+    </li>
+  </ul>
+    </div>
+  </div>
+  
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>type</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</p>
+    </div>
+    <div class="option__example">
+      Possible values:
+      <ul>
+        <li>number - right aligned</li>
+        <li>decimal - right aligned, 2 decimal places</li>
+        <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
+        <li>date - expects a string representation of date eg <code>'20170530'</code>. You should also specify dateInputFormat and dateOutputForamt</li>
+      </ul>    
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>dateInputFormat</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>provide the format to parse date string</p>
+    </div>
+    <div class="option__example">
+      String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code>   
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>dateOutputFormat</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>provide the format for output date</p>
+    </div>
+    <div class="option__example">
+      String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>sortable</strong> <i class="tag">Boolean</i>
+    </div>
+    <div class="option__description">
+      <p>enable/disable sorting on columns. This property is higher priority than global sortable property</p>
+    </div>
+    <div class="option__example">
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>sortFn</strong> <i class="tag">Function</i>
+    </div>
+    <div class="option__description">
+      <p>custom sort function. If you want to supply your own sort function you can use this property to supply it.</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">// in data
+column: [
+  {
+    label: 'Name',
+    field: 'name',
+    sortable: true,
+    sortFn: this.sortFn,
+  }
+  //...
+],
+// in methods
+methods: {
+  sortFn(x, y, col) {
+    return (x < y ? -1 : (x > y ? 1 : 0));
+  }
+}</code></pre> 
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>formatFn</strong> <i class="tag">Function</i>
+    </div>
+    <div class="option__description">
+      <p>Allows for custom format of values, <code>function(value)</code>,
+      should return the formatted value to display.</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">formatFn: function(value) {
+  return '$' + value;
+}</code></pre> 
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>html</strong> <i class="tag">Boolean</i>
+    </div>
+    <div class="option__description">
+      <p>indicates whether this column will require html rendering or not</p>
+    </div>
+    <div class="option__example">
+      example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then `html: true` on the column will render a button
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>width</strong> <i class="tag">Number</i>
+    </div>
+    <div class="option__description">
+      <p>provide a width value for this column</p>
+    </div>
+    <div class="option__example">
+<code>width: '50px'</code>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>hidden</strong> <i class="tag">Boolean</i>
+    </div>
+    <div class="option__description">
+      <p>allow hiding a column on table</p>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>thClass</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>provide custom class(es) to the th</p>
+    </div>
+    <div class="option__example">
+      example: <code>thClass: 'custom-th-class'</code>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>tdClass</strong> <i class="tag">String</i>
+    </div>
+    <div class="option__description">
+      <p>provide custom class(es) to the td</p>
+    </div>
+    <div class="option__example">
+      example: <code>tdClass: 'text-center'</code>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>globalSearchDisabled</strong> <i class="tag">Boolean (default: false)</i>
+    </div>
+    <div class="option__description">
+      <p>if true, this column will be ignored by the global search</p>
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>filterOptions</strong> <i class="tag">Object</i>
+    </div>
+    <div class="option__description">
+      <p>A collection of filter specific properties</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">{
+  enabled: true, // enable filter for this column
+	placeholder: 'Filter This Thing', // placeholder for filter input
+	filterValue: 'Jane', // initial populated value for this filter
+	filterDropdownItems: [], // dropdown (with selected values) instead of text input
+	filterFn: this.columnFilterFn, //custom filter function that 
+}</code></pre> 
+    </div>
+  </div>
+
+#### Column filter options
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>filterDropdownItems</strong> <i class="tag">Array of strings or array of objects</i>
+    </div>
+    <div class="option__description">
+      <p>allows creating a dropdown for filter as opposed to an input</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">//array
+filterOptions: ['Blue', 'Red', 'Yellow']
+//or
+filterOptions: [  
+  { value: 'n', text: 'Inactive' },  
+  { value: 'y', text: 'Active' },  
+  { value: 'c', text: 'Check' }  
+],
+</code></pre> 
+    </div>
+  </div>
+
+  <div class="option space-top">
+    <div class="option__name">
+      <strong>filterFn</strong> <i class="tag">Function</i>
+    </div>
+    <div class="option__description">
+      <p>Custom filter, function of two variables: <code>function(data, filterString)</code>, should return true if data matches the filterString, otherwise false.</p>
+    </div>
+    <div class="option__example">
+<pre v-highlightjs><code class="javascript">filterFn: function(data, filterString) {
+  var x = parseInt(filterString)
+  return data >= x-5 && data <= x+5
+}
+//would create a filter matching numbers within 5 of the provided value.</code></pre> 
+    </div>
+  </div>
+
+### Style Options
+
+Vue-good-table allows providing your own css classes for the table via **styleClass** option but it also has in-built classes that you can make use of
+
+#### .vgt-table
+![Table Screenshot](README/images/table.png)
+
+#### .vgt-table .bordered
+![Table Bordered Screenshot](README/images/table-bordered.png)
+
+#### .vgt-table .stripped
+![Table Bordered Striped Screenshot](README/images/table-bordered-striped.png)
+
+#### .vgt-table .condensed
+![Table Bordered Striped Screenshot](README/images/condensed.png)
+
+
+## Theme
+Vue-good-table currently comes in two themes
+### default
+### nocturnal `theme='nocturnal'`
+
+## Advanced Customization
+
+### Custom row template
+vue-good-table also supports dynamic td templates where you dictate how to display the cells. Example:
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
   <template slot="table-row" slot-scope="props">
     <td>{{ props.row.name }}</td>
     <td class="fancy">{{ props.row.age }}</td>
@@ -129,35 +736,37 @@ This should result in the screenshot seen above
 **Note:** 
 * The original row object can be accessed via `props.row`
 * The currently displayed table row index can be accessed via `props.index` . 
-* The original row index can be accessed via `props.row.originalIndex`. You can access the original row object by using `row[props.row.originalIndex]`.
+* The original row index can be accessed via `props.row.originalIndex`. You can then access the original row object by using `row[props.row.originalIndex]`.
 * You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
 
-## Additional Columns
+### Additional columns before or after
 If you want the table to do all your rendering and want to add some columns to the beginning or end of the row, you can use additional slots: 
 ```html
 <vue-good-table
   :columns="columns"
-  :paginate="true"
   :rows="rows">
-<template slot="table-row-before" slot-scope="props">
-  <td><input type="checkbox" /></td>
-</template>
-<!-- all the regular row items will be populated here-->
-<template slot="table-row-after" slot-scope="props">
-  <td><button @click="doSomething(props.index)">show</button></td>
-</template>
+    <template slot="table-row-before" slot-scope="props">
+      <td>
+        <input type="checkbox" />
+      </td>
+    </template>
+    <!-- all the regular row items will be populated here -->
+    <template slot="table-row-after" slot-scope="props">
+      <td>
+        <button @click="doSomething(props.index)">show</button>
+      </td>
+    </template>
 </vue-good-table>
 ```
 **Note**
 Make sure you add the columns in the columns array for the additional <code>td</code> that you create.
 
 
-## Custom columns
+### Custom column headers
 Sometimes you might want to use custom column formatting. You can do that in the following way
 ```html
 <vue-good-table
   :columns="columns"
-  :paginate="true"
   :rows="rows">
   <template slot="table-column" slot-scope="props">
      <span v-if="props.column.label =='Name'">
@@ -170,517 +779,18 @@ Sometimes you might want to use custom column formatting. You can do that in the
 </vue-good-table>
 ```
 
-## Empty state slot
-
+### Empty state slot
 You can provide html for empty state slot as well. Example:
 
 ```html
 <vue-good-table
-  title="Dynamic Table"
   :columns="columns"
-  :rows="rows"
-  :lineNumbers="true"
-  styleClass="table condensed table-bordered table-striped">
+  :rows="rows">
   <div slot="emptystate">
     This will show up when there are no columns
   </div>
 </vue-good-table>
 ```
-
-### Component Options
-
-<table>
-  <thead>
-    <tr>
-      <th>Option</th>
-      <th>Description</th>
-      <th>Type, Example</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>title</td>
-      <td>Title shows up above the table</td>
-      <td>String, <code>"Test Table"</code><br>
-        If not set, the title region is not created.
-      </td>
-    </tr>
-    <tr>
-      <td>columns</td>
-      <td>Array containing objects that describe table columns</td>
-      <td>
-<pre lang="javascript">
-  [
-    {
-      label: 'Name',
-      field: 'name',
-      filterable: true,
-    }
-    //...
-  ]
-</pre>
-      <em>For all column properties, see below</em>
-      </td>
-    </tr>
-    <tr>
-      <td>rows</td>
-      <td>Array containing row objects</td>
-      <td>
-<pre lang="javascript">
-  [
-    {
-      id:1,
-      name:"John",
-      age:20
-    },
-    //...
-  ]
-</pre>
-      </td>
-    </tr>
-    <tr>
-      <td>paginate</td>
-      <td>Enable Pagination for table</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>paginateOnTop</td>
-      <td>Add pagination on top of the table as opposed to the default bottom</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>rtl</td>
-      <td>Enable Right-To-Left layout for the table</td>
-      <td>Boolean (<em>default: false</em>)</td>
-    </tr>
-    <tr>
-      <td>perPage</td>
-      <td>Number of rows per page</td>
-      <td>Integer (<em>default: 10</em>)</td>
-    </tr>
-    <tr>
-      <td>customRowsPerPageDropdown</td>
-      <td>Customize the dropdown options for the amount of items per page</td>
-      <td>Array (<em>default: [10,20,30,40,50]</em>)</td>
-    </tr>
-    <tr>
-      <td>onClick</td>
-      <td>Function to run when a row is clicked</td>
-      <td>
-<pre lang="javascript">
-&lt;vue-good-table
-      :columns=&quot;columns&quot;
-      :onClick=&quot;onClickFn&quot;
-      :rows=&quot;rows&quot;/&gt;
-// data
-data() {
-  return {
-   // rows, columns ...
-    onClickFn: function(row, index){
-      console.log(row); //the object for the row that was clicked on
-      console.log(index); // index of the row that was clicked on
-    },
-  };
-}
-</pre>
-      </td>
-    </tr>
-    <tr>
-      <td>sortable</td>
-      <td>Enable sorting by clicking column</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>styleClass</td>
-      <td>Allows applying your own classes to table</td>
-      <td>String <em>default: 'table table-bordered'</em></td>
-    </tr>
-    <tr>
-      <td>rowStyleClass</td>
-      <td>Allows providing custom styles for rows</td>
-      <td>it can be: 
-        <ul>
-          <li>string: 'my-class'</li>
-          <li>function: 
-<pre lang="javascript">
-myStyleFn(row){ 
-  // if row has something return a specific class 
-  if(row.fancy) {
-    return 'fancy-class';
-  }
-  return '';
-}
-</pre>
-          </li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>lineNumbers</td>
-      <td>Enable sorting by clicking column</td>
-      <td>Boolean <em>default: false</em></td>
-    </tr>
-    <tr>
-      <td>defaultSortBy</td>
-      <td>Allows specifying a default sort for the table on wakeup</td>
-      <td>Object, example:
-<pre lang="javascript">
-{
-  field: 'name',
-  type: 'asc' //asc or desc (default: 'asc')
-}
-</pre>
-      </td>
-    </tr>
-    <tr>
-      <td>responsive</td>
-      <td>Add responsive class to wrapper</td>
-      <td>Boolean <em>default: true</em></td>
-    </tr>
-    <tr>
-      <td colspan="3">
-        <strong>Events</strong>
-      </td>
-    </tr>
-    <tr>
-      <td>pageChanged</td>
-      <td>event emitted on pagination change</td>
-      <td>
-      <pre lang="javascript">
-&lt;vue-good-table
-    @pageChanged="onPageChange"
-    :columns="columns"
-    :rows="rows"/&gt;
-// ...
-methods: {
-  onPageChange: function (evt) {
-    // { currentPage: 1, currentPerPage: 10, total: 5 }
-    console.log(evt);
-  }
-}
-    </pre>
-      </td>
-    </tr>
-    <tr>
-      <td>perPageChanged</td>
-      <td>event emitted on pagination change</td>
-      <td>
-      <pre lang="javascript">
-&lt;vue-good-table
-    @perPageChanged="onPerPageChange"
-    :columns="columns"
-    :rows="rows"/&gt;
-// ...
-methods: {
-  onPerPageChange: function (evt) {
-    // { currentPage: 1, currentPerPage: 10, total: 5 }
-    console.log(evt);
-  }
-}
-    </pre>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3">
-        <strong>Search Options</strong>
-      </td>
-    </tr>
-    <tr>
-      <td>globalSearch</td>
-      <td>Allows a single search input for the whole table <em>Note: enabling this filter disables column filters</em></td>
-      <td>Boolean <em>default: false</em></td>
-    </tr>
-    <tr>
-      <td>searchTrigger (used with global search)</td>
-      <td>allows specifying searching on enter key rather than live search for large records</td>
-      <td>String <em>searchTrigger="enter"</em></td>
-    </tr>
-    <tr>
-      <td>globalSearchFn</td>
-      <td>Specify your own search function for global search</td>
-      <td>Provide a function that takes in cell values and returns true if it matches, false if it doesn't match
-<pre lang="javascript">
-  &lt;vue-good-table
-  :columns="columns"
-  :globalSearchFn="searchFn"
-  :rows="rows"/&gt;
-// in js
-methods: {
-  searchFn(row, col, cellValue, searchTerm){
-    return value === 'my value';
-  },
-}
-</pre>
-      </td>
-    </tr>
-    <tr>
-      <td>externalSearchQuery</td>
-      <td>Allows global search via your own input field</td>
-      <td>Usage<br>
-<pre lang="html">
-    &lt;input type=&quot;text&quot; v-model=&quot;searchTerm&quot; /&gt;
-    &lt;vue-good-table
-      :columns=&quot;columns&quot;
-      :paginate=&quot;true&quot;
-      :externalSearchQuery=&quot;searchTerm&quot;
-      :rows=&quot;rows&quot;/&gt;
-</pre>
-<pre lang="javascript">
-  // and in data
-  data(){
-      return {
-        searchTerm: '',
-        // rows, columns etc...
-      };
-  }
-</pre>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3">
-        <strong>Text Options</strong> - for those interested in using other languages
-      </td>
-    </tr>
-    <tr>
-      <td>globalSearchPlaceholder</td>
-      <td>Text for global search input place holder</td>
-      <td>default: "Search Table"</td>
-    </tr>
-    <tr>
-      <td>nextText</td>
-      <td>Text for pagination 'Next' link </td>
-      <td>default: "Next"</td>
-    </tr>
-    <tr>
-      <td>prevText</td>
-      <td>Text for pagination 'Prev' link </td>
-      <td>default: "Prev"</td>
-    </tr>
-    <tr>
-      <td>rowsPerPageText</td>
-      <td>Text for pagination 'Rows per page' label </td>
-      <td>default: "Rows per page"</td>
-    </tr>
-    <tr>
-      <td>ofText</td>
-      <td>Text for pagination 'x of y' label </td>
-      <td>default: "of"</td>
-    </tr>
-    <tr>
-      <td>allText</td>
-      <td>Text for the last option in the items per page dropdown</td>
-      <td>default: "All"</td>
-    </tr>
-  </tbody>
-</table>
-
-### Column Options
-<table>
-  <thead>
-    <tr>
-      <td>Option</td>
-      <td>Description</td>
-      <td>Type, example</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>label (required)</td>
-      <td>Label to put on column header</td>
-      <td>String <code>{label: "Name"}</code></td>
-    </tr>
-    <tr>
-      <td>field (required)</td>
-      <td>Row object property that this column corresponds to</td>
-      <td>
-        Could be:
-        <ul>
-          <li>String <code>eg: 'name'</code> - simple row property name</li>
-          <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
-          </li>
-          <li>Function - a function that returns a value to be displayed based on the row object
-  <pre lang="javascript">
-    {
-      field: fieldFn
-    }
-    
-    // in methods
-    fieldFn(rowObj) {
-      // do something with the row object
-    }
-  </pre>
-          </li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>type (optional)</td>
-      <td>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</td>
-      <td>
-        Possible values:
-        <ul>
-          <li>number - right aligned</li>
-          <li>decimal - right aligned, 2 decimal places</li>
-          <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
-          <li>date - expects a string representation of date eg <code>'20170530'</code></li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>inputFormat <strong>(if type is date)</strong></td>
-      <td>provide the format to parse date string</td>
-      <td>String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code></td>
-    </tr>
-    <tr>
-      <td>outputFormat <strong>(if type is date)</strong></td>
-      <td>provide the format for output date</td>
-      <td>String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code></td>
-    </tr>
-    <tr>
-      <td>sortable (optional)</td>
-      <td>enable/disable sorting on columns. This property is higher priority than global sortable property</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>sortFn (optional)</td>
-      <td>
-        custom sort function. If you want to supply your own sort function you can use this property to supply it.
-      </td>
-      <td>
-      Function
-      <pre lang="javascript">
-      // in data
-      column: [
-        {
-          label: 'Name',
-          field: 'name',
-          sortable: true,
-          sortFn: this.sortFn,
-        }
-        //...
-      ],
-      // in methods
-      methods: {
-        sortFn(x, y, col) {
-          return (x < y ? -1 : (x > y ? 1 : 0));
-        }
-      }  
-      </pre>
-      </td>
-    </tr>
-    <tr>
-      <td>filterable (optional)</td>
-      <td>enables filtering on column (By default, creates a text input)</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>filterValue (optional)</td>
-      <td>allows specifying a pre-defined value for column filter</td>
-      <td>String</td>
-    </tr>
-    <tr>
-      <td>globalSearchDisabled (optional)</td>
-      <td>if true, the column will be ignored by global search</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>placeholder</td>
-      <td>placeholder to use for filter input</td>
-      <td>String</td>
-    </tr>
-    <tr>
-      <td>filterDropdown</td>
-      <td>provides a dropdown for filtering instead of a text input</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>filterOptions <strong>required for filterDropdown</strong></td>
-      <td>provides options to dropdown filter
-      </td>
-      <td>
-        array: 
-        <code>filterOptions: ['Blue', 'Red', 'Yellow']</code>
-          or
-      <pre lang="javascript">
-          filterOptions: [  
-            { value: 'n', text: 'Inactive' },  
-            { value: 'y', text: 'Active' },  
-            { value: 'c', text: 'Check' }  
-          ],
-      </pre>
-      </td>
-    </tr>
-    <tr>
-      <td>filter (optional)</td>
-      <td>Custom filter, function of two variables: <code>function(data, filterString)</code>,
-      should return true if data matches the filterString, otherwise false.</td>
-      <td>
-<pre lang="javascript">
-    filter: function(data, filterString) {
-      var x = parseInt(filterString)
-      return data >= x-5 && data <= x+5
-    }
-</pre>
-      would create a filter matching numbers within 5 of the provided value.
-      </td>
-    </tr>
-    <tr>
-      <td>formatFn (optional)</td>
-      <td>Allows for custom format of values, <code>function(value)</code>,
-      should return the formatted value to display.</td>
-      <td>
-<pre lang="javascript">
-    formatFn: function(value) {
-      return '$' + value;
-    }
-</pre>
-      </td>
-    </tr>
-    <tr>
-      <td>html (optional)</td>
-      <td>indicates whether this column will require html rendering or not</td>
-      <td>Boolean, example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then html: true on the column will render a button</td>
-    </tr>
-    <tr>
-      <td>width (optional)</td>
-      <td>provide a width value for this column</td>
-      <td>example: <code>width: '50px'</code></td>
-    </tr>
-    <tr>
-      <td>hidden (optional)</td>
-      <td>allow hiding a column on table</td>
-      <td>Boolean</td>
-    </tr>
-    <tr>
-      <td>tdClass (optional)</td>
-      <td>provide custom class(es) to the td</td>
-      <td>example: <code>tdClass: 'text-center'</code></td>
-    </tr>
-    <tr>
-      <td>thClass (optional)</td>
-      <td>provide custom class(es) to the th</td>
-      <td>example: <code>thClass: 'custom-th-style'</code></td>
-    </tr>
-  </tbody>
-</table>
-
-
-### Style Options
-
-Vue-good-table allows providing your own css classes for the table via **styleClass** option but it also has in-built classes that you can make use of
-
-#### .table
-![Table Screenshot](README/images/table.png)
-
-#### .table .table-bordered
-![Table Bordered Screenshot](README/images/table-bordered.png)
-
-#### .table .table-stripped
-![Table Bordered Striped Screenshot](README/images/table-bordered-striped.png)
-
-#### .table .table-stripped .table-bordered .condensed
-![Table Bordered Striped Screenshot](README/images/condensed.png)
-
 
 ## Authors
 
