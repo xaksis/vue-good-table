@@ -40,15 +40,14 @@
                 <span>{{column.label}}</span>
               </slot>
             </th>
-            <slot name="thead-tr"></slot>
           </tr>
-          <vgt-filter-row
+          <tr is="vgt-filter-row"
             @filter-changed="filterRows"
             :global-search-enabled="searchEnabled"
             :line-numbers="lineNumbers"
             :columns="columns"
             :typed-columns="typedColumns">
-          </vgt-filter-row>
+          </tr>
         </thead>
 
         <tbody>
@@ -58,18 +57,17 @@
             :class="getRowStyleClass(row)"
             @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
-            <slot name="table-row-before" :row="row" :index="index"></slot>
-            <slot name="table-row" :row="row" :formattedRow="formattedRow(row)" :index="index">
-              <td
-                v-for="(column, i) in columns"
-                :key="i"
-                :class="getClasses(i, 'td')"
-                v-if="!column.hidden && column.field">
+            <td
+              v-for="(column, i) in columns"
+              :key="i"
+              :class="getClasses(i, 'td')"
+              v-if="!column.hidden && column.field">
+
+              <slot name="table-row" :row="row" :column="column" :formattedRow="formattedRow(row)" :index="i">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
-              </td>
-            </slot>
-            <slot name="table-row-after" :row="row" :index="index"></slot>
+              </slot>
+            </td>
           </tr>
           <tr v-if="processedRows.length === 0">
             <td :colspan="columns.length">

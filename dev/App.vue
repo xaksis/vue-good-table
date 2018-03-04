@@ -26,6 +26,25 @@
         <button class="button">Hello</button>
         <button class="button">Hi</button>
       </template>
+      <template slot="table-column" slot-scope="props">
+        <span v-if="props.column.field =='name'">
+            <i class="fa fa-user"></i> {{props.column.label}}
+        </span>
+        <span @click="sayHello()" v-else-if="props.column.field == 'joined'">
+            <i class="fa fa-calendar"></i> LaLa
+        </span>
+        <span v-else>
+            {{props.column.label}}
+        </span>
+      </template>
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field == 'age'">
+          age: {{props.row.age}}
+        </span>
+        <span v-else>
+          {{props.formattedRow[props.column.field]}}
+        </span>
+      </template>
       <!-- <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
       </template> -->
@@ -115,13 +134,13 @@
           {name:"Dan", age:40, joined: '20170612'},
 
           {name:"Jay", age:20, joined: '20120201'},
-          {name:"Seah", age:24, joined: '20120305'},
+          {name:"Seah", age:25, joined: '20120305'},
           {name:"Sarah", age:16, joined: '20140823'},
           {name:"Mohit", age:55, joined: '20161109'},
           {name:"Don", age:40, joined: '20170612'},
 
           {name:"Ernesto", age:20, joined: '20120201'},
-          {name:"Clark", age:24, joined: '20120305'},
+          {name:"Clark", age:27, joined: '20120305'},
           {name:"Monty", age:16, joined: '20140823'},
           {name:"Priya", age:55, joined: '20161109'},
           {name:"Sans", age:40, joined: '20170612'},
