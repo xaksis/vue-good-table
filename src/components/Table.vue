@@ -66,7 +66,7 @@
                   <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
                     class=""
                     :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
+                    v-on:change="updateFilters(column, $event.target.value)">
                       <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                       <option
                         v-for="(option, i) in column.filterOptions"
@@ -80,7 +80,7 @@
                   <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
                     class=""
                     :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
+                    v-on:change="updateFilters(column, $event.target.value)">
                     <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                     <option
                       v-for="(option, i) in column.filterOptions"
