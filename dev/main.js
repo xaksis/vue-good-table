@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-// import VueGoodTable from '../dist/vue-good-table.cjs'
+// import VueGoodTable from '../dist/vue-good-table.es'
 // import '../dist/vue-good-table.css'
 import VueGoodTable from '../src'
 
