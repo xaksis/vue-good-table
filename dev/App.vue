@@ -22,10 +22,10 @@
       :paginateOnTop="false"
       :searchEnabled="false"
       :line-numbers="false">
-      <!-- <template slot="table-actions">
+      <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
-      </template> -->
+      </template>
       <!-- <template slot="table-row-before" slot-scope="props">
         <td><input type="checkbox" /></td>
       </template> -->

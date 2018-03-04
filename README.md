@@ -791,15 +791,9 @@ You can provide html for empty state slot as well. Example:
 
 ## Authors
 
-* **Akshay Anand** - *Initial work* - [xaksis](https://github.com/xaksis)
+* [xaksis](https://github.com/xaksis)
 * [Other Contributors](https://github.com/xaksis/vue-good-table/graphs/contributors)
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
-
-## Acknowledgments
-
-Inspiration taken from
-* MicroDroid's [vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable)
-* Bootstrap's [table styles](https://getbootstrap.com/)
