@@ -6,6 +6,8 @@
 
 A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc
 
+Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
+
 ![Basic Screenshot](README/images/vgt-table.png)
 
 ## Live Demo
