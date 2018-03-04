@@ -265,9 +265,9 @@
 
       formattedRow(row) {
         var formattedRow = {};
-        for (const col of this.typedColumns) {
-          
-          // what happens if field is a function here?
+        for (let i = 0; i < this.typedColumns.length; i++) {
+          const col = this.typedColumns[i];
+          // what happens if field is
           if (col.field) {
             formattedRow[col.field] = this.collectFormatted(row, col);
           }
@@ -323,7 +323,8 @@
 
         let computedRows = this.originalRows;
 
-        for (let col of this.typedColumns){
+        for (let i=0; i<this.typedColumns.length; i++){
+          let col = this.typedColumns[i];
           if (this.columnFilters[col.field]) {
             computedRows = computedRows.filter(row => {
               
@@ -421,8 +422,10 @@
         // take care of the global filter here also
         if (this.globalSearchAllowed) {
           var filteredRows = [];
-          for (var row of this.originalRows) {
-            for(var col of this.columns) {
+          for (let i = 0; i < this.originalRows.length; i++) {
+            let row = this.originalRows[i];
+            for (let j = 0; j < this.columns; j++) {
+              let col = this.columns[j];
 
               //if col has search disabled,
               //skip the column.
@@ -540,7 +543,7 @@
         const rows = JSON.parse(JSON.stringify(this.rows));
 
         // we need to preserve the original index of rows so lets do that
-        for(let index = 0; index < rows.length; index++){
+        for (let index = 0; index < rows.length; index++){
           rows[index].originalIndex = index;
         }
 
@@ -549,7 +552,8 @@
 
       typedColumns() {
         const columns = Object.assign(this.columns, []);
-        for(let column of columns){
+        for (let i=0; i< this.columns.length; i++) {
+          let column  = columns[i];
           column.typeDef = this.dataTypes[column.type] || defaultType
         }
         return columns
@@ -565,7 +569,7 @@
 
       //take care of default sort on mount
       if (this.defaultSortBy) {
-        for(let index = 0; index < this.columns.length; index++){
+        for (let index = 0; index < this.columns.length; index++){
           let col = this.columns[index]
           if (col.field === this.defaultSortBy.field) {
             this.sortColumn = index;

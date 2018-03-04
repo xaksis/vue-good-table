@@ -73,7 +73,8 @@ export default {
       // that requires filtering
     hasFilterRow(){
       if (!this.globalSearchEnabled) {
-        for(var col of this.columns){
+        for (let i = 0; i < this.columns.length; i++) {
+          let col = this.columns[i];
           if(col.filterOptions && col.filterOptions.enabled){
             return true;
           }
@@ -122,7 +123,8 @@ export default {
     },
 
     populateInitialFilters() {
-      for (const col of this.columns) {
+      for (let i = 0; i < this.columns.length; i++) {
+        const col = this.columns[i];
         // lets see if there are initial 
         // filters supplied by user
         if(this.isFilterable(col)

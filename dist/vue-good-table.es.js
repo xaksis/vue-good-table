@@ -203,7 +203,8 @@ var VgtFilterRow = { render: function () {
       var this$1 = this;
 
       if (!this.globalSearchEnabled) {
-        for (var col of this$1.columns) {
+        for (var i = 0; i < this.columns.length; i++) {
+          var col = this$1.columns[i];
           if (col.filterOptions && col.filterOptions.enabled) {
             return true;
           }
@@ -249,7 +250,8 @@ var VgtFilterRow = { render: function () {
     populateInitialFilters: function populateInitialFilters() {
       var this$1 = this;
 
-      for (var col of this$1.columns) {
+      for (var i = 0; i < this.columns.length; i++) {
+        var col = this$1.columns[i];
         // lets see if there are initial 
         // filters supplied by user
         if (this$1.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
@@ -552,9 +554,9 @@ var GoodTable = { render: function () {
       var this$1 = this;
 
       var formattedRow = {};
-      for (var col of this$1.typedColumns) {
-
-        // what happens if field is a function here?
+      for (var i = 0; i < this.typedColumns.length; i++) {
+        var col = this$1.typedColumns[i];
+        // what happens if field is
         if (col.field) {
           formattedRow[col.field] = this$1.collectFormatted(row, col);
         }
@@ -614,7 +616,8 @@ var GoodTable = { render: function () {
 
       var computedRows = this.originalRows;
 
-      var loop = function () {
+      var loop = function ( i ) {
+        var col = this$1.typedColumns[i];
         if (this$1.columnFilters[col.field]) {
           computedRows = computedRows.filter(function (row) {
 
@@ -632,7 +635,7 @@ var GoodTable = { render: function () {
         }
       };
 
-      for (var col of this$1.typedColumns) loop();
+      for (var i = 0; i < this.typedColumns.length; i++) loop( i );
       this.filteredRows = computedRows;
     },
 
@@ -709,8 +712,10 @@ var GoodTable = { render: function () {
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
         var filteredRows = [];
-        for (var row of this$1.originalRows) {
-          for (var col of this$1.columns) {
+        for (var i = 0; i < this.originalRows.length; i++) {
+          var row = this$1.originalRows[i];
+          for (var j = 0; j < this.columns; j++) {
+            var col = this$1.columns[j];
 
             //if col has search disabled,
             //skip the column.
@@ -832,7 +837,8 @@ var GoodTable = { render: function () {
       var this$1 = this;
 
       var columns = Object.assign(this.columns, []);
-      for (var column of columns) {
+      for (var i = 0; i < this.columns.length; i++) {
+        var column = columns[i];
         column.typeDef = this$1.dataTypes[column.type] || defaultType;
       }
       return columns;

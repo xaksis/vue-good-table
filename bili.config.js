@@ -22,5 +22,5 @@ module.exports = {
   vue: {
     css: 'dist/vue-good-table.css',
     cssSourceMap: false
-  }
+  },
 }
