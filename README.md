@@ -5,7 +5,10 @@
 [![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
 
 A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc
+
 **Feeling adventurous?** Try out [vue-good-table 2.0 alpha](https://github.com/xaksis/vue-good-table/tree/new-build)
+
+[Upgrade Guide](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
 ![Basic Screenshot](README/images/screenshot.png)
 
