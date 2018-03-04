@@ -23,4 +23,10 @@ module.exports = {
     css: 'dist/vue-good-table.css',
     cssSourceMap: false
   },
+  buble: {
+    transforms: {
+      generator: true,
+      dangerousForOf: true
+    }
+  }
 }

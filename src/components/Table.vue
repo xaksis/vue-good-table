@@ -103,6 +103,7 @@
   import VgtGlobalSearch from './VgtGlobalSearch.vue'
   import VgtFilterRow from './VgtFilterRow.vue'
   import each from 'lodash.foreach'
+  import assign from 'lodash.assign'
   import defaultType from './types/default'
   import diacriticless from 'diacriticless'
 
@@ -285,7 +286,7 @@
       //Get classes for the given header column.
       getHeaderClasses(column, index) {
         const isSortable = this.isSortableColumn(index);
-        const classes = Object.assign({}, this.getClasses(index, 'th'), {
+        const classes = assign({}, this.getClasses(index, 'th'), {
           'sorting': isSortable,
           'sorting-desc': isSortable && this.sortColumn === index && this.sortType === 'desc',
           'sorting-asc': isSortable && this.sortColumn === index && this.sortType === 'asc',
@@ -551,7 +552,7 @@
       },
 
       typedColumns() {
-        const columns = Object.assign(this.columns, []);
+        const columns = assign(this.columns, []);
         for (let i=0; i< this.columns.length; i++) {
           let column  = columns[i];
           column.typeDef = this.dataTypes[column.type] || defaultType

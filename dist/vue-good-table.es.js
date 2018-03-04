@@ -6,6 +6,7 @@
  */
 
 import each from 'lodash.foreach';
+import assign from 'lodash.assign';
 import diacriticless from 'diacriticless';
 import { compareAsc, format, isValid, parse } from 'date-fns/esm';
 import clone from 'lodash.clone';
@@ -203,8 +204,9 @@ var VgtFilterRow = { render: function () {
       var this$1 = this;
 
       if (!this.globalSearchEnabled) {
-        for (var i = 0; i < this.columns.length; i++) {
-          var col = this$1.columns[i];
+        for (var i = 0, list = this$1.columns; i < list.length; i += 1) {
+          var col = list[i];
+
           if (col.filterOptions && col.filterOptions.enabled) {
             return true;
           }
@@ -574,7 +576,7 @@ var GoodTable = { render: function () {
     //Get classes for the given header column.
     getHeaderClasses: function getHeaderClasses(column, index$$1) {
       var isSortable = this.isSortableColumn(index$$1);
-      var classes = Object.assign({}, this.getClasses(index$$1, 'th'), {
+      var classes = assign({}, this.getClasses(index$$1, 'th'), {
         'sorting': isSortable,
         'sorting-desc': isSortable && this.sortColumn === index$$1 && this.sortType === 'desc',
         'sorting-asc': isSortable && this.sortColumn === index$$1 && this.sortType === 'asc'
@@ -836,7 +838,7 @@ var GoodTable = { render: function () {
     typedColumns: function typedColumns() {
       var this$1 = this;
 
-      var columns = Object.assign(this.columns, []);
+      var columns = assign(this.columns, []);
       for (var i = 0; i < this.columns.length; i++) {
         var column = columns[i];
         column.typeDef = this$1.dataTypes[column.type] || defaultType;

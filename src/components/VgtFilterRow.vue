@@ -73,8 +73,7 @@ export default {
       // that requires filtering
     hasFilterRow(){
       if (!this.globalSearchEnabled) {
-        for (let i = 0; i < this.columns.length; i++) {
-          let col = this.columns[i];
+        for (var col of this.columns){
           if(col.filterOptions && col.filterOptions.enabled){
             return true;
           }
