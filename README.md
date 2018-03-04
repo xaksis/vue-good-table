@@ -32,7 +32,7 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
     - [Style/Theme](#styletheme)
     - [Text](#text)
   - [Column Options](#column-options)
-    - [Column filter options](#column-filter-options)
+    - [Column filter option in-depth](#column-filter-option-in-depth)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
@@ -42,12 +42,10 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
   - [nocturnal `theme='nocturnal'`](#nocturnal-themenocturnal)
 - [Advanced Customization](#advanced-customization)
   - [Custom row template](#custom-row-template)
-  - [Additional columns before or after](#additional-columns-before-or-after)
   - [Custom column headers](#custom-column-headers)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -56,12 +54,12 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 ### Installing
 
 Install with npm:
-```
+```bash
 npm install --save vue-good-table@alpha
 ```
 
 Import into project:
-```
+```javascript
 import Vue from 'vue';
 
 import VueGoodTable from 'vue-good-table';
@@ -151,16 +149,19 @@ This should result in the screenshot seen above
       <p>Array containing objects that describe table columns</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">[
+
+```javascript
+[
     {
       label: 'Name',
       field: 'name',
       filterable: true,
     }
     //...
-]</code></pre>      
-    </div>
-  </div>
+]
+```     
+</div>
+</div>
   <div class="option">
     <div class="option__name">
       <strong>rows</strong> <i class="tag">Array of row objects</i>
@@ -169,16 +170,19 @@ This should result in the screenshot seen above
       <p>Array containing row objects</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">[
+
+```javascript
+[
     {
       id:1,
       name:"John",
       age:20
     },
     //...
-]</code></pre>      
-    </div>
-  </div>
+]
+```      
+</div>
+</div>
   <div class="option space-top">
     <div class="option__name">
       <strong>rtl</strong> <i class="tag">Boolean (default: false)</i>
@@ -224,12 +228,15 @@ This should result in the screenshot seen above
       <p>Allows specifying a default sort for the table on wakeup</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">{
+
+```javascript
+{
   field: 'name',
   type: 'asc' //asc or desc (default: 'asc')
-}</code></pre>      
-    </div>
-  </div>
+}
+```      
+</div>
+</div>
 
 #### Pagination
   <div class="option">
@@ -283,9 +290,12 @@ This should result in the screenshot seen above
       <p>Allows user to specify if they want search to trigger on enter event of the input. By default search happens on the fly</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">searchTrigger='enter'</code></pre>      
-    </div>
-  </div>
+
+```javascript
+searchTrigger='enter'
+```      
+</div>
+</div>
 
   <div class="option space-top">
     <div class="option__name">
@@ -295,19 +305,24 @@ This should result in the screenshot seen above
       <p>Allows you to specify your own search function for the global search</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">&lt;vue-good-table
+
+```html
+<vue-good-table
   :columns="columns"
   :rows="rows"
   :searchEnabled="true"
-  :globalSearchFn="searchFn"/&gt;
+  :globalSearchFn="searchFn" />;
+```
+```javascript
 // in js
 methods: {
   searchFn(row, col, cellValue, searchTerm){
     return value === 'my value';
   },
-}</code></pre>      
-    </div>
-  </div>
+}
+```
+</div>
+</div>
 
   <div class="option space-top">
     <div class="option__name">
@@ -328,21 +343,26 @@ methods: {
       <p>Allows global search via your own input field</p>
     </div>
     <div class="option__example">   
-<pre v-highlightjs><code class="javascript">&lt;input type=&quot;text&quot; v-model=&quot;searchTerm&quot; /&gt;
-&lt;vue-good-table
-  :columns=&quot;columns&quot;
-  :paginate=&quot;true&quot;
-  :externalSearchQuery=&quot;searchTerm&quot;
-  :rows=&quot;rows&quot;/&gt;
+
+```html
+<input type="text" v-model="searchTerm" >
+<vue-good-table
+  :columns="columns"
+  :paginate="true"
+  :externalSearchQuery="searchTerm"
+  :rows="rows">
+ ```
+ ```javascript
 // and in data
 data(){
     return {
       searchTerm: '',
       // rows, columns etc...
     };
-}</code></pre> 
-    </div>
-  </div>
+}
+``` 
+</div>
+</div>
 
 #### Style/Theme
   <div class="option space-top">
@@ -363,15 +383,18 @@ data(){
     </div>
     <div class="option__example">
 it can be a string: 'my-class' or: 
-<pre v-highlightjs><code class="javascript">myStyleFn(row){ 
+
+```javascript
+myStyleFn(row){ 
   // if row has something return a specific class 
   if(row.fancy) {
     return 'fancy-class';
   }
   return '';
-}</code></pre>      
-    </div>
-  </div>
+}
+```      
+</div>
+</div>
   <div class="option space-top">
     <div class="option__name">
       <strong>theme</strong> <i class="tag">String</i>
@@ -449,11 +472,14 @@ Each column objects can contain the following configuration options:
     </div>
     <div class="option__example">
 it can be a string: 'my-class' or: 
-<pre v-highlightjs><code class="javascript">{ 
+
+```javascript
+{ 
   label: 'name'
-}</code></pre>      
-    </div>
-  </div>
+}
+```      
+</div>
+</div>
   <div class="option space-top">
     <div class="option__name">
       <strong>field</strong> <i class="tag">String</i>
@@ -468,15 +494,18 @@ Can be:
     <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
     </li>
     <li>Function - a function that returns a value to be displayed based on the row object
-<pre v-highlightjs><code class="javascript">{
+
+```javascript
+{
   field: fieldFn
 }
 // in methods
 fieldFn(rowObj) {
   // do something with the row object
-}</code></pre> 
-    </li>
-  </ul>
+}
+```
+</li>
+</ul>
     </div>
   </div>
   
@@ -541,7 +570,9 @@ fieldFn(rowObj) {
       <p>custom sort function. If you want to supply your own sort function you can use this property to supply it.</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">// in data
+
+```javascript
+// in data
 column: [
   {
     label: 'Name',
@@ -556,9 +587,11 @@ methods: {
   sortFn(x, y, col) {
     return (x < y ? -1 : (x > y ? 1 : 0));
   }
-}</code></pre> 
-    </div>
-  </div>
+}
+```
+
+</div>
+</div>
 
   <div class="option space-top">
     <div class="option__name">
@@ -569,11 +602,14 @@ methods: {
       should return the formatted value to display.</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">formatFn: function(value) {
+
+```javascript
+formatFn: function(value) {
   return '$' + value;
-}</code></pre> 
-    </div>
-  </div>
+}
+```
+</div>
+</div>
 
   <div class="option space-top">
     <div class="option__name">
@@ -649,17 +685,22 @@ methods: {
       <p>A collection of filter specific properties</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">{
+
+```javascript
+{
   enabled: true, // enable filter for this column
 	placeholder: 'Filter This Thing', // placeholder for filter input
 	filterValue: 'Jane', // initial populated value for this filter
 	filterDropdownItems: [], // dropdown (with selected values) instead of text input
 	filterFn: this.columnFilterFn, //custom filter function that 
-}</code></pre> 
-    </div>
-  </div>
+}
+``` 
+</div>
+</div>
 
-#### Column filter options
+#### Column filter option in-depth
+Some filterOption properties need a little more explanation
+
   <div class="option space-top">
     <div class="option__name">
       <strong>filterDropdownItems</strong> <i class="tag">Array of strings or array of objects</i>
@@ -668,7 +709,9 @@ methods: {
       <p>allows creating a dropdown for filter as opposed to an input</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">//array
+
+```javascript
+//array
 filterOptions: ['Blue', 'Red', 'Yellow']
 //or
 filterOptions: [  
@@ -676,9 +719,9 @@ filterOptions: [
   { value: 'y', text: 'Active' },  
   { value: 'c', text: 'Check' }  
 ],
-</code></pre> 
-    </div>
-  </div>
+```
+</div>
+</div>
 
   <div class="option space-top">
     <div class="option__name">
@@ -688,13 +731,16 @@ filterOptions: [
       <p>Custom filter, function of two variables: <code>function(data, filterString)</code>, should return true if data matches the filterString, otherwise false.</p>
     </div>
     <div class="option__example">
-<pre v-highlightjs><code class="javascript">filterFn: function(data, filterString) {
+
+```javascript
+filterFn: function(data, filterString) {
   var x = parseInt(filterString)
   return data >= x-5 && data <= x+5
 }
-//would create a filter matching numbers within 5 of the provided value.</code></pre> 
-    </div>
-  </div>
+//would create a filter matching numbers within 5 of the provided value.
+``` 
+</div>
+</div>
 
 ### Style Options
 
@@ -725,10 +771,12 @@ vue-good-table also supports dynamic td templates where you dictate how to displ
   :columns="columns"
   :rows="rows">
   <template slot="table-row" slot-scope="props">
-    <td>{{ props.row.name }}</td>
-    <td class="fancy">{{ props.row.age }}</td>
-    <td>{{ props.formattedRow.date }}</td>
-    <td>{{ props.index }}</td>
+    <span v-if="props.column.field == 'age'">
+      age: {{props.row.age}}
+    </span>
+    <span v-else>
+      {{props.formattedRow[props.column.field]}}
+    </span>
   </template>
 </vue-good-table>
 ```
@@ -736,30 +784,8 @@ vue-good-table also supports dynamic td templates where you dictate how to displ
 * The original row object can be accessed via `props.row`
 * The currently displayed table row index can be accessed via `props.index` . 
 * The original row index can be accessed via `props.row.originalIndex`. You can then access the original row object by using `row[props.row.originalIndex]`.
-* You can access the formatted row data (for example - formatted date) via `props.formattedRow` 
-
-### Additional columns before or after
-If you want the table to do all your rendering and want to add some columns to the beginning or end of the row, you can use additional slots: 
-```html
-<vue-good-table
-  :columns="columns"
-  :rows="rows">
-    <template slot="table-row-before" slot-scope="props">
-      <td>
-        <input type="checkbox" />
-      </td>
-    </template>
-    <!-- all the regular row items will be populated here -->
-    <template slot="table-row-after" slot-scope="props">
-      <td>
-        <button @click="doSomething(props.index)">show</button>
-      </td>
-    </template>
-</vue-good-table>
-```
-**Note**
-Make sure you add the columns in the columns array for the additional <code>td</code> that you create.
-
+* The column object can be accessed via `props.column`
+* You can access the formatted row data (for example - formatted date) via `props.formattedRow`
 
 ### Custom column headers
 Sometimes you might want to use custom column formatting. You can do that in the following way

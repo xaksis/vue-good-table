@@ -266,6 +266,8 @@
       formattedRow(row) {
         var formattedRow = {};
         for (const col of this.typedColumns) {
+          
+          // what happens if field is a function here?
           if (col.field) {
             formattedRow[col.field] = this.collectFormatted(row, col);
           }
