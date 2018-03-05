@@ -83,16 +83,18 @@
         let first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
 
         if (first > this.total) {
-          // this probably happened as a result of filtering 
+          // this probably happened as a result of filtering
           this.currentPage = 1;
           first = 1;
         }
-        
+
         const last = Math.min(this.total, this.currentPerPage * this.currentPage);
         return `${first} - ${last} ${this.ofText} ${this.total}`;
       },
       nextIsPossible() {
-        return (this.total > this.currentPerPage * this.currentPage);
+        return this.currentPerPage === -1
+                   ? false
+                   : (this.total > this.currentPerPage * this.currentPage);
       },
       prevIsPossible() {
         return this.currentPage > 1;
