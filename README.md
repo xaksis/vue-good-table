@@ -26,54 +26,54 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 - [Configuration](#configuration)
   - [Component Options](#component-options)
     - [Table](#table)
-      - [<strong>columns</strong>](#strongcolumnsstrong)
-      - [<strong>rows</strong>](#strongrowsstrong)
-      - [<strong>rtl</strong>](#strongrtlstrong)
-      - [<strong>lineNumbers</strong>](#stronglinenumbersstrong)
-      - [<strong>responsive</strong>](#strongresponsivestrong)
+      - [columns](#columns)
+      - [rows](#rows)
+      - [rtl](#rtl)
+      - [lineNumbers](#linenumbers)
+      - [responsive](#responsive)
     - [Sort](#sort)
-      - [<strong>sortable</strong>](#strongsortablestrong)
-      - [<strong>defaultSortBy</strong>](#strongdefaultsortbystrong)
+      - [sortable](#sortable)
+      - [defaultSortBy<](#defaultsortby)
     - [Pagination](#pagination)
-      - [<strong>paginate</strong>](#strongpaginatestrong)
-      - [<strong>paginateOnTop</strong>](#strongpaginateontopstrong)
-      - [<strong>perPage</strong>](#strongperpagestrong)
-      - [<strong>customRowsPerPageDropdown</strong>](#strongcustomrowsperpagedropdownstrong)
+      - [paginate](#paginate)
+      - [paginateOnTop](#paginateontop)
+      - [perPage](#perpage)
+      - [customRowsPerPageDropdown](#customrowsperpagedropdown)
     - [Search](#search)
-      - [<strong>searchEnabled</strong>](#strongsearchenabledstrong)
-      - [<strong>searchTrigger</strong>](#strongsearchtriggerstrong)
-      - [<strong>searchFn</strong>](#strongsearchfnstrong)
-      - [<strong>searchPlaceholder</strong>](#strongsearchplaceholderstrong)
-      - [<strong>externalSearchQuery</strong>](#strongexternalsearchquerystrong)
+      - [searchEnabled](#searchenabled)
+      - [searchTrigger](#searchtrigger)
+      - [searchFn](#searchfn)
+      - [searchPlaceholder](#searchplaceholder)
+      - [externalSearchQuery](#externalsearchquery)
     - [Style/Theme](#styletheme)
-      - [<strong>styleClass</strong>](#strongstyleclassstrong)
-      - [<strong>rowStyleClass</strong>](#strongrowstyleclassstrong)
-      - [<strong>theme</strong>](#strongthemestrong)
+      - [styleClass](#styleclass)
+      - [rowStyleClass](#rowstyleclass)
+      - [theme](#theme)
     - [Text](#text)
-      - [<strong>nextText</strong>](#strongnexttextstrong)
-      - [<strong>prevText</strong>](#strongprevtextstrong)
-      - [<strong>rowsPerPageText</strong>](#strongrowsperpagetextstrong)
-      - [<strong>ofText</strong>](#strongoftextstrong)
-      - [<strong>allText</strong>](#strongalltextstrong)
+      - [nextText](#nexttext)
+      - [prevText<](#prevtext)
+      - [rowsPerPageText](#rowsperpagetext)
+      - [ofText](#oftext)
+      - [allText](#alltext)
   - [Column Options](#column-options)
-      - [<strong>label</strong>](#stronglabelstrong)
-      - [<strong>field</strong>](#strongfieldstrong)
-      - [<strong>type</strong>](#strongtypestrong)
-      - [<strong>dateInputFormat</strong>](#strongdateinputformatstrong)
-      - [<strong>dateOutputFormat</strong>](#strongdateoutputformatstrong)
-      - [<strong>sortable</strong>](#strongsortablestrong-1)
-      - [<strong>sortFn</strong>](#strongsortfnstrong)
-      - [<strong>formatFn</strong>](#strongformatfnstrong)
-      - [<strong>html</strong>](#stronghtmlstrong)
-      - [<strong>width</strong>](#strongwidthstrong)
-      - [<strong>hidden</strong>](#stronghiddenstrong)
-      - [<strong>thClass</strong>](#strongthclassstrong)
-      - [<strong>tdClass</strong>](#strongtdclassstrong)
-      - [<strong>globalSearchDisabled</strong>](#strongglobalsearchdisabledstrong)
-      - [<strong>filterOptions</strong>](#strongfilteroptionsstrong)
+      - [label<](#label)
+      - [field](#field)
+      - [type](#type)
+      - [dateInputFormat](#dateinputformat)
+      - [dateOutputFormat](#dateoutputformat)
+      - [sortable](#sortable-1)
+      - [sortFn](#sortfn)
+      - [formatFn](#formatfn)
+      - [html](#html)
+      - [width](#width)
+      - [hidden](#hidden)
+      - [thClass](#thclass)
+      - [tdClass](#tdclass)
+      - [globalSearchDisabled](#globalsearchdisabled)
+      - [filterOptions](#filteroptions)
     - [Column filter option in-depth](#column-filter-option-in-depth)
-      - [<strong>filterDropdownItems</strong>](#strongfilterdropdownitemsstrong)
-      - [<strong>filterFn</strong>](#strongfilterfnstrong)
+      - [filterDropdownItems](#filterdropdownitems)
+      - [filterFn](#filterfn)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
@@ -183,7 +183,7 @@ This should result in the screenshot seen above
 ### Component Options
 #### Table
 
-##### <strong>columns</strong>
+##### columns
 `Array of column objects`
 
 Array containing objects that describe table columns
@@ -199,7 +199,7 @@ Array containing objects that describe table columns
 ]
 ```
 
-##### <strong>rows</strong>
+##### rows
 `Array of row objects`
 
 Array containing row objects
@@ -215,31 +215,31 @@ Array containing row objects
 ]
 ```
 
-##### <strong>rtl</strong>
+##### rtl
 `Boolean (default: false)`
 
 Enable Right-To-Left layout for the table
 
 
-##### <strong>lineNumbers</strong>
+##### lineNumbers
 `Boolean (default: false)`
 
 Show line number for each row
 
 
-##### <strong>responsive</strong>
+##### responsive
 `Boolean (default: true)`
 
 <p>Add responsive class to wrapper</p>
 
 #### Sort
 
-##### <strong>sortable</strong>
+##### sortable
 `Boolean (default: true)`
 
 <p>Enable sorting table by clicking on column</p>
 
-##### <strong>defaultSortBy</strong> 
+##### defaultSortBy
 `Object`
 
 <p>Allows specifying a default sort for the table on wakeup</p>
@@ -253,34 +253,34 @@ Show line number for each row
 
 #### Pagination
 
-##### <strong>paginate</strong>
+##### paginate
 `Boolean`
 
 <p>Enable Pagination for table</p>
 
-##### <strong>paginateOnTop</strong> 
+##### paginateOnTop
 `Boolean`
 
 <p>Add pagination on top of the table (default position is bottom)</p>
 
 
-##### <strong>perPage</strong> 
+##### perPage
 `Integer (default: 10)`
 
 <p>Number of rows per page</p>
 
-##### <strong>customRowsPerPageDropdown</strong>
+##### customRowsPerPageDropdown
 Array (default: [10,20,30,40,50])
 <p>Customize the dropdown options for the amount of items per page</p>
 
 #### Search
 
-##### <strong>searchEnabled</strong> 
+##### searchEnabled
 `Boolean (default: false)`
 
 <p>Allows a single search input for the whole table *Note: enabling this filter disables column filters*</p>
 
-##### <strong>searchTrigger</strong>
+##### searchTrigger
 `String (default: '')`
 
 <p>Allows user to specify if they want search to trigger on enter event of the input. By default search happens on the fly</p>
@@ -289,7 +289,7 @@ Array (default: [10,20,30,40,50])
 searchTrigger='enter'
 ```
 
-##### <strong>searchFn</strong>
+##### searchFn
 `Function`
 
 <p>Allows you to specify your own search function for the global search</p>
@@ -310,11 +310,11 @@ methods: {
 }
 ```
 
-##### <strong>searchPlaceholder</strong>
+##### searchPlaceholder
 `String (default: 'Search Table')`
 <p>Text for global search input place holder</p>
 
-##### <strong>externalSearchQuery</strong>
+##### externalSearchQuery
 String
 
 <p>Allows global search via your own input field</p>
@@ -342,12 +342,12 @@ data(){
 
 #### Style/Theme
 
-##### <strong>styleClass</strong> 
+##### styleClass
 `String (default:  'vgt-table bordered')`
 <p>Allows applying your own classes to table</p>
 <p>other in-built classes: condensed, striped, bordered</p>
 
-##### <strong>rowStyleClass</strong>
+##### rowStyleClass
 `String or Function`
 
 <p>Allows providing custom styles for rows</p>
@@ -364,7 +364,7 @@ myStyleFn(row){
 }
 ```      
 
-##### <strong>theme</strong>
+##### theme
 `String`
 
 * Allows using other themes</p>
@@ -372,28 +372,28 @@ myStyleFn(row){
 
 #### Text
 
-##### <strong>nextText</strong>
+##### nextText
 `String (default: 'Next')`
 
 <p>Text for pagination 'Next' link</p>
 
-##### <strong>prevText</strong> 
+##### prevText
 `String (default: 'Prev')`
 
 <p>Text for pagination 'Prev' link</p>
 
-##### <strong>rowsPerPageText</strong>
+##### rowsPerPageText
 `String (default: 'Rows per page')`
 
 <p>Text for pagination 'Rows per page' label</p>
 
 
-##### <strong>ofText</strong>
+##### ofText
 `String (default: 'of')`
 
 <p>Text for pagination 'x of y' label</p>
 
-##### <strong>allText</strong>
+##### allText
 `String (default: 'All')`
 
 <p>Text for the last option in the items per page dropdown</p>
@@ -403,7 +403,7 @@ myStyleFn(row){
 Each column objects can contain the following configuration options:
 
 
-##### <strong>label</strong> 
+##### label
 `String`
 
 <p>Text to put on column header</p>
@@ -416,7 +416,7 @@ it can be a string: 'my-class' or:
 }
 ```
 
-##### <strong>field</strong>
+##### field
 `String`
 
 <p>Row object property that this column corresponds to</p>
@@ -436,7 +436,7 @@ fieldFn(rowObj) {
 }
 ```
 
-##### <strong>type</strong>
+##### type
 `String`
 
 <p>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</p>
@@ -448,24 +448,24 @@ Possible values:
   <li>date - expects a string representation of date eg <code>'20170530'</code>. You should also specify dateInputFormat and dateOutputForamt</li>
 </ul>
 
-##### <strong>dateInputFormat</strong>
+##### dateInputFormat
 `String`
 provide the format to parse date string
 
 String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code>
 
-##### <strong>dateOutputFormat</strong>
+##### dateOutputFormat
 `String`
 
 <p>provide the format for output date</p>
 String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code>
 
-##### <strong>sortable</strong>
+##### sortable
 `Boolean`
 
 <p>enable/disable sorting on columns. This property is higher priority than global sortable property</p>
 
-##### <strong>sortFn</strong>
+##### sortFn
 `Function`
 
 <p>custom sort function. If you want to supply your own sort function you can use this property to supply it.</p>
@@ -489,7 +489,7 @@ methods: {
 }
 ```
 
-##### <strong>formatFn</strong>
+##### formatFn
 `Function`
 
 <p>Allows for custom format of values, <code>function(value)</code>, should return the formatted value to display.</p>
@@ -500,45 +500,45 @@ formatFn: function(value) {
 }
 ```
 
-##### <strong>html</strong>
+##### html
 `Boolean`
 
 <p>indicates whether this column will require html rendering or not</p>
 
 example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then `html: true` on the column will render a button
 
-##### <strong>width</strong>
+##### width
 `Number`
 
 <p>provide a width value for this column</p>
 
 <code>width: '50px'</code>
 
-##### <strong>hidden</strong>
+##### hidden
 `Boolean`
 
 <p>allow hiding a column on table</p>
 
-##### <strong>thClass</strong>
+##### thClass
 `String`
 
 <p>provide custom class(es) to the th</p>
 
 example: <code>thClass: 'custom-th-class'</code>
 
-##### <strong>tdClass</strong>
+##### tdClass
 `String`
 
 <p>provide custom class(es) to the td</p>
 
 example: <code>tdClass: 'text-center'</code>
 
-##### <strong>globalSearchDisabled</strong>
+##### globalSearchDisabled
 `Boolean (default: false)`
 
 <p>if true, this column will be ignored by the global search</p>
 
-##### <strong>filterOptions</strong>
+##### filterOptions
 `Object`
 
 <p>A collection of filter specific properties</p>
@@ -556,7 +556,7 @@ example: <code>tdClass: 'text-center'</code>
 #### Column filter option in-depth
 Some filterOption properties need a little more explanation
 
-##### <strong>filterDropdownItems</strong>
+##### filterDropdownItems
 `Array of strings or array of objects`
 
 <p>allows creating a dropdown for filter as opposed to an input</p>
@@ -572,7 +572,7 @@ filterOptions: [
 ],
 ```
 
-##### <strong>filterFn</strong>
+##### filterFn
 
 `Function`
 
