@@ -26,13 +26,54 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 - [Configuration](#configuration)
   - [Component Options](#component-options)
     - [Table](#table)
+      - [<strong>columns</strong>](#strongcolumnsstrong)
+      - [<strong>rows</strong>](#strongrowsstrong)
+      - [<strong>rtl</strong>](#strongrtlstrong)
+      - [<strong>lineNumbers</strong>](#stronglinenumbersstrong)
+      - [<strong>responsive</strong>](#strongresponsivestrong)
     - [Sort](#sort)
+      - [<strong>sortable</strong>](#strongsortablestrong)
+      - [<strong>defaultSortBy</strong>](#strongdefaultsortbystrong)
     - [Pagination](#pagination)
+      - [<strong>paginate</strong>](#strongpaginatestrong)
+      - [<strong>paginateOnTop</strong>](#strongpaginateontopstrong)
+      - [<strong>perPage</strong>](#strongperpagestrong)
+      - [<strong>customRowsPerPageDropdown</strong>](#strongcustomrowsperpagedropdownstrong)
     - [Search](#search)
+      - [<strong>searchEnabled</strong>](#strongsearchenabledstrong)
+      - [<strong>searchTrigger</strong>](#strongsearchtriggerstrong)
+      - [<strong>searchFn</strong>](#strongsearchfnstrong)
+      - [<strong>searchPlaceholder</strong>](#strongsearchplaceholderstrong)
+      - [<strong>externalSearchQuery</strong>](#strongexternalsearchquerystrong)
     - [Style/Theme](#styletheme)
+      - [<strong>styleClass</strong>](#strongstyleclassstrong)
+      - [<strong>rowStyleClass</strong>](#strongrowstyleclassstrong)
+      - [<strong>theme</strong>](#strongthemestrong)
     - [Text](#text)
+      - [<strong>nextText</strong>](#strongnexttextstrong)
+      - [<strong>prevText</strong>](#strongprevtextstrong)
+      - [<strong>rowsPerPageText</strong>](#strongrowsperpagetextstrong)
+      - [<strong>ofText</strong>](#strongoftextstrong)
+      - [<strong>allText</strong>](#strongalltextstrong)
   - [Column Options](#column-options)
+      - [<strong>label</strong>](#stronglabelstrong)
+      - [<strong>field</strong>](#strongfieldstrong)
+      - [<strong>type</strong>](#strongtypestrong)
+      - [<strong>dateInputFormat</strong>](#strongdateinputformatstrong)
+      - [<strong>dateOutputFormat</strong>](#strongdateoutputformatstrong)
+      - [<strong>sortable</strong>](#strongsortablestrong-1)
+      - [<strong>sortFn</strong>](#strongsortfnstrong)
+      - [<strong>formatFn</strong>](#strongformatfnstrong)
+      - [<strong>html</strong>](#stronghtmlstrong)
+      - [<strong>width</strong>](#strongwidthstrong)
+      - [<strong>hidden</strong>](#stronghiddenstrong)
+      - [<strong>thClass</strong>](#strongthclassstrong)
+      - [<strong>tdClass</strong>](#strongtdclassstrong)
+      - [<strong>globalSearchDisabled</strong>](#strongglobalsearchdisabledstrong)
+      - [<strong>filterOptions</strong>](#strongfilteroptionsstrong)
     - [Column filter option in-depth](#column-filter-option-in-depth)
+      - [<strong>filterDropdownItems</strong>](#strongfilterdropdownitemsstrong)
+      - [<strong>filterFn</strong>](#strongfilterfnstrong)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
@@ -141,14 +182,11 @@ This should result in the screenshot seen above
 ## Configuration
 ### Component Options
 #### Table
-  <div class="option">
-    <div class="option__name">
-      <strong>columns</strong> <i class="tag">Array of column objects</i>
-    </div>
-    <div class="option__description">
-      <p>Array containing objects that describe table columns</p>
-    </div>
-    <div class="option__example">
+
+##### <strong>columns</strong>
+`Array of column objects`
+
+Array containing objects that describe table columns
 
 ```javascript
 [
@@ -159,17 +197,12 @@ This should result in the screenshot seen above
     }
     //...
 ]
-```     
-</div>
-</div>
-  <div class="option">
-    <div class="option__name">
-      <strong>rows</strong> <i class="tag">Array of row objects</i>
-    </div>
-    <div class="option__description">
-      <p>Array containing row objects</p>
-    </div>
-    <div class="option__example">
+```
+
+##### <strong>rows</strong>
+`Array of row objects`
+
+Array containing row objects
 
 ```javascript
 [
@@ -180,131 +213,86 @@ This should result in the screenshot seen above
     },
     //...
 ]
-```      
-</div>
-</div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>rtl</strong> <i class="tag">Boolean (default: false)</i>
-    </div>
-    <div class="option__description">
-      <p>Enable Right-To-Left layout for the table</p>
-    </div>
-  </div>
+```
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>lineNumbers</strong> <i class="tag">Boolean (default: false)</i>
-    </div>
-    <div class="option__description">
-      <p>Show line number for each row</p>
-    </div>
-  </div>
+##### <strong>rtl</strong>
+`Boolean (default: false)`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>responsive</strong> <i class="tag">Boolean (default: true)</i>
-    </div>
-    <div class="option__description">
-      <p>Add responsive class to wrapper</p>
-    </div>
-  </div>
+Enable Right-To-Left layout for the table
+
+
+##### <strong>lineNumbers</strong>
+`Boolean (default: false)`
+
+Show line number for each row
+
+
+##### <strong>responsive</strong>
+`Boolean (default: true)`
+
+<p>Add responsive class to wrapper</p>
 
 #### Sort
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>sortable</strong> <i class="tag">Boolean (default: true)</i>
-    </div>
-    <div class="option__description">
-      <p>Enable sorting table by clicking on column</p>
-    </div>
-  </div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>defaultSortBy</strong> <i class="tag">Object</i>
-    </div>
-    <div class="option__description">
-      <p>Allows specifying a default sort for the table on wakeup</p>
-    </div>
-    <div class="option__example">
+##### <strong>sortable</strong>
+`Boolean (default: true)`
+
+<p>Enable sorting table by clicking on column</p>
+
+##### <strong>defaultSortBy</strong> 
+`Object`
+
+<p>Allows specifying a default sort for the table on wakeup</p>
 
 ```javascript
 {
   field: 'name',
   type: 'asc' //asc or desc (default: 'asc')
 }
-```      
-</div>
-</div>
+```
 
 #### Pagination
-  <div class="option">
-    <div class="option__name">
-      <strong>paginate</strong> <i class="tag">Boolean</i>
-    </div>
-    <div class="option__description">
-      <p>Enable Pagination for table</p>
-    </div>
-  </div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>paginateOnTop</strong> <i class="tag">Boolean</i>
-    </div>
-    <div class="option__description">
-      <p>Add pagination on top of the table (default position is bottom)</p>
-    </div>
-  </div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>perPage</strong> <i class="tag">Integer (default: 10)</i>
-    </div>
-    <div class="option__description">
-      <p>Number of rows per page</p>
-    </div>
-  </div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>customRowsPerPageDropdown</strong> <i class="tag">Array (default: [10,20,30,40,50])</i>
-    </div>
-    <div class="option__description">
-      <p>Customize the dropdown options for the amount of items per page</p>
-    </div>
-  </div>
+
+##### <strong>paginate</strong>
+`Boolean`
+
+<p>Enable Pagination for table</p>
+
+##### <strong>paginateOnTop</strong> 
+`Boolean`
+
+<p>Add pagination on top of the table (default position is bottom)</p>
+
+
+##### <strong>perPage</strong> 
+`Integer (default: 10)`
+
+<p>Number of rows per page</p>
+
+##### <strong>customRowsPerPageDropdown</strong>
+Array (default: [10,20,30,40,50])
+<p>Customize the dropdown options for the amount of items per page</p>
 
 #### Search
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>searchEnabled</strong> <i class="tag">Boolean (default: false)</i>
-    </div>
-    <div class="option__description">
-      <p>Allows a single search input for the whole table *Note: enabling this filter disables column filters*</p>
-    </div>
-  </div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>searchTrigger</strong> <i class="tag">String (default: '')</i>
-    </div>
-    <div class="option__description">
-      <p>Allows user to specify if they want search to trigger on enter event of the input. By default search happens on the fly</p>
-    </div>
-    <div class="option__example">
+##### <strong>searchEnabled</strong> 
+`Boolean (default: false)`
+
+<p>Allows a single search input for the whole table *Note: enabling this filter disables column filters*</p>
+
+##### <strong>searchTrigger</strong>
+`String (default: '')`
+
+<p>Allows user to specify if they want search to trigger on enter event of the input. By default search happens on the fly</p>
 
 ```javascript
 searchTrigger='enter'
-```      
-</div>
-</div>
+```
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>searchFn</strong> <i class="tag">Function</i>
-    </div>
-    <div class="option__description">
-      <p>Allows you to specify your own search function for the global search</p>
-    </div>
-    <div class="option__example">
+##### <strong>searchFn</strong>
+`Function`
+
+<p>Allows you to specify your own search function for the global search</p>
 
 ```html
 <vue-good-table
@@ -321,28 +309,16 @@ methods: {
   },
 }
 ```
-</div>
-</div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>searchPlaceholder</strong> <i class="tag">String (default: 'Filter Table')</i>
-    </div>
-    <div class="option__description">
-      <p>Text for global search input place holder</p>
-    </div>
-    <div class="option__example">   
-    </div>
-  </div>
+##### <strong>searchPlaceholder</strong>
+`String (default: 'Search Table')`
+<p>Text for global search input place holder</p>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>externalSearchQuery</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>Allows global search via your own input field</p>
-    </div>
-    <div class="option__example">   
+##### <strong>externalSearchQuery</strong>
+String
+
+<p>Allows global search via your own input field</p>
+
 
 ```html
 <input type="text" v-model="searchTerm" >
@@ -365,23 +341,17 @@ data(){
 </div>
 
 #### Style/Theme
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>styleClass</strong> <i class="tag">String (default: 'vgt-table bordered')</i>
-    </div>
-    <div class="option__description">
-      <p>Allows applying your own classes to table</p>
-      <p>other in-built classes: condensed, striped, bordered</p>
-    </div>
-  </div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>rowStyleClass</strong> <i class="tag">String or Function</i>
-    </div>
-    <div class="option__description">
-      <p>Allows providing custom styles for rows</p>
-    </div>
-    <div class="option__example">
+
+##### <strong>styleClass</strong> 
+`String (default:  'vgt-table bordered')`
+<p>Allows applying your own classes to table</p>
+<p>other in-built classes: condensed, striped, bordered</p>
+
+##### <strong>rowStyleClass</strong>
+`String or Function`
+
+<p>Allows providing custom styles for rows</p>
+
 it can be a string: 'my-class' or: 
 
 ```javascript
@@ -393,107 +363,68 @@ myStyleFn(row){
   return '';
 }
 ```      
-</div>
-</div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>theme</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>Allows using other themes</p>
-      <p>in-built theme: 'nocturnal'</p>
-    </div>
-  </div>
+
+##### <strong>theme</strong>
+`String`
+
+* Allows using other themes</p>
+* in-built theme: 'nocturnal'</p>
 
 #### Text
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>nextText</strong> <i class="tag">String (default: 'Next')</i>
-    </div>
-    <div class="option__description">
-      <p>Text for pagination 'Next' link</p>
-    </div>
-    <div class="option__example">   
-    </div>
-  </div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>prevText</strong> <i class="tag">String (default: 'Prev')</i>
-    </div>
-    <div class="option__description">
-      <p>Text for pagination 'Prev' link</p>
-    </div>
-    <div class="option__example"> 
-    </div>
-  </div>
+##### <strong>nextText</strong>
+`String (default: 'Next')`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>rowsPerPageText</strong> <i class="tag">String (default: 'Rows per page')</i>
-    </div>
-    <div class="option__description">
-      <p>Text for pagination 'Rows per page' label</p>
-    </div>
-    <div class="option__example">   
-    </div>
-  </div>
+<p>Text for pagination 'Next' link</p>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>ofText</strong> <i class="tag">String (default: 'of')</i>
-    </div>
-    <div class="option__description">
-      <p>Text for pagination 'x of y' label</p>
-    </div>
-    <div class="option__example">   
-    </div>
-  </div>
+##### <strong>prevText</strong> 
+`String (default: 'Prev')`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>allText</strong> <i class="tag">String (default: 'All')</i>
-    </div>
-    <div class="option__description">
-      <p>Text for the last option in the items per page dropdown</p>
-    </div>
-    <div class="option__example">   
-    </div>
-  </div>
+<p>Text for pagination 'Prev' link</p>
+
+##### <strong>rowsPerPageText</strong>
+`String (default: 'Rows per page')`
+
+<p>Text for pagination 'Rows per page' label</p>
+
+
+##### <strong>ofText</strong>
+`String (default: 'of')`
+
+<p>Text for pagination 'x of y' label</p>
+
+##### <strong>allText</strong>
+`String (default: 'All')`
+
+<p>Text for the last option in the items per page dropdown</p>
+
 
 ### Column Options
 Each column objects can contain the following configuration options:
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>label</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>Text to put on column header</p>
-    </div>
-    <div class="option__example">
+
+
+##### <strong>label</strong> 
+`String`
+
+<p>Text to put on column header</p>
+
 it can be a string: 'my-class' or: 
 
 ```javascript
 { 
   label: 'name'
 }
-```      
-</div>
-</div>
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>field</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>Row object property that this column corresponds to</p>
-    </div>
-    <div class="option__example">
+```
+
+##### <strong>field</strong>
+`String`
+
+<p>Row object property that this column corresponds to</p>
 Can be:
-  <ul>
-    <li>String <code>eg: 'name'</code> - simple row property name</li>
-    <li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
-    </li>
-    <li>Function - a function that returns a value to be displayed based on the row object
+
+* String <code>eg: 'name'</code> - simple row property name
+* String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
+* Function - a function that returns a value to be displayed based on the row object
 
 ```javascript
 {
@@ -504,72 +435,40 @@ fieldFn(rowObj) {
   // do something with the row object
 }
 ```
-</li>
+
+##### <strong>type</strong>
+`String`
+
+<p>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</p>
+Possible values:
+<ul>
+  <li>number - right aligned</li>
+  <li>decimal - right aligned, 2 decimal places</li>
+  <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
+  <li>date - expects a string representation of date eg <code>'20170530'</code>. You should also specify dateInputFormat and dateOutputForamt</li>
 </ul>
-    </div>
-  </div>
-  
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>type</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</p>
-    </div>
-    <div class="option__example">
-      Possible values:
-      <ul>
-        <li>number - right aligned</li>
-        <li>decimal - right aligned, 2 decimal places</li>
-        <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
-        <li>date - expects a string representation of date eg <code>'20170530'</code>. You should also specify dateInputFormat and dateOutputForamt</li>
-      </ul>    
-    </div>
-  </div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>dateInputFormat</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>provide the format to parse date string</p>
-    </div>
-    <div class="option__example">
-      String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code>   
-    </div>
-  </div>
+##### <strong>dateInputFormat</strong>
+`String`
+provide the format to parse date string
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>dateOutputFormat</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>provide the format for output date</p>
-    </div>
-    <div class="option__example">
-      String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code>
-    </div>
-  </div>
+String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>sortable</strong> <i class="tag">Boolean</i>
-    </div>
-    <div class="option__description">
-      <p>enable/disable sorting on columns. This property is higher priority than global sortable property</p>
-    </div>
-    <div class="option__example">
-    </div>
-  </div>
+##### <strong>dateOutputFormat</strong>
+`String`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>sortFn</strong> <i class="tag">Function</i>
-    </div>
-    <div class="option__description">
-      <p>custom sort function. If you want to supply your own sort function you can use this property to supply it.</p>
-    </div>
-    <div class="option__example">
+<p>provide the format for output date</p>
+String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code>
+
+##### <strong>sortable</strong>
+`Boolean`
+
+<p>enable/disable sorting on columns. This property is higher priority than global sortable property</p>
+
+##### <strong>sortFn</strong>
+`Function`
+
+<p>custom sort function. If you want to supply your own sort function you can use this property to supply it.</p>
 
 ```javascript
 // in data
@@ -590,101 +489,59 @@ methods: {
 }
 ```
 
-</div>
-</div>
+##### <strong>formatFn</strong>
+`Function`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>formatFn</strong> <i class="tag">Function</i>
-    </div>
-    <div class="option__description">
-      <p>Allows for custom format of values, <code>function(value)</code>,
-      should return the formatted value to display.</p>
-    </div>
-    <div class="option__example">
+<p>Allows for custom format of values, <code>function(value)</code>, should return the formatted value to display.</p>
 
 ```javascript
 formatFn: function(value) {
   return '$' + value;
 }
 ```
-</div>
-</div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>html</strong> <i class="tag">Boolean</i>
-    </div>
-    <div class="option__description">
-      <p>indicates whether this column will require html rendering or not</p>
-    </div>
-    <div class="option__example">
-      example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then `html: true` on the column will render a button
-    </div>
-  </div>
+##### <strong>html</strong>
+`Boolean`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>width</strong> <i class="tag">Number</i>
-    </div>
-    <div class="option__description">
-      <p>provide a width value for this column</p>
-    </div>
-    <div class="option__example">
+<p>indicates whether this column will require html rendering or not</p>
+
+example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then `html: true` on the column will render a button
+
+##### <strong>width</strong>
+`Number`
+
+<p>provide a width value for this column</p>
+
 <code>width: '50px'</code>
-    </div>
-  </div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>hidden</strong> <i class="tag">Boolean</i>
-    </div>
-    <div class="option__description">
-      <p>allow hiding a column on table</p>
-    </div>
-  </div>
+##### <strong>hidden</strong>
+`Boolean`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>thClass</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>provide custom class(es) to the th</p>
-    </div>
-    <div class="option__example">
-      example: <code>thClass: 'custom-th-class'</code>
-    </div>
-  </div>
+<p>allow hiding a column on table</p>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>tdClass</strong> <i class="tag">String</i>
-    </div>
-    <div class="option__description">
-      <p>provide custom class(es) to the td</p>
-    </div>
-    <div class="option__example">
-      example: <code>tdClass: 'text-center'</code>
-    </div>
-  </div>
+##### <strong>thClass</strong>
+`String`
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>globalSearchDisabled</strong> <i class="tag">Boolean (default: false)</i>
-    </div>
-    <div class="option__description">
-      <p>if true, this column will be ignored by the global search</p>
-    </div>
-  </div>
+<p>provide custom class(es) to the th</p>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>filterOptions</strong> <i class="tag">Object</i>
-    </div>
-    <div class="option__description">
-      <p>A collection of filter specific properties</p>
-    </div>
-    <div class="option__example">
+example: <code>thClass: 'custom-th-class'</code>
+
+##### <strong>tdClass</strong>
+`String`
+
+<p>provide custom class(es) to the td</p>
+
+example: <code>tdClass: 'text-center'</code>
+
+##### <strong>globalSearchDisabled</strong>
+`Boolean (default: false)`
+
+<p>if true, this column will be ignored by the global search</p>
+
+##### <strong>filterOptions</strong>
+`Object`
+
+<p>A collection of filter specific properties</p>
 
 ```javascript
 {
@@ -694,21 +551,15 @@ formatFn: function(value) {
 	filterDropdownItems: [], // dropdown (with selected values) instead of text input
 	filterFn: this.columnFilterFn, //custom filter function that 
 }
-``` 
-</div>
-</div>
+```
 
 #### Column filter option in-depth
 Some filterOption properties need a little more explanation
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>filterDropdownItems</strong> <i class="tag">Array of strings or array of objects</i>
-    </div>
-    <div class="option__description">
-      <p>allows creating a dropdown for filter as opposed to an input</p>
-    </div>
-    <div class="option__example">
+##### <strong>filterDropdownItems</strong>
+`Array of strings or array of objects`
+
+<p>allows creating a dropdown for filter as opposed to an input</p>
 
 ```javascript
 //array
@@ -720,17 +571,12 @@ filterOptions: [
   { value: 'c', text: 'Check' }  
 ],
 ```
-</div>
-</div>
 
-  <div class="option space-top">
-    <div class="option__name">
-      <strong>filterFn</strong> <i class="tag">Function</i>
-    </div>
-    <div class="option__description">
-      <p>Custom filter, function of two variables: <code>function(data, filterString)</code>, should return true if data matches the filterString, otherwise false.</p>
-    </div>
-    <div class="option__example">
+##### <strong>filterFn</strong>
+
+`Function`
+
+<p>Custom filter, function of two variables: <code>function(data, filterString)</code>, should return true if data matches the filterString, otherwise false.</p>
 
 ```javascript
 filterFn: function(data, filterString) {
@@ -738,9 +584,7 @@ filterFn: function(data, filterString) {
   return data >= x-5 && data <= x+5
 }
 //would create a filter matching numbers within 5 of the provided value.
-``` 
-</div>
-</div>
+```
 
 ### Style Options
 
