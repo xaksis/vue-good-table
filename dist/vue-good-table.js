@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.20.1
+ * vue-good-table v1.20.2
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -5716,7 +5716,7 @@ var _Table2 = _interopRequireDefault(_Table);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var GoodTablePlugin = {
-  install: function install(Vue, options) {
+  install: function install(Vue) {
     Vue.component(_Table2.default.name, _Table2.default);
   }
 };
