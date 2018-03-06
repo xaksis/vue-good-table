@@ -10,3 +10,5 @@ node_modules/
 /demos/demo2/webpack.config.js
 /test/unit/coverage/
 
+test/e2e/reports/
+selenium-debug.log
