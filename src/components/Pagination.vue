@@ -5,12 +5,13 @@
         <span>{{rowsPerPageText}}</span>
         <!-- <span v-if="perPage" class="perpage-count">{{perPage}}</span> -->
         <select class="browser-default" @change="perPageChanged">
-          <option v-if="perPage" :value="perPage">{{perPage}}</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
+          <option
+            v-for="option in getRowsPerPageDropdown()"
+            v-bind:key="'rows-dropdown-option-' + option"
+            :selected="(perPage && currentPerPage === option) || currentPerPage === option"
+            :value="option">
+            {{ option }}
+          </option>
           <option value="-1">{{allText}}</option>
         </select>
       </label>
@@ -39,6 +40,7 @@
       total: {default: null},
       perPage: {},
       rtl: {default: false},
+      customRowsPerPageDropdown: {default: function(){ return [] }},
 
       // text options
       nextText: {default: 'Next'},
@@ -50,10 +52,60 @@
 
     data: () => ({
       currentPage: 1,
-      currentPerPage: 10
+      currentPerPage: 10,
+      rowsPerPageOptions: [],
+      defaultRowsPerPageDropdown: [10,20,30,40,50]
     }),
 
+    watch: {
+      perPage() {
+        if (this.perPage) {
+          this.currentPerPage = this.perPage;
+        }else{
+          //reset to default
+          this.currentPerPage = 10;
+        }
+        this.perPageChanged();
+      },
+
+      customRowsPerPageDropdown() {
+        if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0))
+          this.rowsPerPageOptions = this.customRowsPerPageDropdown
+      }
+
+    },
+
+    computed: {
+      paginatedInfo() {
+        if (this.currentPerPage === -1) {
+          return `1 - ${this.total} ${this.ofText} ${this.total}`;
+        }
+        let first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
+
+        if (first > this.total) {
+          // this probably happened as a result of filtering
+          this.currentPage = 1;
+          first = 1;
+        }
+
+        const last = Math.min(this.total, this.currentPerPage * this.currentPage);
+        return `${first} - ${last} ${this.ofText} ${this.total}`;
+      },
+      nextIsPossible() {
+        return this.currentPerPage === -1
+                   ? false
+                   : (this.total > this.currentPerPage * this.currentPage);
+      },
+      prevIsPossible() {
+        return this.currentPage > 1;
+      }
+    },
+
     methods: {
+
+      reset() {
+
+      },
 
       nextPage() {
         if(this.currentPerPage === -1) return;
@@ -77,44 +129,24 @@
           this.currentPerPage = parseInt(event.target.value);
         }
         this.$emit('per-page-changed', {currentPerPage: this.currentPerPage});
-      }
-
-    },
-
-    watch: {
-      perPage() {
-        if (this.perPage) {
-          this.currentPerPage = this.perPage;
-        }else{
-          //reset to default
-          this.currentPerPage = 10;
-        }
-        this.perPageChanged();
-      }
-
-    },
-
-    computed: {
-      paginatedInfo() {
-        if (this.currentPerPage === -1) {
-          return `1 - ${this.total} ${this.ofText} ${this.total}`;
-        }
-        const first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
-        const last = Math.min(this.total, this.currentPerPage * this.currentPage);
-        return `${first} - ${last} ${this.ofText} ${this.total}`;
       },
-      nextIsPossible() {
-        return (this.total > this.currentPerPage * this.currentPage);
-      },
-      prevIsPossible() {
-        return this.currentPage > 1;
+
+      getRowsPerPageDropdown() {
+        return this.rowsPerPageOptions
       }
+
     },
 
     mounted() {
+      this.rowsPerPageOptions = this.defaultRowsPerPageDropdown
+
       if (this.perPage) {
         this.currentPerPage = this.perPage;
+        this.rowsPerPageOptions.push(this.perPage)
       }
+
+      if(this.customRowsPerPageDropdown !== null && (Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.length !== 0))
+          this.rowsPerPageOptions = this.customRowsPerPageDropdown
     }
   }
 </script>

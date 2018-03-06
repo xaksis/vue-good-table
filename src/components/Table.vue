@@ -18,6 +18,7 @@
         :nextText="nextText"
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
+        :customRowsPerPageDropdown="customRowsPerPageDropdown"
         :ofText="ofText"
         :allText="allText"></vue-good-pagination>
       <div :class="{'responsive': responsive}">
@@ -65,7 +66,7 @@
                   <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) !== 'object'"
                     class=""
                     :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
+                    v-on:change="updateFilters(column, $event.target.value)">
                       <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                       <option
                         v-for="(option, i) in column.filterOptions"
@@ -79,7 +80,7 @@
                   <select v-if="column.filterDropdown && typeof(column.filterOptions[0]) === 'object'"
                     class=""
                     :value="columnFilters[column.field]"
-                    v-on:input="updateFilters(column, $event.target.value)">
+                    v-on:change="updateFilters(column, $event.target.value)">
                     <option value="" key="-1">{{ getPlaceholder(column) }}</option>
                     <option
                       v-for="(option, i) in column.filterOptions"
@@ -133,6 +134,7 @@
         :nextText="nextText"
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
+        :customRowsPerPageDropdown="customRowsPerPageDropdown"
         :ofText="ofText"
         :allText="allText"
         ></vue-good-pagination>
@@ -158,6 +160,7 @@
       VueGoodPagination
     },
     props: {
+      customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'table table-bordered'},
       title: '',
       columns: {},
@@ -178,9 +181,9 @@
       searchTrigger: {default: null},
       externalSearchQuery: {default: null},
       globalSearchFn: {type: Function, default: null},
+      
       // text options
       globalSearchPlaceholder: {default: 'Search Table'},
-
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
       rowsPerPageText: {default: 'Rows per page:'},
@@ -274,11 +277,17 @@
       },
 
       collectFormatted(obj, column) {
-        var value = this.collect(obj, column.field);
-
+        let value = this.collect(obj, column.field);
         if (value === undefined) return '';
+
+        // if user has supplied custom formatter, 
+        // use that here
+        if (column.formatFn && typeof column.formatFn === 'function') {
+          return column.formatFn(value);
+        }
+
         //lets format the resultant data
-        var type = column.typeDef
+        let type = column.typeDef
         return type.format(value, column);
       },
 
@@ -331,7 +340,6 @@
         this.timer = setTimeout(function(){
           _this.$set(_this.columnFilters, column.field, value)
         }, 400);
-
       },
 
       //method to filter rows
@@ -347,6 +355,7 @@
                 if (col.filter) {
                   return col.filter(this.collect(row, col.field), this.columnFilters[col.field])
                 }else{
+
                   // Use default filters
                   var typeDef = col.typeDef
                   return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
@@ -381,6 +390,18 @@
           classes += ' ' + rowStyleClasses;
         }
         return classes;
+      },
+
+      populateInitialFilters() {
+        for (const col of this.columns) {
+          // lets see if there are initial 
+          // filters supplied by user
+          if(typeof(col.filterValue) !== 'undefined' 
+            && col.filterValue !== null) {
+            this.updateFilters(col, col.filterValue);
+            this.$set(col, 'filterValue', undefined);
+          }
+        }
       }
     },
 
@@ -396,8 +417,13 @@
           this.filterRows();
         },
         deep: true
+      },
+      columns: {
+        handler: function() {
+          this.populateInitialFilters();
+        },
+        deep: true
       }
-
     },
 
     computed: {
@@ -478,10 +504,20 @@
                   break;
                 }
               } else {
-                if (String(diacriticless(this.collectFormatted(row, col))).toLowerCase()
-                  .search(diacriticless(this.searchTerm.toLowerCase())) > -1) {
-                  filteredRows.push(row);
-                  break;
+                // lets get the formatted row/col value
+                let tableValue = this.collectFormatted(row, col);
+                if(typeof(tableValue) !== 'undefined' && tableValue !== null) {
+                  // table value
+                  tableValue = diacriticless(String(tableValue).toLowerCase());
+
+                  // search term
+                  let searchTerm = diacriticless(this.searchTerm.toLowerCase());
+
+                  // comparison
+                  if (tableValue.search(searchTerm) > -1) {
+                    filteredRows.push(row);
+                    break;
+                  }
                 }
               }
             }
@@ -578,6 +614,9 @@
 
     mounted() {
       this.filteredRows = this.originalRows;
+
+      // take care of initial filters
+      this.populateInitialFilters();
 
       if (this.perPage) {
         this.currentPerPage = this.perPage;
@@ -806,8 +845,8 @@
 {
   margin-top: 3px;
   display: block;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border: 3px solid #ccc;
   position: relative;
   border-radius: 50%;
