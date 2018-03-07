@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-alpha.6
+ * vue-good-table v2.0.0-alpha.7
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -416,7 +416,7 @@ var GoodTable = { render: function () {
       return _c('tr', { key: index$$1, class: _vm.getRowStyleClass(row), on: { "click": function ($event) {
             _vm.click(row, index$$1);
           } } }, [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }, [_vm._v(_vm._s(_vm.getCurrentIndex(index$$1)))]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-        return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(row, column)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: i })], 2) : _vm._e();
+        return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(row, column)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: index$$1 })], 2) : _vm._e();
       })], 2);
     }), _vm._v(" "), _vm.processedRows.length === 0 ? _c('tr', [_c('td', { attrs: { "colspan": _vm.columns.length } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align text-disabled" }, [_vm._v(" No data for table. ")])])], 2)]) : _vm._e()], 2)])]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.processedRows.length, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
   }, staticRenderFns: [],
@@ -606,44 +606,53 @@ var GoodTable = { render: function () {
     },
 
     //method to filter rows
-    filterRows: function filterRows(columnFilters) {
+    filterRows: function filterRows(columnFilters, fromFilter) {
       var this$1 = this;
+      if ( fromFilter === void 0 ) fromFilter = true;
 
-      // this is only called from the filter component
-      // which is only shown if there is a filter row
+
+      // this is invoked either as a result of changing filters
+      // or as a result of modifying rows rows. 
       this.columnFilters = columnFilters;
-
-      // if mode is remote, we don't do any filtering here. 
-      // we need to emit an event and that's that.
-      if (this.mode === 'remote') {
-        this.$emit('on-column-filter', {
-          columnFilters: this.columnFilters
-        });
-        return;
-      }
 
       var computedRows = this.originalRows;
 
-      var loop = function ( i ) {
-        var col = this$1.typedColumns[i];
-        if (this$1.columnFilters[col.field]) {
-          computedRows = computedRows.filter(function (row) {
+      // do we have a filter to care about?
+      // if not we don't need to do anything
+      if (this.columnFilters && Object.keys(this.columnFilters).length) {
 
-            // If column has a custom filter, use that.
-            if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
-
-              return col.filterOptions.filterFn(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
-            } else {
-
-              // Use default filters
-              var typeDef = col.typeDef;
-              return typeDef.filterPredicate(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
-            }
+        // if mode is remote, we don't do any filtering here. 
+        // we need to emit an event and that's that.
+        // but this only needs to be invoked if filter is changing
+        // not when row object is modified. 
+        if (this.mode === 'remote' && fromFilter) {
+          this.$emit('on-column-filter', {
+            columnFilters: this.columnFilters
           });
+          return;
         }
-      };
 
-      for (var i = 0; i < this.typedColumns.length; i++) loop( i );
+        var loop = function ( i ) {
+          var col = this$1.typedColumns[i];
+          if (this$1.columnFilters[col.field]) {
+            computedRows = computedRows.filter(function (row) {
+
+              // If column has a custom filter, use that.
+              if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
+
+                return col.filterOptions.filterFn(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
+              } else {
+
+                // Use default filters
+                var typeDef = col.typeDef;
+                return typeDef.filterPredicate(this$1.collect(row, col.field), this$1.columnFilters[col.field]);
+              }
+            });
+          }
+        };
+
+        for (var i = 0; i < this.typedColumns.length; i++) loop( i );
+      }
       this.filteredRows = computedRows;
     },
 
@@ -670,7 +679,7 @@ var GoodTable = { render: function () {
   watch: {
     rows: {
       handler: function () {
-        this.filterRows();
+        this.filterRows(this.columnFilters, false);
       },
       deep: true
     }
