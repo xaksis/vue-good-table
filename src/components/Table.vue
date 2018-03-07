@@ -63,7 +63,7 @@
               :class="getClasses(i, 'td')"
               v-if="!column.hidden && column.field">
 
-              <slot name="table-row" :row="row" :column="column" :formattedRow="formattedRow(row)" :index="i">
+              <slot name="table-row" :row="row" :column="column" :formattedRow="formattedRow(row)" :index="index">
                 <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
                 <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </slot>
@@ -308,42 +308,50 @@
       },
 
       //method to filter rows
-      filterRows(columnFilters) {
-        // this is only called from the filter component
-        // which is only shown if there is a filter row
+      filterRows(columnFilters, fromFilter=true) {
+        
+        // this is invoked either as a result of changing filters
+        // or as a result of modifying rows rows. 
         this.columnFilters = columnFilters;
         
-        // if mode is remote, we don't do any filtering here. 
-        // we need to emit an event and that's that.
-        if (this.mode === 'remote') {
-          this.$emit('on-column-filter', {
-            columnFilters: this.columnFilters,
-          });
-          return;
-        }
-
         let computedRows = this.originalRows;
 
-        for (let i=0; i<this.typedColumns.length; i++){
-          let col = this.typedColumns[i];
-          if (this.columnFilters[col.field]) {
-            computedRows = computedRows.filter(row => {
-              
-              // If column has a custom filter, use that.
-              if (col.filterOptions 
-                && typeof(col.filterOptions.filterFn) === 'function' )  {
-                
-                return col.filterOptions.filterFn(
-                  this.collect(row, col.field), 
-                  this.columnFilters[col.field]
-                );
-              }else{
+        // do we have a filter to care about?
+        // if not we don't need to do anything
+        if (this.columnFilters && Object.keys(this.columnFilters).length) {
 
-                // Use default filters
-                var typeDef = col.typeDef
-                return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
-              }
+          // if mode is remote, we don't do any filtering here. 
+          // we need to emit an event and that's that.
+          // but this only needs to be invoked if filter is changing
+          // not when row object is modified. 
+          if (this.mode === 'remote' && fromFilter) {
+            this.$emit('on-column-filter', {
+              columnFilters: this.columnFilters,
             });
+            return;
+          }
+
+          for (let i=0; i<this.typedColumns.length; i++){
+            let col = this.typedColumns[i];
+            if (this.columnFilters[col.field]) {
+              computedRows = computedRows.filter(row => {
+                
+                // If column has a custom filter, use that.
+                if (col.filterOptions 
+                  && typeof(col.filterOptions.filterFn) === 'function' )  {
+                  
+                  return col.filterOptions.filterFn(
+                    this.collect(row, col.field), 
+                    this.columnFilters[col.field]
+                  );
+                }else{
+
+                  // Use default filters
+                  var typeDef = col.typeDef
+                  return typeDef.filterPredicate(this.collect(row, col.field), this.columnFilters[col.field])
+                }
+              });
+            }
           }
         }
         this.filteredRows = computedRows;
@@ -372,7 +380,7 @@
     watch: {
       rows: {
         handler: function() {
-          this.filterRows();
+          this.filterRows(this.columnFilters, false);
         },
         deep: true
       },
