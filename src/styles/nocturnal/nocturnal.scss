@@ -4,6 +4,12 @@
   border: 1px solid $border-color;
   background-color: $table-bg;
 
+  & tr.clickable {
+    &:hover{
+      background-color: $highlight-color;
+    }
+  }
+
   // td
   & td {
     border-bottom:  1px solid $border-color;

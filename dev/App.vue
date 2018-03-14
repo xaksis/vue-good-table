@@ -15,7 +15,7 @@
       style="margin-top: 30px"
       styleClass="vgt-table bordered condensed"
       mode="" 
-      theme=""
+      theme="nocturnal"
       :paginate="true"
       :columns="columns" 
       :rows="rows"
