@@ -258,6 +258,8 @@ table.vgt-table {
 .vgt-table.nocturnal {
   border: 1px solid #435169;
   background-color: #324057; }
+  .vgt-table.nocturnal tr.clickable:hover {
+    background-color: #445168; }
   .vgt-table.nocturnal td {
     border-bottom: 1px solid #435169;
     color: #C7CED8; }
