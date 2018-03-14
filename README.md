@@ -96,7 +96,7 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 
 Install with npm:
 ```bash
-npm install --save vue-good-table@alpha
+npm install --save vue-good-table@beta
 ```
 
 Import into project:
