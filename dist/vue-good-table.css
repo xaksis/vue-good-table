@@ -22,7 +22,7 @@
 
 .vgt-responsive {
   width: 100%;
-  overflow-x: scroll; }
+  overflow-x: auto; }
 
 table.vgt-table {
   border-collapse: collapse;
@@ -38,6 +38,8 @@ table.vgt-table {
     color: #606266; }
   table.vgt-table tr.clickable {
     cursor: pointer; }
+    table.vgt-table tr.clickable:hover {
+      background-color: #F1F5FD; }
 
 .vgt-table th:not(.line-numbers) {
   padding: .75rem 1.5rem .75rem .75rem;
