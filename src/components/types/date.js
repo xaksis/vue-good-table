@@ -6,7 +6,7 @@ const date = clone(def);
 
 date.isRight = true;
 
-date.compare = function compare(x, y, column) {
+date.compare = function (x, y, column) {
   function cook(d) {
     if (column && column.dateInputFormat) {
       return parse(`${d}`, `${column.dateInputFormat}`, new Date());
@@ -24,7 +24,7 @@ date.compare = function compare(x, y, column) {
   return compareAsc(x, y);
 };
 
-date.format = function formatDate(v, column) {
+date.format = function (v, column) {
   // convert to date
   const date = parse(v, column.dateInputFormat, new Date());
   return format(date, column.dateOutputFormat);

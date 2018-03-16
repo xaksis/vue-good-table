@@ -27,7 +27,7 @@
             {{ option }}
           </option>
       </select>
-      
+
       <!-- options are a list of objects with text and value -->
       <select v-if="isDropdownObjects(column)"
         class="vgt-select"
@@ -55,26 +55,27 @@ export default {
   ],
   watch: {
     columns: {
-      handler: function() {
+      handler() {
         this.populateInitialFilters();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   data() {
     return {
       columnFilters: {},
       timer: null,
-    }
-  }, 
+    };
+  },
   computed: {
     // to create a filter row, we need to
-      // make sure that there is atleast 1 column
-      // that requires filtering
-    hasFilterRow(){
+    // make sure that there is atleast 1 column
+    // that requires filtering
+    hasFilterRow() {
       if (!this.globalSearchEnabled) {
-        for (var col of this.columns){
-          if(col.filterOptions && col.filterOptions.enabled){
+        for (let i = 0; i < this.columns.length; i++) {
+          const col = this.columns[i];
+          if (col.filterOptions && col.filterOptions.enabled) {
             return true;
           }
         }
@@ -84,50 +85,49 @@ export default {
   },
   methods: {
     isFilterable(column) {
-      return column.filterOptions 
+      return column.filterOptions
         && column.filterOptions.enabled;
     },
 
     isDropdown(column) {
       return this.isFilterable(column)
-        && column.filterOptions.filterDropdownItems 
+        && column.filterOptions.filterDropdownItems
         && column.filterOptions.filterDropdownItems.length;
     },
 
     isDropdownObjects(column) {
       return this.isDropdown(column)
-        && typeof(column.filterOptions.filterDropdownItems[0]) === 'object';
+        && typeof column.filterOptions.filterDropdownItems[0] === 'object';
     },
 
     isDropdownArray(column) {
       return this.isDropdown(column)
-        && typeof(column.filterOptions.filterDropdownItems[0]) !== 'object';
+        && typeof column.filterOptions.filterDropdownItems[0] !== 'object';
     },
 
-    //get column's defined placeholder or default one
+    // get column's defined placeholder or default one
     getPlaceholder(column) {
-      const placeholder = (this.isFilterable(column) && column.filterOptions.placeholder) || 'Filter ' + column.label
-      return placeholder
+      const placeholder = (this.isFilterable(column) && column.filterOptions.placeholder) || `Filter ${column.label}`;
+      return placeholder;
     },
 
-    //since vue doesn't detect property addition and deletion, we
+    // since vue doesn't detect property addition and deletion, we
     // need to create helper function to set property etc
     updateFilters(column, value) {
-      const _this = this;
       if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(function(){
-        _this.$set(_this.columnFilters, column.field, value)
-        _this.$emit('filter-changed', _this.columnFilters);
+      this.timer = setTimeout(() => {
+        this.$set(this.columnFilters, column.field, value);
+        this.$emit('filter-changed', this.columnFilters);
       }, 400);
     },
 
     populateInitialFilters() {
       for (let i = 0; i < this.columns.length; i++) {
         const col = this.columns[i];
-        // lets see if there are initial 
+        // lets see if there are initial
         // filters supplied by user
-        if(this.isFilterable(col)
-          && typeof(col.filterOptions.filterValue) !== 'undefined' 
+        if (this.isFilterable(col)
+          && typeof col.filterOptions.filterValue !== 'undefined'
           && col.filterOptions.filterValue !== null) {
           this.updateFilters(col, col.filterOptions.filterValue);
           this.$set(col, 'filterValue', undefined);
@@ -138,8 +138,8 @@ export default {
   mounted() {
     // take care of initial filters
     this.populateInitialFilters();
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

@@ -5,22 +5,24 @@ const number = clone(def);
 
 number.isRight = true;
 
-number.filterPredicate = function defaultFilter(rowval, filter) {
+number.filterPredicate = function (rowval, filter) {
   return number.compare(rowval, filter) === 0;
 };
 
 
-number.compare = function compareNumbers (x, y) {
-  function cook (d) {
-    // if d is null or undefined we give it the smallest 
+number.compare = function (x, y) {
+  function cook(d) {
+    // if d is null or undefined we give it the smallest
     // possible value
     if (d === undefined || d === null) return -Infinity;
-    return d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d)
+    return d.indexOf('.') >= 0 ? parseFloat(d) : parseInt(d, 10);
   }
 
   x = typeof x === 'number' ? x : cook(x);
   y = typeof y === 'number' ? y : cook(y);
-  return (x < y ? -1 : (x > y ? 1 : 0));
+  if (x < y) return -1;
+  if (x > y) return 1;
+  return 0;
 };
 
 export default number;

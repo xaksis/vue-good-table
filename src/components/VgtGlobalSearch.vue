@@ -6,11 +6,11 @@
     </span>
     <input
       v-if="searchEnabled"
-      type="text" 
-      class="vgt-input vgt-pull-left" 
-      :placeholder="globalSearchPlaceholder" 
+      type="text"
+      class="vgt-input vgt-pull-left"
+      :placeholder="globalSearchPlaceholder"
       :value="value"
-      @input="updateValue($event.target.value)" 
+      @input="updateValue($event.target.value)"
       @keyup.enter="entered($event.target.value)" />
   </div>
   <div class="vgt-global-search__actions vgt-pull-right">
@@ -31,12 +31,12 @@ export default {
   data() {
     return {
       globalSearchTerm: null,
-    }
+    };
   },
   computed: {
     showControlBar() {
       return this.searchEnabled || this.$slots['internal-table-actions'];
-    }
+    },
   },
   methods: {
     updateValue(value) {
@@ -44,9 +44,9 @@ export default {
     },
     entered(value) {
       this.$emit('on-enter', value);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

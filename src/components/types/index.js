@@ -4,8 +4,8 @@ import * as number from './number';
 import * as percentage from './percentage';
 
 export default {
-  date: date,
-  decimal: decimal,
-  number: number,
-  percentage: percentage,
+  date,
+  decimal,
+  number,
+  percentage,
 };
