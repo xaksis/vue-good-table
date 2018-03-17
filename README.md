@@ -104,14 +104,14 @@ export default {
         },
       ],
       rows: [
-        {id:1, name:"John", age:20, createdAt: '201-10-31:9: 35 am',score: 0.03343},
-        {id:2, name:"Jane", age:24, createdAt: '2011-10-31', score: 0.03343},
-        {id:3, name:"Susan", age:16, createdAt: '2011-10-30', score: 0.03343},
-        {id:4, name:"Chris", age:55, createdAt: '2011-10-11', score: 0.03343},
-        {id:5, name:"Dan", age:40, createdAt: '2011-10-21', score: 0.03343},
-        {id:6, name:"John", age:20, createdAt: '2011-10-31', score: 0.03343},
-        {id:7, name:"Jane", age:24, createdAt: '20111031'},
-        {id:8, name:"Susan", age:16, createdAt: '2013-10-31', score: 0.03343},
+        { id:1, name:"John", age: 20, createdAt: '201-10-31:9: 35 am',score: 0.03343 },
+        { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
+        { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
+        { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
+        { id:5, name:"Dan", age: 40, createdAt: '2011-10-21', score: 0.03343 },
+        { id:6, name:"John", age: 20, createdAt: '2011-10-31', score: 0.03343 },
+        { id:7, name:"Jane", age: 24, createdAt: '20111031' },
+        { id:8, name:"Susan", age: 16, createdAt: '2013-10-31', score: 0.03343 },
       ],
     };
   },
@@ -123,12 +123,11 @@ This should result in the screenshot seen above
 ## Configuration
 ### Component Options
 #### Table
+These options relate to the table as a whole
 
-##### columns
-`Array of column objects`
+##### columns `Array`
 
-Array containing objects that describe table columns
-
+Array containing objects that describe table columns. The column object itself can contain many [configurable properties](#column-options).
 ```javascript
 [
     {
@@ -140,11 +139,9 @@ Array containing objects that describe table columns
 ]
 ```
 
-##### rows
-`Array of row objects`
+##### rows `Array`
 
-Array containing row objects
-
+Array containing row objects. Each row object contains data that will be displayed in the table row.
 ```javascript
 [
     {
@@ -156,146 +153,217 @@ Array containing row objects
 ]
 ```
 
-##### rtl
-`Boolean (default: false)`
+##### rtl `Boolean (default: false)`
 
 Enable Right-To-Left layout for the table
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :rtl="true">
+</vue-good-table>
+```
 
-
-##### lineNumbers
-`Boolean (default: false)`
-
+##### lineNumbers `Boolean (default: false)`
 Show line number for each row
-
-
-##### responsive
-`Boolean (default: true)`
-
-<p>Add responsive class to wrapper</p>
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :lineNumbers="true">
+</vue-good-table>
+```
 
 #### Sort
+---
+These options are related to table sorting
 
-##### sortable
-`Boolean (default: true)`
 
-<p>Enable sorting table by clicking on column</p>
+##### sortable `Boolean (default: true)`
+Enable/disable sorting on table as a whole. 
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :sortable="true">
+</vue-good-table>
+```
 
-##### defaultSortBy
-`Object`
-
-<p>Allows specifying a default sort for the table on wakeup</p>
+##### defaultSortBy `Object`
+Allows specifying a default sort for the table on wakeup
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :defaultSortBy="defaultSort">
+</vue-good-table>
+```
 
 ```javascript
-{
+// in data
+defaultSort: {
   field: 'name',
   type: 'asc' //asc or desc (default: 'asc')
 }
 ```
 
 #### Pagination
-
-##### paginate
-`Boolean`
-
-<p>Enable Pagination for table</p>
-
-##### paginateOnTop
-`Boolean`
-
-<p>Add pagination on top of the table (default position is bottom)</p>
-
-
-##### perPage
-`Integer (default: 10)`
-
-<p>Number of rows per page</p>
-
-##### customRowsPerPageDropdown
-Array (default: [10,20,30,40,50])
-<p>Customize the dropdown options for the amount of items per page</p>
-
-#### Search
-
-##### searchEnabled
-`Boolean (default: false)`
-
-<p>Allows a single search input for the whole table *Note: enabling this filter disables column filters*</p>
-
-##### searchTrigger
-`String (default: '')`
-
-<p>Allows user to specify if they want search to trigger on enter event of the input. By default search happens on the fly</p>
-
-```javascript
-searchTrigger='enter'
+---
+Following options are related to table pagination
+##### paginate `Boolean`
+Enable Pagination for table. By default the paginator is created at the bottom of the table.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginate="true">
+</vue-good-table>
 ```
 
-##### searchFn
-`Function`
+##### paginateOnTop `Boolean`
+Add pagination on top of the table (default position is bottom)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginate="true"
+  :paginateOnTop="true">
+</vue-good-table>
+```
 
-<p>Allows you to specify your own search function for the global search</p>
+##### perPage `Integer (default: 10)`
+Number of rows to show per page
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginate="true"
+  :perPage="5">
+</vue-good-table>
+```
+
+##### customRowsPerPageDropdown `Array (default: [10,20,30,40,50])`
+Customize the dropdown options for the amount of items per page
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginate="true"
+  :customRowsPerPageDropdown="customPerPageDropdown">
+</vue-good-table>
+```
+```javascript
+// in data
+customPerPageDropdown: [2, 5, 7],
+```
+
+#### Search
+---
+Search related options. These options pertain to the global table search.
+
+##### searchEnabled `Boolean (default: false)`
+
+Allows a single search input for the whole table 
+
+>Note: enabling this option disables column filters
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :searchEnabled="true">
+</vue-good-table>
+```
+
+##### searchTrigger `String (default: '')`
+Allows you to specify if you want search to trigger on 'enter' event of the input. By default table searches on key-up. 
 
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
   :searchEnabled="true"
-  :globalSearchFn="searchFn" />;
+  searchTrigger="enter">
+</vue-good-table>
+```
+
+##### searchFn `Function`
+
+Allows you to specify your own search function for the global search
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :searchEnabled="true"
+  :searchFn="myFunc" />;
 ```
 ```javascript
 // in js
 methods: {
-  searchFn(row, col, cellValue, searchTerm){
+  myFunc(row, col, cellValue, searchTerm){
     return value === 'my value';
   },
 }
 ```
 
-##### searchPlaceholder
-`String (default: 'Search Table')`
-<p>Text for global search input place holder</p>
+##### searchPlaceholder `String (default: 'Search Table')`
+Text for global search input place holder
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :searchEnabled="true"
+  searchPlaceholder="Search my awesome table">
+</vue-good-table>
+```
 
-##### externalSearchQuery
-String
+##### externalSearchQuery `String`
 
-<p>Allows global search via your own input field</p>
-
+If you want to use your own input for searching the table, you can use this property
 
 ```html
 <input type="text" v-model="searchTerm" >
 <vue-good-table
   :columns="columns"
-  :paginate="true"
-  :externalSearchQuery="searchTerm"
-  :rows="rows">
+  :rows="rows"
+  :externalSearchQuery="searchTerm">
  ```
  ```javascript
 // and in data
 data(){
-    return {
-      searchTerm: '',
-      // rows, columns etc...
-    };
+  return {
+    searchTerm: '',
+    // rows, columns etc...
+  };
 }
-``` 
-</div>
-</div>
+```
 
 #### Style/Theme
+---
+Style options for table
 
-##### styleClass
-`String (default:  'vgt-table bordered')`
-<p>Allows applying your own classes to table</p>
-<p>other in-built classes: condensed, striped, bordered</p>
+##### styleClass `String (default:  'vgt-table bordered')`
+Allows applying your own classes to table. Other in-built classes: condensed, striped, bordered
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  styleClass="vgt-table bordered striped">
+</vue-good-table>
+```
 
-##### rowStyleClass
-`String or Function`
+##### rowStyleClass `String or Function`
 
-<p>Allows providing custom styles for rows</p>
-
-it can be a string: 'my-class' or: 
-
+Allows providing custom styles for rows. It can be a string: 'my-class' or a function.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :rowStyleClass="myStyleFn">
+</vue-good-table>
+```
 ```javascript
+// in methods
 myStyleFn(row){ 
   // if row has something return a specific class 
   if(row.fancy) {
@@ -305,111 +373,117 @@ myStyleFn(row){
 }
 ```      
 
-##### theme
-`String`
-
-* Allows using other themes</p>
-* in-built theme: 'nocturnal'</p>
+##### theme `String`
+Allows using other themes. Currently there is one other theme - 'nocturnal'
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  theme="nocturnal">
+</vue-good-table>
+```
 
 #### Text
+---
+text replacement options for all the texts we currently have in the table.
 
-##### nextText
-`String (default: 'Next')`
+##### nextText `String (default: 'Next')`
+Text for pagination 'Next' link
 
-<p>Text for pagination 'Next' link</p>
+##### prevText `String (default: 'Prev')`
+Text for pagination 'Prev' link
 
-##### prevText
-`String (default: 'Prev')`
+##### rowsPerPageText `String (default: 'Rows per page')`
+Text for pagination 'Rows per page' label
 
-<p>Text for pagination 'Prev' link</p>
+##### ofText `String (default: 'of')`
+Text for pagination 'x of y' label
 
-##### rowsPerPageText
-`String (default: 'Rows per page')`
-
-<p>Text for pagination 'Rows per page' label</p>
-
-
-##### ofText
-`String (default: 'of')`
-
-<p>Text for pagination 'x of y' label</p>
-
-##### allText
-`String (default: 'All')`
-
-<p>Text for the last option in the items per page dropdown</p>
+##### allText `String (default: 'All')`
+Text for the last option in the items per page dropdown
 
 
 ### Column Options
+---
 Each column objects can contain the following configuration options:
 
 
-##### label
-`String`
-
-<p>Text to put on column header</p>
-
-it can be a string: 'my-class' or: 
+##### label `String`
+Text to put on column header.
 
 ```javascript
-{ 
-  label: 'name'
-}
+columns: [
+  { 
+    label: 'name'
+  },
+  // ...
+]
 ```
 
-##### field
-`String`
+##### field `String`
 
-<p>Row object property that this column corresponds to</p>
-Can be:
+Row object property that this column corresponds to. This can be: 
 
 * String <code>eg: 'name'</code> - simple row property name
 * String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
 * Function - a function that returns a value to be displayed based on the row object
-
 ```javascript
-{
-  field: fieldFn
-}
+columns: [
+  { 
+    label: 'name',
+    field: this.fealdFn,
+  },
+  // ...
+]
 // in methods
 fieldFn(rowObj) {
-  // do something with the row object
+  return rowObj.name;
 }
 ```
 
-##### type
-`String`
+##### type `String`
 
-<p>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well</p>
-Possible values:
-<ul>
-  <li>number - right aligned</li>
-  <li>decimal - right aligned, 2 decimal places</li>
-  <li>percentage - expects a decimal like 0.03 and formats it as 3.00%</li>
-  <li>date - expects a string representation of date eg <code>'20170530'</code>. You should also specify dateInputFormat and dateOutputForamt</li>
-</ul>
+type of column. default: 'text'. This determines the formatting for the column and filter behavior as well. Possible values:
+* _number_ - right aligned
+* _decimal_ - right aligned, 2 decimal places
+* _percentage_ - expects a decimal like 0.03 and formats it as 3.00%
+* _date_ - expects a string representation of date eg `'20170530'`. You should also specify [dateInputFormat](#dateinputformat) and [dateOutputFormat](dateoutputformat)
 
-##### dateInputFormat
-`String`
+```javascript
+columns: [
+  { 
+    label: 'joined On',
+    field: 'createdAt',
+    type: 'date',
+    dateInputFormat: 'YYYY-MM-DD', // expects 2018-03-16
+    dateOutputFormat: 'MMM Do YYYY', // outputs Mar 16th 2018
+  },
+  // ...
+]
+```
+
+##### dateInputFormat `String`
 provide the format to parse date string
 
-String eg: <code>'YYYYMMDD' //where date strings are '20170530'</code>
+##### dateOutputFormat `String`
+provide the format for output date
 
-##### dateOutputFormat
-`String`
+##### sortable `Boolean`
+enable/disable sorting on columns. This property is higher priority than global sortable property
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    sortable: false,
+  },
+  // ...
+]
+```
 
-<p>provide the format for output date</p>
-String eg: <code>'MMM Do YY' //where date will be output like 'May 30th 17'</code>
+##### sortFn `Function`
 
-##### sortable
-`Boolean`
-
-<p>enable/disable sorting on columns. This property is higher priority than global sortable property</p>
-
-##### sortFn
-`Function`
-
-<p>custom sort function. If you want to supply your own sort function you can use this property to supply it.</p>
+custom sort function. If you want to supply your own sort function you can use this property.
 
 ```javascript
 // in data
@@ -430,77 +504,139 @@ methods: {
 }
 ```
 
-##### formatFn
-`Function`
-
-<p>Allows for custom format of values, <code>function(value)</code>, should return the formatted value to display.</p>
+##### formatFn `Function`
+Allows for custom format of values, <code>function(value)</code>, should return the formatted value to display.
 
 ```javascript
+// in data
+column: [
+  {
+    label: 'Salary',
+    field: 'salary',
+    sortable: true,
+    formatFn: this.formatFn,
+  }
+  //...
+],
+// in methods
 formatFn: function(value) {
   return '$' + value;
 }
 ```
 
-##### html
-`Boolean`
+##### html `Boolean`
+indicates whether this column will require html rendering. 
+> The preferred way of creating columns that have html is by [using slots](#custom-row-template)
+```javascript
+// in data
+column: [
+  {
+    label: 'Action',
+    field: 'btn',
+    html: true,
+  }
+  //...
+],
+rows: [
+  {
+    btn: '<button>My Action</button>',
+    // ...
+  }
+]
+```
 
-<p>indicates whether this column will require html rendering or not</p>
-
-example: if row had a property 'htmlContent' like <code>htmlContent: '&lt;button&gt;Hello&lt;/button&gt;'</code>, then `html: true` on the column will render a button
-
-##### width
-`Number`
-
-<p>provide a width value for this column</p>
-
-<code>width: '50px'</code>
-
-##### hidden
-`Boolean`
-
-<p>allow hiding a column on table</p>
-
-##### thClass
-`String`
-
-<p>provide custom class(es) to the th</p>
-
-example: <code>thClass: 'custom-th-class'</code>
-
-##### tdClass
-`String`
-
-<p>provide custom class(es) to the td</p>
-
-example: <code>tdClass: 'text-center'</code>
-
-##### globalSearchDisabled
-`Boolean (default: false)`
-
-<p>if true, this column will be ignored by the global search</p>
-
-##### filterOptions
-`Object`
-
-<p>A collection of filter specific properties</p>
+##### width `Number`
+provide a width value for this column
 
 ```javascript
-{
-  enabled: true, // enable filter for this column
-	placeholder: 'Filter This Thing', // placeholder for filter input
-	filterValue: 'Jane', // initial populated value for this filter
-	filterDropdownItems: [], // dropdown (with selected values) instead of text input
-	filterFn: this.columnFilterFn, //custom filter function that 
-}
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    width: '50px',
+  },
+  // ...
+]
+```
+
+##### hidden `Boolean`
+hide a column
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    hidden: true,
+  },
+  // ...
+]
+```
+
+##### thClass `String`
+provide custom class(es) to the table header
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    thClass: 'custom-th-class',
+  },
+  // ...
+]
+```
+
+##### tdClass `String`
+provide custom class(es) to the table cells
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    tdClass: 'text-center',
+  },
+  // ...
+]
+```
+
+##### globalSearchDisabled `Boolean (default: false)`
+if true, this column will be ignored by the global search
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    globalSearchDisabled: true,
+  },
+  // ...
+]
+```
+
+##### filterOptions `Object`
+A collection of filter specific properties. You can find more about these properties in [column filter options section](#column-filter-option-in-depth)
+
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    filterOptions: {
+  	  enabled: true, // enable filter for this column
+	  placeholder: 'Filter This Thing', // placeholder for filter input
+	  filterValue: 'Jane', // initial populated value for this filter
+	  filterDropdownItems: [], // dropdown (with selected values) instead of text input
+	  filterFn: this.columnFilterFn, //custom filter function that 
+	},
+  },
+  // ...
+]
 ```
 
 #### Column filter option in-depth
+---
 Some filterOption properties need a little more explanation
 
-##### filterDropdownItems
-`Array of strings or array of objects`
-
-<p>allows creating a dropdown for filter as opposed to an input</p>
+##### filterDropdownItems `Array of strings or Array of objects`
+allows creating a dropdown for filter as opposed to an input
 
 ```javascript
 //array
@@ -513,18 +649,15 @@ filterOptions: [
 ],
 ```
 
-##### filterFn
-
-`Function`
-
-<p>Custom filter, function of two variables: <code>function(data, filterString)</code>, should return true if data matches the filterString, otherwise false.</p>
+##### filterFn `Function`
+Custom filter, function of two variables: <code>function(data, filterString)</code>, should return true if data matches the filterString, otherwise false
 
 ```javascript
 filterFn: function(data, filterString) {
   var x = parseInt(filterString)
-  return data >= x-5 && data <= x+5
+  return data >= x - 5 && data <= x + 5;
 }
-//would create a filter matching numbers within 5 of the provided value.
+// would create a filter matching numbers within 5 of the provided value
 ```
 
 ### Style Options

@@ -45,9 +45,10 @@
   },
   "devDependencies": {
     "bili": "^2.2.7",
-    "poi": "^9.6.13",
     "rollup-plugin-vue": "^3.0.0",
     "sass-loader": "^6.0.6",
+    "vue": "^2.5.16",
+    "vue-template-compiler": "^2.5.16",
     "webpack": "^3.11.0"
   }
 }
