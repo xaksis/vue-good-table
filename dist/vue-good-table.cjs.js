@@ -195,7 +195,9 @@ var VgtGlobalSearch = { render: function () {
   },
   computed: {
     showControlBar: function showControlBar() {
-      return this.searchEnabled || this.$slots['internal-table-actions'];
+      console.log('should we show searchbar');
+      console.log(this.searchEnabled || !!this.$slots['internal-table-actions']);
+      return this.searchEnabled || !!this.$slots['internal-table-actions'];
     }
   },
   methods: {

@@ -701,7 +701,7 @@ vue-good-table also supports dynamic td templates where you dictate how to displ
 **Note:** 
 * The original row object can be accessed via `props.row`
 * The currently displayed table row index can be accessed via `props.index` . 
-* The original row index can be accessed via `props.row.originalIndex`. You can then access the original row object by using `row[props.row.originalIndex]`.
+* The original row index can be accessed via `props.row.originalIndex`. You can then access the original row object by using `rows[props.row.originalIndex]`.
 * The column object can be accessed via `props.column`
 * You can access the formatted row data (for example - formatted date) via `props.formattedRow`
 

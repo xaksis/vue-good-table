@@ -41,7 +41,8 @@
     "diacriticless": "1.0.1",
     "lodash.assign": "^4.2.0",
     "lodash.clone": "^4.5.0",
-    "lodash.foreach": "^4.5.0"
+    "lodash.foreach": "^4.5.0",
+    "poi": "^9.6.13"
   },
   "devDependencies": {
     "bili": "^2.2.7",

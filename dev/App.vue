@@ -20,12 +20,12 @@
       :columns="columns"
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="false"
+      :searchEnabled="true"
       :line-numbers="false">
-      <template slot="table-actions">
+      <!-- <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
-      </template>
+      </template> -->
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.field =='name'">
             <i class="fa fa-user"></i> {{props.column.label}}

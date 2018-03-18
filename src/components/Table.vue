@@ -434,7 +434,7 @@ export default {
         const filteredRows = [];
         for (let i = 0; i < this.originalRows.length; i++) {
           const row = this.originalRows[i];
-          for (let j = 0; j < this.columns; j++) {
+          for (let j = 0; j < this.columns.length; j++) {
             const col = this.columns[j];
 
             // if col has search disabled,
