@@ -1,4 +1,4 @@
-import { format, parse, isValid, compareAsc } from 'date-fns/esm';
+import { format, parse, isValid, compareAsc } from 'date-fns';
 import clone from 'lodash.clone';
 import def from './default';
 
