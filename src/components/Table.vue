@@ -51,7 +51,20 @@
         </thead>
         <tbody v-for="(headerRow, index) in paginated" :key="index">
           <tr v-if="groupEnabled">
-            <td :colspan="columns.length">Header</td>
+            <th
+              v-if="headerRow.mode === 'span'"
+              class="vgt-left-align vgt-row-header"
+              :colspan="columns.length">
+              {{ headerRow.label }}
+            </th>
+            <th
+              v-for="(column, i) in columns"
+              :key="i"
+              class="vgt-row-header"
+              :class="getClasses(i, 'td')"
+              v-else>
+              {{ collectFormatted(headerRow, column) }}
+            </th>
           </tr>
           <!-- normal rows here. we loop over all rows -->
           <tr
@@ -59,7 +72,9 @@
             :key="index"
             :class="getRowStyleClass(row)"
             @click="click(row, index)">
-            <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <th v-if="lineNumbers" class="line-numbers">
+              {{ getCurrentIndex(index) }}
+            </th>
             <td
               v-for="(column, i) in columns"
               :key="i"
@@ -78,6 +93,7 @@
                 <span v-if="column.html" v-html="collect(row, column.field)">
                 </span>
               </slot>
+
             </td>
           </tr>
           <tr v-if="processedRows.length === 0">

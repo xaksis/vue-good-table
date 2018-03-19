@@ -5,7 +5,8 @@
     :rows="rows"
     :paginate="true"
     :perPage="5"
-    :group-enabled="true">
+    :group-enabled="true"
+    styleClass="vgt-table condensed">
   </vue-good-table>
 </div>
 </template>
@@ -44,8 +45,10 @@ export default {
       ],
       rows: [
         {
-          mode: 'span',
-          label: 'header 1',
+          name: 'Total',
+          age: '',
+          createdAt: undefined,
+          score: 0.2,
           children: [
             {
               name: 'John', age: 20, createdAt: '201-10-31:9: 35 am', score: 0.03343,
@@ -60,7 +63,7 @@ export default {
         },
         {
           mode: 'span',
-          label: 'header 2',
+          label: 'Header Two',
           children: [
             {
               name: 'Chris', age: 55, createdAt: '2011-10-11', score: 0.03343,

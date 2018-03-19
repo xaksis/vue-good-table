@@ -21,6 +21,12 @@
     padding: .75rem .75rem .75rem .75rem;
   }
 
+  th.vgt-row-header{
+    border-bottom: 2px solid $border-color;
+    border-top: 2px solid $border-color;
+    background-color: lighten($border-color, 10%);
+  }
+
   thead th{
     color: $text-color;
     vertical-align: bottom;
