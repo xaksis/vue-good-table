@@ -3,6 +3,8 @@
   <vue-good-table
     :columns="columns"
     :rows="rows"
+    :paginate="true"
+    :perPage="5"
     :group-enabled="true">
   </vue-good-table>
 </div>
@@ -18,6 +20,9 @@ export default {
         {
           label: 'Name',
           field: 'name',
+          filterOptions: {
+            enabled: true,
+          },
         },
         {
           label: 'Age',

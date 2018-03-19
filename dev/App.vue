@@ -53,7 +53,7 @@
       </template> -->
     </vue-good-table>
     <h3>Grouped Table</h3>
-    <!-- <grouped-table></grouped-table> -->
+    <grouped-table></grouped-table>
   </div>
 </template>
 

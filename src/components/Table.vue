@@ -112,7 +112,7 @@
 <script>
 import each from 'lodash.foreach';
 import assign from 'lodash.assign';
-import clone from 'lodash.clone';
+import cloneDeep from 'lodash.clonedeep';
 import filter from 'lodash.filter';
 import diacriticless from 'diacriticless';
 import defaultType from './types/default';
@@ -291,7 +291,7 @@ export default {
         each(this.filteredRows, (headerRow, i) => {
           const children = filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
-            const newHeaderRow = clone(headerRow);
+            const newHeaderRow = cloneDeep(headerRow);
             newHeaderRow.children = children;
             computedRows.push(newHeaderRow);
           }
@@ -306,7 +306,7 @@ export default {
         (this.searchTrigger !== 'enter' || this.sortChanged)) {
         this.sortChanged = false;
 
-        computedRows = each(computedRows, (cRows) => {
+        each(computedRows, (cRows) => {
           cRows.children.sort((x, y) => {
             if (!this.columns[this.sortColumn]) return 0;
 
@@ -378,7 +378,7 @@ export default {
       each(this.processedRows, (headerRow, i) => {
         const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
-          const newHeaderRow = clone(headerRow);
+          const newHeaderRow = cloneDeep(headerRow);
           newHeaderRow.children = children;
           reconstructedRows.push(newHeaderRow);
         }
@@ -388,16 +388,26 @@ export default {
     },
 
     originalRows() {
-      const rows = clone(this.rows);
-      // we need to preserve the original index of rows so lets do that
+      const rows = cloneDeep(this.rows);
+      let nestedRows = [];
+      if (!this.groupEnabled) {
+        nestedRows = this.handleGrouped([{
+          label: 'no groups',
+          children: rows,
+        }]);
+      } else {
+        nestedRows = this.handleGrouped(rows);
+      }
+      // we need to preserve the original index of
+      // rows so lets do that
       let index = 0;
-      each(rows, (headerRow, i) => {
+      each(nestedRows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
           row.originalIndex = index++;
         });
       });
 
-      return rows;
+      return nestedRows;
     },
 
     typedColumns() {
@@ -420,7 +430,6 @@ export default {
     },
 
     pageChanged(pagination) {
-      console.log(pagination);
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
@@ -556,9 +565,7 @@ export default {
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows rows.
       this.columnFilters = columnFilters;
-      // handleRows (this sets original)
-      this.handleRows(); // this will set filtered rows to what we want
-      let computedRows = this.filteredRows;
+      let computedRows = cloneDeep(this.originalRows);
 
       // do we have a filter to care about?
       // if not we don't need to do anything
@@ -644,7 +651,7 @@ export default {
   },
 
   mounted() {
-    this.handleRows();
+    this.filteredRows = this.originalRows;
 
     if (this.perPage) {
       this.currentPerPage = this.perPage;
