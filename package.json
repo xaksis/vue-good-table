@@ -41,6 +41,7 @@
     "diacriticless": "1.0.1",
     "lodash.assign": "^4.2.0",
     "lodash.clone": "^4.5.0",
+    "lodash.filter": "^4.6.0",
     "lodash.foreach": "^4.5.0",
     "poi": "^9.6.13"
   },

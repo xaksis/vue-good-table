@@ -15,12 +15,12 @@
       style="margin-top: 30px"
       styleClass="vgt-table bordered condensed"
       mode=""
-      theme="nocturnal"
+      theme=""
       :paginate="true"
       :columns="columns"
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="true"
+      :searchEnabled="false"
       :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>
@@ -52,10 +52,14 @@
         <td><a class="button lightbox" :href="'test_detail.php?id=' + props.row.id" >detail</a></td>
       </template> -->
     </vue-good-table>
+    <h3>Grouped Table</h3>
+    <!-- <grouped-table></grouped-table> -->
   </div>
 </template>
 
 <script>
+import GroupedTable from './grouped-table';
+
 export default {
   name: 'test',
   mounted() {
@@ -210,6 +214,9 @@ export default {
       console.log('on-row-click');
       console.log(params);
     },
+  },
+  components: {
+    'grouped-table': GroupedTable,
   },
 };
 </script>
