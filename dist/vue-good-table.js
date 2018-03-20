@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-beta.4
+ * vue-good-table v2.0.0-beta.5
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10213,7 +10213,7 @@ var GoodTable = { render: function () {
           } } }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], { column: column })], 2) : _vm._e();
     })], 2), _vm._v(" "), _c("vgt-filter-row", { tag: "tr", attrs: { "global-search-enabled": _vm.searchEnabled, "line-numbers": _vm.lineNumbers, "columns": _vm.columns, "typed-columns": _vm.typedColumns }, on: { "filter-changed": _vm.filterRows } })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
       return _c('tbody', { key: index$$1 }, [_vm.groupHeaderOnTop ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._l(_vm.columns, function (column, i) {
-        return _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column)) + " ")]);
+        return _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]);
       })], 2) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
         return _c('tr', { key: index$$1, class: _vm.getRowStyleClass(row), on: { "click": function ($event) {
               _vm.click(row, index$$1);
@@ -10221,7 +10221,7 @@ var GoodTable = { render: function () {
           return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(row, column)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: index$$1 })], 2) : _vm._e();
         })], 2);
       }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._l(_vm.columns, function (column, i) {
-        return _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column)) + " ")]);
+        return _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]);
       })], 2) : _vm._e(), _vm._v(" "), _vm.processedRows.length === 0 ? _c('tr', [_c('td', { attrs: { "colspan": _vm.columns.length } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align text-disabled" }, [_vm._v(" No data for table. ")])])], 2)]) : _vm._e()], 2);
     })], 2)]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
   }, staticRenderFns: [],
@@ -10614,8 +10614,15 @@ var GoodTable = { render: function () {
       return undefined;
     },
 
-    collectFormatted: function collectFormatted(obj, column) {
-      var value = this.collect(obj, column.field);
+    collectFormatted: function collectFormatted(obj, column, headerRow) {
+      if ( headerRow === void 0 ) headerRow = false;
+
+      var value;
+      if (headerRow && column.headerField) {
+        value = this.collect(obj, column.headerField);
+      } else {
+        value = this.collect(obj, column.field);
+      }
       if (value === undefined) { return ''; }
 
       // if user has supplied custom formatter,
