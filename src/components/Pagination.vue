@@ -4,9 +4,9 @@
       <span class="footer__row-count__label">{{rowsPerPageText}}</span>
       <select class="footer__row-count__select" @change="perPageChanged">
         <option
-          v-for="option in getRowsPerPageDropdown()"
-          v-bind:key="'rows-dropdown-option-' + option"
-          :selected="(perPage && currentPerPage === option) || currentPerPage === option"
+          v-for="(option, idx) in getRowsPerPageDropdown()"
+          v-bind:key="'rows-dropdown-option-' + idx"
+          :selected="currentPerPage === option"
           :value="option">
           {{ option }}
         </option>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash.clonedeep';
+
 export default {
   name: 'vue-good-pagination',
   props: {
@@ -60,12 +62,7 @@ export default {
 
   watch: {
     perPage() {
-      if (this.perPage) {
-        this.currentPerPage = this.perPage;
-      } else {
-        // reset to default
-        this.currentPerPage = 10;
-      }
+      this.handlePerPage();
       this.perPageChanged();
     },
 
@@ -140,21 +137,33 @@ export default {
       return this.rowsPerPageOptions;
     },
 
+    handlePerPage() {
+      this.rowsPerPageOptions = cloneDeep(this.defaultRowsPerPageDropdown);
+      if (this.perPage) {
+        this.currentPerPage = this.perPage;
+        // if perPage doesn't already exist, we add it
+        let found = false;
+        for (let i = 0; i < this.rowsPerPageOptions.length; i++) {
+          if (this.rowsPerPageOptions[i] === this.perPage) {
+            found = true;
+          }
+        }
+        if (!found) this.rowsPerPageOptions.push(this.perPage);
+      } else {
+        // reset to default
+        this.currentPerPage = 10;
+      }
+
+      if (this.customRowsPerPageDropdown !== null
+        && (Array.isArray(this.customRowsPerPageDropdown)
+        && this.customRowsPerPageDropdown.length !== 0)) {
+        this.rowsPerPageOptions = this.customRowsPerPageDropdown;
+      }
+    },
   },
 
   mounted() {
-    this.rowsPerPageOptions = this.defaultRowsPerPageDropdown;
-
-    if (this.perPage) {
-      this.currentPerPage = this.perPage;
-      this.rowsPerPageOptions.push(this.perPage);
-    }
-
-    if (this.customRowsPerPageDropdown !== null
-      && (Array.isArray(this.customRowsPerPageDropdown)
-      && this.customRowsPerPageDropdown.length !== 0)) {
-      this.rowsPerPageOptions = this.customRowsPerPageDropdown;
-    }
+    this.handlePerPage();
   },
 };
 </script>

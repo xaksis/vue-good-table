@@ -4,9 +4,9 @@
     :columns="columns"
     :rows="rows"
     :paginate="true"
-    :perPage="5"
+    :perPage="4"
     :group-enabled="true"
-    styleClass="vgt-table condensed">
+    styleClass="vgt-table condensed bordered">
   </vue-good-table>
 </div>
 </template>
@@ -73,9 +73,6 @@ export default {
             },
             {
               name: 'John', age: 20, createdAt: '2011-10-31', score: 0.03343,
-            },
-            {
-              name: 'Jane', age: 24, createdAt: '2013-09-21',
             },
             {
               name: 'Susan', age: 16, createdAt: '2013-10-31', score: 0.03343,

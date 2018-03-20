@@ -209,7 +209,7 @@ export default {
     totalRowCount() {
       let total = 0;
       each(this.processedRows, (headerRow) => {
-        total += headerRow.children ? headerRow.children.length : 0; 
+        total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
     },
