@@ -33,6 +33,7 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 - [Advanced Customization](#advanced-customization)
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
+  - [Grouped Rows](#grouped-rows)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
 - [License](#license)
@@ -152,6 +153,7 @@ Array containing row objects. Each row object contains data that will be display
     //...
 ]
 ```
+> for **grouped rows**, you need a nested format. Refer to [Grouped Rows](#grouped-rows) for an example.
 
 ##### rtl `Boolean (default: false)`
 
@@ -337,6 +339,24 @@ data(){
   };
 }
 ```
+
+#### Grouped Rows
+---
+Sometimes you have a hierarchy in table and you want to group rows under subheadings, vue-good-table allows you to do that as well. Following properties relate to row grouping
+
+##### groupOptions `Object`
+Object containing group related options. 
+```html
+<input type="text" v-model="searchTerm" >
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :groupOptions="{
+    enabled: true,
+    headerPosition: 'bottom' 
+  }">
+ ```
+> rows are formatted differently for grouped tables, refer to [Grouped Rows](#grouped-rows) section.
 
 #### Style/Theme
 ---
@@ -721,6 +741,60 @@ Sometimes you might want to use custom column formatting. You can do that in the
   </template>
 </vue-good-table>
 ```
+
+### Grouped Rows
+To create grouped rows, you need two things. 
+1. add groupOptions to table component
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :groupOptions="{
+  	enabled: true
+  }">
+</vue-good-table>
+```
+
+2. make sure the rows are formatted correctly. grouped rows need to be nested with headers rows containing rows in their children property. For example: 
+
+```javascript
+rows: [{
+  mode: 'span', // span means this header will span all columns
+  label: 'Header Two', // this is the label that'll be used for the header
+  children: [
+    { name: 'Chris', age: 55, createdAt: '2011-10-11', score: 0.03343 },
+    { name: 'Dan', age: 40, createdAt: '2011-10-21', score: 0.03343 },
+  ]
+}]
+```
+
+3. sometimes, you might want a summary row instead of a header row. for example if you want to show total score for your group
+
+```javascript
+rows: [{
+  name: 'Total', // this is the label that'll be used for the header
+  age: undefined,
+  createdAt: undefined,
+  score: 0.3, // total score here
+  children: [
+    { name: 'Chris', age: 55, createdAt: '2011-10-11', score: 0.03343 },
+    { name: 'Dan', age: 40, createdAt: '2011-10-21', score: 0.03343 },
+  ]
+}]
+```
+
+4. if you want the header/summary row to show up at the bottom of the group, you can specify that in the groupOptions property of the table.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :groupOptions="{
+  	enabled: true,
+    headerPosition: 'bottom',
+  }">
+</vue-good-table>
+```
+
 
 ### Empty state slot
 You can provide html for empty state slot as well. Example:
