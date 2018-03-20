@@ -50,7 +50,7 @@
           </tr>
         </thead>
         <tbody v-for="(headerRow, index) in paginated" :key="index">
-          <tr v-if="groupEnabled">
+          <tr v-if="groupHeaderOnTop">
             <th
               v-if="headerRow.mode === 'span'"
               class="vgt-left-align vgt-row-header"
@@ -95,6 +95,22 @@
               </slot>
 
             </td>
+          </tr>
+          <tr v-if="groupHeaderOnBottom">
+            <th
+              v-if="headerRow.mode === 'span'"
+              class="vgt-left-align vgt-row-header"
+              :colspan="columns.length">
+              {{ headerRow.label }}
+            </th>
+            <th
+              v-for="(column, i) in columns"
+              :key="i"
+              class="vgt-row-header"
+              :class="getClasses(i, 'td')"
+              v-else>
+              {{ collectFormatted(headerRow, column) }}
+            </th>
           </tr>
           <tr v-if="processedRows.length === 0">
             <td :colspan="columns.length">
@@ -166,7 +182,13 @@ export default {
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
-    groupEnabled: { default: false },
+    groupOptions: {
+      default() {
+        return {
+          enabled: false,
+        };
+      },
+    },
 
     // search
     searchEnabled: { default: false },
@@ -206,6 +228,27 @@ export default {
   },
 
   computed: {
+    groupHeaderOnTop() {
+      if (this.groupOptions
+        && this.groupOptions.enabled
+        && this.groupOptions.headerPosition
+        && this.groupOptions.headerPosition === 'bottom') {
+        return false;
+      }
+      if (this.groupOptions && this.groupOptions.enabled) return true;
+
+      // will only get here if groupOptions is false
+      return false;
+    },
+    groupHeaderOnBottom() {
+      if (this.groupOptions
+        && this.groupOptions.enabled
+        && this.groupOptions.headerPosition
+        && this.groupOptions.headerPosition === 'bottom') {
+        return true;
+      }
+      return false;
+    },
     totalRowCount() {
       let total = 0;
       each(this.processedRows, (headerRow) => {
@@ -406,7 +449,7 @@ export default {
     originalRows() {
       const rows = cloneDeep(this.rows);
       let nestedRows = [];
-      if (!this.groupEnabled) {
+      if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([{
           label: 'no groups',
           children: rows,
@@ -655,7 +698,7 @@ export default {
     },
 
     handleRows() {
-      if (!this.groupEnabled) {
+      if (!this.groupOptions.enabled) {
         this.filteredRows = this.handleGrouped([{
           label: 'no groups',
           children: this.originalRows,

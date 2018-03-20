@@ -5,7 +5,10 @@
     :rows="rows"
     :paginate="true"
     :perPage="4"
-    :group-enabled="true"
+    :group-options="{
+      enabled: true,
+      headerPosition: 'top'
+    }"
     styleClass="vgt-table condensed bordered">
   </vue-good-table>
 </div>
