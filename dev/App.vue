@@ -17,6 +17,7 @@
       mode=""
       theme=""
       :paginate="true"
+      :perPage="7"
       :columns="columns"
       :rows="rows"
       :paginateOnTop="false"

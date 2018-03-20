@@ -43,6 +43,7 @@ export default {
         {
           label: 'Percent',
           field: 'score',
+          headerField: this.sumScore,
           type: 'percentage',
         },
       ],
@@ -88,6 +89,13 @@ export default {
   computed: {
   },
   methods: {
+    sumScore(rowObj) {
+      let sum = 0;
+      for (let i = 0; i < rowObj.children.length; i++) {
+        sum += rowObj.children[i].score;
+      }
+      return sum;
+    },
   },
   mounted() {
   },
@@ -97,5 +105,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.row-style{
+    background-color: red;
+  }
 </style>

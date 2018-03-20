@@ -26,7 +26,7 @@
     </vgt-global-search>
 
     <div :class="{'vgt-responsive': responsive}">
-      <table ref="table" :class="tableStyleClasses" >
+      <table ref="table" :class="tableStyleClasses">
         <thead>
           <tr>
             <th v-if="lineNumbers" class="line-numbers"></th>
@@ -63,7 +63,7 @@
               class="vgt-row-header"
               :class="getClasses(i, 'td')"
               v-else>
-              {{ collectFormatted(headerRow, column) }}
+              {{ collectFormatted(headerRow, column, true) }}
             </th>
           </tr>
           <!-- normal rows here. we loop over all rows -->
@@ -109,7 +109,7 @@
               class="vgt-row-header"
               :class="getClasses(i, 'td')"
               v-else>
-              {{ collectFormatted(headerRow, column) }}
+              {{ collectFormatted(headerRow, column, true) }}
             </th>
           </tr>
           <tr v-if="processedRows.length === 0">
@@ -561,8 +561,13 @@ export default {
       return undefined;
     },
 
-    collectFormatted(obj, column) {
-      const value = this.collect(obj, column.field);
+    collectFormatted(obj, column, headerRow = false) {
+      let value;
+      if (headerRow && column.headerField) {
+        value = this.collect(obj, column.headerField);
+      } else {
+        value = this.collect(obj, column.field);
+      }
       if (value === undefined) return '';
 
       // if user has supplied custom formatter,
