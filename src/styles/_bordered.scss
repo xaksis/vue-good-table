@@ -2,4 +2,7 @@
   &.bordered td, &.bordered th {
       border: 1px solid $border-color;
   }
+  &.bordered th.vgt-row-header{
+    border-bottom: 3px solid $border-color;
+  }
 }

@@ -4,7 +4,7 @@
       v-if="paginate && paginateOnTop"
       :perPage="perPage"
       :rtl="rtl"
-      :total="totalRows || processedRows.length"
+      :total="totalRows || totalRowCount"
       @page-changed="pageChanged"
       @per-page-changed="perPageChanged"
       :nextText="nextText"
@@ -49,14 +49,32 @@
             :typed-columns="typedColumns">
           </tr>
         </thead>
-
-        <tbody>
+        <tbody v-for="(headerRow, index) in paginated" :key="index">
+          <tr v-if="groupHeaderOnTop">
+            <th
+              v-if="headerRow.mode === 'span'"
+              class="vgt-left-align vgt-row-header"
+              :colspan="columns.length">
+              {{ headerRow.label }}
+            </th>
+            <th
+              v-for="(column, i) in columns"
+              :key="i"
+              class="vgt-row-header"
+              :class="getClasses(i, 'td')"
+              v-else>
+              {{ collectFormatted(headerRow, column) }}
+            </th>
+          </tr>
+          <!-- normal rows here. we loop over all rows -->
           <tr
-            v-for="(row, index) in paginated"
+            v-for="(row, index) in headerRow.children"
             :key="index"
             :class="getRowStyleClass(row)"
             @click="click(row, index)">
-            <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
+            <th v-if="lineNumbers" class="line-numbers">
+              {{ getCurrentIndex(index) }}
+            </th>
             <td
               v-for="(column, i) in columns"
               :key="i"
@@ -69,10 +87,30 @@
                 :column="column"
                 :formattedRow="formattedRow(row)"
                 :index="index">
-                <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
-                <span v-if="column.html" v-html="collect(row, column.field)"></span>
+                <span v-if="!column.html">
+                  {{ collectFormatted(row, column) }}
+                </span>
+                <span v-if="column.html" v-html="collect(row, column.field)">
+                </span>
               </slot>
+
             </td>
+          </tr>
+          <tr v-if="groupHeaderOnBottom">
+            <th
+              v-if="headerRow.mode === 'span'"
+              class="vgt-left-align vgt-row-header"
+              :colspan="columns.length">
+              {{ headerRow.label }}
+            </th>
+            <th
+              v-for="(column, i) in columns"
+              :key="i"
+              class="vgt-row-header"
+              :class="getClasses(i, 'td')"
+              v-else>
+              {{ collectFormatted(headerRow, column) }}
+            </th>
           </tr>
           <tr v-if="processedRows.length === 0">
             <td :colspan="columns.length">
@@ -90,7 +128,7 @@
       v-if="paginate && !paginateOnTop"
       :perPage="perPage"
       :rtl="rtl"
-      :total="totalRows || processedRows.length"
+      :total="totalRows || totalRowCount"
       @page-changed="pageChanged"
       @per-page-changed="perPageChanged"
       :nextText="nextText"
@@ -106,6 +144,8 @@
 <script>
 import each from 'lodash.foreach';
 import assign from 'lodash.assign';
+import cloneDeep from 'lodash.clonedeep';
+import filter from 'lodash.filter';
 import diacriticless from 'diacriticless';
 import defaultType from './types/default';
 import VueGoodPagination from './Pagination.vue';
@@ -142,6 +182,13 @@ export default {
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
+    groupOptions: {
+      default() {
+        return {
+          enabled: false,
+        };
+      },
+    },
 
     // search
     searchEnabled: { default: false },
@@ -171,12 +218,273 @@ export default {
     dataTypes: dataTypes || {},
   }),
 
+  watch: {
+    rows: {
+      handler() {
+        this.filterRows(this.columnFilters, false);
+      },
+      deep: true,
+    },
+  },
+
+  computed: {
+    groupHeaderOnTop() {
+      if (this.groupOptions
+        && this.groupOptions.enabled
+        && this.groupOptions.headerPosition
+        && this.groupOptions.headerPosition === 'bottom') {
+        return false;
+      }
+      if (this.groupOptions && this.groupOptions.enabled) return true;
+
+      // will only get here if groupOptions is false
+      return false;
+    },
+    groupHeaderOnBottom() {
+      if (this.groupOptions
+        && this.groupOptions.enabled
+        && this.groupOptions.headerPosition
+        && this.groupOptions.headerPosition === 'bottom') {
+        return true;
+      }
+      return false;
+    },
+    totalRowCount() {
+      let total = 0;
+      each(this.processedRows, (headerRow) => {
+        total += headerRow.children ? headerRow.children.length : 0;
+      });
+      return total;
+    },
+    tableStyleClasses() {
+      let classes = this.styleClass;
+      classes += ` ${this.theme}`;
+      return classes;
+    },
+
+    searchTerm() {
+      return (this.externalSearchQuery != null) ? this.externalSearchQuery : this.globalSearchTerm;
+    },
+
+    //
+    globalSearchAllowed() {
+      if (this.searchEnabled
+        && !!this.globalSearchTerm
+        && this.searchTrigger !== 'enter') {
+        return true;
+      }
+
+      if (this.externalSearchQuery != null
+          && this.searchTrigger !== 'enter') {
+        return true;
+      }
+
+      if (this.forceSearch) {
+        this.forceSearch = false;
+        return true;
+      }
+
+      return false;
+    },
+
+    // this is done everytime sortColumn
+    // or sort type changes
+    //----------------------------------------
+    processedRows() {
+      // we only process rows when mode is local
+      let computedRows = this.filteredRows;
+      if (this.mode === 'remote') {
+        return computedRows;
+      }
+
+      // take care of the global filter here also
+      if (this.globalSearchAllowed) {
+        // here also we need to de-construct and then
+        // re-construct the rows, lets see.
+        const allRows = [];
+        each(this.filteredRows, (headerRow) => {
+          allRows.push(...headerRow.children);
+        });
+        const filteredRows = [];
+        each(allRows, (row) => {
+          each(this.columns, (col) => {
+            // if col does not have search disabled,
+            if (!col.globalSearchDisabled) {
+              // if a search function is provided,
+              // use that for searching, otherwise,
+              // use the default search behavior
+              if (this.searchFn) {
+                const foundMatch = this.searchFn(
+                  row,
+                  col,
+                  this.collectFormatted(row, col),
+                  this.searchTerm
+                );
+                if (foundMatch) {
+                  filteredRows.push(row);
+                  return false; // break the loop
+                }
+              } else {
+                // lets get the formatted row/col value
+                let tableValue = this.collectFormatted(row, col);
+                if (typeof tableValue !== 'undefined' && tableValue !== null) {
+                  // table value
+                  tableValue = diacriticless(String(tableValue).toLowerCase());
+
+                  // search term
+                  const searchTerm = diacriticless(this.searchTerm.toLowerCase());
+
+                  // comparison
+                  if (tableValue.search(searchTerm) > -1) {
+                    filteredRows.push(row);
+                    return false; // break loop
+                  }
+                }
+              }
+            }
+          });
+        });
+        // here we need to reconstruct the nested structure
+        // of rows
+        computedRows = [];
+        each(this.filteredRows, (headerRow, i) => {
+          const children = filter(filteredRows, ['vgt_id', i]);
+          if (children.length) {
+            const newHeaderRow = cloneDeep(headerRow);
+            newHeaderRow.children = children;
+            computedRows.push(newHeaderRow);
+          }
+        });
+      }
+
+      // taking care of sort here only if sort has changed
+      if (this.sortColumn !== -1
+        && this.isSortableColumn(this.sortColumn) &&
+        // if search trigger is enter then we only sort
+        // when enter is hit
+        (this.searchTrigger !== 'enter' || this.sortChanged)) {
+        this.sortChanged = false;
+
+        each(computedRows, (cRows) => {
+          cRows.children.sort((x, y) => {
+            if (!this.columns[this.sortColumn]) return 0;
+
+            const xvalue = this.collect(x, this.columns[this.sortColumn].field);
+            const yvalue = this.collect(y, this.columns[this.sortColumn].field);
+
+            // if user has provided a custom sort, use that instead of
+            // built-in sort
+            const { sortFn } = this.columns[this.sortColumn];
+            if (sortFn && typeof sortFn === 'function') {
+              return sortFn(xvalue, yvalue, this.columns[this.sortColumn]) * (this.sortType === 'desc' ? -1 : 1);
+            }
+
+            // built in sort
+            const { typeDef } = this.typedColumns[this.sortColumn];
+            return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
+              * (this.sortType === 'desc' ? -1 : 1);
+          });
+        });
+      }
+
+      // if the filtering is event based, we need to maintain filter
+      // rows
+      if (this.searchTrigger === 'enter') {
+        this.filteredRows = computedRows;
+      }
+
+      return computedRows;
+    },
+
+    paginated() {
+      if (!this.processedRows.length) return [];
+
+      // for every group, extract the child rows
+      // to cater to paging
+      let paginatedRows = [];
+      each(this.processedRows, (childRows) => {
+        paginatedRows.push(...childRows.children);
+      });
+
+      if (this.mode === 'remote') {
+        return paginatedRows;
+      }
+
+      if (this.paginate) {
+        let pageStart = (this.currentPage - 1) * this.currentPerPage;
+
+        // in case of filtering we might be on a page that is
+        // not relevant anymore
+        // also, if setting to all, current page will not be valid
+        if (pageStart >= paginatedRows.length
+          || this.currentPerPage === -1) {
+          this.currentPage = 1;
+          pageStart = 0;
+        }
+
+        // calculate page end now
+        let pageEnd = paginatedRows.length + 1;
+
+        // if the setting is set to 'all'
+        if (this.currentPerPage !== -1) {
+          pageEnd = this.currentPage * this.currentPerPage;
+        }
+
+        paginatedRows = paginatedRows.slice(pageStart, pageEnd);
+      }
+      // reconstruct paginated rows here
+      const reconstructedRows = [];
+      each(this.processedRows, (headerRow, i) => {
+        const children = filter(paginatedRows, ['vgt_id', i]);
+        if (children.length) {
+          const newHeaderRow = cloneDeep(headerRow);
+          newHeaderRow.children = children;
+          reconstructedRows.push(newHeaderRow);
+        }
+      });
+
+      return reconstructedRows;
+    },
+
+    originalRows() {
+      const rows = cloneDeep(this.rows);
+      let nestedRows = [];
+      if (!this.groupOptions.enabled) {
+        nestedRows = this.handleGrouped([{
+          label: 'no groups',
+          children: rows,
+        }]);
+      } else {
+        nestedRows = this.handleGrouped(rows);
+      }
+      // we need to preserve the original index of
+      // rows so lets do that
+      let index = 0;
+      each(nestedRows, (headerRow, i) => {
+        each(headerRow.children, (row, j) => {
+          row.originalIndex = index++;
+        });
+      });
+
+      return nestedRows;
+    },
+
+    typedColumns() {
+      const columns = assign(this.columns, []);
+      for (let i = 0; i < this.columns.length; i++) {
+        const column = columns[i];
+        column.typeDef = this.dataTypes[column.type] || defaultType;
+      }
+      return columns;
+    },
+  },
+
   methods: {
     pageChangedEvent() {
       return {
         currentPage: this.currentPage,
         currentPerPage: this.currentPerPage,
-        total: Math.floor(this.rows.length / this.currentPerPage),
+        total: Math.floor(this.totalRowCount / this.currentPerPage),
       };
     },
 
@@ -316,7 +624,7 @@ export default {
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows rows.
       this.columnFilters = columnFilters;
-      let computedRows = this.originalRows;
+      let computedRows = cloneDeep(this.originalRows);
 
       // do we have a filter to care about?
       // if not we don't need to do anything
@@ -335,22 +643,25 @@ export default {
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
           if (this.columnFilters[col.field]) {
-            computedRows = computedRows.filter((row) => {
-              // If column has a custom filter, use that.
-              if (col.filterOptions
-                && typeof col.filterOptions.filterFn === 'function') {
-                return col.filterOptions.filterFn(
+            computedRows = each(computedRows, (headerRow) => {
+              const newChildren = headerRow.children.filter((row) => {
+                // If column has a custom filter, use that.
+                if (col.filterOptions
+                  && typeof col.filterOptions.filterFn === 'function') {
+                  return col.filterOptions.filterFn(
+                    this.collect(row, col.field),
+                    this.columnFilters[col.field]
+                  );
+                }
+                // Otherwise Use default filters
+                const { typeDef } = col;
+                return typeDef.filterPredicate(
                   this.collect(row, col.field),
                   this.columnFilters[col.field]
                 );
-              }
-
-              // Otherwise Use default filters
-              const { typeDef } = col;
-              return typeDef.filterPredicate(
-                this.collect(row, col.field),
-                this.columnFilters[col.field]
-              );
+              });
+              // should we remove the header?
+              headerRow.children = newChildren;
             });
           }
         }
@@ -376,196 +687,25 @@ export default {
       }
       return classes;
     },
-  },
 
-  watch: {
-    rows: {
-      handler() {
-        this.filterRows(this.columnFilters, false);
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    tableStyleClasses() {
-      let classes = this.styleClass;
-      classes += ` ${this.theme}`;
-      return classes;
-    },
-
-    searchTerm() {
-      return (this.externalSearchQuery != null) ? this.externalSearchQuery : this.globalSearchTerm;
-    },
-
-    //
-    globalSearchAllowed() {
-      if (this.searchEnabled
-        && !!this.globalSearchTerm
-        && this.searchTrigger !== 'enter') {
-        return true;
-      }
-
-      if (this.externalSearchQuery != null
-          && this.searchTrigger !== 'enter') {
-        return true;
-      }
-
-      if (this.forceSearch) {
-        this.forceSearch = false;
-        return true;
-      }
-
-      return false;
-    },
-
-    // this is done everytime sortColumn
-    // or sort type changes
-    //----------------------------------------
-    processedRows() {
-      // we only process rows when mode is local
-      let computedRows = this.filteredRows;
-      if (this.mode === 'remote') {
-        return computedRows;
-      }
-
-      // take care of the global filter here also
-      if (this.globalSearchAllowed) {
-        const filteredRows = [];
-        for (let i = 0; i < this.originalRows.length; i++) {
-          const row = this.originalRows[i];
-          for (let j = 0; j < this.columns.length; j++) {
-            const col = this.columns[j];
-
-            // if col has search disabled,
-            // skip the column.
-            if (col.globalSearchDisabled) {
-              continue;
-            }
-
-            // if a search function is provided,
-            // use that for searching, otherwise,
-            // use the default search behavior
-            if (this.searchFn) {
-              const foundMatch = this.searchFn(
-                row,
-                col,
-                this.collectFormatted(row, col),
-                this.searchTerm
-              );
-              if (foundMatch) {
-                filteredRows.push(row);
-                break;
-              }
-            } else {
-              // lets get the formatted row/col value
-              let tableValue = this.collectFormatted(row, col);
-              if (typeof tableValue !== 'undefined' && tableValue !== null) {
-                // table value
-                tableValue = diacriticless(String(tableValue).toLowerCase());
-
-                // search term
-                const searchTerm = diacriticless(this.searchTerm.toLowerCase());
-
-                // comparison
-                if (tableValue.search(searchTerm) > -1) {
-                  filteredRows.push(row);
-                  break;
-                }
-              }
-            }
-          }
-        }
-        computedRows = filteredRows;
-      }
-
-      // taking care of sort here only if sort has changed
-      if (this.sortColumn !== -1
-        && this.isSortableColumn(this.sortColumn) &&
-        // if search trigger is enter then we only sort
-        // when enter is hit
-        (this.searchTrigger !== 'enter' || this.sortChanged)) {
-        this.sortChanged = false;
-
-        computedRows = computedRows.sort((x, y) => {
-          if (!this.columns[this.sortColumn]) return 0;
-
-          const xvalue = this.collect(x, this.columns[this.sortColumn].field);
-          const yvalue = this.collect(y, this.columns[this.sortColumn].field);
-
-          // if user has provided a custom sort, use that instead of
-          // built-in sort
-          const { sortFn } = this.columns[this.sortColumn];
-          if (sortFn && typeof sortFn === 'function') {
-            return sortFn(xvalue, yvalue, this.columns[this.sortColumn]) * (this.sortType === 'desc' ? -1 : 1);
-          }
-
-          // built in sort
-          const { typeDef } = this.typedColumns[this.sortColumn];
-          return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
-            * (this.sortType === 'desc' ? -1 : 1);
+    handleGrouped(originalRows) {
+      each(originalRows, (headerRow, i) => {
+        each(headerRow.children, (childRow) => {
+          childRow.vgt_id = i;
         });
-      }
-
-      // if the filtering is event based, we need to maintain filter
-      // rows
-      if (this.searchTrigger === 'enter') {
-        this.filteredRows = computedRows;
-      }
-
-      return computedRows;
+      });
+      return originalRows;
     },
 
-    paginated() {
-      let paginatedRows = this.processedRows;
-
-      if (this.mode === 'remote') {
-        return paginatedRows;
+    handleRows() {
+      if (!this.groupOptions.enabled) {
+        this.filteredRows = this.handleGrouped([{
+          label: 'no groups',
+          children: this.originalRows,
+        }]);
+      } else {
+        this.filteredRows = this.handleGrouped(this.originalRows);
       }
-
-      if (this.paginate) {
-        let pageStart = (this.currentPage - 1) * this.currentPerPage;
-
-        // in case of filtering we might be on a page that is
-        // not relevant anymore
-        // also, if setting to all, current page will not be valid
-        if (pageStart >= this.processedRows.length
-          || this.currentPerPage === -1) {
-          this.currentPage = 1;
-          pageStart = 0;
-        }
-
-        // calculate page end now
-        let pageEnd = paginatedRows.length + 1;
-
-        // if the setting is set to 'all'
-        if (this.currentPerPage !== -1) {
-          pageEnd = this.currentPage * this.currentPerPage;
-        }
-
-        paginatedRows = paginatedRows.slice(pageStart, pageEnd);
-      }
-      return paginatedRows;
-    },
-
-    originalRows() {
-      const rows = JSON.parse(JSON.stringify(this.rows));
-
-      // we need to preserve the original index of rows so lets do that
-      for (let index = 0; index < rows.length; index++) {
-        rows[index].originalIndex = index;
-      }
-
-      return rows;
-    },
-
-    typedColumns() {
-      const columns = assign(this.columns, []);
-      for (let i = 0; i < this.columns.length; i++) {
-        const column = columns[i];
-        column.typeDef = this.dataTypes[column.type] || defaultType;
-      }
-      return columns;
     },
   },
 

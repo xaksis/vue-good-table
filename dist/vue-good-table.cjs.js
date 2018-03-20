@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-beta.2
+ * vue-good-table v2.0.0-beta.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -195,8 +195,6 @@ var VgtGlobalSearch = { render: function () {
   },
   computed: {
     showControlBar: function showControlBar() {
-      console.log('should we show searchbar');
-      console.log(this.searchEnabled || !!this.$slots['internal-table-actions']);
       return this.searchEnabled || !!this.$slots['internal-table-actions'];
     }
   },
@@ -745,7 +743,7 @@ var GoodTable = { render: function () {
         var filteredRows = [];
         for (var i = 0; i < this.originalRows.length; i++) {
           var row = this$1.originalRows[i];
-          for (var j = 0; j < this.columns; j++) {
+          for (var j = 0; j < this.columns.length; j++) {
             var col = this$1.columns[j];
 
             // if col has search disabled,
