@@ -61,6 +61,11 @@ table.vgt-table {
 .vgt-table th.filter-th {
   padding: .75rem .75rem .75rem .75rem; }
 
+.vgt-table th.vgt-row-header {
+  border-bottom: 2px solid #DCDFE6;
+  border-top: 2px solid #DCDFE6;
+  background-color: #fafafb; }
+
 .vgt-table thead th {
   color: #606266;
   vertical-align: bottom;
@@ -115,6 +120,9 @@ table.vgt-table {
 .vgt-table.bordered td, .vgt-table.bordered th {
   border: 1px solid #DCDFE6; }
 
+.vgt-table.bordered th.vgt-row-header {
+  border-bottom: 3px solid #DCDFE6; }
+
 .vgt-table.striped tbody tr:nth-of-type(odd) {
   background-color: rgba(51, 68, 109, 0.03); }
 
@@ -130,7 +138,7 @@ table.vgt-table {
     margin-right: 5px;
     margin-left: 0px; }
 
-.vgt-table.condensed td {
+.vgt-table.condensed td, .vgt-table.condensed th.vgt-row-header {
   padding: .4rem .4rem .4rem .4rem; }
 
 .vgt-global-search {
