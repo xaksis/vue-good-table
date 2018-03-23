@@ -10,9 +10,9 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 
 ![Basic Screenshot](README/images/vgt-table.png)
 
-## Live Demo
+## Demo
 
-[vue-good-table Demo Site](https://xaksis.github.io/vue-good-demos/#/simple-table)
+[vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
 
 ## Table of contents
 
@@ -25,8 +25,19 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
   - [Example Usage](#example-usage)
 - [Configuration](#configuration)
   - [Component Options](#component-options)
+    - [Table](#table)
+    - [Sort](#sort)
+    - [Pagination](#pagination)
+    - [Search](#search)
+    - [Grouped Row Options](#grouped-row-options)
+    - [Style/Theme](#styletheme)
+    - [Text](#text)
   - [Column Options](#column-options)
+    - [Column filter option in-depth](#column-filter-option-in-depth)
   - [Style Options](#style-options)
+    - [.vgt-table](#vgt-table)
+    - [.vgt-table .stripped](#vgt-table-stripped)
+    - [.vgt-table .condensed](#vgt-table-condensed)
 - [Theme](#theme)
   - [default](#default)
   - [nocturnal `theme='nocturnal'`](#nocturnal-themenocturnal)
@@ -340,7 +351,7 @@ data(){
 }
 ```
 
-#### Grouped Rows
+#### Grouped Row Options
 ---
 Sometimes you have a hierarchy in table and you want to group rows under subheadings, vue-good-table allows you to do that as well. Following properties relate to row grouping
 
@@ -794,6 +805,9 @@ rows: [{
   }">
 </vue-good-table>
 ```
+
+you can check out some live examples on the recipes page: 
+[vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
 
 
 ### Empty state slot

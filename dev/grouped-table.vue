@@ -3,11 +3,9 @@
   <vue-good-table
     :columns="columns"
     :rows="rows"
-    :paginate="true"
-    :perPage="4"
     :group-options="{
       enabled: true,
-      headerPosition: 'top'
+      headerPosition: 'bottom',
     }"
     styleClass="vgt-table condensed bordered">
   </vue-good-table>
@@ -29,58 +27,48 @@ export default {
           },
         },
         {
-          label: 'Age',
-          field: 'age',
+          label: 'Diet',
+          field: 'diet',
+          type: 'text',
+        },
+        {
+          label: 'Count',
+          field: 'count',
+          headerField: this.sumCount,
           type: 'number',
-        },
-        {
-          label: 'Created On',
-          field: 'createdAt',
-          type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'MMM Do YY',
-        },
-        {
-          label: 'Percent',
-          field: 'score',
-          headerField: this.sumScore,
-          type: 'percentage',
         },
       ],
       rows: [
         {
-          name: 'Total',
-          age: '',
-          createdAt: undefined,
-          score: 0.2,
+          name: 'Mammal Total',
+          diet: '',
+          count: '',
           children: [
-            {
-              name: 'John', age: 20, createdAt: '201-10-31:9: 35 am', score: 0.03343,
-            },
-            {
-              name: 'Jane', age: 24, createdAt: '2011-10-31', score: 0.03343,
-            },
-            {
-              name: 'Susan', age: 16, createdAt: '2011-10-30', score: 0.03343,
-            },
+            { name: 'Elephant', diet: 'herbivore', count: 5 },
+            { name: 'Cat', diet: 'carnivore', count: 28 },
+            { name: 'Dog', diet: 'omnivore', count: 12 },
+            { name: 'Dolphin', diet: 'carnivore', count: 9 },
           ],
         },
         {
-          mode: 'span',
-          label: 'Header Two',
+          name: 'Reptile Total',
+          diet: '',
+          count: '',
           children: [
-            {
-              name: 'Chris', age: 55, createdAt: '2011-10-11', score: 0.03343,
-            },
-            {
-              name: 'Dan', age: 40, createdAt: '2011-10-21', score: 0.03343,
-            },
-            {
-              name: 'John', age: 20, createdAt: '2011-10-31', score: 0.03343,
-            },
-            {
-              name: 'Susan', age: 16, createdAt: '2013-10-31', score: 0.03343,
-            },
+            { name: 'Snake', diet: 'carnivore', count: 40 },
+            { name: 'lizard', diet: 'insectivore', count: 34 },
+            { name: 'crocodile', diet: 'carnivore', count: 22 },
+            { name: 'turtles', diet: 'herbivore', count: 29 },
+          ],
+        },
+        {
+          name: 'Fish Total',
+          diet: '',
+          count: '',
+          children: [
+            { name: 'Shark', diet: 'carnivore', count: 2 },
+            { name: 'koi', diet: 'omnivore', count: 14 },
+            { name: 'guppy', diet: 'omnivore', count: 35 },
           ],
         },
       ],
@@ -89,10 +77,10 @@ export default {
   computed: {
   },
   methods: {
-    sumScore(rowObj) {
+    sumCount(rowObj) {
       let sum = 0;
       for (let i = 0; i < rowObj.children.length; i++) {
-        sum += rowObj.children[i].score;
+        sum += rowObj.children[i].count;
       }
       return sum;
     },
