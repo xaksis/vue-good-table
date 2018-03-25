@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-beta.5
+ * vue-good-table v2.0.0-beta.6
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5547,7 +5547,7 @@ var VueGoodPagination = { render: function () {
       if (this.currentPerPage === -1) {
         return ("1 - " + (this.total) + " " + (this.ofText) + " " + (this.total));
       }
-      var first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
+      var first = (this.currentPage - 1) * this.currentPerPage + 1 ? (this.currentPage - 1) * this.currentPerPage + 1 : 1;
 
       if (first > this.total) {
         // this probably happened as a result of filtering
@@ -10396,6 +10396,13 @@ var GoodTable = { render: function () {
             }
           });
         });
+
+        // this is where we emit on search
+        this.$emit('on-search', {
+          searchTerm: this.searchTerm,
+          rowCount: filteredRows.length
+        });
+
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
@@ -10582,9 +10589,6 @@ var GoodTable = { render: function () {
     },
 
     searchTable: function searchTable() {
-      this.$emit('on-search', {
-        searchTerm: this.searchTerm
-      });
       if (this.searchTrigger === 'enter') {
         this.forceSearch = true;
         this.sortChanged = true;
