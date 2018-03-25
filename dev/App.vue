@@ -21,7 +21,7 @@
       :columns="columns"
       :rows="rows"
       :paginateOnTop="false"
-      :searchEnabled="false"
+      :searchEnabled="true"
       :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>

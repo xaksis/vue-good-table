@@ -344,6 +344,13 @@ export default {
             }
           });
         });
+
+        // this is where we emit on search
+        this.$emit('on-search', {
+          searchTerm: this.searchTerm,
+          rowCount: filteredRows.length,
+        });
+
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
@@ -529,9 +536,6 @@ export default {
     },
 
     searchTable() {
-      this.$emit('on-search', {
-        searchTerm: this.searchTerm,
-      });
       if (this.searchTrigger === 'enter') {
         this.forceSearch = true;
         this.sortChanged = true;
