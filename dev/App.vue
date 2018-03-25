@@ -7,6 +7,8 @@
       :paginate="true"
       :columns="columns" 
       :rows="rows"
+      :perPage="3"
+      :paginateDropdownAllowAll="false"
       :paginateOnTop="true"
       :line-numbers="true">
       <template slot="table-row-before" slot-scope="props">

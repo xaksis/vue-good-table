@@ -12,7 +12,7 @@
             :value="option">
             {{ option }}
           </option>
-          <option value="-1">{{allText}}</option>
+          <option v-if="paginateDropdownAllowAll" value="-1">{{allText}}</option>
         </select>
       </label>
     </div>
@@ -41,6 +41,7 @@
       perPage: {},
       rtl: {default: false},
       customRowsPerPageDropdown: {default: function(){ return [] }},
+      paginateDropdownAllowAll: {default: true},
 
       // text options
       nextText: {default: 'Next'},
@@ -80,7 +81,7 @@
         if (this.currentPerPage === -1) {
           return `1 - ${this.total} ${this.ofText} ${this.total}`;
         }
-        let first = (this.currentPage - 1) * this.currentPerPage ? (this.currentPage - 1) * this.currentPerPage : 1;
+        let first = ((this.currentPage - 1) * this.currentPerPage) + 1 ? ((this.currentPage - 1) * this.currentPerPage) + 1 : 1;
 
         if (first > this.total) {
           // this probably happened as a result of filtering

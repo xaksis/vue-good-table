@@ -19,6 +19,7 @@
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
         :customRowsPerPageDropdown="customRowsPerPageDropdown"
+        :paginateDropdownAllowAll="paginateDropdownAllowAll"
         :ofText="ofText"
         :allText="allText"></vue-good-pagination>
       <div :class="{'responsive': responsive}">
@@ -135,6 +136,7 @@
         :prevText="prevText"
         :rowsPerPageText="rowsPerPageText"
         :customRowsPerPageDropdown="customRowsPerPageDropdown"
+        :paginateDropdownAllowAll="paginateDropdownAllowAll"
         :ofText="ofText"
         :allText="allText"
         ></vue-good-pagination>
@@ -160,21 +162,24 @@
       VueGoodPagination
     },
     props: {
-      customRowsPerPageDropdown: {default: function(){ return [] }},
       styleClass: {default: 'table table-bordered'},
       title: '',
       columns: {},
       rows: {},
       onClick: {},
-      perPage: {},
       sortable: {default: true},
-      paginate: {default: false},
-      paginateOnTop: {default: false},
       lineNumbers: {default: false},
       defaultSortBy: {default: null},
       responsive: {default: true},
       rtl: {default: false},
       rowStyleClass: {default: null, type: [Function, String]},
+      
+      // paginate
+      paginate: {default: false},
+      perPage: {},
+      customRowsPerPageDropdown: {default: function(){ return [] }},
+      paginateOnTop: {default: false},
+      paginateDropdownAllowAll: {default: true},
 
       // search
       globalSearch: {default: false},
