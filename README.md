@@ -26,9 +26,9 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
 - [Configuration](#configuration)
   - [Component Options](#component-options)
     - [Table](#table)
-    - [Sort](#sort)
-    - [Pagination](#pagination)
-    - [Search](#search)
+    - [Sort Options](#sort-options)
+    - [Pagination Options](#pagination-options)
+    - [Search Options](#search-options)
     - [Grouped Row Options](#grouped-row-options)
     - [Style/Theme](#styletheme)
     - [Text](#text)
@@ -187,28 +187,42 @@ Show line number for each row
 </vue-good-table>
 ```
 
-#### Sort
+#### Sort Options
 ---
-These options are related to table sorting
+Set of options related to table sorting
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :sort-options="{
+  	enabled: true,
+    initialSortBy: {field: 'name', type: 'asc'}
+  }">
+</vue-good-table>
+```
 
-
-##### sortable `Boolean (default: true)`
+##### sortOptions.enabled `Boolean (default: true)`
 Enable/disable sorting on table as a whole. 
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :sortable="true">
+  :sort-options="{
+  	enabled: true,
+  }">
 </vue-good-table>
 ```
 
-##### defaultSortBy `Object`
+##### sortOptions.initialSortBy `Object`
 Allows specifying a default sort for the table on wakeup
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :defaultSortBy="defaultSort">
+  :sort-options="{
+  	enabled: true,
+    initialSortBy: {field: 'name', type: 'asc'}
+  }">
 </vue-good-table>
 ```
 
@@ -220,61 +234,108 @@ defaultSort: {
 }
 ```
 
-#### Pagination
+#### Pagination Options
 ---
-Following options are related to table pagination
-##### paginate `Boolean`
+A set of options that are related to table pagination
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginationOptions="{
+  	enabled: true,
+    perPage: 5,
+    position: 'top',
+    perPageDropdown: [3, 7, 9],
+    dropdownAllowAll: false,
+  }">
+</vue-good-table>
+```
+Options explained below
+##### paginationOptions.enabled `Boolean (default: false)`
 Enable Pagination for table. By default the paginator is created at the bottom of the table.
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :paginate="true">
+  :paginationOptions="{
+  	enabled: true
+  }">
 </vue-good-table>
 ```
 
-##### paginateOnTop `Boolean`
+##### paginationOptions.position `String (default: 'bottom')`
 Add pagination on top of the table (default position is bottom)
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :paginate="true"
-  :paginateOnTop="true">
+  :paginationOptions="{
+  	enabled: true,
+    position: 'top'
+  }">
 </vue-good-table>
 ```
 
-##### perPage `Integer (default: 10)`
+##### paginationOptions.perPage `Integer (default: 10)`
 Number of rows to show per page
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :paginate="true"
-  :perPage="5">
+  :paginationOptions="{
+  	enabled: true,
+    perPage: 5
+  }">
 </vue-good-table>
 ```
 
-##### customRowsPerPageDropdown `Array (default: [10,20,30,40,50])`
+##### paginationOptions.perPageDropdown `Array (default: [10,20,30,40,50])`
 Customize the dropdown options for the amount of items per page
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :paginate="true"
-  :customRowsPerPageDropdown="customPerPageDropdown">
+  :paginationOptions="{
+  	enabled: true,
+    perPageDropdown: [3, 7, 9]
+  }">
 </vue-good-table>
 ```
-```javascript
-// in data
-customPerPageDropdown: [2, 5, 7],
+
+##### paginationOptions.dropdownAllowAll `Boolean (default: true)`
+enables/disables 'All' in the per page dropdown.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginationOptions="{
+  	enabled: true,
+    perPageDropdown: [3, 7, 9],
+    dropdownAllowAll: false,
+  }">
+</vue-good-table>
 ```
 
-#### Search
+#### Search Options
 ---
-Search related options. These options pertain to the global table search.
+Set of search related options. These options pertain to the global table search.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :searchOptions="{
+  	enabled: true,
+    trigger: 'enter',
+    searchFn: mySearchFn,
+    placeholder: 'Search this table',
+    externalQuery: searchQuery
+  }">
+</vue-good-table>
+```
 
-##### searchEnabled `Boolean (default: false)`
+Search options explained below
+
+##### searchOptions.enabled `Boolean (default: false)`
 
 Allows a single search input for the whole table 
 
@@ -283,23 +344,27 @@ Allows a single search input for the whole table
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :searchEnabled="true">
+  :searchOptions="{
+  	enabled: true
+  }">
 </vue-good-table>
 ```
 
-##### searchTrigger `String (default: '')`
+##### searchOptions.trigger `String (default: '')`
 Allows you to specify if you want search to trigger on 'enter' event of the input. By default table searches on key-up. 
 
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :searchEnabled="true"
-  searchTrigger="enter">
+  :searchOptions="{
+  	enabled: true,
+    trigger: 'enter'
+  }">
 </vue-good-table>
 ```
 
-##### searchFn `Function`
+##### searchOptions.searchFn `Function`
 
 Allows you to specify your own search function for the global search
 
@@ -307,30 +372,35 @@ Allows you to specify your own search function for the global search
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :searchEnabled="true"
-  :searchFn="myFunc" />;
+  :searchOptions="{
+  	enabled: true,
+    searchFn: myFunc
+  }">
+</vue-good-table>
 ```
 ```javascript
 // in js
 methods: {
   myFunc(row, col, cellValue, searchTerm){
-    return value === 'my value';
+    return cellValue === 'my value';
   },
 }
 ```
 
-##### searchPlaceholder `String (default: 'Search Table')`
+##### searchOptions.placeholder `String (default: 'Search Table')`
 Text for global search input place holder
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :searchEnabled="true"
-  searchPlaceholder="Search my awesome table">
+  :searchOptions="{
+  	enabled: true,
+    placeholder: 'Search this table',
+  }">
 </vue-good-table>
 ```
 
-##### externalSearchQuery `String`
+##### searchOptions.externalQuery `String`
 
 If you want to use your own input for searching the table, you can use this property
 
@@ -339,9 +409,13 @@ If you want to use your own input for searching the table, you can use this prop
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :externalSearchQuery="searchTerm">
- ```
- ```javascript
+  :searchOptions="{
+  	enabled: true,
+    externalQuery: searchTerm
+  }">
+</vue-good-table>
+```
+```javascript
 // and in data
 data(){
   return {

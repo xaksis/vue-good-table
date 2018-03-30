@@ -10,7 +10,7 @@
           :value="option">
           {{ option }}
         </option>
-        <option value="-1">{{allText}}</option>
+        <option v-if="paginateDropdownAllowAll" value="-1">{{allText}}</option>
       </select>
     </div>
     <div class="footer__navigation vgt-pull-right">
@@ -44,6 +44,7 @@ export default {
     perPage: {},
     rtl: { default: false },
     customRowsPerPageDropdown: { default() { return []; } },
+    paginateDropdownAllowAll: { default: true },
 
     // text options
     nextText: { default: 'Next' },

@@ -11,6 +11,7 @@
       :prevText="prevText"
       :rowsPerPageText="rowsPerPageText"
       :customRowsPerPageDropdown="customRowsPerPageDropdown"
+      :paginateDropdownAllowAll="paginateDropdownAllowAll"
       :ofText="ofText"
       :allText="allText"></vue-good-pagination>
 
@@ -135,6 +136,7 @@
       :prevText="prevText"
       :rowsPerPageText="rowsPerPageText"
       :customRowsPerPageDropdown="customRowsPerPageDropdown"
+      :paginateDropdownAllowAll="paginateDropdownAllowAll"
       :ofText="ofText"
       :allText="allText"
       ></vue-good-pagination>
@@ -168,20 +170,15 @@ export default {
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: { }, // required if mode = 'remote'
-    customRowsPerPageDropdown: { default() { return []; } },
     styleClass: { default: 'vgt-table bordered' },
     columns: { },
     rows: { },
     onClick: { },
-    perPage: { },
-    sortable: { default: true },
-    paginate: { default: false },
-    paginateOnTop: { default: false },
     lineNumbers: { default: false },
-    defaultSortBy: { default: null },
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
+
     groupOptions: {
       default() {
         return {
@@ -190,14 +187,42 @@ export default {
       },
     },
 
-    // search
-    searchEnabled: { default: false },
-    searchTrigger: { default: null },
-    externalSearchQuery: { default: null },
-    searchFn: { type: Function, default: null },
+    // sort
+    sortOptions: {
+      default() {
+        return {
+          enabled: true,
+          initialSortBy: {},
+        };
+      },
+    },
+
+    // pagination
+    paginationOptions: {
+      default() {
+        return {
+          enabled: false,
+          perPage: 10,
+          perPageDropdown: null,
+          position: 'bottom',
+          dropdownAllowAll: true,
+        };
+      },
+    },
+
+    searchOptions: {
+      default() {
+        return {
+          enabled: false,
+          trigger: null,
+          externalQuery: null,
+          searchFn: null,
+          placeholder: 'Search Table',
+        };
+      },
+    },
 
     // text options
-    searchPlaceholder: { default: 'Search Table' },
     nextText: { default: 'Next' },
     prevText: { default: 'Prev' },
     rowsPerPageText: { default: 'Rows per page' },
@@ -206,6 +231,24 @@ export default {
   },
 
   data: () => ({
+    // internal sort options
+    sortable: true,
+    defaultSortBy: null,
+
+    // internal search options
+    searchEnabled: false,
+    searchTrigger: null,
+    externalSearchQuery: null,
+    searchFn: null,
+    searchPlaceholder: 'Search Table',
+
+    // internal pagination options
+    perPage: null,
+    paginate: false,
+    paginateOnTop: false,
+    customRowsPerPageDropdown: [],
+    paginateDropdownAllowAll: true,
+
     currentPage: 1,
     currentPerPage: 10,
     sortColumn: -1,
@@ -224,6 +267,29 @@ export default {
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
+    },
+    paginationOptions: {
+      handler() {
+        this.initializePagination();
+      },
+      deep: true,
+      immediate: true,
+    },
+
+    searchOptions: {
+      handler() {
+        this.initializeSearch();
+      },
+      deep: true,
+      immediate: true,
+    },
+
+    sortOptions: {
+      handler() {
+        this.initializeSort();
+      },
+      deep: true,
+      immediate: true,
     },
   },
 
@@ -537,6 +603,9 @@ export default {
 
     searchTable() {
       if (this.searchTrigger === 'enter') {
+        // we reset the filteredRows here because
+        // we want to search across everything.
+        this.filteredRows = this.originalRows;
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -714,6 +783,33 @@ export default {
         }]);
       } else {
         this.filteredRows = this.handleGrouped(this.originalRows);
+      }
+    },
+
+    initializePagination() {
+      if (this.paginationOptions) {
+        this.perPage = this.paginationOptions.perPage;
+        this.paginate = this.paginationOptions.enabled;
+        this.paginateOnTop = this.paginationOptions.position === 'top';
+        this.customRowsPerPageDropdown = this.paginationOptions.perPageDropdown;
+        this.paginateDropdownAllowAll = this.paginationOptions.dropdownAllowAll;
+      }
+    },
+
+    initializeSearch() {
+      if (this.searchOptions) {
+        this.searchEnabled = this.searchOptions.enabled;
+        this.searchTrigger = this.searchOptions.trigger;
+        this.externalSearchQuery = this.searchOptions.externalQuery;
+        this.searchFn = this.searchOptions.searchFn;
+        this.searchPlaceholder = this.searchOptions.placeholder;
+      }
+    },
+
+    initializeSort() {
+      if (this.sortOptions) {
+        this.sortable = this.sortOptions.enabled;
+        this.defaultSortBy = this.sortOptions.initialSortBy;
       }
     },
   },

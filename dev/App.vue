@@ -16,12 +16,26 @@
       styleClass="vgt-table bordered condensed"
       mode=""
       theme=""
-      :paginate="true"
-      :perPage="7"
+      :sort-options="{
+        enabled: true,
+        initialSortBy: {field: 'name', type: 'asc'},
+      }"
+      :paginationOptions="{
+        enabled: true,
+        perPage: 5,
+        position: 'bottom',
+        perPageDropdown: testing,
+        dropdownAllowAll: true,
+      }"
+      :searchOptions="{
+        enabled: true,
+        //trigger: 'enter',
+        // externalQuery: searchQuery,
+        // searchFn:
+        placeholder: 'My Search',
+      }"
       :columns="columns"
       :rows="rows"
-      :paginateOnTop="false"
-      :searchEnabled="true"
       :line-numbers="false">
       <!-- <template slot="table-actions">
         <button class="button">Hello</button>
