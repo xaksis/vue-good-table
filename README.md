@@ -31,7 +31,6 @@ Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xak
     - [Search Options](#search-options)
     - [Grouped Row Options](#grouped-row-options)
     - [Style/Theme](#styletheme)
-    - [Text](#text)
   - [Column Options](#column-options)
     - [Column filter option in-depth](#column-filter-option-in-depth)
   - [Style Options](#style-options)
@@ -78,8 +77,10 @@ Vue.use(VueGoodTable);
     <vue-good-table
       :columns="columns"
       :rows="rows"
-      :perPage="5"
-      :paginate="true"
+      :pagination-options="{
+        enabled: true,
+        perPage: 5,
+      }"
       styleClass="vgt-table striped bordered"/>
   </div>
 </template>
@@ -236,7 +237,7 @@ defaultSort: {
 
 #### Pagination Options
 ---
-A set of options that are related to table pagination
+A set of options that are related to table pagination. Each of these are optional and reasonable defaults will be used if you leave off the property.
 ```html
 <vue-good-table
   :columns="columns"
@@ -247,6 +248,11 @@ A set of options that are related to table pagination
     position: 'top',
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
+    nextLabel: 'next',
+    prevLabel: 'prev',
+    rowsPerPageLabel: 'Rows per page',
+    ofLabel: 'of',
+    allLabel: 'All',
   }">
 </vue-good-table>
 ```
@@ -312,6 +318,23 @@ enables/disables 'All' in the per page dropdown.
   	enabled: true,
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
+  }">
+</vue-good-table>
+```
+
+##### pagination label/text options
+you can change one or more of the texts shown on pagination by overriding the labels in the following way: 
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginationOptions="{
+  	enabled: true,
+    nextLabel: 'next',
+    prevLabel: 'prev',
+    rowsPerPageLabel: 'Rows per page',
+    ofLabel: 'of',
+    allLabel: 'All',
   }">
 </vue-good-table>
 ```
@@ -487,25 +510,6 @@ Allows using other themes. Currently there is one other theme - 'nocturnal'
   theme="nocturnal">
 </vue-good-table>
 ```
-
-#### Text
----
-text replacement options for all the texts we currently have in the table.
-
-##### nextText `String (default: 'Next')`
-Text for pagination 'Next' link
-
-##### prevText `String (default: 'Prev')`
-Text for pagination 'Prev' link
-
-##### rowsPerPageText `String (default: 'Rows per page')`
-Text for pagination 'Rows per page' label
-
-##### ofText `String (default: 'of')`
-Text for pagination 'x of y' label
-
-##### allText `String (default: 'All')`
-Text for the last option in the items per page dropdown
 
 
 ### Column Options

@@ -221,16 +221,16 @@ export default {
         };
       },
     },
-
-    // text options
-    nextText: { default: 'Next' },
-    prevText: { default: 'Prev' },
-    rowsPerPageText: { default: 'Rows per page' },
-    ofText: { default: 'of' },
-    allText: { default: 'All' },
   },
 
   data: () => ({
+    // text options
+    nextText: 'Next',
+    prevText: 'Prev',
+    rowsPerPageText: 'Rows per page',
+    ofText: 'of',
+    allText: 'All',
+
     // internal sort options
     sortable: true,
     defaultSortBy: null,
@@ -787,29 +787,99 @@ export default {
     },
 
     initializePagination() {
-      if (this.paginationOptions) {
-        this.perPage = this.paginationOptions.perPage;
-        this.paginate = this.paginationOptions.enabled;
-        this.paginateOnTop = this.paginationOptions.position === 'top';
-        this.customRowsPerPageDropdown = this.paginationOptions.perPageDropdown;
-        this.paginateDropdownAllowAll = this.paginationOptions.dropdownAllowAll;
+      const {
+        enabled,
+        perPage,
+        position,
+        perPageDropdown,
+        dropdownAllowAll,
+        nextLabel,
+        prevLabel,
+        rowsPerPageLabel,
+        ofLabel,
+        allLabel,
+      } = this.paginationOptions;
+
+      if (typeof enabled === 'boolean') {
+        this.paginate = enabled;
+      }
+
+      if (typeof perPage === 'number') {
+        this.perPage = perPage;
+      }
+
+      if (position === 'top') {
+        this.paginateOnTop = true; // default is false
+      }
+
+      if (Array.isArray(perPageDropdown) && perPageDropdown.length) {
+        this.customRowsPerPageDropdown = perPageDropdown;
+      }
+
+      if (typeof dropdownAllowAll === 'boolean') {
+        this.paginateDropdownAllowAll = dropdownAllowAll;
+      }
+
+      if (typeof nextLabel === 'string') {
+        this.nextText = nextLabel;
+      }
+
+      if (typeof prevLabel === 'string') {
+        this.prevText = prevLabel;
+      }
+
+      if (typeof rowsPerPageLabel === 'string') {
+        this.rowsPerPageText = rowsPerPageLabel;
+      }
+
+      if (typeof ofLabel === 'string') {
+        this.ofText = ofLabel;
+      }
+
+      if (typeof allLabel === 'string') {
+        this.allText = allLabel;
       }
     },
 
     initializeSearch() {
-      if (this.searchOptions) {
-        this.searchEnabled = this.searchOptions.enabled;
-        this.searchTrigger = this.searchOptions.trigger;
-        this.externalSearchQuery = this.searchOptions.externalQuery;
-        this.searchFn = this.searchOptions.searchFn;
-        this.searchPlaceholder = this.searchOptions.placeholder;
+      const {
+        enabled,
+        trigger,
+        externalQuery,
+        searchFn,
+        placeholder,
+      } = this.searchOptions;
+
+      if (typeof enabled === 'boolean') {
+        this.searchEnabled = enabled;
+      }
+
+      if (trigger === 'enter') {
+        this.searchTrigger = trigger;
+      }
+
+      if (typeof externalQuery === 'string') {
+        this.externalSearchQuery = externalQuery;
+      }
+
+      if (typeof searchFn === 'function') {
+        this.searchFn = searchFn;
+      }
+
+      if (typeof placeholder === 'string') {
+        this.searchPlaceholder = placeholder;
       }
     },
 
     initializeSort() {
-      if (this.sortOptions) {
-        this.sortable = this.sortOptions.enabled;
-        this.defaultSortBy = this.sortOptions.initialSortBy;
+      const { enabled, initialSortBy } = this.sortOptions;
+
+      if (typeof enabled === 'boolean') {
+        this.sortable = enabled;
+      }
+
+      if (typeof initialSortBy === 'object') {
+        this.defaultSortBy = initialSortBy;
       }
     },
   },

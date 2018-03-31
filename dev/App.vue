@@ -22,10 +22,13 @@
       }"
       :paginationOptions="{
         enabled: true,
-        perPage: 5,
         position: 'bottom',
-        perPageDropdown: testing,
         dropdownAllowAll: true,
+        nextLabel: 'aage',
+        prevLabel: 'peechhe',
+        rowsPerPageLabel: 'Rows per page',
+        ofLabel: 'of',
+        allLabel: 'All',
       }"
       :searchOptions="{
         enabled: true,
