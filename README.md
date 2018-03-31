@@ -4,14 +4,18 @@
 [![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/releases)
 [![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
 
-A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc
+A simple, clean data table for VueJS with essential features like sorting, column filtering, pagination etc
 
+## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
-![Basic Screenshot](README/images/vgt-table.png)
+### Basic Screenshot
+![Basic Screenshot](README/images/vgt-table.regular.png)
+### Advanced Screenshot
+![Advanced Screenshot](README/images/vgt-table.advanced.png)
 
-## Demo
-
+## Recipes
+Some example recipes for inspiration 
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
 
 ## Table of contents
@@ -77,6 +81,9 @@ Vue.use(VueGoodTable);
     <vue-good-table
       :columns="columns"
       :rows="rows"
+      :search-options="{
+        enabled: true,
+      }"
       :pagination-options="{
         enabled: true,
         perPage: 5,
@@ -749,9 +756,9 @@ allows creating a dropdown for filter as opposed to an input
 
 ```javascript
 //array
-filterOptions: ['Blue', 'Red', 'Yellow']
+filterDropdownItems: ['Blue', 'Red', 'Yellow']
 //or
-filterOptions: [  
+filterDropdownItems: [  
   { value: 'n', text: 'Inactive' },  
   { value: 'y', text: 'Active' },  
   { value: 'c', text: 'Check' }  

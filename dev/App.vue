@@ -31,19 +31,18 @@
         allLabel: 'All',
       }"
       :searchOptions="{
-        enabled: true,
+        enabled: false,
         //trigger: 'enter',
         // externalQuery: searchQuery,
         // searchFn:
-        placeholder: 'My Search',
       }"
       :columns="columns"
       :rows="rows"
       :line-numbers="false">
-      <!-- <template slot="table-actions">
+      <template slot="table-actions">
         <button class="button">Hello</button>
         <button class="button">Hi</button>
-      </template> -->
+      </template>
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.field =='name'">
             <i class="fa fa-user"></i> {{props.column.label}}

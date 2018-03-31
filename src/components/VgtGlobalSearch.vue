@@ -35,7 +35,9 @@ export default {
   },
   computed: {
     showControlBar() {
-      return this.searchEnabled || !!this.$slots['internal-table-actions'];
+      if (this.searchEnabled) return true;
+      if (this.$slots && this.$slots['internal-table-actions']) return true;
+      return false;
     },
   },
   methods: {
