@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-beta.8
+ * vue-good-table v2.0.0-beta.9
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5649,7 +5649,9 @@ var VgtGlobalSearch = { render: function () {
   },
   computed: {
     showControlBar: function showControlBar() {
-      return this.searchEnabled || !!this.$slots['internal-table-actions'];
+      if (this.searchEnabled) { return true; }
+      if (this.$slots && this.$slots['internal-table-actions']) { return true; }
+      return false;
     }
   },
   methods: {
