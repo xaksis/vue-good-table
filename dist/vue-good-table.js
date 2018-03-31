@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-beta.7
+ * vue-good-table v2.0.0-beta.8
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10281,17 +10281,17 @@ var GoodTable = { render: function () {
           placeholder: 'Search Table'
         };
       }
-    },
-
-    // text options
-    nextText: { default: 'Next' },
-    prevText: { default: 'Prev' },
-    rowsPerPageText: { default: 'Rows per page' },
-    ofText: { default: 'of' },
-    allText: { default: 'All' }
+    }
   },
 
   data: function () { return ({
+    // text options
+    nextText: 'Next',
+    prevText: 'Prev',
+    rowsPerPageText: 'Rows per page',
+    ofText: 'of',
+    allText: 'All',
+
     // internal sort options
     sortable: true,
     defaultSortBy: null,
@@ -10842,29 +10842,99 @@ var GoodTable = { render: function () {
     },
 
     initializePagination: function initializePagination() {
-      if (this.paginationOptions) {
-        this.perPage = this.paginationOptions.perPage;
-        this.paginate = this.paginationOptions.enabled;
-        this.paginateOnTop = this.paginationOptions.position === 'top';
-        this.customRowsPerPageDropdown = this.paginationOptions.perPageDropdown;
-        this.paginateDropdownAllowAll = this.paginationOptions.dropdownAllowAll;
+      var ref = this.paginationOptions;
+      var enabled = ref.enabled;
+      var perPage = ref.perPage;
+      var position = ref.position;
+      var perPageDropdown = ref.perPageDropdown;
+      var dropdownAllowAll = ref.dropdownAllowAll;
+      var nextLabel = ref.nextLabel;
+      var prevLabel = ref.prevLabel;
+      var rowsPerPageLabel = ref.rowsPerPageLabel;
+      var ofLabel = ref.ofLabel;
+      var allLabel = ref.allLabel;
+
+      if (typeof enabled === 'boolean') {
+        this.paginate = enabled;
+      }
+
+      if (typeof perPage === 'number') {
+        this.perPage = perPage;
+      }
+
+      if (position === 'top') {
+        this.paginateOnTop = true; // default is false
+      }
+
+      if (Array.isArray(perPageDropdown) && perPageDropdown.length) {
+        this.customRowsPerPageDropdown = perPageDropdown;
+      }
+
+      if (typeof dropdownAllowAll === 'boolean') {
+        this.paginateDropdownAllowAll = dropdownAllowAll;
+      }
+
+      if (typeof nextLabel === 'string') {
+        this.nextText = nextLabel;
+      }
+
+      if (typeof prevLabel === 'string') {
+        this.prevText = prevLabel;
+      }
+
+      if (typeof rowsPerPageLabel === 'string') {
+        this.rowsPerPageText = rowsPerPageLabel;
+      }
+
+      if (typeof ofLabel === 'string') {
+        this.ofText = ofLabel;
+      }
+
+      if (typeof allLabel === 'string') {
+        this.allText = allLabel;
       }
     },
 
     initializeSearch: function initializeSearch() {
-      if (this.searchOptions) {
-        this.searchEnabled = this.searchOptions.enabled;
-        this.searchTrigger = this.searchOptions.trigger;
-        this.externalSearchQuery = this.searchOptions.externalQuery;
-        this.searchFn = this.searchOptions.searchFn;
-        this.searchPlaceholder = this.searchOptions.placeholder;
+      var ref = this.searchOptions;
+      var enabled = ref.enabled;
+      var trigger = ref.trigger;
+      var externalQuery = ref.externalQuery;
+      var searchFn = ref.searchFn;
+      var placeholder = ref.placeholder;
+
+      if (typeof enabled === 'boolean') {
+        this.searchEnabled = enabled;
+      }
+
+      if (trigger === 'enter') {
+        this.searchTrigger = trigger;
+      }
+
+      if (typeof externalQuery === 'string') {
+        this.externalSearchQuery = externalQuery;
+      }
+
+      if (typeof searchFn === 'function') {
+        this.searchFn = searchFn;
+      }
+
+      if (typeof placeholder === 'string') {
+        this.searchPlaceholder = placeholder;
       }
     },
 
     initializeSort: function initializeSort() {
-      if (this.sortOptions) {
-        this.sortable = this.sortOptions.enabled;
-        this.defaultSortBy = this.sortOptions.initialSortBy;
+      var ref = this.sortOptions;
+      var enabled = ref.enabled;
+      var initialSortBy = ref.initialSortBy;
+
+      if (typeof enabled === 'boolean') {
+        this.sortable = enabled;
+      }
+
+      if (typeof initialSortBy === 'object') {
+        this.defaultSortBy = initialSortBy;
       }
     }
   },
