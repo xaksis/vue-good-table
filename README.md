@@ -60,7 +60,7 @@ Some example recipes for inspiration
 
 Install with npm:
 ```bash
-npm install --save vue-good-table@beta
+npm install --save vue-good-table
 ```
 
 Import into project:
