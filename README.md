@@ -9,9 +9,9 @@ A simple, clean data table for VueJS with essential features like sorting, colum
 ## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
-### Basic Screenshot
+### Basic Table
 ![Basic Screenshot](README/images/vgt-table.regular.png)
-### Advanced Screenshot
+### Table with grouped rows and column filters
 ![Advanced Screenshot](README/images/vgt-table.advanced.png)
 
 ## Recipes
