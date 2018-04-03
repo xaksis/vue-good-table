@@ -24,6 +24,9 @@
   width: 100%;
   overflow-x: auto; }
 
+.vgt-text-disabled {
+  color: #909399; }
+
 table.vgt-table {
   border-collapse: collapse;
   background-color: transparent;
