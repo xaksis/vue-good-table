@@ -203,7 +203,7 @@ Set of options related to table sorting
   :columns="columns"
   :rows="rows"
   :sort-options="{
-  	enabled: true,
+    enabled: true,
     initialSortBy: {field: 'name', type: 'asc'}
   }">
 </vue-good-table>
@@ -216,7 +216,7 @@ Enable/disable sorting on table as a whole.
   :columns="columns"
   :rows="rows"
   :sort-options="{
-  	enabled: true,
+    enabled: true,
   }">
 </vue-good-table>
 ```
@@ -228,7 +228,7 @@ Allows specifying a default sort for the table on wakeup
   :columns="columns"
   :rows="rows"
   :sort-options="{
-  	enabled: true,
+    enabled: true,
     initialSortBy: {field: 'name', type: 'asc'}
   }">
 </vue-good-table>
@@ -271,7 +271,7 @@ Enable Pagination for table. By default the paginator is created at the bottom o
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true
+    enabled: true
   }">
 </vue-good-table>
 ```
@@ -283,7 +283,7 @@ Add pagination on top of the table (default position is bottom)
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     position: 'top'
   }">
 </vue-good-table>
@@ -296,7 +296,7 @@ Number of rows to show per page
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPage: 5
   }">
 </vue-good-table>
@@ -309,7 +309,7 @@ Customize the dropdown options for the amount of items per page
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPageDropdown: [3, 7, 9]
   }">
 </vue-good-table>
@@ -322,7 +322,7 @@ enables/disables 'All' in the per page dropdown.
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
   }">
@@ -336,7 +336,7 @@ you can change one or more of the texts shown on pagination by overriding the la
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     nextLabel: 'next',
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
@@ -354,7 +354,7 @@ Set of search related options. These options pertain to the global table search.
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     trigger: 'enter',
     searchFn: mySearchFn,
     placeholder: 'Search this table',
@@ -375,7 +375,7 @@ Allows a single search input for the whole table
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true
+    enabled: true
   }">
 </vue-good-table>
 ```
@@ -388,7 +388,7 @@ Allows you to specify if you want search to trigger on 'enter' event of the inpu
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     trigger: 'enter'
   }">
 </vue-good-table>
@@ -403,7 +403,7 @@ Allows you to specify your own search function for the global search
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     searchFn: myFunc
   }">
 </vue-good-table>
@@ -424,7 +424,7 @@ Text for global search input place holder
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     placeholder: 'Search this table',
   }">
 </vue-good-table>
@@ -440,7 +440,7 @@ If you want to use your own input for searching the table, you can use this prop
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     externalQuery: searchTerm
   }">
 </vue-good-table>
