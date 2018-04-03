@@ -113,11 +113,13 @@
               {{ collectFormatted(headerRow, column, true) }}
             </th>
           </tr>
-          <tr v-if="processedRows.length === 0">
+        </tbody>
+        <tbody v-if="!paginated.length">
+          <tr>
             <td :colspan="columns.length">
               <slot name="emptystate">
-                <div class="vgt-center-align text-disabled">
-                  No data for table.
+                <div class="vgt-center-align vgt-text-disabled">
+                  No data for table
                 </div>
               </slot>
             </td>

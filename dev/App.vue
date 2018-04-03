@@ -1,74 +1,18 @@
 <template>
   <div>
-    <button @click="addRow">Add Row</button>
-    <button @click="editRow">edit Row</button>
-    <button @click="addFilter">Add Filter</button>
-    <input type="text" v-model="searchQuery">
-    <vue-good-table
-      @on-per-page-change="onPerPageChange"
-      @on-page-change="onPageChange"
-      @on-column-filter="onColumnFilter"
-      @on-sort-change="onSortChange"
-      @on-search="onSearch"
-      @on-row-click="onRowClick"
-      :on-click="onRowClick"
-      style="margin-top: 30px"
-      styleClass="vgt-table bordered condensed"
-      mode=""
-      theme=""
-      :sort-options="{
-        enabled: true,
-        initialSortBy: {field: 'name', type: 'asc'},
-      }"
-      :paginationOptions="{
-        enabled: true,
-        position: 'bottom',
-        dropdownAllowAll: true,
-        nextLabel: 'aage',
-        prevLabel: 'peechhe',
-        rowsPerPageLabel: 'Rows per page',
-        ofLabel: 'of',
-        allLabel: 'All',
-      }"
-      :searchOptions="{
-        enabled: false,
-        //trigger: 'enter',
-        // externalQuery: searchQuery,
-        // searchFn:
-      }"
-      :columns="columns"
-      :rows="rows"
-      :line-numbers="false">
-      <template slot="table-actions">
-        <button class="button">Hello</button>
-        <button class="button">Hi</button>
-      </template>
-      <template slot="table-column" slot-scope="props">
-        <span v-if="props.column.field =='name'">
-            <i class="fa fa-user"></i> {{props.column.label}}
-        </span>
-        <span @click="sayHello()" v-else-if="props.column.field == 'joined'">
-            <i class="fa fa-calendar"></i> LaLa
-        </span>
-        <span v-else>
-            {{props.column.label}}
-        </span>
-      </template>
-      <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'age'">
-          age: {{props.row.age}}
-        </span>
-        <span v-else>
-          {{props.formattedRow[props.column.field]}}
-        </span>
-      </template>
-      <!-- <template slot="table-row-before" slot-scope="props">
-        <td><input type="checkbox" /></td>
-      </template> -->
-      <!-- <template slot="table-row-after" slot-scope="props">
-        <td><a class="button lightbox" :href="'test_detail.php?id=' + props.row.id" >detail</a></td>
-      </template> -->
-    </vue-good-table>
+    <p>
+      Scenario 1: If you click on "Auto filter name" and then Reset, it works. Then, uncoment the line 15, retry, it doesnt work. 
+    </p>
+    <p>
+      Scenario 2: Resetting by "=null" (uncomment line 16), autofilter Name + Reset => it works. However, Autofilter Age + Reset does not work
+    </p><br>
+  <a href="#" @click.stop="autofilter('name')">Auto filter Name</a>&nbsp;&nbsp;
+  <a href="#" @click.stop="autofilter('age')">Auto filter age</a>
+  &nbsp;&nbsp;
+  <a href="#" @click.stop="autofilter('reset')">Reset</a>
+  
+  <vue-good-table :columns="columns" :rows="rows">
+  </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
   </div>
@@ -89,62 +33,37 @@ export default {
       searchQuery: '',
       testing: [2, 7, 12],
       columns: [
-        // {
-        //   label: '',
-        //   sortable: false,
-        // },
         {
           label: 'Name',
           field: 'name',
-          type: 'text',
-          sortable: true,
-          sortFn: this.sortFn,
           filterOptions: {
             enabled: true,
-            placeholder: 'Filter Here',
-            filterDropdownItems: [
-              { value: 'Chris', text: 'Chris' },
-              { value: 'Jane', text: 'Jane' },
-              { value: 'Dan', text: 'Dan' },
-              { value: 'Susan', text: 'Susan' },
-              { value: 'John', text: 'John' },
-            ],
+            filterValue: null,
           },
         },
-        // {
-        //   label: 'Name2',
-        //   field: 'name',
-        //   type: 'text',
-        //   sortable: true,
-        //   sortFn: this.sortFn,
-        //   filterOptions: {
-        //     enabled: true,
-        //     placeholder: 'Filter name2',
-        //   }
-        // },
         {
           label: 'Age',
           field: 'age',
           type: 'number',
           filterOptions: {
-            enabled: false,
-            filterFn(data, filterString) {
-              const x = parseInt(filterString, 10);
-              return data >= x - 10 && data <= x + 10;
-            },
+            enabled: true,
+            filterDropdownItems: ['>30', '<=30'],
+            filterFn: this.filterAge,
+            filterValue: null,
           },
         },
         {
-          label: 'Joined On',
-          field: 'joined',
+          label: 'Created On',
+          field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYYMMDD',
-          dateOutputFormat: 'MMM Do YYYY',
+          dateInputFormat: 'YYYY-MM-DD',
+          dateOutputFormat: 'MMM Do YY',
         },
-        // {
-        //   label: '',
-        //   sortable: false,
-        // },
+        {
+          label: 'Percent',
+          field: 'score',
+          type: 'percentage',
+        },
       ],
       rows: [
         { name: 'John', age: 20, joined: '20120201' },
@@ -168,6 +87,30 @@ export default {
     };
   },
   methods: {
+    autofilter(type) {
+      if (type == 'name') {
+        this.columns[0].filterOptions.filterValue = 'John';
+      }
+      if (type == 'age') {
+        this.columns[1].filterOptions.filterValue = '>30';
+      }
+      if (type == 'reset') {
+        this.columns[0].filterOptions.filterValue = '';
+        this.columns[1].filterOptions.filterValue = '';
+        // this.columns[1].filterOptions.filterValue = null;
+      }
+    },
+
+    filterAge(data, filterString) {
+      if ((filterString === '>30') && (parseInt(data, 10) > 30)) {
+        return true;
+      }
+      if ((filterString === '<=30') && (parseInt(data, 10) <= 30)) {
+        return true
+      }
+      return false;
+    },
+
     onClick() {
       console.log('clicked');
     },
