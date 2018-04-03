@@ -250,7 +250,7 @@ A set of options that are related to table pagination. Each of these are optiona
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPage: 5,
     position: 'top',
     perPageDropdown: [3, 7, 9],
