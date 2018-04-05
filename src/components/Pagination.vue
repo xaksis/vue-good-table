@@ -87,8 +87,8 @@ export default {
 
       if (first > this.total) {
         // this probably happened as a result of filtering
-        this.currentPage = 1;
         first = 1;
+        this.currentPage = 1;
       }
 
       const last = Math.min(this.total, this.currentPerPage * this.currentPage);

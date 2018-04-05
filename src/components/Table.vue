@@ -2,11 +2,12 @@
   <div class="vgt-wrap" :class="{'rtl': rtl, 'nocturnal': theme==='nocturnal'}">
     <vue-good-pagination
       v-if="paginate && paginateOnTop"
+      ref="paginationTop"
+      @page-changed="pageChanged"
+      @per-page-changed="perPageChanged"
       :perPage="perPage"
       :rtl="rtl"
       :total="totalRows || totalRowCount"
-      @page-changed="pageChanged"
-      @per-page-changed="perPageChanged"
       :nextText="nextText"
       :prevText="prevText"
       :rowsPerPageText="rowsPerPageText"
@@ -129,11 +130,12 @@
     </div>
     <vue-good-pagination
       v-if="paginate && !paginateOnTop"
+      ref="paginationBottom"
+      @page-changed="pageChanged"
+      @per-page-changed="perPageChanged"
       :perPage="perPage"
       :rtl="rtl"
       :total="totalRows || totalRowCount"
-      @page-changed="pageChanged"
-      @per-page-changed="perPageChanged"
       :nextText="nextText"
       :prevText="prevText"
       :rowsPerPageText="rowsPerPageText"
@@ -359,6 +361,10 @@ export default {
     // or sort type changes
     //----------------------------------------
     processedRows() {
+      // every time we process rows, we want to set current page
+      // to 1
+      this.changePage(1);
+
       // we only process rows when mode is local
       let computedRows = this.filteredRows;
       if (this.mode === 'remote') {
@@ -555,6 +561,21 @@ export default {
   },
 
   methods: {
+    changePage(value) {
+      if (this.paginationOptions.enabled) {
+        let paginationWidget = this.$refs.paginationBottom;
+        if (this.paginationOptions.position === 'top') {
+          paginationWidget = this.$refs.paginationTop;
+        }
+        if (paginationWidget) {
+          paginationWidget.currentPage = value;
+          // we also need to set the currentPage
+          // for table.
+          this.currentPage = value;
+        }
+      }
+    },
+
     pageChangedEvent() {
       return {
         currentPage: this.currentPage,
@@ -800,6 +821,7 @@ export default {
         rowsPerPageLabel,
         ofLabel,
         allLabel,
+        setCurrentPage,
       } = this.paginationOptions;
 
       if (typeof enabled === 'boolean') {
@@ -840,6 +862,12 @@ export default {
 
       if (typeof allLabel === 'string') {
         this.allText = allLabel;
+      }
+
+      if (typeof setCurrentPage === 'number') {
+        setTimeout(() => {
+          this.changePage(setCurrentPage);
+        }, 500);
       }
     },
 

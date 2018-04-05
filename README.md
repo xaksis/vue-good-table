@@ -259,6 +259,7 @@ A set of options that are related to table pagination. Each of these are optiona
     position: 'top',
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
+    setCurrentPage: 2,
     nextLabel: 'next',
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
@@ -329,6 +330,20 @@ enables/disables 'All' in the per page dropdown.
     enabled: true,
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
+  }">
+</vue-good-table>
+```
+
+##### paginationOptions.setCurrentPage `Number`
+set current page programmatically. 
+> There's no validation for number of pages so please be careful using this.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginationOptions="{
+    enabled: true,
+    setCurrentPage: 2,
   }">
 </vue-good-table>
 ```

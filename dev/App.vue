@@ -1,18 +1,30 @@
 <template>
   <div>
     <p>
-      Scenario 1: If you click on "Auto filter name" and then Reset, it works. Then, uncoment the line 15, retry, it doesnt work. 
+      Scenario 1: If you click on "Auto filter name" and then
+      Reset, it works. Then, uncoment the line 15, retry, it doesnt work. 
     </p>
     <p>
-      Scenario 2: Resetting by "=null" (uncomment line 16), autofilter Name + Reset => it works. However, Autofilter Age + Reset does not work
+    Scenario 2: Resetting by "=null" (uncomment line 16),
+    autofilter Name + Reset => it works. However, Autofilter Age + Reset does not work
     </p><br>
   <a href="#" @click.stop="autofilter('name')">Auto filter Name</a>&nbsp;&nbsp;
   <a href="#" @click.stop="autofilter('age')">Auto filter age</a>
   &nbsp;&nbsp;
   <a href="#" @click.stop="autofilter('reset')">Reset</a>
-  
-  <vue-good-table :columns="columns" :rows="rows">
-  </vue-good-table>
+
+    <vue-good-table
+      :columns="columns"
+      :rows="rows"
+      :search-options="{
+        enabled: false,
+      }"
+      :pagination-options="{
+        enabled: true,
+        perPage: 2,
+        setCurrentPage: 1,
+      }">
+    </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
   </div>
@@ -65,25 +77,16 @@ export default {
           type: 'percentage',
         },
       ],
-      rows: [
-        { name: 'John', age: 20, joined: '20120201' },
-        { name: 'Jane', age: 24, joined: '20120305' },
-        { name: 'Susan', age: 16, joined: '20140823' },
-        { name: 'Chris', age: 55, joined: '20161109' },
-        { name: 'Dan', age: 40, joined: '20170612' },
-
-        { name: 'Jay', age: 20, joined: '20120201' },
-        { name: 'Seah', age: 25, joined: '20120305' },
-        { name: 'Sarah', age: 16, joined: '20140823' },
-        { name: 'Mohit', age: 55, joined: '20161109' },
-        { name: 'Don', age: 40, joined: '20170612' },
-
-        { name: 'Ernesto', age: 20, joined: '20120201' },
-        { name: 'Clark', age: 27, joined: '20120305' },
-        { name: 'Monty', age: 16, joined: '20140823' },
-        { name: 'Priya', age: 55, joined: '20161109' },
-        { name: 'Sans', age: 40, joined: '20170612' },
-      ],
+      rows:  [
+      { id:1, name:"John", age: 20, createdAt: '201-10-31:9: 35 am',score: 0.03343 },
+      { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
+      { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
+      { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
+      { id:5, name:"Dan", age: 40, createdAt: '2011-10-21', score: 0.03343 },
+      { id:6, name:"John", age: 20, createdAt: '2011-10-31', score: 0.03343 },
+      { id:7, name:"Jane", age: 24, createdAt: '2013-09-21' },
+      { id:8, name:"Susan", age: 16, createdAt: '2013-10-31', score: 0.03343 },
+    ],
     };
   },
   methods: {
