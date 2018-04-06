@@ -6,11 +6,11 @@
         autocomplete="off"
         name="perPageSelect"
         class="footer__row-count__select"
+        v-model="currentPerPage"
         @change="perPageChanged">
         <option
           v-for="(option, idx) in getRowsPerPageDropdown()"
           v-bind:key="'rows-dropdown-option-' + idx"
-          :selected="option === currentPerPage"
           :value="option">
           {{ option }}
         </option>
