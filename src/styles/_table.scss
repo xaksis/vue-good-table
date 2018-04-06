@@ -1,0 +1,20 @@
+table.vgt-table{
+  border-collapse: collapse;
+  background-color: transparent;
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto;
+  border: 1px solid $border-color;
+  & td {
+    padding: .75rem .75rem .75rem .75rem;
+    vertical-align: top;
+    border-bottom:  1px solid $border-color;
+    color: $text-color;
+  }
+  & tr.clickable {
+    cursor: pointer;
+    &:hover{
+      background-color: $highlight-color;
+    }
+  }
+}

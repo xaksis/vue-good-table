@@ -1,0 +1,18 @@
+.vgt-wrap.rtl{
+  direction: rtl;
+
+  .vgt-table{
+    td, th:not(.line-numbers) {
+      padding: .75rem .75rem .75rem 1.5rem;
+    }
+    thead th, &.condensed thead th {
+      padding-left:  1.5rem;
+      padding-right:  .75rem;
+    }
+    th.sorting:after,
+    th.sorting-asc:after{
+      margin-right:  5px;
+      margin-left:  0px;
+    }
+  }
+}

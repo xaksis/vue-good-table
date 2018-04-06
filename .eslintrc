@@ -1,0 +1,28 @@
+{
+  "extends": [
+    "airbnb",
+    "plugin:vue/base"
+  ],
+  "rules": {
+    "func-names": ["error", "never"],
+    "no-shadow": "off",
+    "no-unused-vars": "off",
+    "consistent-return": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "no-continue": "off",
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never"
+    }]
+  },
+  "globals": {
+    "_": false,
+    "moment": false
+  }
+}
