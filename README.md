@@ -6,7 +6,7 @@
 
 A simple, clean data table for VueJS with essential features like sorting, column filtering, pagination etc
 
-Is vue-good-table helping you? Help me continue working on it. Thank you so much for your support!
+Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
 
 <a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
