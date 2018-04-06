@@ -2,11 +2,15 @@
   <div class="vgt-wrap__footer vgt-clearfix">
     <div class="footer__row-count vgt-pull-left">
       <span class="footer__row-count__label">{{rowsPerPageText}}</span>
-      <select name="perPageSelect" class="footer__row-count__select" @change="perPageChanged">
+      <select
+        autocomplete="off"
+        name="perPageSelect"
+        class="footer__row-count__select"
+        @change="perPageChanged">
         <option
           v-for="(option, idx) in getRowsPerPageDropdown()"
           v-bind:key="'rows-dropdown-option-' + idx"
-          :selected="optionSelected(option)"
+          :selected="option === currentPerPage"
           :value="option">
           {{ option }}
         </option>
@@ -103,9 +107,9 @@ export default {
   },
 
   methods: {
-    optionSelected(option) {
-      return this.currentPerPage === option ? 'selected' : false;
-    },
+    // optionSelected(option) {
+    //   return this.currentPerPage === option;
+    // },
 
     reset() {
 
