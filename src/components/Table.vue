@@ -98,12 +98,12 @@
             <td :colspan="columns.length">
               <slot name="loading">
                 <div class="center-align text-disabled">
-                  Loading ...
+                  {{ loadingText }}
                 </div>
               </slot>
             </td>
           </tr>
-          <tr 
+          <tr
             v-else
             v-for="(row, index) in paginated"
             :key="index"
@@ -186,7 +186,8 @@
       globalSearchPlaceholder: {default: 'Search Table'},
 
       // state
-      loading: {default: false, type: Boolean}
+      loading: {default: false, type: Boolean},
+      loadingText: {default: 'Loading...'},
 
       nextText: {default: 'Next'},
       prevText: {default: 'Prev'},
