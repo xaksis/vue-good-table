@@ -391,20 +391,10 @@ export default {
                   return false; // break the loop
                 }
               } else {
-                // lets get the formatted row/col value
-                let tableValue = this.collectFormatted(row, col);
-                if (typeof tableValue !== 'undefined' && tableValue !== null) {
-                  // table value
-                  tableValue = diacriticless(String(tableValue).toLowerCase());
-
-                  // search term
-                  const searchTerm = diacriticless(this.searchTerm.toLowerCase());
-
-                  // comparison
-                  if (tableValue.search(searchTerm) > -1) {
-                    filteredRows.push(row);
-                    return false; // break loop
-                  }
+                // comparison
+                if (defaultType.filterPredicate(this.collectFormatted(row, col), this.searchTerm)) {
+                  filteredRows.push(row);
+                  return false; // break loop
                 }
               }
             }
