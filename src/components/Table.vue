@@ -727,14 +727,14 @@ export default {
                 if (col.filterOptions
                   && typeof col.filterOptions.filterFn === 'function') {
                   return col.filterOptions.filterFn(
-                    this.collect(row, col.field),
+                    this.collectFormatted(row, col),
                     this.columnFilters[col.field]
                   );
                 }
                 // Otherwise Use default filters
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
-                  this.collect(row, col.field),
+                  this.collectFormatted(row, col),
                   this.columnFilters[col.field]
                 );
               });
