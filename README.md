@@ -489,9 +489,19 @@ Object containing select options
   :columns="columns"
   :rows="rows"
   :select-options="{
-    enabled: true
+    enabled: true,
+    selectionInfoClass: 'custom-class',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
   }">
  ```
+
+ you can also programmatically get selected rows at any time by putting a `ref` on the table and then doing
+ 
+ ```html
+ this.$refs['my-table'].selectedRows;
+ ```
+
 Check out [a working example](https://jsfiddle.net/aks9800/keLjcssn/) for details
 
 
