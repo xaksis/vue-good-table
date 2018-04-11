@@ -1,5 +1,5 @@
 /**
- * vue-good-table v1.20.0
+ * vue-good-table v1.20.1
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
  */
@@ -5793,7 +5793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return first + ' - ' + last + ' ' + this.ofText + ' ' + this.total;
     },
     nextIsPossible: function nextIsPossible() {
-      return this.total > this.currentPerPage * this.currentPage;
+      return this.currentPerPage === -1 ? false : this.total > this.currentPerPage * this.currentPage;
     },
     prevIsPossible: function prevIsPossible() {
       return this.currentPage > 1;
@@ -7151,7 +7151,7 @@ exports = module.exports = __webpack_require__(51)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Utility styles\n************************************************/\n.right-align[data-v-a440e668]{\n  text-align: right;\n}\n.left-align[data-v-a440e668]{\n  text-align: left;\n}\n.center-align[data-v-a440e668]{\n  text-align: center;\n}\n.pull-left[data-v-a440e668]{\n  float:  left !important;\n}\n.pull-right[data-v-a440e668]{\n  float:  right !important;\n}\n.clearfix[data-v-a440e668]::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n\n/* Table footer specific styles\n************************************************/\n.table-footer[data-v-a440e668]{\n  /* background-color: rgba(35,41,53, 0.03); */\n  background-color: rgba(35,41,53,0.05);\n  border: 1px solid #DDD;\n  margin:  0;\n  padding:  1rem;\n  font-size: 14px;\n  color:  rgba(0, 0, 0, 0.44);\n}\n.table-footer>div[data-v-a440e668]{\n  display: inline-block;\n}\n.pagination-controls>*[data-v-a440e668]{\n  display: inline-block;\n}\n.pagination-controls a[data-v-a440e668]{\n  text-decoration: none;\n  color: rgba(0, 0, 0, 0.66);\n  font-size: 14px;\n  font-weight: 600;\n  opacity: 0.8;\n}\n.pagination-controls a.disabled[data-v-a440e668],\n.pagination-controls a.disabled[data-v-a440e668]:hover {\n  cursor: not-allowed;\n  opacity: 0.4;\n}\n.pagination-controls a[data-v-a440e668]:hover{\n  opacity: 1;\n}\n.pagination-controls a span[data-v-a440e668]{\n  display: inline-block;\n  vertical-align: middle;\n}\n.pagination-controls .info[data-v-a440e668]{\n  margin:  0px 15px;\n  font-size: 13px;\n  font-weight: bold;\n  color:  rgba(0, 0, 0, 0.40);\n}\n.pagination-controls a .chevron[data-v-a440e668]{\n  width:  24px;\n  height:  24px;\n  border-radius: 15%;\n  /* border:  1px solid rgba(35,41,53,0.2);\n  background-color: #fff; */\n  position:  relative;\n  margin:  0px 8px;\n}\n.pagination-controls .chevron[data-v-a440e668]::after{\n  content:  '';\n  position:  absolute;\n  display:  block;\n  left:  50%;\n  top:  50%;\n  margin-top:  -6px;\n  border-top: 6px solid transparent;\n  border-bottom: 6px solid transparent;\n}\n.pagination-controls .chevron.left[data-v-a440e668]::after{\n  border-right:  6px solid rgba(0, 0, 0, 0.66);\n  margin-left:  -3px;\n}\n.pagination-controls .chevron.right[data-v-a440e668]::after{\n  border-left:  6px solid rgba(0, 0, 0, 0.66);\n  margin-left:  -3px;\n}\n.table-footer select[data-v-a440e668] {\n  display: inline-block;\n  background-color: transparent;\n  width: auto;\n  padding: 0;\n  border: 0;\n  border-radius: 0;\n  height: auto;\n  font-size: 14px;\n  margin-left: 8px;\n  color:  rgba(0, 0, 0, 0.55);\n  font-weight: bold;\n}\n.table-footer .perpage-count[data-v-a440e668]{\n  color:  rgba(0, 0, 0, 0.55);\n  font-weight: bold;\n}\n@media only screen and (max-width: 750px) {\n  /* on small screens hide the info */\n.pagination-controls .info[data-v-a440e668]{\n    display:  none;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Utility styles\n************************************************/\n.right-align[data-v-a440e668]{\n  text-align: right;\n}\n.left-align[data-v-a440e668]{\n  text-align: left;\n}\n.center-align[data-v-a440e668]{\n  text-align: center;\n}\n.pull-left[data-v-a440e668]{\n  float:  left !important;\n}\n.pull-right[data-v-a440e668]{\n  float:  right !important;\n}\n.clearfix[data-v-a440e668]::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n\n/* Table footer specific styles\n************************************************/\n.table-footer[data-v-a440e668]{\n  /* background-color: rgba(35,41,53, 0.03); */\n  background-color: rgba(35,41,53,0.05);\n  border: 1px solid #DDD;\n  margin:  0;\n  padding:  1rem;\n  font-size: 14px;\n  color:  rgba(0, 0, 0, 0.44);\n}\n.table-footer>div[data-v-a440e668]{\n  display: inline-block;\n}\n.pagination-controls>*[data-v-a440e668]{\n  display: inline-block;\n}\n.pagination-controls a[data-v-a440e668]{\n  text-decoration: none;\n  color: rgba(0, 0, 0, 0.66);\n  font-size: 14px;\n  font-weight: 600;\n  opacity: 0.8;\n}\n.pagination-controls a.disabled[data-v-a440e668],\n.pagination-controls a.disabled[data-v-a440e668]:hover {\n  cursor: not-allowed;\n  opacity: 0.4;\n}\n.pagination-controls a[data-v-a440e668]:hover{\n  opacity: 1;\n}\n.pagination-controls a span[data-v-a440e668]{\n  display: inline-block;\n  vertical-align: middle;\n}\n.pagination-controls .info[data-v-a440e668]{\n  margin:  0px 15px;\n  font-size: 13px;\n  font-weight: bold;\n  color:  rgba(0, 0, 0, 0.40);\n}\n.pagination-controls a .chevron[data-v-a440e668]{\n  width:  24px;\n  height:  24px;\n  border-radius: 15%;\n  /* border:  1px solid rgba(35,41,53,0.2);\n  background-color: #fff; */\n  position:  relative;\n  margin:  0px 8px;\n}\n.pagination-controls .chevron[data-v-a440e668]::after{\n  content:  '';\n  position:  absolute;\n  display:  block;\n  left:  50%;\n  top:  50%;\n  margin-top:  -6px;\n  border-top: 6px solid transparent;\n  border-bottom: 6px solid transparent;\n}\n.pagination-controls .chevron.left[data-v-a440e668]::after{\n  border-right:  6px solid rgba(0, 0, 0, 0.66);\n  margin-left:  -3px;\n}\n.pagination-controls .chevron.right[data-v-a440e668]::after{\n  border-left:  6px solid rgba(0, 0, 0, 0.66);\n  margin-left:  -3px;\n}\n.table-footer select[data-v-a440e668] {\n  display: inline-block;\n  background-color: transparent;\n  width: auto;\n  padding: 0;\n  border: 0;\n  border-radius: 0;\n  height: auto;\n  font-size: 14px;\n  margin-left: 8px;\n  color:  rgba(0, 0, 0, 0.55);\n  font-weight: bold;\n}\n.table-footer .perpage-count[data-v-a440e668]{\n  color:  rgba(0, 0, 0, 0.55);\n  font-weight: bold;\n}\n@media only screen and (max-width: 750px) {\n  /* on small screens hide the info */\n.pagination-controls .info[data-v-a440e668]{\n    display:  none;\n}\n}\n", ""]);
 
 // exports
 
@@ -14668,7 +14668,7 @@ var Component = __webpack_require__(84)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/akshay/Projects/learn/vue/plugins/vue-good-table/src/components/Pagination.vue"
+Component.options.__file = "/Users/akshay/Projects/learn/vue/plugins/vue-good-table-v1/vue-good-table/src/components/Pagination.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Pagination.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14712,7 +14712,7 @@ var Component = __webpack_require__(84)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/akshay/Projects/learn/vue/plugins/vue-good-table/src/components/Table.vue"
+Component.options.__file = "/Users/akshay/Projects/learn/vue/plugins/vue-good-table-v1/vue-good-table/src/components/Table.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Table.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -14927,7 +14927,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": _vm.columnFilters[column.field]
       },
       on: {
-        "input": function($event) {
+        "change": function($event) {
           _vm.updateFilters(column, $event.target.value)
         }
       }
@@ -14948,7 +14948,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": _vm.columnFilters[column.field]
       },
       on: {
-        "input": function($event) {
+        "change": function($event) {
           _vm.updateFilters(column, $event.target.value)
         }
       }
