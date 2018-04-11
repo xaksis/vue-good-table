@@ -17,6 +17,7 @@
       :allText="allText"></vue-good-pagination>
 
     <vgt-global-search
+      @on-keyup="searchTable"
       @on-enter="searchTable"
       v-model="globalSearchTerm"
       :search-enabled="searchEnabled && externalSearchQuery == null"
@@ -425,7 +426,6 @@ export default {
         // every time we search rows, we want to set current page
         // to 1
         this.changePage(1);
-        this.unselectAll();
         // here also we need to de-construct and then
         // re-construct the rows, lets see.
         const allRows = [];
@@ -499,7 +499,6 @@ export default {
         (this.searchTrigger !== 'enter' || this.sortChanged)) {
         // every time we change sort we need to reset to page 1
         this.changePage(1);
-        this.unselectAll();
         this.sortChanged = false;
 
         each(computedRows, (cRows) => {
@@ -630,7 +629,7 @@ export default {
 
     unselectAllInternal() {
       this.emitSelectNone();
-      each(this.paginated, (headerRow, i) => {
+      each(this.originalRows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
           this.$set(row, 'vgtSelected', false);
         });
@@ -718,6 +717,8 @@ export default {
         columnIndex: this.sortColumn,
       });
 
+      this.unselectAll();
+
       // if the mode is remote, we don't need to do anything
       // after this.
       if (this.mode === 'remote') return;
@@ -738,6 +739,7 @@ export default {
     },
 
     searchTable() {
+      this.unselectAll();
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.

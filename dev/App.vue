@@ -15,7 +15,7 @@
         enabled: true,
       }"
       :search-options="{
-        enabled: false,
+        enabled: true,
       }"
       :pagination-options="{
         enabled: true,
