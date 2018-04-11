@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.1.0
+ * vue-good-table v2.1.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5666,6 +5666,7 @@ var VgtGlobalSearch = { render: function () {
   methods: {
     updateValue: function updateValue(value) {
       this.$emit('input', value);
+      this.$emit('on-keyup', value);
     },
     entered: function entered(value) {
       this.$emit('on-enter', value);
@@ -10221,7 +10222,7 @@ lodash_foreach(Object.keys(coreDataTypes), function (key) {
 });
 
 var GoodTable = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.searchTable, "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
           _vm.globalSearchTerm = $$v;
         }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', { staticClass: "vgt-checkbox-col" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.allSelected, expression: "allSelected" }], attrs: { "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.allSelected) ? _vm._i(_vm.allSelected, null) > -1 : _vm.allSelected }, on: { "change": [function ($event) {
           var $$a = _vm.allSelected,
@@ -10492,7 +10493,6 @@ var GoodTable = { render: function () {
         // every time we search rows, we want to set current page
         // to 1
         this.changePage(1);
-        this.unselectAll();
         // here also we need to de-construct and then
         // re-construct the rows, lets see.
         var allRows = [];
@@ -10560,7 +10560,6 @@ var GoodTable = { render: function () {
       this.searchTrigger !== 'enter' || this.sortChanged)) {
         // every time we change sort we need to reset to page 1
         this.changePage(1);
-        this.unselectAll();
         this.sortChanged = false;
 
         lodash_foreach(computedRows, function (cRows) {
@@ -10695,7 +10694,7 @@ var GoodTable = { render: function () {
       var this$1 = this;
 
       this.emitSelectNone();
-      lodash_foreach(this.paginated, function (headerRow, i) {
+      lodash_foreach(this.originalRows, function (headerRow, i) {
         lodash_foreach(headerRow.children, function (row, j) {
           this$1.$set(row, 'vgtSelected', false);
         });
@@ -10785,6 +10784,8 @@ var GoodTable = { render: function () {
         columnIndex: this.sortColumn
       });
 
+      this.unselectAll();
+
       // if the mode is remote, we don't need to do anything
       // after this.
       if (this.mode === 'remote') { return; }
@@ -10805,6 +10806,7 @@ var GoodTable = { render: function () {
     },
 
     searchTable: function searchTable() {
+      this.unselectAll();
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.
