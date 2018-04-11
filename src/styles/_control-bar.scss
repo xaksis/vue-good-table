@@ -48,3 +48,19 @@
 .vgt-global-search__actions{
   margin-left: 10px;
 }
+
+.vgt-selection-info-row{
+  background: $notify-bg-color;
+  padding: 5px 16px;
+  font-size: 13px;
+  border-top:  1px solid $border-color;
+  border-left:  1px solid $border-color;
+  border-right:  1px solid $border-color;
+  color: lighten($notify-fg-color, 10%);
+  font-weight: bold;
+  a{
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+  }
+}

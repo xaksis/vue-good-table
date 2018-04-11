@@ -27,7 +27,19 @@
         </slot>
       </template>
     </vgt-global-search>
-
+    <div v-if="selectedRowCount"
+      class="vgt-selection-info-row clearfix"
+      :class="selectionInfoClass">
+      {{selectionInfo}}
+      <a href=""
+      @click.prevent="unselectAll(); unselectAllInternal()">
+        {{clearSelectionText}}
+      </a>
+      <div class="vgt-selection-info-row__actions vgt-pull-right">
+        <slot name="selected-row-actions">
+        </slot>
+      </div>
+    </div>
     <div :class="{'vgt-responsive': responsive}">
       <table ref="table" :class="tableStyleClasses">
         <thead>
@@ -219,6 +231,9 @@ export default {
       default() {
         return {
           enabled: false,
+          selectionInfoClass: '',
+          selectionText: 'rows selected',
+          clearSelectionText: 'clear',
         };
       },
     },
@@ -269,7 +284,9 @@ export default {
 
     // internal select options
     selectable: false,
-    selectAllMode: 'visible',
+    selectionInfoClass: '',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
 
     // internal sort options
     sortable: true,
@@ -346,6 +363,26 @@ export default {
   },
 
   computed: {
+    selectionInfo() {
+      return `${this.selectedRowCount} ${this.selectionText}`;
+    },
+
+    selectedRowCount() {
+      return this.selectedRows.length;
+    },
+
+    selectedRows() {
+      const selectedRows = [];
+      each(this.processedRows, (headerRow) => {
+        each(headerRow.children, (row) => {
+          if (row.vgtSelected) {
+            selectedRows.push(row);
+          }
+        });
+      });
+      return selectedRows;
+    },
+
     fullColspan() {
       let fullColspan = this.columns.length;
       if (this.lineNumbers) fullColspan++;
@@ -423,9 +460,6 @@ export default {
 
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
-        // every time we search rows, we want to set current page
-        // to 1
-        this.changePage(1);
         // here also we need to de-construct and then
         // re-construct the rows, lets see.
         const allRows = [];
@@ -497,8 +531,6 @@ export default {
         // if search trigger is enter then we only sort
         // when enter is hit
         (this.searchTrigger !== 'enter' || this.sortChanged)) {
-        // every time we change sort we need to reset to page 1
-        this.changePage(1);
         this.sortChanged = false;
 
         each(computedRows, (cRows) => {
@@ -639,7 +671,7 @@ export default {
     unselectAll() {
       if (this.selectable && this.allSelected) {
         this.allSelected = false;
-        this.unselectAllInternal();
+        // this.unselectAllInternal();
       }
     },
 
@@ -718,6 +750,8 @@ export default {
       });
 
       this.unselectAll();
+      // every time we change sort we need to reset to page 1
+      this.changePage(1);
 
       // if the mode is remote, we don't need to do anything
       // after this.
@@ -730,6 +764,11 @@ export default {
       if (this.selectable) {
         selected = !row.vgtSelected;
         this.$set(row, 'vgtSelected', selected);
+        if (!selected) {
+          // if we're unselecting a row, we need to unselect
+          // selectall
+          this.unselectAll();
+        }
       }
       this.$emit('on-row-click', {
         row,
@@ -740,6 +779,9 @@ export default {
 
     searchTable() {
       this.unselectAll();
+      this.unselectAllInternal();
+      // every time we searchTable
+      this.changePage(1);
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.
@@ -1033,14 +1075,27 @@ export default {
     },
 
     initializeSelect() {
-      const { enabled, selectAllMode } = this.selectOptions;
+      const {
+        enabled,
+        selectionInfoClass,
+        selectionText,
+        clearSelectionText,
+      } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
         this.selectable = enabled;
       }
 
-      if (typeof selectAllMode === 'string') {
-        this.selectAllMode = selectAllMode;
+      if (typeof selectionInfoClass === 'string') {
+        this.selectionInfoClass = selectionInfoClass;
+      }
+
+      if (typeof selectionText === 'string') {
+        this.selectionText = selectionText;
+      }
+
+      if (typeof clearSelectionText === 'string') {
+        this.clearSelectionText = clearSelectionText;
       }
     },
   },
