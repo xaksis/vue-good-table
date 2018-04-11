@@ -190,6 +190,20 @@ table.vgt-table {
 .vgt-global-search__actions {
   margin-left: 10px; }
 
+.vgt-selection-info-row {
+  background: #fdf9e8;
+  padding: 5px 16px;
+  font-size: 13px;
+  border-top: 1px solid #DCDFE6;
+  border-left: 1px solid #DCDFE6;
+  border-right: 1px solid #DCDFE6;
+  color: #d3aa3b;
+  font-weight: bold; }
+  .vgt-selection-info-row a {
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px; }
+
 .vgt-wrap__footer {
   color: #606266;
   padding: 1rem;

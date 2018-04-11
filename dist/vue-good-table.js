@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.1.1
+ * vue-good-table v2.2.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10224,7 +10224,9 @@ lodash_foreach(Object.keys(coreDataTypes), function (key) {
 var GoodTable = { render: function () {
     var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.searchTable, "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
           _vm.globalSearchTerm = $$v;
-        }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', { staticClass: "vgt-checkbox-col" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.allSelected, expression: "allSelected" }], attrs: { "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.allSelected) ? _vm._i(_vm.allSelected, null) > -1 : _vm.allSelected }, on: { "change": [function ($event) {
+        }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount ? _c('div', { staticClass: "vgt-selection-info-row clearfix", class: _vm.selectionInfoClass }, [_vm._v(" " + _vm._s(_vm.selectionInfo) + " "), _c('a', { attrs: { "href": "" }, on: { "click": function ($event) {
+          $event.preventDefault();_vm.unselectAll();_vm.unselectAllInternal();
+        } } }, [_vm._v(" " + _vm._s(_vm.clearSelectionText) + " ")]), _vm._v(" "), _c('div', { staticClass: "vgt-selection-info-row__actions vgt-pull-right" }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', { staticClass: "vgt-checkbox-col" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.allSelected, expression: "allSelected" }], attrs: { "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.allSelected) ? _vm._i(_vm.allSelected, null) > -1 : _vm.allSelected }, on: { "change": [function ($event) {
           var $$a = _vm.allSelected,
               $$el = $event.target,
               $$c = $$el.checked ? true : false;if (Array.isArray($$a)) {
@@ -10292,7 +10294,10 @@ var GoodTable = { render: function () {
     selectOptions: {
       default: function default$2() {
         return {
-          enabled: false
+          enabled: false,
+          selectionInfoClass: '',
+          selectionText: 'rows selected',
+          clearSelectionText: 'clear'
         };
       }
     },
@@ -10343,7 +10348,9 @@ var GoodTable = { render: function () {
 
     // internal select options
     selectable: false,
-    selectAllMode: 'visible',
+    selectionInfoClass: '',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
 
     // internal sort options
     sortable: true,
@@ -10420,6 +10427,26 @@ var GoodTable = { render: function () {
   },
 
   computed: {
+    selectionInfo: function selectionInfo() {
+      return ((this.selectedRowCount) + " " + (this.selectionText));
+    },
+
+    selectedRowCount: function selectedRowCount() {
+      return this.selectedRows.length;
+    },
+
+    selectedRows: function selectedRows() {
+      var selectedRows = [];
+      lodash_foreach(this.processedRows, function (headerRow) {
+        lodash_foreach(headerRow.children, function (row) {
+          if (row.vgtSelected) {
+            selectedRows.push(row);
+          }
+        });
+      });
+      return selectedRows;
+    },
+
     fullColspan: function fullColspan() {
       var fullColspan = this.columns.length;
       if (this.lineNumbers) { fullColspan++; }
@@ -10490,9 +10517,6 @@ var GoodTable = { render: function () {
 
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
-        // every time we search rows, we want to set current page
-        // to 1
-        this.changePage(1);
         // here also we need to de-construct and then
         // re-construct the rows, lets see.
         var allRows = [];
@@ -10558,8 +10582,6 @@ var GoodTable = { render: function () {
       // if search trigger is enter then we only sort
       // when enter is hit
       this.searchTrigger !== 'enter' || this.sortChanged)) {
-        // every time we change sort we need to reset to page 1
-        this.changePage(1);
         this.sortChanged = false;
 
         lodash_foreach(computedRows, function (cRows) {
@@ -10704,7 +10726,7 @@ var GoodTable = { render: function () {
     unselectAll: function unselectAll() {
       if (this.selectable && this.allSelected) {
         this.allSelected = false;
-        this.unselectAllInternal();
+        // this.unselectAllInternal();
       }
     },
 
@@ -10785,6 +10807,8 @@ var GoodTable = { render: function () {
       });
 
       this.unselectAll();
+      // every time we change sort we need to reset to page 1
+      this.changePage(1);
 
       // if the mode is remote, we don't need to do anything
       // after this.
@@ -10797,6 +10821,11 @@ var GoodTable = { render: function () {
       if (this.selectable) {
         selected = !row.vgtSelected;
         this.$set(row, 'vgtSelected', selected);
+        if (!selected) {
+          // if we're unselecting a row, we need to unselect
+          // selectall
+          this.unselectAll();
+        }
       }
       this.$emit('on-row-click', {
         row: row,
@@ -10807,6 +10836,9 @@ var GoodTable = { render: function () {
 
     searchTable: function searchTable() {
       this.unselectAll();
+      this.unselectAllInternal();
+      // every time we searchTable
+      this.changePage(1);
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.
@@ -11109,14 +11141,24 @@ var GoodTable = { render: function () {
     initializeSelect: function initializeSelect() {
       var ref = this.selectOptions;
       var enabled = ref.enabled;
-      var selectAllMode = ref.selectAllMode;
+      var selectionInfoClass = ref.selectionInfoClass;
+      var selectionText = ref.selectionText;
+      var clearSelectionText = ref.clearSelectionText;
 
       if (typeof enabled === 'boolean') {
         this.selectable = enabled;
       }
 
-      if (typeof selectAllMode === 'string') {
-        this.selectAllMode = selectAllMode;
+      if (typeof selectionInfoClass === 'string') {
+        this.selectionInfoClass = selectionInfoClass;
+      }
+
+      if (typeof selectionText === 'string') {
+        this.selectionText = selectionText;
+      }
+
+      if (typeof clearSelectionText === 'string') {
+        this.clearSelectionText = clearSelectionText;
       }
     }
   },
