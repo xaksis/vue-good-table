@@ -12,7 +12,7 @@
       @on-select-all="onSelectAll"
       @on-row-click="selectRow"
       :select-options="{
-        enabled: true,
+        enabled: false,
       }"
       :search-options="{
         enabled: true,
