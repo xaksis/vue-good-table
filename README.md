@@ -53,6 +53,7 @@ Some example recipes for inspiration
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
   - [Grouped Rows](#grouped-rows)
+  - [Table Actions Slot](#table-actions-slot)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
 - [License](#license)
@@ -931,6 +932,20 @@ rows: [{
 
 you can check out some live examples on the recipes page: 
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
+
+
+### Table Actions Slot
+If you want to add table specific actions like a print button for example, you can use the Table Actions Slot. If you have global search enabled, the action panel will show up to the right of that.
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <div slot="table-actions">
+    This will show up on the top right of the table. 
+  </div>
+</vue-good-table>
+```
 
 
 ### Empty state slot

@@ -22,6 +22,9 @@
         perPage: 3,
         setCurrentPage: 1,
       }">
+      <div slot="table-actions">
+        This will show up on the top right of the table
+      </div>
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
