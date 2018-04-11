@@ -3,7 +3,7 @@ import number from './number';
 
 const percentage = clone(number);
 
-percentage.format = function formatPercent(v) {
+percentage.format = function (v) {
   return `${parseFloat(v * 100).toFixed(2)}%`;
 };
 

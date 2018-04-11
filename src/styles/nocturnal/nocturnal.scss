@@ -1,0 +1,110 @@
+@import './overrides';
+// suggested by wifey
+.vgt-table.nocturnal{
+  border: 1px solid $border-color;
+  background-color: $table-bg;
+
+  & tr.clickable {
+    &:hover{
+      background-color: $highlight-color;
+    }
+  }
+
+  // td
+  & td {
+    border-bottom:  1px solid $border-color;
+    color: $text-color;
+  }
+
+  //th
+  & th.line-numbers {
+    color: $text-color;
+    border-right: 1px solid $border-color;
+    background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
+  }
+  thead th{
+    color: $text-color;
+    border-bottom:  1px solid $border-color;
+    background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
+    &.sorting-asc, &.sorting-desc {
+      color: darken($text-color, 15%);
+    }
+  }
+  
+  //bordered
+  &.bordered td, &.bordered th {
+      border: 1px solid $border-color;
+  }
+
+  //input
+  .vgt-input, .vgt-select{
+    color: $text-color;
+    background-color: darken($thead-bg-color-2, 5%);
+    border: 1px solid $input-border-color;
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: $text-color;
+      opacity: 0.3; /* Firefox */
+    }
+  }
+}
+
+.vgt-wrap.nocturnal{
+  .vgt-wrap__footer{
+    color: $text-color;
+    border: 1px solid $border-color;
+    background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
+    .footer__row-count{
+      &__label{
+        color: $secondary-text-color;
+      }
+      &__select{
+        color:  $text-color;
+        &:focus{
+          border-color: $link-color;
+        }
+      }
+    }
+    .footer__navigation{
+      &__page-btn{
+        color: $text-color;
+        &.disabled,
+        &.disabled:hover {
+          .chevron.left:after{
+            border-right-color: $text-color;
+          }
+          .chevron.right:after{
+            border-left-color: $text-color;
+          }
+        }
+      }
+      &__info{
+        color: $secondary-text-color;
+      }
+    }
+  }
+
+  // control bar
+  .vgt-global-search{
+    border:  1px solid $border-color;
+    background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
+  }
+  .vgt-global-search__input{
+    .input__icon{
+      .magnifying-glass{
+        border: 2px solid darken($border-color, 2%);
+        &:before{
+          background: darken($border-color, 2%);
+        }
+      }
+    }
+    .vgt-input, .vgt-select{
+      color: $text-color;
+      background-color: darken($thead-bg-color-2, 5%);
+      border: 1px solid $input-border-color;
+      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: $text-color;
+        opacity: 0.3; /* Firefox */
+      }
+    }
+  }
+}

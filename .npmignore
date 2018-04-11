@@ -1,13 +1,7 @@
-.babelrc
-.editorconfig
-.eslintrc.js
-.eslintignore
 .gitignore
-.postcssrc.js
 .DS_Store
 node_modules/
 *.log
-build
-config
 dev
-test
+src
+.babelrc

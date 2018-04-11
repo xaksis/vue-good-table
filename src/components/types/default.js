@@ -1,14 +1,15 @@
-import diacriticless from 'diacriticless'
+import diacriticless from 'diacriticless';
+
 export default {
-  format: function defaultFormat(x) {
+  format(x) {
     return x;
   },
-  filterPredicate: function defaultFilter(rowval, filter) {
+  filterPredicate(rowval, filter) {
     // take care of nulls
-    if(typeof(rowval) === 'undefined' || rowval === null) {
+    if (typeof rowval === 'undefined' || rowval === null) {
       return false;
     }
-    
+
     // row value
     const rowValue = diacriticless(String(rowval).toLowerCase());
 
@@ -19,13 +20,15 @@ export default {
     return (rowValue.search(searchTerm) > -1);
   },
 
-  compare: function compare (x, y) {
-    function cook (d) {
-      if(typeof(d) === 'undefined' || d === null) return '';
-      return d.toLowerCase()
+  compare(x, y) {
+    function cook(d) {
+      if (typeof d === 'undefined' || d === null) return '';
+      return d.toLowerCase();
     }
     x = cook(x);
     y = cook(y);
-    return (x < y ? -1 : (x > y ? 1 : 0));
+    if (x < y) return -1;
+    if (x > y) return 1;
+    return 0;
   },
 };
