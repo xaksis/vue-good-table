@@ -1,13 +1,5 @@
 <template>
   <div>
-    <p>
-      Scenario 1: If you click on "Auto filter name" and then
-      Reset, it works. Then, uncoment the line 15, retry, it doesnt work. 
-    </p>
-    <p>
-    Scenario 2: Resetting by "=null" (uncomment line 16),
-    autofilter Name + Reset => it works. However, Autofilter Age + Reset does not work
-    </p><br>
   <a href="#" @click.stop="autofilter('name')">Auto filter Name</a>&nbsp;&nbsp;
   <a href="#" @click.stop="autofilter('age')">Auto filter age</a>
   &nbsp;&nbsp;
@@ -16,12 +8,18 @@
     <vue-good-table
       :columns="columns"
       :rows="rows"
+      mode=""
+      @on-select-all="onSelectAll"
+      @on-row-click="selectRow"
+      :select-options="{
+        enabled: true,
+      }"
       :search-options="{
         enabled: false,
       }"
       :pagination-options="{
         enabled: true,
-        perPage: 2,
+        perPage: 3,
         setCurrentPage: 1,
       }">
     </vue-good-table>
@@ -90,6 +88,31 @@ export default {
     };
   },
   methods: {
+    onSelectAll(params) {
+      console.log(params);
+      // this.unselectAll();
+      // if (params.selected) {
+      //   for (let i = 0; i < params.selectedRows.length; i++) {
+      //     // lets get the original index of the row
+      //     const originalIndex = params.selectedRows[i].originalIndex;
+      //     // now lets set that row's selected value to be true
+      //     this.$set(this.rows[originalIndex], 'selected', true);
+      //   }
+      // }
+    },
+    unselectAll() {
+      for (let i = 0; i < this.rows.length; i++) {
+        this.$set(this.rows[i], 'selected', false);
+      }
+    },
+    selectRow(params) {
+      console.log(params.row, params.pageIndex, params.selected);
+      // if (this.rows[row.originalIndex].selected) {
+      //   this.$set(this.rows[row.originalIndex], 'selected', false);
+      // } else {
+      //   this.$set(this.rows[row.originalIndex], 'selected', true);
+      // }
+    },
     autofilter(type) {
       if (type == 'name') {
         this.columns[0].filterOptions.filterValue = 'John';

@@ -43,10 +43,10 @@
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.filter": "^4.6.0",
-    "lodash.foreach": "^4.5.0",
-    "poi": "^9.6.13"
+    "lodash.foreach": "^4.5.0"
   },
   "devDependencies": {
+    "poi": "^9.6.13",
     "bili": "^2.2.7",
     "rollup-plugin-vue": "^3.0.0",
     "sass-loader": "^6.0.6",

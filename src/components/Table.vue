@@ -32,6 +32,12 @@
         <thead>
           <tr>
             <th v-if="lineNumbers" class="line-numbers"></th>
+            <th v-if="selectable" class="vgt-checkbox-col">
+              <input
+                type="checkbox"
+                v-model="allSelected"
+                @change="toggleSelectAll" />
+            </th>
             <th v-for="(column, index) in columns"
               :key="index"
               @click="sort(index)"
@@ -47,6 +53,7 @@
             @filter-changed="filterRows"
             :global-search-enabled="searchEnabled"
             :line-numbers="lineNumbers"
+            :selectable="selectable"
             :columns="columns"
             :typed-columns="typedColumns">
           </tr>
@@ -56,26 +63,37 @@
             <th
               v-if="headerRow.mode === 'span'"
               class="vgt-left-align vgt-row-header"
-              :colspan="columns.length">
+              :colspan="fullColspan">
               {{ headerRow.label }}
             </th>
             <th
+              class="vgt-row-header"
+              v-if="headerRow.mode !== 'span' && lineNumbers"></th>
+            <th
+              class="vgt-row-header"
+              v-if="headerRow.mode !== 'span' && selectable"></th>
+            <th
+              v-if="headerRow.mode !== 'span'"
               v-for="(column, i) in columns"
               :key="i"
               class="vgt-row-header"
-              :class="getClasses(i, 'td')"
-              v-else>
+              :class="getClasses(i, 'td')">
               {{ collectFormatted(headerRow, column, true) }}
             </th>
           </tr>
           <!-- normal rows here. we loop over all rows -->
           <tr
             v-for="(row, index) in headerRow.children"
-            :key="index"
+            :key="row.originalIndex"
             :class="getRowStyleClass(row)"
             @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">
               {{ getCurrentIndex(index) }}
+            </th>
+            <th v-if="selectable" class="vgt-checkbox-col">
+              <input
+                type="checkbox"
+                v-model="row.vgtSelected"/>
             </th>
             <td
               v-for="(column, i) in columns"
@@ -106,18 +124,24 @@
               {{ headerRow.label }}
             </th>
             <th
+              class="vgt-row-header"
+              v-if="headerRow.mode !== 'span' && lineNumbers"></th>
+            <th
+              class="vgt-row-header"
+              v-if="headerRow.mode !== 'span' && selectable"></th>
+            <th
+              v-if="headerRow.mode !== 'span'"
               v-for="(column, i) in columns"
               :key="i"
               class="vgt-row-header"
-              :class="getClasses(i, 'td')"
-              v-else>
+              :class="getClasses(i, 'td')">
               {{ collectFormatted(headerRow, column, true) }}
             </th>
           </tr>
         </tbody>
         <tbody v-if="!paginated.length">
           <tr>
-            <td :colspan="columns.length">
+            <td :colspan="fullColspan">
               <slot name="emptystate">
                 <div class="vgt-center-align vgt-text-disabled">
                   No data for table
@@ -177,13 +201,20 @@ export default {
     styleClass: { default: 'vgt-table bordered' },
     columns: { },
     rows: { },
-    onClick: { },
     lineNumbers: { default: false },
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
 
     groupOptions: {
+      default() {
+        return {
+          enabled: false,
+        };
+      },
+    },
+
+    selectOptions: {
       default() {
         return {
           enabled: false,
@@ -235,6 +266,10 @@ export default {
     ofText: 'of',
     allText: 'All',
 
+    // internal select options
+    selectable: false,
+    selectAllMode: 'visible',
+
     // internal sort options
     sortable: true,
     defaultSortBy: null,
@@ -263,6 +298,9 @@ export default {
     forceSearch: false,
     sortChanged: false,
     dataTypes: dataTypes || {},
+
+    // to keep track of select-all
+    allSelected: false,
   }),
 
   watch: {
@@ -272,6 +310,15 @@ export default {
       },
       deep: true,
     },
+
+    selectOptions: {
+      handler() {
+        this.initializeSelect();
+      },
+      deep: true,
+      immediate: true,
+    },
+
     paginationOptions: {
       handler() {
         this.initializePagination();
@@ -298,6 +345,12 @@ export default {
   },
 
   computed: {
+    fullColspan() {
+      let fullColspan = this.columns.length;
+      if (this.lineNumbers) fullColspan++;
+      if (this.selectable) fullColspan++;
+      return fullColspan;
+    },
     groupHeaderOnTop() {
       if (this.groupOptions
         && this.groupOptions.enabled
@@ -361,10 +414,6 @@ export default {
     // or sort type changes
     //----------------------------------------
     processedRows() {
-      // every time we process rows, we want to set current page
-      // to 1
-      this.changePage(1);
-
       // we only process rows when mode is local
       let computedRows = this.filteredRows;
       if (this.mode === 'remote') {
@@ -373,6 +422,10 @@ export default {
 
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
+        // every time we search rows, we want to set current page
+        // to 1
+        this.changePage(1);
+        this.unselectAll();
         // here also we need to de-construct and then
         // re-construct the rows, lets see.
         const allRows = [];
@@ -444,6 +497,9 @@ export default {
         // if search trigger is enter then we only sort
         // when enter is hit
         (this.searchTrigger !== 'enter' || this.sortChanged)) {
+        // every time we change sort we need to reset to page 1
+        this.changePage(1);
+        this.unselectAll();
         this.sortChanged = false;
 
         each(computedRows, (cRows) => {
@@ -480,16 +536,16 @@ export default {
     paginated() {
       if (!this.processedRows.length) return [];
 
+      if (this.mode === 'remote') {
+        return this.processedRows;
+      }
+
       // for every group, extract the child rows
       // to cater to paging
       let paginatedRows = [];
       each(this.processedRows, (childRows) => {
         paginatedRows.push(...childRows.children);
       });
-
-      if (this.mode === 'remote') {
-        return paginatedRows;
-      }
 
       if (this.paginate) {
         let pageStart = (this.currentPage - 1) * this.currentPerPage;
@@ -558,9 +614,58 @@ export default {
       }
       return columns;
     },
+
+    hasRowClickListener() {
+      return this.$listeners && this.$listeners['on-row-click'];
+    },
   },
 
   methods: {
+    emitSelectNone() {
+      this.$emit('on-select-all', {
+        selected: false,
+        selectedRows: [],
+      });
+    },
+
+    unselectAllInternal() {
+      this.emitSelectNone();
+      each(this.paginated, (headerRow, i) => {
+        each(headerRow.children, (row, j) => {
+          this.$set(row, 'vgtSelected', false);
+        });
+      });
+    },
+
+    unselectAll() {
+      if (this.selectable && this.allSelected) {
+        this.allSelected = false;
+        this.unselectAllInternal();
+      }
+    },
+
+    toggleSelectAll() {
+      if (!this.allSelected) {
+        this.unselectAllInternal();
+        return;
+      }
+      each(this.paginated, (headerRow) => {
+        each(headerRow.children, (row) => {
+          this.$set(row, 'vgtSelected', true);
+        });
+      });
+      let selectedRows = [];
+      if (this.groupOptions.enabled) {
+        selectedRows = cloneDeep(this.paginated);
+      } else {
+        selectedRows = cloneDeep(this.paginated[0].children);
+      }
+      this.$emit('on-select-all', {
+        selected: this.allSelected,
+        selectedRows,
+      });
+    },
+
     changePage(value) {
       if (this.paginationOptions.enabled) {
         let paginationWidget = this.$refs.paginationBottom;
@@ -585,6 +690,8 @@ export default {
     },
 
     pageChanged(pagination) {
+      // every time we change page we have to unselect all
+      this.unselectAll();
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
@@ -618,10 +725,16 @@ export default {
     },
 
     click(row, index) {
-      this.$emit('on-row-click', { row, index });
-      if (this.onClick) {
-        this.onClick(row, index);
+      let selected = false;
+      if (this.selectable) {
+        selected = !row.vgtSelected;
+        this.$set(row, 'vgtSelected', selected);
       }
+      this.$emit('on-row-click', {
+        row,
+        pageIndex: index,
+        selected,
+      });
     },
 
     searchTable() {
@@ -730,6 +843,10 @@ export default {
       // do we have a filter to care about?
       // if not we don't need to do anything
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
+        // every time we filter rows, we need to set current page
+        // to 1
+        this.changePage(1);
+        this.unselectAll();
         // if mode is remote, we don't do any filtering here.
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
@@ -776,7 +893,7 @@ export default {
 
     getRowStyleClass(row) {
       let classes = '';
-      if (this.onClick) classes += 'clickable';
+      if (this.hasRowClickListener) classes += 'clickable';
       let rowStyleClasses;
       if (typeof this.rowStyleClass === 'function') {
         rowStyleClasses = this.rowStyleClass(row);
@@ -910,6 +1027,18 @@ export default {
 
       if (typeof initialSortBy === 'object') {
         this.defaultSortBy = initialSortBy;
+      }
+    },
+
+    initializeSelect() {
+      const { enabled, selectAllMode } = this.selectOptions;
+
+      if (typeof enabled === 'boolean') {
+        this.selectable = enabled;
+      }
+
+      if (typeof selectAllMode === 'string') {
+        this.selectAllMode = selectAllMode;
       }
     },
   },

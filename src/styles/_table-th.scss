@@ -1,19 +1,18 @@
 .vgt-table{
-  & th:not(.line-numbers) {
+  & th{
     padding: .75rem 1.5rem .75rem .75rem;
-    vertical-align: top;
+    vertical-align: middle;
     &.sorting:hover:after{
       display: inline-block;
       border-bottom-color: lighten($link-color, 10%);
     }
   }
-  & th.line-numbers {
+  & th.line-numbers, & th.vgt-checkbox-col {
+    padding: 0 .75rem 0 .75rem;
     color: $text-color;
     border-right: 1px solid $border-color;
-    padding-left:  5px;
-    padding-right:  5px;
     word-wrap: break-word;
-    max-width: 45px;
+    width: 25px;
     text-align: center;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
   }
@@ -33,6 +32,9 @@
     border-bottom:  1px solid $border-color;
     padding-right: 1.5rem;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
+    &.vgt-checkbox-col{
+      vertical-align: middle;
+    }
     &.sorting-asc, &.sorting-desc {
       color: darken($text-color, 15%);
       position: relative;

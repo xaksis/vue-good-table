@@ -3,6 +3,9 @@
   <vue-good-table
     :columns="columns"
     :rows="rows"
+    :line-numbers="true"
+    :select-options="{enabled: true}"
+    @on-select-all="onSelectAll"
     :group-options="{
       enabled: true,
       headerPosition: 'bottom',
@@ -77,6 +80,9 @@ export default {
   computed: {
   },
   methods: {
+    onSelectAll(params) {
+      console.log(params);
+    },
     sumCount(rowObj) {
       let sum = 0;
       for (let i = 0; i < rowObj.children.length; i++) {

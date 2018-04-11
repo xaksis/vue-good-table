@@ -37,6 +37,7 @@ Some example recipes for inspiration
     - [Sort Options](#sort-options)
     - [Pagination Options](#pagination-options)
     - [Search Options](#search-options)
+    - [Checkbox Table](#checkbox-table)
     - [Grouped Row Options](#grouped-row-options)
     - [Style/Theme](#styletheme)
   - [Column Options](#column-options)
@@ -474,6 +475,25 @@ data(){
 }
 ```
 
+#### Checkbox Table
+Creating table with selectable rows (checkboxes) is easier than ever. 
+![Checkbox Screenshot](README/images/vgt-table.checkbox.png)
+
+##### selectOptions `Object`
+Object containing select options
+```html
+<vue-good-table
+  @on-select-all="allSelected"
+  @on-row-click="rowSelected"
+  :columns="columns"
+  :rows="rows"
+  :select-options="{
+    enabled: true
+  }">
+ ```
+Check out [a working example](https://jsfiddle.net/aks9800/keLjcssn/) for details
+
+
 #### Grouped Row Options
 ---
 Sometimes you have a hierarchy in table and you want to group rows under subheadings, vue-good-table allows you to do that as well. Following properties relate to row grouping
@@ -481,11 +501,10 @@ Sometimes you have a hierarchy in table and you want to group rows under subhead
 ##### groupOptions `Object`
 Object containing group related options. 
 ```html
-<input type="text" v-model="searchTerm" >
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :groupOptions="{
+  :group-options="{
     enabled: true,
     headerPosition: 'bottom' 
   }">

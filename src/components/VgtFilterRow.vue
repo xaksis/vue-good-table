@@ -1,6 +1,7 @@
 <template>
 <tr v-if="hasFilterRow">
   <th v-if="lineNumbers"></th>
+  <th v-if="selectable"></th>
   <th class="filter-th"
     v-for="(column, index) in columns" :key="index"
     v-if="!column.hidden">
@@ -52,6 +53,7 @@ export default {
     'columns',
     'typedColumns',
     'globalSearchEnabled',
+    'selectable',
   ],
   watch: {
     columns: {
