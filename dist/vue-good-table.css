@@ -44,20 +44,19 @@ table.vgt-table {
     table.vgt-table tr.clickable:hover {
       background-color: #F1F5FD; }
 
-.vgt-table th:not(.line-numbers) {
+.vgt-table th {
   padding: .75rem 1.5rem .75rem .75rem;
-  vertical-align: top; }
-  .vgt-table th:not(.line-numbers).sorting:hover:after {
+  vertical-align: middle; }
+  .vgt-table th.sorting:hover:after {
     display: inline-block;
     border-bottom-color: #73b8ff; }
 
-.vgt-table th.line-numbers {
+.vgt-table th.line-numbers, .vgt-table th.vgt-checkbox-col {
+  padding: 0 .75rem 0 .75rem;
   color: #606266;
   border-right: 1px solid #DCDFE6;
-  padding-left: 5px;
-  padding-right: 5px;
   word-wrap: break-word;
-  max-width: 45px;
+  width: 25px;
   text-align: center;
   background: linear-gradient(#F4F5F8, #F1F3F6); }
 
@@ -75,6 +74,8 @@ table.vgt-table {
   border-bottom: 1px solid #DCDFE6;
   padding-right: 1.5rem;
   background: linear-gradient(#F4F5F8, #F1F3F6); }
+  .vgt-table thead th.vgt-checkbox-col {
+    vertical-align: middle; }
   .vgt-table thead th.sorting-asc, .vgt-table thead th.sorting-desc {
     color: #3b3c3f;
     position: relative; }
@@ -360,6 +361,7 @@ table.vgt-table {
 
 
 /*# sourceMappingURL=VgtGlobalSearch.vue.map */
+
 
 
 
