@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.2.0
+ * vue-good-table v2.3.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10247,7 +10247,11 @@ var GoodTable = { render: function () {
       return _c('tbody', { key: index$$1 }, [_vm.groupHeaderOnTop ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.fullColspan } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
       })], 2) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
-        return _c('tr', { key: row.originalIndex, class: _vm.getRowStyleClass(row), on: { "click": function ($event) {
+        return _c('tr', { key: row.originalIndex, class: _vm.getRowStyleClass(row), on: { "mouseenter": function ($event) {
+              _vm.onMouseenter(row, index$$1);
+            }, "mouseleave": function ($event) {
+              _vm.onMouseleave(row, index$$1);
+            }, "click": function ($event) {
               _vm.click(row, index$$1);
             } } }, [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }, [_vm._v(" " + _vm._s(_vm.getCurrentIndex(index$$1)) + " ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', { staticClass: "vgt-checkbox-col" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: row.vgtSelected, expression: "row.vgtSelected" }], attrs: { "type": "checkbox" }, domProps: { "checked": Array.isArray(row.vgtSelected) ? _vm._i(row.vgtSelected, null) > -1 : row.vgtSelected }, on: { "change": function ($event) {
               var $$a = row.vgtSelected,
@@ -10268,7 +10272,7 @@ var GoodTable = { render: function () {
       }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
       })], 2) : _vm._e()], 2);
-    }), _vm._v(" "), !_vm.paginated.length ? _c('tbody', [_c('tr', [_c('td', { attrs: { "colspan": _vm.fullColspan } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align vgt-text-disabled" }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationBottom", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
+    }), _vm._v(" "), !_vm.paginated.length ? _c('tbody', [_c('tr', [_c('td', { attrs: { "colspan": _vm.fullColspan } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align vgt-text-disabled" }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _c('vue-good-pagination', { ref: "paginationBottom", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
   }, staticRenderFns: [],
   name: 'vue-good-table',
   props: {
@@ -10367,6 +10371,7 @@ var GoodTable = { render: function () {
     perPage: null,
     paginate: false,
     paginateOnTop: false,
+    paginateOnBottom: true,
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
 
@@ -10518,7 +10523,7 @@ var GoodTable = { render: function () {
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
         // here also we need to de-construct and then
-        // re-construct the rows, lets see.
+        // re-construct the rows.
         var allRows = [];
         lodash_foreach(this.filteredRows, function (headerRow) {
           allRows.push.apply(allRows, headerRow.children);
@@ -10543,7 +10548,6 @@ var GoodTable = { render: function () {
                 if (typeof tableValue !== 'undefined' && tableValue !== null) {
                   // table value
                   tableValue = diacriticless(String(tableValue).toLowerCase());
-
                   // search term
                   var searchTerm = diacriticless(this$1.searchTerm.toLowerCase());
 
@@ -10567,7 +10571,8 @@ var GoodTable = { render: function () {
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
-        lodash_foreach(this.filteredRows, function (headerRow, i) {
+        lodash_foreach(this.filteredRows, function (headerRow) {
+          var i = headerRow.vgt_header_id;
           var children = lodash_filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
             var newHeaderRow = lodash_clonedeep(headerRow);
@@ -10653,7 +10658,8 @@ var GoodTable = { render: function () {
       }
       // reconstruct paginated rows here
       var reconstructedRows = [];
-      lodash_foreach(this.processedRows, function (headerRow, i) {
+      lodash_foreach(this.processedRows, function (headerRow) {
+        var i = headerRow.vgt_header_id;
         var children = lodash_filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
           var newHeaderRow = lodash_clonedeep(headerRow);
@@ -10661,7 +10667,6 @@ var GoodTable = { render: function () {
           reconstructedRows.push(newHeaderRow);
         }
       });
-
       return reconstructedRows;
     },
 
@@ -10831,6 +10836,20 @@ var GoodTable = { render: function () {
         row: row,
         pageIndex: index$$1,
         selected: selected
+      });
+    },
+
+    onMouseenter: function onMouseenter(row, index$$1) {
+      this.$emit('on-row-mouseenter', {
+        row: row,
+        pageIndex: index$$1
+      });
+    },
+
+    onMouseleave: function onMouseleave(row, index$$1) {
+      this.$emit('on-row-mouseleave', {
+        row: row,
+        pageIndex: index$$1
       });
     },
 
@@ -11014,6 +11033,7 @@ var GoodTable = { render: function () {
 
     handleGrouped: function handleGrouped(originalRows) {
       lodash_foreach(originalRows, function (headerRow, i) {
+        headerRow.vgt_header_id = i;
         lodash_foreach(headerRow.children, function (childRow) {
           childRow.vgt_id = i;
         });
@@ -11058,6 +11078,10 @@ var GoodTable = { render: function () {
 
       if (position === 'top') {
         this.paginateOnTop = true; // default is false
+        this.paginateOnBottom = false; // default is true
+      } else if (position === 'both') {
+        this.paginateOnTop = true;
+        this.paginateOnBottom = true;
       }
 
       if (Array.isArray(perPageDropdown) && perPageDropdown.length) {
