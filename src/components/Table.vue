@@ -168,7 +168,7 @@
       </table>
     </div>
     <vue-good-pagination
-      v-if="paginate && !paginateOnTop"
+      v-if="paginate && paginateOnBottom"
       ref="paginationBottom"
       @page-changed="pageChanged"
       @per-page-changed="perPageChanged"
@@ -305,6 +305,7 @@ export default {
     perPage: null,
     paginate: false,
     paginateOnTop: false,
+    paginateOnBottom: true,
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
 
@@ -1012,6 +1013,10 @@ export default {
 
       if (position === 'top') {
         this.paginateOnTop = true; // default is false
+        this.paginateOnBottom = false; // default is true
+      } else if (position === 'both') {
+        this.paginateOnTop = true;
+        this.paginateOnBottom = true;
       }
 
       if (Array.isArray(perPageDropdown) && perPageDropdown.length) {
