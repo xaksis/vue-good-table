@@ -11,8 +11,10 @@
       mode=""
       @on-select-all="onSelectAll"
       @on-row-click="selectRow"
+      @on-search="searchedRow"
       :select-options="{
-        enabled: false,
+        enabled: true,
+        selectionInfoClass: 'info-custom',
       }"
       :search-options="{
         enabled: true,
@@ -25,6 +27,18 @@
       <div slot="table-actions">
         This will show up on the top right of the table
       </div>
+      <div slot="selected-row-actions">
+        <button>Action 1</button>
+        <button>Action 2</button>
+      </div>
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field == 'age'">
+          <input type="text" v-model="rows[props.row.originalIndex].age">
+        </span>
+        <span v-else>
+          {{props.formattedRow[props.column.field]}}
+        </span>
+      </template>
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
@@ -115,6 +129,9 @@ export default {
       // } else {
       //   this.$set(this.rows[row.originalIndex], 'selected', true);
       // }
+    },
+    searchedRow(params) {
+      console.log(params);
     },
     autofilter(type) {
       if (type == 'name') {
@@ -217,5 +234,8 @@ export default {
   *{
     font-family: 'Open Sans';
   }
+  /* .vgt-selection-info-row.info-custom{
+    background: red;
+  } */
 </style>
 

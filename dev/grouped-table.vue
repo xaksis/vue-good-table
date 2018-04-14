@@ -6,9 +6,15 @@
     :line-numbers="true"
     :select-options="{enabled: true}"
     @on-select-all="onSelectAll"
+    @on-search="onSelectAll"
+    @on-row-mouseenter="onMouseover"
+    @on-row-mouseleave="onMouseover"
+    :search-options="{
+      enabled: true,
+    }"
     :group-options="{
       enabled: true,
-      headerPosition: 'bottom',
+      headerPosition: 'top',
     }"
     styleClass="vgt-table condensed bordered">
   </vue-good-table>
@@ -81,6 +87,9 @@ export default {
   },
   methods: {
     onSelectAll(params) {
+      console.log(params);
+    },
+    onMouseover(params) {
       console.log(params);
     },
     sumCount(rowObj) {

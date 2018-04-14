@@ -42,6 +42,15 @@ Some example recipes for inspiration
     - [Style/Theme](#styletheme)
   - [Column Options](#column-options)
     - [Column filter option in-depth](#column-filter-option-in-depth)
+  - [Table Events](#table-events)
+    - [@on-row-click](#on-row-click)
+    - [@on-row-mouseenter](#on-row-mouseenter)
+    - [@on-row-mouseleave](#on-row-mouseleave)
+    - [@on-search](#on-search)
+    - [@on-page-change](#on-page-change)
+    - [@on-per-page-change](#on-per-page-change)
+    - [@on-sort-change](#on-sort-change)
+    - [@on-select-all](#on-select-all)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
@@ -284,14 +293,14 @@ Enable Pagination for table. By default the paginator is created at the bottom o
 ```
 
 ##### paginationOptions.position `String (default: 'bottom')`
-Add pagination on top of the table (default position is bottom)
+Add pagination on `'top'`, `'bottom'`, or `'both'` (top and bottom) of the table (default position is bottom)
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
     enabled: true,
-    position: 'top'
+    position: 'both'
   }">
 </vue-good-table>
 ```
@@ -489,9 +498,19 @@ Object containing select options
   :columns="columns"
   :rows="rows"
   :select-options="{
-    enabled: true
+    enabled: true,
+    selectionInfoClass: 'custom-class',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
   }">
  ```
+
+ you can also programmatically get selected rows at any time by putting a `ref` on the table and then doing
+ 
+ ```html
+ this.$refs['my-table'].selectedRows;
+ ```
+
 Check out [a working example](https://jsfiddle.net/aks9800/keLjcssn/) for details
 
 
@@ -814,6 +833,149 @@ filterFn: function(data, filterString) {
 }
 // would create a filter matching numbers within 5 of the provided value
 ```
+
+### Table Events
+
+#### @on-row-click
+event emitted on table row click
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-click="onRowClick">
+ ```
+ ```javascript
+ methods: {
+   onRowClick(row, pageIndex, selected) {
+     // row - row object 
+     // pageIndex - index of this row on the current page.
+     // selected - if selection is enabled this argument 
+     // indicates selected or not
+   }
+ }
+ ```
+ 
+ #### @on-row-mouseenter
+event emitted on row mouseenter
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-mouseenter="onRowMouseover">
+ ```
+ ```javascript
+ methods: {
+   onRowMouseover(row, pageIndex) {
+     // row - row object 
+     // pageIndex - index of this row on the current page.
+   }
+ }
+ ```
+ 
+ #### @on-row-mouseleave
+event emitted on table row mouseleave
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-mouseleave="onRowMouseleave">
+ ```
+ ```javascript
+ methods: {
+   onRowMouseleave(row, pageIndex) {
+     // row - row object 
+     // pageIndex - index of this row on the current page.
+   }
+ }
+ ```
+ 
+#### @on-search
+event emitted on global search (when global search is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-search="onSearch">
+ ```
+ ```javascript
+ methods: {
+   onSearch(searchTerm, rowCount) {
+     // searchTerm - term being searched for
+     // rowCount - number of rows that match search
+   }
+ }
+ ```
+ 
+#### @on-page-change
+event emitted on pagination page change (when pagination is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-page-change="onPageChange">
+ ```
+ ```javascript
+ methods: {
+   onPageChange(currentPage, currentPerPage, total) {
+     // currentPage - current page that pagination is at
+     // currentPerPage - number of items per page
+     // total - total number of items in the table
+   }
+ }
+ ```
+ 
+#### @on-per-page-change
+event emitted on per page dropdown change (when pagination is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-per-page-change="onPageChange">
+```
+```javascript
+methods: {
+  onPageChange(currentPage, currentPerPage, total) {
+    // currentPage - current page that pagination is at
+    // currentPerPage - number of items per page
+    // total - total number of items in the table
+  }
+}
+```
+
+#### @on-sort-change
+event emitted on sort change
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-sort-change="onSortChange">
+```
+```javascript
+methods: {
+  onSortChange(sortType, columnIndex) {
+    // sortType - ascending or descending
+    // columnIndex - index of column being sorted
+  }
+}
+```
+ 
+
+#### @on-select-all
+event emitted when all is selected (only emitted for checkbox tables)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-select-all="onSelectAll">
+ ```
+ ```javascript
+ methods: {
+   onSelectAll(selected, selectedRows) {
+     // selected - whether the select-all checkbox is checked or unchecked
+     // selectedRows - all rows that are selected (this page)
+   }
+ }
+ ```
 
 ### Style Options
 
