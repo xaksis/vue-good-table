@@ -99,6 +99,8 @@
             v-for="(row, index) in headerRow.children"
             :key="row.originalIndex"
             :class="getRowStyleClass(row)"
+            @mouseenter="onMouseenter(row, index)"
+            @mouseleave="onMouseleave(row, index)"
             @click="click(row, index)">
             <th v-if="lineNumbers" class="line-numbers">
               {{ getCurrentIndex(index) }}
@@ -461,7 +463,7 @@ export default {
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
         // here also we need to de-construct and then
-        // re-construct the rows, lets see.
+        // re-construct the rows.
         const allRows = [];
         each(this.filteredRows, (headerRow) => {
           allRows.push(...headerRow.children);
@@ -491,7 +493,6 @@ export default {
                 if (typeof tableValue !== 'undefined' && tableValue !== null) {
                   // table value
                   tableValue = diacriticless(String(tableValue).toLowerCase());
-
                   // search term
                   const searchTerm = diacriticless(this.searchTerm.toLowerCase());
 
@@ -515,7 +516,8 @@ export default {
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
-        each(this.filteredRows, (headerRow, i) => {
+        each(this.filteredRows, (headerRow) => {
+          const i = headerRow.vgt_header_id;
           const children = filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
             const newHeaderRow = cloneDeep(headerRow);
@@ -602,7 +604,8 @@ export default {
       }
       // reconstruct paginated rows here
       const reconstructedRows = [];
-      each(this.processedRows, (headerRow, i) => {
+      each(this.processedRows, (headerRow) => {
+        const i = headerRow.vgt_header_id;
         const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
           const newHeaderRow = cloneDeep(headerRow);
@@ -610,7 +613,6 @@ export default {
           reconstructedRows.push(newHeaderRow);
         }
       });
-
       return reconstructedRows;
     },
 
@@ -774,6 +776,20 @@ export default {
         row,
         pageIndex: index,
         selected,
+      });
+    },
+
+    onMouseenter(row, index) {
+      this.$emit('on-row-mouseenter', {
+        row,
+        pageIndex: index,
+      });
+    },
+
+    onMouseleave(row, index) {
+      this.$emit('on-row-mouseleave', {
+        row,
+        pageIndex: index,
       });
     },
 
@@ -952,6 +968,7 @@ export default {
 
     handleGrouped(originalRows) {
       each(originalRows, (headerRow, i) => {
+        headerRow.vgt_header_id = i;
         each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });

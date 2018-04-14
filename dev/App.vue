@@ -11,6 +11,7 @@
       mode=""
       @on-select-all="onSelectAll"
       @on-row-click="selectRow"
+      @on-search="searchedRow"
       :select-options="{
         enabled: true,
         selectionInfoClass: 'info-custom',
@@ -128,6 +129,9 @@ export default {
       // } else {
       //   this.$set(this.rows[row.originalIndex], 'selected', true);
       // }
+    },
+    searchedRow(params) {
+      console.log(params);
     },
     autofilter(type) {
       if (type == 'name') {
