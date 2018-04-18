@@ -111,6 +111,7 @@
                 v-model="row.vgtSelected"/>
             </th>
             <td
+              @click="onCellClicked(row, column, index)"
               v-for="(column, i) in columns"
               :key="i"
               :class="getClasses(i, 'td')"
@@ -777,6 +778,14 @@ export default {
         row,
         pageIndex: index,
         selected,
+      });
+    },
+
+    onCellClicked(row, column, rowIndex) {
+      this.$emit('on-cell-click', {
+        row,
+        column,
+        rowIndex,
       });
     },
 

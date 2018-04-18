@@ -11,9 +11,10 @@
       mode=""
       @on-select-all="onSelectAll"
       @on-row-click="selectRow"
+      @on-cell-click="selectCell"
       @on-search="searchedRow"
       :select-options="{
-        enabled: true,
+        enabled: false,
         selectionInfoClass: 'info-custom',
       }"
       :search-options="{
@@ -129,6 +130,10 @@ export default {
       // } else {
       //   this.$set(this.rows[row.originalIndex], 'selected', true);
       // }
+    },
+    selectCell(params) {
+      console.log('select cell called');
+      console.log(params);
     },
     searchedRow(params) {
       console.log(params);

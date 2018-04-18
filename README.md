@@ -44,6 +44,7 @@ Some example recipes for inspiration
     - [Column filter option in-depth](#column-filter-option-in-depth)
   - [Table Events](#table-events)
     - [@on-row-click](#on-row-click)
+    - [@on-cell-click](#on-cell-click)
     - [@on-row-mouseenter](#on-row-mouseenter)
     - [@on-row-mouseleave](#on-row-mouseleave)
     - [@on-search](#on-search)
@@ -851,6 +852,24 @@ event emitted on table row click
      // pageIndex - index of this row on the current page.
      // selected - if selection is enabled this argument 
      // indicates selected or not
+   }
+ }
+ ```
+
+ #### @on-cell-click
+event emitted on table cell click
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-cell-click="onCellClick">
+ ```
+ ```javascript
+ methods: {
+   onCellClick(row, column, rowIndex) {
+     // row - row object 
+     // column - column object
+     // rowIndex - index of this row on the current page.
    }
  }
  ```
