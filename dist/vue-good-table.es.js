@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.3.0
+ * vue-good-table v2.4.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -481,7 +481,9 @@ var GoodTable = { render: function () {
                 _vm.$set(row, "vgtSelected", $$c);
               }
             } } })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-          return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(row, column)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: index$$1 })], 2) : _vm._e();
+          return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td'), on: { "click": function ($event) {
+                _vm.onCellClicked(row, column, index$$1);
+              } } }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(row, column)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: index$$1 })], 2) : _vm._e();
         })], 2);
       }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
@@ -1050,6 +1052,14 @@ var GoodTable = { render: function () {
         row: row,
         pageIndex: index$$1,
         selected: selected
+      });
+    },
+
+    onCellClicked: function onCellClicked(row, column, rowIndex) {
+      this.$emit('on-cell-click', {
+        row: row,
+        column: column,
+        rowIndex: rowIndex
       });
     },
 
