@@ -673,7 +673,12 @@ column: [
 ],
 // in methods
 methods: {
-  sortFn(x, y, col) {
+  sortFn(x, y, col, rowX, rowY) {
+    // x - row1 value for column
+    // y - row2 value for column
+    // col - column being sorted
+    // rowX - row object for row1
+    // rowY - row object for row2
     return (x < y ? -1 : (x > y ? 1 : 0));
   }
 }
