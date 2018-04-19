@@ -1,8 +1,9 @@
 # Vue-good-table
 
-[![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=for-the-badge)](https://www.npmjs.com/package/vue-good-table)
-[![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/releases)
-[![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=flat-square)](https://www.npmjs.com/package/vue-good-table)
+[![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/releases)
+[![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
+[![](https://data.jsdelivr.com/v1/package/npm/vue-good-table/badge)](https://www.jsdelivr.com/package/npm/vue-good-table)
 
 A simple, clean data table for VueJS with essential features like sorting, column filtering, pagination etc
 
