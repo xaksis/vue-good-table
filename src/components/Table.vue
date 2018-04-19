@@ -548,7 +548,7 @@ export default {
             // built-in sort
             const { sortFn } = this.columns[this.sortColumn];
             if (sortFn && typeof sortFn === 'function') {
-              return sortFn(xvalue, yvalue, this.columns[this.sortColumn]) * (this.sortType === 'desc' ? -1 : 1);
+              return sortFn(xvalue, yvalue, this.columns[this.sortColumn], x, y) * (this.sortType === 'desc' ? -1 : 1);
             }
 
             // built in sort
