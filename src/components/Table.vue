@@ -665,10 +665,13 @@ export default {
 
     unselectAllInternal() {
       this.emitSelectNone();
+      const tempRows = cloneDeep(this.originalRows);
       each(this.originalRows, (headerRow, i) => {
-        each(headerRow.children, (row, j) => {
-          this.$set(row, 'vgtSelected', false);
+        const tempChildren = cloneDeep(headerRow.children);
+        each(tempChildren, (row, j) => {
+          row.vgtSelected = false;
         });
+        this.$set(headerRow, 'children', tempChildren);
       });
     },
 

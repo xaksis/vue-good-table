@@ -1,45 +1,13 @@
 <template>
   <div>
-  <a href="#" @click.stop="autofilter('name')">Auto filter Name</a>&nbsp;&nbsp;
-  <a href="#" @click.stop="autofilter('age')">Auto filter age</a>
-  &nbsp;&nbsp;
-  <a href="#" @click.stop="autofilter('reset')">Reset</a>
 
     <vue-good-table
+      @on-select-all="onSelectAll"
+      @on-row-click="toggleSelectRow"
       :columns="columns"
       :rows="rows"
-      mode=""
-      @on-select-all="onSelectAll"
-      @on-row-click="selectRow"
-      @on-cell-click="selectCell"
-      @on-search="searchedRow"
-      :select-options="{
-        enabled: false,
-        selectionInfoClass: 'info-custom',
-      }"
-      :search-options="{
-        enabled: true,
-      }"
-      :pagination-options="{
-        enabled: true,
-        perPage: 3,
-        setCurrentPage: 1,
-      }">
-      <div slot="table-actions">
-        This will show up on the top right of the table
-      </div>
-      <div slot="selected-row-actions">
-        <button>Action 1</button>
-        <button>Action 2</button>
-      </div>
-      <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'age'">
-          <input type="text" v-model="rows[props.row.originalIndex].age">
-        </span>
-        <span v-else>
-          {{props.formattedRow[props.column.field]}}
-        </span>
-      </template>
+      :select-options="{ enabled: true }"
+      :search-options="{ enabled: true }">
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
@@ -51,58 +19,23 @@ import GroupedTable from './grouped-table';
 
 export default {
   name: 'test',
-  mounted() {
-    // setTimeout(() => {
-    //   this.testing = [50, 100, 300];
-    // }, 5000);
-  },
   data() {
     return {
-      searchQuery: '',
-      testing: [2, 7, 12],
       columns: [
         {
-          label: 'Name',
-          field: 'name',
-          filterOptions: {
-            enabled: true,
-            filterValue: null,
-          },
+          label: 'User Id',
+          field: 'userId',
         },
         {
-          label: 'Age',
-          field: 'age',
-          type: 'number',
-          filterOptions: {
-            enabled: true,
-            filterDropdownItems: ['>30', '<=30'],
-            filterFn: this.filterAge,
-            filterValue: null,
-          },
+          label: 'Title',
+          field: 'title',
         },
         {
-          label: 'Created On',
-          field: 'createdAt',
-          type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'MMM Do YY',
-        },
-        {
-          label: 'Percent',
-          field: 'score',
-          type: 'percentage',
+          label: 'Body',
+          field: 'body',
         },
       ],
-      rows:  [
-      { id:1, name:"John", age: 20, createdAt: '201-10-31:9: 35 am',score: 0.03343 },
-      { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
-      { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
-      { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
-      { id:5, name:"Dan", age: 40, createdAt: '2011-10-21', score: 0.03343 },
-      { id:6, name:"John", age: 20, createdAt: '2011-10-31', score: 0.03343 },
-      { id:7, name:"Jane", age: 24, createdAt: '2013-09-21' },
-      { id:8, name:"Susan", age: 16, createdAt: '2013-10-31', score: 0.03343 },
-    ],
+      rows: [],
     };
   },
   methods: {
@@ -123,7 +56,7 @@ export default {
         this.$set(this.rows[i], 'selected', false);
       }
     },
-    selectRow(params) {
+    toggleSelectRow(params) {
       console.log(params.row, params.pageIndex, params.selected);
       // if (this.rows[row.originalIndex].selected) {
       //   this.$set(this.rows[row.originalIndex], 'selected', false);
@@ -225,6 +158,13 @@ export default {
       console.log('on-row-click');
       console.log(params);
     },
+  },
+  mounted() {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => {
+        console.log(response);
+        this.rows = response.data;
+      });
   },
   components: {
     'grouped-table': GroupedTable,
