@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.4.1
+ * vue-good-table v2.4.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5690,7 +5690,7 @@ var VgtFilterRow = { render: function () {
     })], 2) : _vm._e();
   }, staticRenderFns: [], _scopeId: 'data-v-2949d74f',
   name: 'VgtFilterRow',
-  props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable'],
+  props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable', 'mode'],
   watch: {
     columns: {
       handler: function handler() {
@@ -5712,7 +5712,7 @@ var VgtFilterRow = { render: function () {
     hasFilterRow: function hasFilterRow() {
       var this$1 = this;
 
-      if (!this.globalSearchEnabled) {
+      if (this.mode === 'remote' || !this.globalSearchEnabled) {
         for (var i = 0; i < this.columns.length; i++) {
           var col = this$1.columns[i];
           if (col.filterOptions && col.filterOptions.enabled) {
@@ -10243,7 +10243,7 @@ var GoodTable = { render: function () {
       return !column.hidden ? _c('th', { key: index$$1, class: _vm.getHeaderClasses(column, index$$1), style: { width: column.width ? column.width : 'auto' }, on: { "click": function ($event) {
             _vm.sort(index$$1);
           } } }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], { column: column })], 2) : _vm._e();
-    })], 2), _vm._v(" "), _c("vgt-filter-row", { tag: "tr", attrs: { "global-search-enabled": _vm.searchEnabled, "line-numbers": _vm.lineNumbers, "selectable": _vm.selectable, "columns": _vm.columns, "typed-columns": _vm.typedColumns }, on: { "filter-changed": _vm.filterRows } })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
+    })], 2), _vm._v(" "), _c("vgt-filter-row", { tag: "tr", attrs: { "global-search-enabled": _vm.searchEnabled, "line-numbers": _vm.lineNumbers, "selectable": _vm.selectable, "columns": _vm.columns, "mode": _vm.mode, "typed-columns": _vm.typedColumns }, on: { "filter-changed": _vm.filterRows } })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
       return _c('tbody', { key: index$$1 }, [_vm.groupHeaderOnTop ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.fullColspan } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
       })], 2) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
@@ -10723,10 +10723,13 @@ var GoodTable = { render: function () {
       var this$1 = this;
 
       this.emitSelectNone();
+      var tempRows = lodash_clonedeep(this.originalRows);
       lodash_foreach(this.originalRows, function (headerRow, i) {
-        lodash_foreach(headerRow.children, function (row, j) {
-          this$1.$set(row, 'vgtSelected', false);
+        var tempChildren = lodash_clonedeep(headerRow.children);
+        lodash_foreach(tempChildren, function (row, j) {
+          row.vgtSelected = false;
         });
+        this$1.$set(headerRow, 'children', tempChildren);
       });
     },
 
