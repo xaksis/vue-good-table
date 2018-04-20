@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.4.2
+ * vue-good-table v2.4.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -611,7 +611,8 @@ var GoodTable = { render: function () {
       handler: function handler() {
         this.filterRows(this.columnFilters, false);
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
 
     selectOptions: {
@@ -937,14 +938,14 @@ var GoodTable = { render: function () {
       var this$1 = this;
 
       this.emitSelectNone();
-      var tempRows = cloneDeep(this.originalRows);
       each(this.originalRows, function (headerRow, i) {
-        var tempChildren = cloneDeep(headerRow.children);
-        each(tempChildren, function (row, j) {
-          row.vgtSelected = false;
+        each(headerRow.children, function (row, j) {
+          this$1.$set(row, 'vgtSelected', false);
         });
-        this$1.$set(headerRow, 'children', tempChildren);
       });
+      // we need to call this to propagate changes to paginated
+      // rows
+      this.filterRows();
     },
 
     unselectAll: function unselectAll() {
@@ -1192,8 +1193,9 @@ var GoodTable = { render: function () {
       var this$1 = this;
       if ( fromFilter === void 0 ) fromFilter = true;
 
+      if (!this.rows.length) { return; }
       // this is invoked either as a result of changing filters
-      // or as a result of modifying rows rows.
+      // or as a result of modifying rows.
       this.columnFilters = columnFilters;
       var computedRows = cloneDeep(this.originalRows);
 
@@ -1268,16 +1270,16 @@ var GoodTable = { render: function () {
       return originalRows;
     },
 
-    handleRows: function handleRows() {
-      if (!this.groupOptions.enabled) {
-        this.filteredRows = this.handleGrouped([{
-          label: 'no groups',
-          children: this.originalRows
-        }]);
-      } else {
-        this.filteredRows = this.handleGrouped(this.originalRows);
-      }
-    },
+    // handleRows() {
+    //   if (!this.groupOptions.enabled) {
+    //     this.filteredRows = this.handleGrouped([{
+    //       label: 'no groups',
+    //       children: this.originalRows,
+    //     }]);
+    //   } else {
+    //     this.filteredRows = this.handleGrouped(this.originalRows);
+    //   }
+    // },
 
     initializePagination: function initializePagination() {
       var this$1 = this;
@@ -1417,7 +1419,7 @@ var GoodTable = { render: function () {
   mounted: function mounted() {
     var this$1 = this;
 
-    this.filteredRows = this.originalRows;
+    // this.filteredRows = this.originalRows;
 
     if (this.perPage) {
       this.currentPerPage = this.perPage;
