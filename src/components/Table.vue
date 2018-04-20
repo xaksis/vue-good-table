@@ -332,6 +332,7 @@ export default {
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
+      immediate: true,
     },
 
     selectOptions: {
@@ -666,14 +667,14 @@ export default {
 
     unselectAllInternal() {
       this.emitSelectNone();
-      const tempRows = cloneDeep(this.originalRows);
       each(this.originalRows, (headerRow, i) => {
-        const tempChildren = cloneDeep(headerRow.children);
-        each(tempChildren, (row, j) => {
-          row.vgtSelected = false;
+        each(headerRow.children, (row, j) => {
+          this.$set(row, 'vgtSelected', false);
         });
-        this.$set(headerRow, 'children', tempChildren);
       });
+      // we need to call this to propagate changes to paginated
+      // rows
+      this.filterRows();
     },
 
     unselectAll() {
@@ -909,8 +910,9 @@ export default {
 
     // method to filter rows
     filterRows(columnFilters, fromFilter = true) {
+      if (!this.rows.length) return;
       // this is invoked either as a result of changing filters
-      // or as a result of modifying rows rows.
+      // or as a result of modifying rows.
       this.columnFilters = columnFilters;
       let computedRows = cloneDeep(this.originalRows);
 
@@ -990,16 +992,16 @@ export default {
       return originalRows;
     },
 
-    handleRows() {
-      if (!this.groupOptions.enabled) {
-        this.filteredRows = this.handleGrouped([{
-          label: 'no groups',
-          children: this.originalRows,
-        }]);
-      } else {
-        this.filteredRows = this.handleGrouped(this.originalRows);
-      }
-    },
+    // handleRows() {
+    //   if (!this.groupOptions.enabled) {
+    //     this.filteredRows = this.handleGrouped([{
+    //       label: 'no groups',
+    //       children: this.originalRows,
+    //     }]);
+    //   } else {
+    //     this.filteredRows = this.handleGrouped(this.originalRows);
+    //   }
+    // },
 
     initializePagination() {
       const {
@@ -1136,7 +1138,7 @@ export default {
   },
 
   mounted() {
-    this.filteredRows = this.originalRows;
+    // this.filteredRows = this.originalRows;
 
     if (this.perPage) {
       this.currentPerPage = this.perPage;
