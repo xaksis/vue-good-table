@@ -68,6 +68,7 @@
             :line-numbers="lineNumbers"
             :selectable="selectable"
             :columns="columns"
+            :mode="mode"
             :typed-columns="typedColumns">
           </tr>
         </thead>
