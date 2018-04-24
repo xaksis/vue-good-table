@@ -1001,6 +1001,23 @@ event emitted when all is selected (only emitted for checkbox tables)
    }
  }
  ```
+ 
+ #### @on-column-filter
+event emitted when column is filtered (only emitted for checkbox tables)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-column-filter="onColumnFilter">
+ ```
+ ```javascript
+ methods: {
+   onColumnFilter(params) {
+     // params.columnFilters - filter values for each column in the following format:
+     // {field1: 'filterTerm', field3: 'filterTerm2')
+   }
+ }
+ ```
 
 ### Style Options
 
