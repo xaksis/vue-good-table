@@ -1003,7 +1003,7 @@ event emitted when all is selected (only emitted for checkbox tables)
  ```
  
  #### @on-column-filter
-event emitted when column is filtered (only emitted for checkbox tables)
+event emitted when column is filtered (only emitted for remote mode)
 ```html
 <vue-good-table
   :columns="columns"
