@@ -1,6 +1,7 @@
 <template>
 <tr v-if="hasFilterRow">
   <th v-if="lineNumbers"></th>
+  <th v-if="selectable"></th>
   <th class="filter-th"
     v-for="(column, index) in columns" :key="index"
     v-if="!column.hidden">
@@ -52,6 +53,8 @@ export default {
     'columns',
     'typedColumns',
     'globalSearchEnabled',
+    'selectable',
+    'mode'
   ],
   watch: {
     columns: {
@@ -72,7 +75,7 @@ export default {
     // make sure that there is atleast 1 column
     // that requires filtering
     hasFilterRow() {
-      if (!this.globalSearchEnabled) {
+      if (this.mode === 'remote' || !this.globalSearchEnabled) {
         for (let i = 0; i < this.columns.length; i++) {
           const col = this.columns[i];
           if (col.filterOptions && col.filterOptions.enabled) {
@@ -116,9 +119,13 @@ export default {
     updateFilters(column, value) {
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.$set(this.columnFilters, column.field, value);
-        this.$emit('filter-changed', this.columnFilters);
+        this.updateFiltersImmediately(column, value);
       }, 400);
+    },
+
+    updateFiltersImmediately(column, value) {
+      this.$set(this.columnFilters, column.field, value);
+      this.$emit('filter-changed', this.columnFilters);
     },
 
     populateInitialFilters() {
@@ -129,8 +136,8 @@ export default {
         if (this.isFilterable(col)
           && typeof col.filterOptions.filterValue !== 'undefined'
           && col.filterOptions.filterValue !== null) {
-          this.updateFilters(col, col.filterOptions.filterValue);
-          this.$set(col, 'filterValue', undefined);
+          this.updateFiltersImmediately(col, col.filterOptions.filterValue);
+          this.$set(col.filterOptions, 'filterValue', undefined);
         }
       }
     },

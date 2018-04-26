@@ -2,11 +2,15 @@
   <div class="vgt-wrap__footer vgt-clearfix">
     <div class="footer__row-count vgt-pull-left">
       <span class="footer__row-count__label">{{rowsPerPageText}}</span>
-      <select class="footer__row-count__select" @change="perPageChanged">
+      <select
+        autocomplete="off"
+        name="perPageSelect"
+        class="footer__row-count__select"
+        v-model="currentPerPage"
+        @change="perPageChanged">
         <option
           v-for="(option, idx) in getRowsPerPageDropdown()"
           v-bind:key="'rows-dropdown-option-' + idx"
-          :selected="currentPerPage === option"
           :value="option">
           {{ option }}
         </option>
@@ -87,8 +91,8 @@ export default {
 
       if (first > this.total) {
         // this probably happened as a result of filtering
-        this.currentPage = 1;
         first = 1;
+        this.currentPage = 1;
       }
 
       const last = Math.min(this.total, this.currentPerPage * this.currentPage);
@@ -103,6 +107,9 @@ export default {
   },
 
   methods: {
+    // optionSelected(option) {
+    //   return this.currentPerPage === option;
+    // },
 
     reset() {
 

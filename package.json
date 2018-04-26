@@ -1,6 +1,6 @@
 {
   "name": "vue-good-table",
-  "version": "2.0.0-beta.9",
+  "version": "2.4.3",
   "description": "A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc",
   "main": "dist/vue-good-table.cjs.js",
   "module": "dist/vue-good-table.es.js",
@@ -43,10 +43,10 @@
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.filter": "^4.6.0",
-    "lodash.foreach": "^4.5.0",
-    "poi": "^9.6.13"
+    "lodash.foreach": "^4.5.0"
   },
   "devDependencies": {
+    "poi": "^9.6.13",
     "bili": "^2.2.7",
     "rollup-plugin-vue": "^3.0.0",
     "sass-loader": "^6.0.6",

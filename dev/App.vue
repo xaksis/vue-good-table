@@ -1,73 +1,13 @@
 <template>
   <div>
-    <button @click="addRow">Add Row</button>
-    <button @click="editRow">edit Row</button>
-    <button @click="addFilter">Add Filter</button>
-    <input type="text" v-model="searchQuery">
+
     <vue-good-table
-      @on-per-page-change="onPerPageChange"
-      @on-page-change="onPageChange"
-      @on-column-filter="onColumnFilter"
-      @on-sort-change="onSortChange"
-      @on-search="onSearch"
-      @on-row-click="onRowClick"
-      :on-click="onRowClick"
-      style="margin-top: 30px"
-      styleClass="vgt-table bordered condensed"
-      mode=""
-      theme=""
-      :sort-options="{
-        enabled: true,
-        initialSortBy: {field: 'name', type: 'asc'},
-      }"
-      :paginationOptions="{
-        enabled: true,
-        position: 'bottom',
-        dropdownAllowAll: true,
-        nextLabel: 'aage',
-        prevLabel: 'peechhe',
-        rowsPerPageLabel: 'Rows per page',
-        ofLabel: 'of',
-        allLabel: 'All',
-      }"
-      :searchOptions="{
-        enabled: false,
-        //trigger: 'enter',
-        // externalQuery: searchQuery,
-        // searchFn:
-      }"
+      @on-select-all="onSelectAll"
+      @on-row-click="toggleSelectRow"
       :columns="columns"
       :rows="rows"
-      :line-numbers="false">
-      <template slot="table-actions">
-        <button class="button">Hello</button>
-        <button class="button">Hi</button>
-      </template>
-      <template slot="table-column" slot-scope="props">
-        <span v-if="props.column.field =='name'">
-            <i class="fa fa-user"></i> {{props.column.label}}
-        </span>
-        <span @click="sayHello()" v-else-if="props.column.field == 'joined'">
-            <i class="fa fa-calendar"></i> LaLa
-        </span>
-        <span v-else>
-            {{props.column.label}}
-        </span>
-      </template>
-      <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'age'">
-          age: {{props.row.age}}
-        </span>
-        <span v-else>
-          {{props.formattedRow[props.column.field]}}
-        </span>
-      </template>
-      <!-- <template slot="table-row-before" slot-scope="props">
-        <td><input type="checkbox" /></td>
-      </template> -->
-      <!-- <template slot="table-row-after" slot-scope="props">
-        <td><a class="button lightbox" :href="'test_detail.php?id=' + props.row.id" >detail</a></td>
-      </template> -->
+      :select-options="{ enabled: true }"
+      :search-options="{ enabled: true }">
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
@@ -79,95 +19,82 @@ import GroupedTable from './grouped-table';
 
 export default {
   name: 'test',
-  mounted() {
-    // setTimeout(() => {
-    //   this.testing = [50, 100, 300];
-    // }, 5000);
-  },
   data() {
     return {
-      searchQuery: '',
-      testing: [2, 7, 12],
       columns: [
-        // {
-        //   label: '',
-        //   sortable: false,
-        // },
         {
-          label: 'Name',
-          field: 'name',
-          type: 'text',
-          sortable: true,
-          sortFn: this.sortFn,
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Filter Here',
-            filterDropdownItems: [
-              { value: 'Chris', text: 'Chris' },
-              { value: 'Jane', text: 'Jane' },
-              { value: 'Dan', text: 'Dan' },
-              { value: 'Susan', text: 'Susan' },
-              { value: 'John', text: 'John' },
-            ],
-          },
-        },
-        // {
-        //   label: 'Name2',
-        //   field: 'name',
-        //   type: 'text',
-        //   sortable: true,
-        //   sortFn: this.sortFn,
-        //   filterOptions: {
-        //     enabled: true,
-        //     placeholder: 'Filter name2',
-        //   }
-        // },
-        {
-          label: 'Age',
-          field: 'age',
-          type: 'number',
-          filterOptions: {
-            enabled: false,
-            filterFn(data, filterString) {
-              const x = parseInt(filterString, 10);
-              return data >= x - 10 && data <= x + 10;
-            },
-          },
+          label: 'User Id',
+          field: 'userId',
         },
         {
-          label: 'Joined On',
-          field: 'joined',
-          type: 'date',
-          dateInputFormat: 'YYYYMMDD',
-          dateOutputFormat: 'MMM Do YYYY',
+          label: 'Title',
+          field: 'title',
         },
-        // {
-        //   label: '',
-        //   sortable: false,
-        // },
+        {
+          label: 'Body',
+          field: 'body',
+        },
       ],
-      rows: [
-        { name: 'John', age: 20, joined: '20120201' },
-        { name: 'Jane', age: 24, joined: '20120305' },
-        { name: 'Susan', age: 16, joined: '20140823' },
-        { name: 'Chris', age: 55, joined: '20161109' },
-        { name: 'Dan', age: 40, joined: '20170612' },
-
-        { name: 'Jay', age: 20, joined: '20120201' },
-        { name: 'Seah', age: 25, joined: '20120305' },
-        { name: 'Sarah', age: 16, joined: '20140823' },
-        { name: 'Mohit', age: 55, joined: '20161109' },
-        { name: 'Don', age: 40, joined: '20170612' },
-
-        { name: 'Ernesto', age: 20, joined: '20120201' },
-        { name: 'Clark', age: 27, joined: '20120305' },
-        { name: 'Monty', age: 16, joined: '20140823' },
-        { name: 'Priya', age: 55, joined: '20161109' },
-        { name: 'Sans', age: 40, joined: '20170612' },
-      ],
+      rows: [],
     };
   },
   methods: {
+    onSelectAll(params) {
+      console.log(params);
+      // this.unselectAll();
+      // if (params.selected) {
+      //   for (let i = 0; i < params.selectedRows.length; i++) {
+      //     // lets get the original index of the row
+      //     const originalIndex = params.selectedRows[i].originalIndex;
+      //     // now lets set that row's selected value to be true
+      //     this.$set(this.rows[originalIndex], 'selected', true);
+      //   }
+      // }
+    },
+    unselectAll() {
+      for (let i = 0; i < this.rows.length; i++) {
+        this.$set(this.rows[i], 'selected', false);
+      }
+    },
+    toggleSelectRow(params) {
+      console.log(params.row, params.pageIndex, params.selected);
+      // if (this.rows[row.originalIndex].selected) {
+      //   this.$set(this.rows[row.originalIndex], 'selected', false);
+      // } else {
+      //   this.$set(this.rows[row.originalIndex], 'selected', true);
+      // }
+    },
+    selectCell(params) {
+      console.log('select cell called');
+      console.log(params);
+    },
+    searchedRow(params) {
+      console.log(params);
+    },
+    autofilter(type) {
+      if (type == 'name') {
+        this.columns[0].filterOptions.filterValue = 'John';
+      }
+      if (type == 'age') {
+        this.columns[1].filterOptions.filterValue = '>30';
+      }
+      if (type == 'reset') {
+        this.columns[0].filterOptions.filterValue = '';
+        this.columns[1].filterOptions.filterValue = '';
+        // this.columns[1].filterOptions.filterValue = null;
+      }
+    },
+
+    filterAge(data, filterString) {
+      if ((filterString === '>30') && (parseInt(data, 10) > 30)) {
+        return true;
+      }
+      if ((filterString === '<=30') && (parseInt(data, 10) <= 30)) {
+        return true
+      }
+      return false;
+    },
+
     onClick() {
       console.log('clicked');
     },
@@ -232,6 +159,13 @@ export default {
       console.log(params);
     },
   },
+  mounted() {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => {
+        console.log(response);
+        this.rows = response.data;
+      });
+  },
   components: {
     'grouped-table': GroupedTable,
   },
@@ -245,5 +179,8 @@ export default {
   *{
     font-family: 'Open Sans';
   }
+  /* .vgt-selection-info-row.info-custom{
+    background: red;
+  } */
 </style>
 

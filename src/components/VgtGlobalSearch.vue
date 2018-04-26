@@ -43,6 +43,7 @@ export default {
   methods: {
     updateValue(value) {
       this.$emit('input', value);
+      this.$emit('on-keyup', value);
     },
     entered(value) {
       this.$emit('on-enter', value);

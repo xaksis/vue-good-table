@@ -1,17 +1,22 @@
 # Vue-good-table
 
-[![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=for-the-badge)](https://www.npmjs.com/package/vue-good-table)
-[![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/releases)
-[![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=flat-square)](https://www.npmjs.com/package/vue-good-table)
+[![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/releases)
+[![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
+[![](https://data.jsdelivr.com/v1/package/npm/vue-good-table/badge)](https://www.jsdelivr.com/package/npm/vue-good-table)
 
 A simple, clean data table for VueJS with essential features like sorting, column filtering, pagination etc
+
+Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
+
+<a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
 ## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
-### Basic Screenshot
+### Basic Table
 ![Basic Screenshot](README/images/vgt-table.regular.png)
-### Advanced Screenshot
+### Table with grouped rows and column filters
 ![Advanced Screenshot](README/images/vgt-table.advanced.png)
 
 ## Recipes
@@ -33,10 +38,21 @@ Some example recipes for inspiration
     - [Sort Options](#sort-options)
     - [Pagination Options](#pagination-options)
     - [Search Options](#search-options)
+    - [Checkbox Table](#checkbox-table)
     - [Grouped Row Options](#grouped-row-options)
     - [Style/Theme](#styletheme)
   - [Column Options](#column-options)
     - [Column filter option in-depth](#column-filter-option-in-depth)
+  - [Table Events](#table-events)
+    - [@on-row-click](#on-row-click)
+    - [@on-cell-click](#on-cell-click)
+    - [@on-row-mouseenter](#on-row-mouseenter)
+    - [@on-row-mouseleave](#on-row-mouseleave)
+    - [@on-search](#on-search)
+    - [@on-page-change](#on-page-change)
+    - [@on-per-page-change](#on-per-page-change)
+    - [@on-sort-change](#on-sort-change)
+    - [@on-select-all](#on-select-all)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
@@ -48,6 +64,7 @@ Some example recipes for inspiration
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
   - [Grouped Rows](#grouped-rows)
+  - [Table Actions Slot](#table-actions-slot)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
 - [License](#license)
@@ -60,7 +77,7 @@ Some example recipes for inspiration
 
 Install with npm:
 ```bash
-npm install --save vue-good-table@beta
+npm install --save vue-good-table
 ```
 
 Import into project:
@@ -203,7 +220,7 @@ Set of options related to table sorting
   :columns="columns"
   :rows="rows"
   :sort-options="{
-  	enabled: true,
+    enabled: true,
     initialSortBy: {field: 'name', type: 'asc'}
   }">
 </vue-good-table>
@@ -216,7 +233,7 @@ Enable/disable sorting on table as a whole.
   :columns="columns"
   :rows="rows"
   :sort-options="{
-  	enabled: true,
+    enabled: true,
   }">
 </vue-good-table>
 ```
@@ -228,7 +245,7 @@ Allows specifying a default sort for the table on wakeup
   :columns="columns"
   :rows="rows"
   :sort-options="{
-  	enabled: true,
+    enabled: true,
     initialSortBy: {field: 'name', type: 'asc'}
   }">
 </vue-good-table>
@@ -250,11 +267,12 @@ A set of options that are related to table pagination. Each of these are optiona
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPage: 5,
     position: 'top',
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
+    setCurrentPage: 2,
     nextLabel: 'next',
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
@@ -271,20 +289,20 @@ Enable Pagination for table. By default the paginator is created at the bottom o
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true
+    enabled: true
   }">
 </vue-good-table>
 ```
 
 ##### paginationOptions.position `String (default: 'bottom')`
-Add pagination on top of the table (default position is bottom)
+Add pagination on `'top'`, `'bottom'`, or `'both'` (top and bottom) of the table (default position is bottom)
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
-    position: 'top'
+    enabled: true,
+    position: 'both'
   }">
 </vue-good-table>
 ```
@@ -296,7 +314,7 @@ Number of rows to show per page
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPage: 5
   }">
 </vue-good-table>
@@ -309,7 +327,7 @@ Customize the dropdown options for the amount of items per page
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPageDropdown: [3, 7, 9]
   }">
 </vue-good-table>
@@ -322,9 +340,23 @@ enables/disables 'All' in the per page dropdown.
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
+  }">
+</vue-good-table>
+```
+
+##### paginationOptions.setCurrentPage `Number`
+set current page programmatically. 
+> There's no validation for number of pages so please be careful using this.
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :paginationOptions="{
+    enabled: true,
+    setCurrentPage: 2,
   }">
 </vue-good-table>
 ```
@@ -336,7 +368,7 @@ you can change one or more of the texts shown on pagination by overriding the la
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
-  	enabled: true,
+    enabled: true,
     nextLabel: 'next',
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
@@ -354,7 +386,7 @@ Set of search related options. These options pertain to the global table search.
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     trigger: 'enter',
     searchFn: mySearchFn,
     placeholder: 'Search this table',
@@ -375,7 +407,7 @@ Allows a single search input for the whole table
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true
+    enabled: true
   }">
 </vue-good-table>
 ```
@@ -388,7 +420,7 @@ Allows you to specify if you want search to trigger on 'enter' event of the inpu
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     trigger: 'enter'
   }">
 </vue-good-table>
@@ -403,7 +435,7 @@ Allows you to specify your own search function for the global search
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     searchFn: myFunc
   }">
 </vue-good-table>
@@ -424,7 +456,7 @@ Text for global search input place holder
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     placeholder: 'Search this table',
   }">
 </vue-good-table>
@@ -440,7 +472,7 @@ If you want to use your own input for searching the table, you can use this prop
   :columns="columns"
   :rows="rows"
   :searchOptions="{
-  	enabled: true,
+    enabled: true,
     externalQuery: searchTerm
   }">
 </vue-good-table>
@@ -455,6 +487,35 @@ data(){
 }
 ```
 
+#### Checkbox Table
+Creating table with selectable rows (checkboxes) is easier than ever. 
+![Checkbox Screenshot](README/images/vgt-table.checkbox.png)
+
+##### selectOptions `Object`
+Object containing select options
+```html
+<vue-good-table
+  @on-select-all="allSelected"
+  @on-row-click="rowSelected"
+  :columns="columns"
+  :rows="rows"
+  :select-options="{
+    enabled: true,
+    selectionInfoClass: 'custom-class',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
+  }">
+ ```
+
+ you can also programmatically get selected rows at any time by putting a `ref` on the table and then doing
+ 
+ ```html
+ this.$refs['my-table'].selectedRows;
+ ```
+
+Check out [a working example](https://jsfiddle.net/aks9800/keLjcssn/) for details
+
+
 #### Grouped Row Options
 ---
 Sometimes you have a hierarchy in table and you want to group rows under subheadings, vue-good-table allows you to do that as well. Following properties relate to row grouping
@@ -462,11 +523,10 @@ Sometimes you have a hierarchy in table and you want to group rows under subhead
 ##### groupOptions `Object`
 Object containing group related options. 
 ```html
-<input type="text" v-model="searchTerm" >
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :groupOptions="{
+  :group-options="{
     enabled: true,
     headerPosition: 'bottom' 
   }">
@@ -614,7 +674,12 @@ column: [
 ],
 // in methods
 methods: {
-  sortFn(x, y, col) {
+  sortFn(x, y, col, rowX, rowY) {
+    // x - row1 value for column
+    // y - row2 value for column
+    // col - column being sorted
+    // rowX - row object for row1
+    // rowY - row object for row2
     return (x < y ? -1 : (x > y ? 1 : 0));
   }
 }
@@ -776,6 +841,184 @@ filterFn: function(data, filterString) {
 // would create a filter matching numbers within 5 of the provided value
 ```
 
+### Table Events
+
+#### @on-row-click
+event emitted on table row click
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-click="onRowClick">
+ ```
+ ```javascript
+ methods: {
+   onRowClick(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
+     // params.selected - if selection is enabled this argument 
+     // indicates selected or not
+   }
+ }
+ ```
+
+ #### @on-cell-click
+event emitted on table cell click
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-cell-click="onCellClick">
+ ```
+ ```javascript
+ methods: {
+   onCellClick(params) {
+     // params.row - row object 
+     // params.column - column object
+     // params.rowIndex - index of this row on the current page.
+   }
+ }
+ ```
+ 
+ #### @on-row-mouseenter
+event emitted on row mouseenter
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-mouseenter="onRowMouseover">
+ ```
+ ```javascript
+ methods: {
+   onRowMouseover(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
+   }
+ }
+ ```
+ 
+ #### @on-row-mouseleave
+event emitted on table row mouseleave
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-mouseleave="onRowMouseleave">
+ ```
+ ```javascript
+ methods: {
+   onRowMouseleave(row, pageIndex) {
+     // row - row object 
+     // pageIndex - index of this row on the current page.
+   }
+ }
+ ```
+ 
+#### @on-search
+event emitted on global search (when global search is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-search="onSearch">
+ ```
+ ```javascript
+ methods: {
+   onSearch(params) {
+     // params.searchTerm - term being searched for
+     // params.rowCount - number of rows that match search
+   }
+ }
+ ```
+ 
+#### @on-page-change
+event emitted on pagination page change (when pagination is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-page-change="onPageChange">
+ ```
+ ```javascript
+ methods: {
+   onPageChange(params) {
+     // params.currentPage - current page that pagination is at
+     // params.currentPerPage - number of items per page
+     // params.total - total number of items in the table
+   }
+ }
+ ```
+ 
+#### @on-per-page-change
+event emitted on per page dropdown change (when pagination is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-per-page-change="onPageChange">
+```
+```javascript
+methods: {
+  onPageChange(params) {
+    // params.currentPage - current page that pagination is at
+    // params.currentPerPage - number of items per page
+    // params.total - total number of items in the table
+  }
+}
+```
+
+#### @on-sort-change
+event emitted on sort change
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-sort-change="onSortChange">
+```
+```javascript
+methods: {
+  onSortChange(params) {
+    // params.sortType - ascending or descending
+    // params.columnIndex - index of column being sorted
+  }
+}
+```
+ 
+
+#### @on-select-all
+event emitted when all is selected (only emitted for checkbox tables)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-select-all="onSelectAll">
+ ```
+ ```javascript
+ methods: {
+   onSelectAll(params) {
+     // params.selected - whether the select-all checkbox is checked or unchecked
+     // params.selectedRows - all rows that are selected (this page)
+   }
+ }
+ ```
+ 
+ #### @on-column-filter
+event emitted when column is filtered (only emitted for remote mode)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-column-filter="onColumnFilter">
+ ```
+ ```javascript
+ methods: {
+   onColumnFilter(params) {
+     // params.columnFilters - filter values for each column in the following format:
+     // {field1: 'filterTerm', field3: 'filterTerm2')
+   }
+ }
+ ```
+
 ### Style Options
 
 Vue-good-table allows providing your own css classes for the table via **styleClass** option but it also has in-built classes that you can make use of
@@ -893,6 +1136,20 @@ rows: [{
 
 you can check out some live examples on the recipes page: 
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
+
+
+### Table Actions Slot
+If you want to add table specific actions like a print button for example, you can use the Table Actions Slot. If you have global search enabled, the action panel will show up to the right of that.
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <div slot="table-actions">
+    This will show up on the top right of the table. 
+  </div>
+</vue-good-table>
+```
 
 
 ### Empty state slot

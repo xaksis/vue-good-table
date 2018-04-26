@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.0.0-beta.9
+ * vue-good-table v2.4.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -53,8 +53,14 @@ var defaultType = {
 };
 
 var VueGoodPagination = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap__footer vgt-clearfix" }, [_c('div', { staticClass: "footer__row-count vgt-pull-left" }, [_c('span', { staticClass: "footer__row-count__label" }, [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', { staticClass: "footer__row-count__select", on: { "change": _vm.perPageChanged } }, [_vm._l(_vm.getRowsPerPageDropdown(), function (option, idx) {
-      return _c('option', { key: 'rows-dropdown-option-' + idx, domProps: { "selected": _vm.currentPerPage === option, "value": option } }, [_vm._v(" " + _vm._s(option) + " ")]);
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap__footer vgt-clearfix" }, [_c('div', { staticClass: "footer__row-count vgt-pull-left" }, [_c('span', { staticClass: "footer__row-count__label" }, [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.currentPerPage, expression: "currentPerPage" }], staticClass: "footer__row-count__select", attrs: { "autocomplete": "off", "name": "perPageSelect" }, on: { "change": [function ($event) {
+          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+            return o.selected;
+          }).map(function (o) {
+            var val = "_value" in o ? o._value : o.value;return val;
+          });_vm.currentPerPage = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+        }, _vm.perPageChanged] } }, [_vm._l(_vm.getRowsPerPageDropdown(), function (option, idx) {
+      return _c('option', { key: 'rows-dropdown-option-' + idx, domProps: { "value": option } }, [_vm._v(" " + _vm._s(option) + " ")]);
     }), _vm._v(" "), _vm.paginateDropdownAllowAll ? _c('option', { attrs: { "value": "-1" } }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)]), _vm._v(" "), _c('div', { staticClass: "footer__navigation vgt-pull-right" }, [_c('a', { staticClass: "footer__navigation__page-btn", class: { disabled: !_vm.prevIsPossible }, attrs: { "href": "javascript:undefined", "tabindex": "0" }, on: { "click": function ($event) {
           $event.preventDefault();$event.stopPropagation();return _vm.previousPage($event);
         } } }, [_c('span', { staticClass: "chevron", class: { 'left': !_vm.rtl, 'right': _vm.rtl } }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _c('div', { staticClass: "footer__navigation__info" }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('a', { staticClass: "footer__navigation__page-btn", class: { disabled: !_vm.nextIsPossible }, attrs: { "href": "javascript:undefined", "tabindex": "0" }, on: { "click": function ($event) {
@@ -110,8 +116,8 @@ var VueGoodPagination = { render: function () {
 
       if (first > this.total) {
         // this probably happened as a result of filtering
-        this.currentPage = 1;
         first = 1;
+        this.currentPage = 1;
       }
 
       var last = Math.min(this.total, this.currentPerPage * this.currentPage);
@@ -126,6 +132,9 @@ var VueGoodPagination = { render: function () {
   },
 
   methods: {
+    // optionSelected(option) {
+    //   return this.currentPerPage === option;
+    // },
 
     reset: function reset() {},
 
@@ -215,6 +224,7 @@ var VgtGlobalSearch = { render: function () {
   methods: {
     updateValue: function updateValue(value) {
       this.$emit('input', value);
+      this.$emit('on-keyup', value);
     },
     entered: function entered(value) {
       this.$emit('on-enter', value);
@@ -223,7 +233,7 @@ var VgtGlobalSearch = { render: function () {
 };
 
 var VgtFilterRow = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
       return !column.hidden ? _c('th', { key: index, staticClass: "filter-th" }, [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', { staticClass: "vgt-input", attrs: { "type": "text", "placeholder": _vm.getPlaceholder(column) }, domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
             _vm.updateFilters(column, $event.target.value);
           } } }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c('select', { staticClass: "vgt-select", domProps: { "value": _vm.columnFilters[column.field] }, on: { "input": function ($event) {
@@ -238,7 +248,7 @@ var VgtFilterRow = { render: function () {
     })], 2) : _vm._e();
   }, staticRenderFns: [], _scopeId: 'data-v-2949d74f',
   name: 'VgtFilterRow',
-  props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled'],
+  props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable', 'mode'],
   watch: {
     columns: {
       handler: function handler() {
@@ -260,7 +270,7 @@ var VgtFilterRow = { render: function () {
     hasFilterRow: function hasFilterRow() {
       var this$1 = this;
 
-      if (!this.globalSearchEnabled) {
+      if (this.mode === 'remote' || !this.globalSearchEnabled) {
         for (var i = 0; i < this.columns.length; i++) {
           var col = this$1.columns[i];
           if (col.filterOptions && col.filterOptions.enabled) {
@@ -301,9 +311,13 @@ var VgtFilterRow = { render: function () {
 
       if (this.timer) { clearTimeout(this.timer); }
       this.timer = setTimeout(function () {
-        this$1.$set(this$1.columnFilters, column.field, value);
-        this$1.$emit('filter-changed', this$1.columnFilters);
+        this$1.updateFiltersImmediately(column, value);
       }, 400);
+    },
+
+    updateFiltersImmediately: function updateFiltersImmediately(column, value) {
+      this.$set(this.columnFilters, column.field, value);
+      this.$emit('filter-changed', this.columnFilters);
     },
 
     populateInitialFilters: function populateInitialFilters() {
@@ -314,8 +328,8 @@ var VgtFilterRow = { render: function () {
         // lets see if there are initial
         // filters supplied by user
         if (this$1.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
-          this$1.updateFilters(col, col.filterOptions.filterValue);
-          this$1.$set(col, 'filterValue', undefined);
+          this$1.updateFiltersImmediately(col, col.filterOptions.filterValue);
+          this$1.$set(col.filterOptions, 'filterValue', undefined);
         }
       }
     }
@@ -428,25 +442,59 @@ each(Object.keys(coreDataTypes), function (key) {
 });
 
 var GoodTable = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.searchTable, "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
           _vm.globalSearchTerm = $$v;
-        }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
+        }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount ? _c('div', { staticClass: "vgt-selection-info-row clearfix", class: _vm.selectionInfoClass }, [_vm._v(" " + _vm._s(_vm.selectionInfo) + " "), _c('a', { attrs: { "href": "" }, on: { "click": function ($event) {
+          $event.preventDefault();_vm.unselectAll();_vm.unselectAllInternal();
+        } } }, [_vm._v(" " + _vm._s(_vm.clearSelectionText) + " ")]), _vm._v(" "), _c('div', { staticClass: "vgt-selection-info-row__actions vgt-pull-right" }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', { class: { 'vgt-responsive': _vm.responsive } }, [_c('table', { ref: "table", class: _vm.tableStyleClasses }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', { staticClass: "vgt-checkbox-col" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.allSelected, expression: "allSelected" }], attrs: { "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.allSelected) ? _vm._i(_vm.allSelected, null) > -1 : _vm.allSelected }, on: { "change": [function ($event) {
+          var $$a = _vm.allSelected,
+              $$el = $event.target,
+              $$c = $$el.checked ? true : false;if (Array.isArray($$a)) {
+            var $$v = null,
+                $$i = _vm._i($$a, $$v);if ($$el.checked) {
+              $$i < 0 && (_vm.allSelected = $$a.concat([$$v]));
+            } else {
+              $$i > -1 && (_vm.allSelected = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+            }
+          } else {
+            _vm.allSelected = $$c;
+          }
+        }, _vm.toggleSelectAll] } })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
       return !column.hidden ? _c('th', { key: index$$1, class: _vm.getHeaderClasses(column, index$$1), style: { width: column.width ? column.width : 'auto' }, on: { "click": function ($event) {
             _vm.sort(index$$1);
           } } }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], { column: column })], 2) : _vm._e();
-    })], 2), _vm._v(" "), _c("vgt-filter-row", { tag: "tr", attrs: { "global-search-enabled": _vm.searchEnabled, "line-numbers": _vm.lineNumbers, "columns": _vm.columns, "typed-columns": _vm.typedColumns }, on: { "filter-changed": _vm.filterRows } })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
-      return _c('tbody', { key: index$$1 }, [_vm.groupHeaderOnTop ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._l(_vm.columns, function (column, i) {
-        return _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]);
+    })], 2), _vm._v(" "), _c("vgt-filter-row", { tag: "tr", attrs: { "global-search-enabled": _vm.searchEnabled, "line-numbers": _vm.lineNumbers, "selectable": _vm.selectable, "columns": _vm.columns, "mode": _vm.mode, "typed-columns": _vm.typedColumns }, on: { "filter-changed": _vm.filterRows } })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
+      return _c('tbody', { key: index$$1 }, [_vm.groupHeaderOnTop ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.fullColspan } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+        return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
       })], 2) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
-        return _c('tr', { key: index$$1, class: _vm.getRowStyleClass(row), on: { "click": function ($event) {
+        return _c('tr', { key: row.originalIndex, class: _vm.getRowStyleClass(row), on: { "mouseenter": function ($event) {
+              _vm.onMouseenter(row, index$$1);
+            }, "mouseleave": function ($event) {
+              _vm.onMouseleave(row, index$$1);
+            }, "click": function ($event) {
               _vm.click(row, index$$1);
-            } } }, [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }, [_vm._v(" " + _vm._s(_vm.getCurrentIndex(index$$1)) + " ")]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-          return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td') }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(row, column)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: index$$1 })], 2) : _vm._e();
+            } } }, [_vm.lineNumbers ? _c('th', { staticClass: "line-numbers" }, [_vm._v(" " + _vm._s(_vm.getCurrentIndex(index$$1)) + " ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', { staticClass: "vgt-checkbox-col" }, [_c('input', { directives: [{ name: "model", rawName: "v-model", value: row.vgtSelected, expression: "row.vgtSelected" }], attrs: { "type": "checkbox" }, domProps: { "checked": Array.isArray(row.vgtSelected) ? _vm._i(row.vgtSelected, null) > -1 : row.vgtSelected }, on: { "change": function ($event) {
+              var $$a = row.vgtSelected,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false;if (Array.isArray($$a)) {
+                var $$v = null,
+                    $$i = _vm._i($$a, $$v);if ($$el.checked) {
+                  $$i < 0 && _vm.$set(row, "vgtSelected", $$a.concat([$$v]));
+                } else {
+                  $$i > -1 && _vm.$set(row, "vgtSelected", $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+                }
+              } else {
+                _vm.$set(row, "vgtSelected", $$c);
+              }
+            } } })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+          return !column.hidden && column.field ? _c('td', { key: i, class: _vm.getClasses(i, 'td'), on: { "click": function ($event) {
+                _vm.onCellClicked(row, column, index$$1);
+              } } }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(row, column)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', { domProps: { "innerHTML": _vm._s(_vm.collect(row, column.field)) } }) : _vm._e()], { row: row, column: column, formattedRow: _vm.formattedRow(row), index: index$$1 })], 2) : _vm._e();
         })], 2);
-      }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._l(_vm.columns, function (column, i) {
-        return _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]);
-      })], 2) : _vm._e(), _vm._v(" "), _vm.processedRows.length === 0 ? _c('tr', [_c('td', { attrs: { "colspan": _vm.columns.length } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align text-disabled" }, [_vm._v(" No data for table. ")])])], 2)]) : _vm._e()], 2);
-    })], 2)]), _vm._v(" "), _vm.paginate && !_vm.paginateOnTop ? _c('vue-good-pagination', { attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
+      }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+        return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
+      })], 2) : _vm._e()], 2);
+    }), _vm._v(" "), !_vm.paginated.length ? _c('tbody', [_c('tr', [_c('td', { attrs: { "colspan": _vm.fullColspan } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align vgt-text-disabled" }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _c('vue-good-pagination', { ref: "paginationBottom", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
   }, staticRenderFns: [],
   name: 'vue-good-table',
   props: {
@@ -456,7 +504,6 @@ var GoodTable = { render: function () {
     styleClass: { default: 'vgt-table bordered' },
     columns: {},
     rows: {},
-    onClick: {},
     lineNumbers: { default: false },
     responsive: { default: true },
     rtl: { default: false },
@@ -470,9 +517,20 @@ var GoodTable = { render: function () {
       }
     },
 
+    selectOptions: {
+      default: function default$2$$1() {
+        return {
+          enabled: false,
+          selectionInfoClass: '',
+          selectionText: 'rows selected',
+          clearSelectionText: 'clear'
+        };
+      }
+    },
+
     // sort
     sortOptions: {
-      default: function default$2$$1() {
+      default: function default$3$$1() {
         return {
           enabled: true,
           initialSortBy: {}
@@ -482,7 +540,7 @@ var GoodTable = { render: function () {
 
     // pagination
     paginationOptions: {
-      default: function default$3$$1() {
+      default: function default$4$$1() {
         return {
           enabled: false,
           perPage: 10,
@@ -494,7 +552,7 @@ var GoodTable = { render: function () {
     },
 
     searchOptions: {
-      default: function default$4$$1() {
+      default: function default$5$$1() {
         return {
           enabled: false,
           trigger: null,
@@ -514,6 +572,12 @@ var GoodTable = { render: function () {
     ofText: 'of',
     allText: 'All',
 
+    // internal select options
+    selectable: false,
+    selectionInfoClass: '',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
+
     // internal sort options
     sortable: true,
     defaultSortBy: null,
@@ -529,6 +593,7 @@ var GoodTable = { render: function () {
     perPage: null,
     paginate: false,
     paginateOnTop: false,
+    paginateOnBottom: true,
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
 
@@ -541,7 +606,10 @@ var GoodTable = { render: function () {
     columnFilters: {},
     forceSearch: false,
     sortChanged: false,
-    dataTypes: dataTypes || {}
+    dataTypes: dataTypes || {},
+
+    // to keep track of select-all
+    allSelected: false
   }); },
 
   watch: {
@@ -549,8 +617,18 @@ var GoodTable = { render: function () {
       handler: function handler() {
         this.filterRows(this.columnFilters, false);
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
+
+    selectOptions: {
+      handler: function handler() {
+        this.initializeSelect();
+      },
+      deep: true,
+      immediate: true
+    },
+
     paginationOptions: {
       handler: function handler() {
         this.initializePagination();
@@ -577,6 +655,32 @@ var GoodTable = { render: function () {
   },
 
   computed: {
+    selectionInfo: function selectionInfo() {
+      return ((this.selectedRowCount) + " " + (this.selectionText));
+    },
+
+    selectedRowCount: function selectedRowCount() {
+      return this.selectedRows.length;
+    },
+
+    selectedRows: function selectedRows() {
+      var selectedRows = [];
+      each(this.processedRows, function (headerRow) {
+        each(headerRow.children, function (row) {
+          if (row.vgtSelected) {
+            selectedRows.push(row);
+          }
+        });
+      });
+      return selectedRows;
+    },
+
+    fullColspan: function fullColspan() {
+      var fullColspan = this.columns.length;
+      if (this.lineNumbers) { fullColspan++; }
+      if (this.selectable) { fullColspan++; }
+      return fullColspan;
+    },
     groupHeaderOnTop: function groupHeaderOnTop() {
       if (this.groupOptions && this.groupOptions.enabled && this.groupOptions.headerPosition && this.groupOptions.headerPosition === 'bottom') {
         return false;
@@ -642,7 +746,7 @@ var GoodTable = { render: function () {
       // take care of the global filter here also
       if (this.globalSearchAllowed) {
         // here also we need to de-construct and then
-        // re-construct the rows, lets see.
+        // re-construct the rows.
         var allRows = [];
         each(this.filteredRows, function (headerRow) {
           allRows.push.apply(allRows, headerRow.children);
@@ -667,7 +771,6 @@ var GoodTable = { render: function () {
                 if (typeof tableValue !== 'undefined' && tableValue !== null) {
                   // table value
                   tableValue = diacriticless(String(tableValue).toLowerCase());
-
                   // search term
                   var searchTerm = diacriticless(this$1.searchTerm.toLowerCase());
 
@@ -691,7 +794,8 @@ var GoodTable = { render: function () {
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
-        each(this.filteredRows, function (headerRow, i) {
+        each(this.filteredRows, function (headerRow) {
+          var i = headerRow.vgt_header_id;
           var children = filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
             var newHeaderRow = cloneDeep(headerRow);
@@ -720,7 +824,7 @@ var GoodTable = { render: function () {
             var ref = this$1.columns[this$1.sortColumn];
             var sortFn = ref.sortFn;
             if (sortFn && typeof sortFn === 'function') {
-              return sortFn(xvalue, yvalue, this$1.columns[this$1.sortColumn]) * (this$1.sortType === 'desc' ? -1 : 1);
+              return sortFn(xvalue, yvalue, this$1.columns[this$1.sortColumn], x, y) * (this$1.sortType === 'desc' ? -1 : 1);
             }
 
             // built in sort
@@ -743,16 +847,16 @@ var GoodTable = { render: function () {
     paginated: function paginated() {
       if (!this.processedRows.length) { return []; }
 
+      if (this.mode === 'remote') {
+        return this.processedRows;
+      }
+
       // for every group, extract the child rows
       // to cater to paging
       var paginatedRows = [];
       each(this.processedRows, function (childRows) {
         paginatedRows.push.apply(paginatedRows, childRows.children);
       });
-
-      if (this.mode === 'remote') {
-        return paginatedRows;
-      }
 
       if (this.paginate) {
         var pageStart = (this.currentPage - 1) * this.currentPerPage;
@@ -777,7 +881,8 @@ var GoodTable = { render: function () {
       }
       // reconstruct paginated rows here
       var reconstructedRows = [];
-      each(this.processedRows, function (headerRow, i) {
+      each(this.processedRows, function (headerRow) {
+        var i = headerRow.vgt_header_id;
         var children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
           var newHeaderRow = cloneDeep(headerRow);
@@ -785,7 +890,6 @@ var GoodTable = { render: function () {
           reconstructedRows.push(newHeaderRow);
         }
       });
-
       return reconstructedRows;
     },
 
@@ -821,10 +925,81 @@ var GoodTable = { render: function () {
         column.typeDef = this$1.dataTypes[column.type] || defaultType;
       }
       return columns;
+    },
+
+    hasRowClickListener: function hasRowClickListener() {
+      return this.$listeners && this.$listeners['on-row-click'];
     }
   },
 
   methods: {
+    emitSelectNone: function emitSelectNone() {
+      this.$emit('on-select-all', {
+        selected: false,
+        selectedRows: []
+      });
+    },
+
+    unselectAllInternal: function unselectAllInternal() {
+      var this$1 = this;
+
+      this.emitSelectNone();
+      each(this.originalRows, function (headerRow, i) {
+        each(headerRow.children, function (row, j) {
+          this$1.$set(row, 'vgtSelected', false);
+        });
+      });
+      // we need to call this to propagate changes to paginated
+      // rows
+      this.filterRows();
+    },
+
+    unselectAll: function unselectAll() {
+      if (this.selectable && this.allSelected) {
+        this.allSelected = false;
+        // this.unselectAllInternal();
+      }
+    },
+
+    toggleSelectAll: function toggleSelectAll() {
+      var this$1 = this;
+
+      if (!this.allSelected) {
+        this.unselectAllInternal();
+        return;
+      }
+      each(this.paginated, function (headerRow) {
+        each(headerRow.children, function (row) {
+          this$1.$set(row, 'vgtSelected', true);
+        });
+      });
+      var selectedRows = [];
+      if (this.groupOptions.enabled) {
+        selectedRows = cloneDeep(this.paginated);
+      } else {
+        selectedRows = cloneDeep(this.paginated[0].children);
+      }
+      this.$emit('on-select-all', {
+        selected: this.allSelected,
+        selectedRows: selectedRows
+      });
+    },
+
+    changePage: function changePage(value) {
+      if (this.paginationOptions.enabled) {
+        var paginationWidget = this.$refs.paginationBottom;
+        if (this.paginationOptions.position === 'top') {
+          paginationWidget = this.$refs.paginationTop;
+        }
+        if (paginationWidget) {
+          paginationWidget.currentPage = value;
+          // we also need to set the currentPage
+          // for table.
+          this.currentPage = value;
+        }
+      }
+    },
+
     pageChangedEvent: function pageChangedEvent() {
       return {
         currentPage: this.currentPage,
@@ -834,6 +1009,8 @@ var GoodTable = { render: function () {
     },
 
     pageChanged: function pageChanged(pagination) {
+      // every time we change page we have to unselect all
+      this.unselectAll();
       this.currentPage = pagination.currentPage;
       var pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
@@ -860,6 +1037,10 @@ var GoodTable = { render: function () {
         columnIndex: this.sortColumn
       });
 
+      this.unselectAll();
+      // every time we change sort we need to reset to page 1
+      this.changePage(1);
+
       // if the mode is remote, we don't need to do anything
       // after this.
       if (this.mode === 'remote') { return; }
@@ -867,13 +1048,50 @@ var GoodTable = { render: function () {
     },
 
     click: function click(row, index$$1) {
-      this.$emit('on-row-click', { row: row, index: index$$1 });
-      if (this.onClick) {
-        this.onClick(row, index$$1);
+      var selected = false;
+      if (this.selectable) {
+        selected = !row.vgtSelected;
+        this.$set(row, 'vgtSelected', selected);
+        if (!selected) {
+          // if we're unselecting a row, we need to unselect
+          // selectall
+          this.unselectAll();
+        }
       }
+      this.$emit('on-row-click', {
+        row: row,
+        pageIndex: index$$1,
+        selected: selected
+      });
+    },
+
+    onCellClicked: function onCellClicked(row, column, rowIndex) {
+      this.$emit('on-cell-click', {
+        row: row,
+        column: column,
+        rowIndex: rowIndex
+      });
+    },
+
+    onMouseenter: function onMouseenter(row, index$$1) {
+      this.$emit('on-row-mouseenter', {
+        row: row,
+        pageIndex: index$$1
+      });
+    },
+
+    onMouseleave: function onMouseleave(row, index$$1) {
+      this.$emit('on-row-mouseleave', {
+        row: row,
+        pageIndex: index$$1
+      });
     },
 
     searchTable: function searchTable() {
+      this.unselectAll();
+      this.unselectAllInternal();
+      // every time we searchTable
+      this.changePage(1);
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.
@@ -981,14 +1199,19 @@ var GoodTable = { render: function () {
       var this$1 = this;
       if ( fromFilter === void 0 ) fromFilter = true;
 
+      if (!this.rows.length) { return; }
       // this is invoked either as a result of changing filters
-      // or as a result of modifying rows rows.
+      // or as a result of modifying rows.
       this.columnFilters = columnFilters;
       var computedRows = cloneDeep(this.originalRows);
 
       // do we have a filter to care about?
       // if not we don't need to do anything
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
+        // every time we filter rows, we need to set current page
+        // to 1
+        this.changePage(1);
+        this.unselectAll();
         // if mode is remote, we don't do any filtering here.
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
@@ -1030,7 +1253,7 @@ var GoodTable = { render: function () {
 
     getRowStyleClass: function getRowStyleClass(row) {
       var classes = '';
-      if (this.onClick) { classes += 'clickable'; }
+      if (this.hasRowClickListener) { classes += 'clickable'; }
       var rowStyleClasses;
       if (typeof this.rowStyleClass === 'function') {
         rowStyleClasses = this.rowStyleClass(row);
@@ -1045,6 +1268,7 @@ var GoodTable = { render: function () {
 
     handleGrouped: function handleGrouped(originalRows) {
       each(originalRows, function (headerRow, i) {
+        headerRow.vgt_header_id = i;
         each(headerRow.children, function (childRow) {
           childRow.vgt_id = i;
         });
@@ -1052,18 +1276,20 @@ var GoodTable = { render: function () {
       return originalRows;
     },
 
-    handleRows: function handleRows() {
-      if (!this.groupOptions.enabled) {
-        this.filteredRows = this.handleGrouped([{
-          label: 'no groups',
-          children: this.originalRows
-        }]);
-      } else {
-        this.filteredRows = this.handleGrouped(this.originalRows);
-      }
-    },
+    // handleRows() {
+    //   if (!this.groupOptions.enabled) {
+    //     this.filteredRows = this.handleGrouped([{
+    //       label: 'no groups',
+    //       children: this.originalRows,
+    //     }]);
+    //   } else {
+    //     this.filteredRows = this.handleGrouped(this.originalRows);
+    //   }
+    // },
 
     initializePagination: function initializePagination() {
+      var this$1 = this;
+
       var ref = this.paginationOptions;
       var enabled = ref.enabled;
       var perPage = ref.perPage;
@@ -1075,6 +1301,7 @@ var GoodTable = { render: function () {
       var rowsPerPageLabel = ref.rowsPerPageLabel;
       var ofLabel = ref.ofLabel;
       var allLabel = ref.allLabel;
+      var setCurrentPage = ref.setCurrentPage;
 
       if (typeof enabled === 'boolean') {
         this.paginate = enabled;
@@ -1086,6 +1313,10 @@ var GoodTable = { render: function () {
 
       if (position === 'top') {
         this.paginateOnTop = true; // default is false
+        this.paginateOnBottom = false; // default is true
+      } else if (position === 'both') {
+        this.paginateOnTop = true;
+        this.paginateOnBottom = true;
       }
 
       if (Array.isArray(perPageDropdown) && perPageDropdown.length) {
@@ -1114,6 +1345,12 @@ var GoodTable = { render: function () {
 
       if (typeof allLabel === 'string') {
         this.allText = allLabel;
+      }
+
+      if (typeof setCurrentPage === 'number') {
+        setTimeout(function () {
+          this$1.changePage(setCurrentPage);
+        }, 500);
       }
     },
 
@@ -1158,13 +1395,37 @@ var GoodTable = { render: function () {
       if (typeof initialSortBy === 'object') {
         this.defaultSortBy = initialSortBy;
       }
+    },
+
+    initializeSelect: function initializeSelect() {
+      var ref = this.selectOptions;
+      var enabled = ref.enabled;
+      var selectionInfoClass = ref.selectionInfoClass;
+      var selectionText = ref.selectionText;
+      var clearSelectionText = ref.clearSelectionText;
+
+      if (typeof enabled === 'boolean') {
+        this.selectable = enabled;
+      }
+
+      if (typeof selectionInfoClass === 'string') {
+        this.selectionInfoClass = selectionInfoClass;
+      }
+
+      if (typeof selectionText === 'string') {
+        this.selectionText = selectionText;
+      }
+
+      if (typeof clearSelectionText === 'string') {
+        this.clearSelectionText = clearSelectionText;
+      }
     }
   },
 
   mounted: function mounted() {
     var this$1 = this;
 
-    this.filteredRows = this.originalRows;
+    // this.filteredRows = this.originalRows;
 
     if (this.perPage) {
       this.currentPerPage = this.perPage;
