@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.4.3
+ * vue-good-table v2.4.4
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10143,6 +10143,7 @@ date.compare = function (x, y, column) {
 };
 
 date.format = function (v, column) {
+  if (v === undefined || v === null) { return ''; }
   // convert to date
   var date = parse(v, column.dateInputFormat, new Date());
   return format(date, column.dateOutputFormat);
@@ -10185,6 +10186,7 @@ var number$2 = Object.freeze({
 
 var decimal = lodash_clone(number);
 decimal.format = function (v) {
+  if (v === undefined || v === null) { return ''; }
   return parseFloat(Math.round(v * 100) / 100).toFixed(2);
 };
 
@@ -10197,6 +10199,7 @@ var decimal$2 = Object.freeze({
 var percentage = lodash_clone(number);
 
 percentage.format = function (v) {
+  if (v === undefined || v === null) { return ''; }
   return ((parseFloat(v * 100).toFixed(2)) + "%");
 };
 
@@ -10222,7 +10225,7 @@ lodash_foreach(Object.keys(coreDataTypes), function (key) {
 });
 
 var GoodTable = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.searchTable, "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.resetTable, "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
           _vm.globalSearchTerm = $$v;
         }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount ? _c('div', { staticClass: "vgt-selection-info-row clearfix", class: _vm.selectionInfoClass }, [_vm._v(" " + _vm._s(_vm.selectionInfo) + " "), _c('a', { attrs: { "href": "" }, on: { "click": function ($event) {
           $event.preventDefault();_vm.unselectAll();_vm.unselectAllInternal();
@@ -10868,10 +10871,7 @@ var GoodTable = { render: function () {
     },
 
     searchTable: function searchTable() {
-      this.unselectAll();
-      this.unselectAllInternal();
-      // every time we searchTable
-      this.changePage(1);
+      this.resetTable();
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.
@@ -10879,6 +10879,13 @@ var GoodTable = { render: function () {
         this.forceSearch = true;
         this.sortChanged = true;
       }
+    },
+
+    resetTable: function resetTable() {
+      this.unselectAll();
+      this.unselectAllInternal();
+      // every time we searchTable
+      this.changePage(1);
     },
 
     // field can be:

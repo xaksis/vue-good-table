@@ -78,7 +78,8 @@ table.vgt-table {
     vertical-align: middle; }
   .vgt-table thead th.sorting-asc, .vgt-table thead th.sorting-desc {
     color: #3b3c3f;
-    position: relative; }
+    position: relative;
+    background-clip: padding-box; }
     .vgt-table thead th.sorting-asc:after, .vgt-table thead th.sorting-desc:after {
       content: '';
       display: block;
