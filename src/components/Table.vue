@@ -17,7 +17,7 @@
       :allText="allText"></vue-good-pagination>
 
     <vgt-global-search
-      @on-keyup="searchTable"
+      @on-keyup="resetTable"
       @on-enter="searchTable"
       v-model="globalSearchTerm"
       :search-enabled="searchEnabled && externalSearchQuery == null"
@@ -809,10 +809,7 @@ export default {
     },
 
     searchTable() {
-      this.unselectAll();
-      this.unselectAllInternal();
-      // every time we searchTable
-      this.changePage(1);
+      this.resetTable();
       if (this.searchTrigger === 'enter') {
         // we reset the filteredRows here because
         // we want to search across everything.
@@ -820,6 +817,13 @@ export default {
         this.forceSearch = true;
         this.sortChanged = true;
       }
+    },
+
+    resetTable() {
+      this.unselectAll();
+      this.unselectAllInternal();
+      // every time we searchTable
+      this.changePage(1);
     },
 
     // field can be:

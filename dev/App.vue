@@ -5,7 +5,7 @@
       :columns="columns"
       :rows="rows"
       :pagination-options="{ enabled: true, perPage: 3}"
-      :search-options="{ enabled: true}">
+      :search-options="{ enabled: true, trigger: 'enter'}">
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
