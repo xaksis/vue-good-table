@@ -853,10 +853,10 @@ event emitted on table row click
  ```
  ```javascript
  methods: {
-   onRowClick(row, pageIndex, selected) {
-     // row - row object 
-     // pageIndex - index of this row on the current page.
-     // selected - if selection is enabled this argument 
+   onRowClick(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
+     // params.selected - if selection is enabled this argument 
      // indicates selected or not
    }
  }
@@ -872,10 +872,10 @@ event emitted on table cell click
  ```
  ```javascript
  methods: {
-   onCellClick(row, column, rowIndex) {
-     // row - row object 
-     // column - column object
-     // rowIndex - index of this row on the current page.
+   onCellClick(params) {
+     // params.row - row object 
+     // params.column - column object
+     // params.rowIndex - index of this row on the current page.
    }
  }
  ```
@@ -890,9 +890,9 @@ event emitted on row mouseenter
  ```
  ```javascript
  methods: {
-   onRowMouseover(row, pageIndex) {
-     // row - row object 
-     // pageIndex - index of this row on the current page.
+   onRowMouseover(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
    }
  }
  ```
@@ -924,9 +924,9 @@ event emitted on global search (when global search is enabled)
  ```
  ```javascript
  methods: {
-   onSearch(searchTerm, rowCount) {
-     // searchTerm - term being searched for
-     // rowCount - number of rows that match search
+   onSearch(params) {
+     // params.searchTerm - term being searched for
+     // params.rowCount - number of rows that match search
    }
  }
  ```
@@ -941,10 +941,10 @@ event emitted on pagination page change (when pagination is enabled)
  ```
  ```javascript
  methods: {
-   onPageChange(currentPage, currentPerPage, total) {
-     // currentPage - current page that pagination is at
-     // currentPerPage - number of items per page
-     // total - total number of items in the table
+   onPageChange(params) {
+     // params.currentPage - current page that pagination is at
+     // params.currentPerPage - number of items per page
+     // params.total - total number of items in the table
    }
  }
  ```
@@ -959,10 +959,10 @@ event emitted on per page dropdown change (when pagination is enabled)
 ```
 ```javascript
 methods: {
-  onPageChange(currentPage, currentPerPage, total) {
-    // currentPage - current page that pagination is at
-    // currentPerPage - number of items per page
-    // total - total number of items in the table
+  onPageChange(params) {
+    // params.currentPage - current page that pagination is at
+    // params.currentPerPage - number of items per page
+    // params.total - total number of items in the table
   }
 }
 ```
@@ -977,9 +977,9 @@ event emitted on sort change
 ```
 ```javascript
 methods: {
-  onSortChange(sortType, columnIndex) {
-    // sortType - ascending or descending
-    // columnIndex - index of column being sorted
+  onSortChange(params) {
+    // params.sortType - ascending or descending
+    // params.columnIndex - index of column being sorted
   }
 }
 ```
@@ -995,9 +995,26 @@ event emitted when all is selected (only emitted for checkbox tables)
  ```
  ```javascript
  methods: {
-   onSelectAll(selected, selectedRows) {
-     // selected - whether the select-all checkbox is checked or unchecked
-     // selectedRows - all rows that are selected (this page)
+   onSelectAll(params) {
+     // params.selected - whether the select-all checkbox is checked or unchecked
+     // params.selectedRows - all rows that are selected (this page)
+   }
+ }
+ ```
+ 
+ #### @on-column-filter
+event emitted when column is filtered (only emitted for remote mode)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-column-filter="onColumnFilter">
+ ```
+ ```javascript
+ methods: {
+   onColumnFilter(params) {
+     // params.columnFilters - filter values for each column in the following format:
+     // {field1: 'filterTerm', field3: 'filterTerm2')
    }
  }
  ```
