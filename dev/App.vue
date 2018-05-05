@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    <button @click="rows = [];">empty row</button>
     <vue-good-table
       :columns="columns"
       :rows="rows"

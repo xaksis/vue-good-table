@@ -914,7 +914,7 @@ export default {
 
     // method to filter rows
     filterRows(columnFilters, fromFilter = true) {
-      if (!this.rows.length) return;
+      // if (!this.rows.length) return;
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
