@@ -1,11 +1,15 @@
 <template>
   <div>
     <button @click="rows = [];">empty row</button>
+    <input type="text" v-model="searchTerm">
     <vue-good-table
       :columns="columns"
       :rows="rows"
       :pagination-options="{ enabled: true, perPage: 3}"
-      :search-options="{ enabled: true, trigger: 'enter'}">
+      :search-options="{
+        enabled: true,
+        externalQuery: searchTerm,
+      }">
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
@@ -19,6 +23,7 @@ export default {
   name: 'test',
   data() {
     return {
+      searchTerm: '',
       columns: [
         {
           label: 'Name',

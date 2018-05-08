@@ -1090,7 +1090,7 @@ export default {
         this.searchTrigger = trigger;
       }
 
-      if (typeof externalQuery === 'string') {
+      if (typeof externalQuery === 'string' && externalQuery !== '') {
         this.externalSearchQuery = externalQuery;
       }
 
