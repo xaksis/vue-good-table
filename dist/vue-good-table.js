@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.4.5
+ * vue-good-table v2.4.6
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -11157,7 +11157,7 @@ var GoodTable = { render: function () {
         this.searchTrigger = trigger;
       }
 
-      if (typeof externalQuery === 'string') {
+      if (typeof externalQuery === 'string' && externalQuery !== '') {
         this.externalSearchQuery = externalQuery;
       }
 
