@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.4.6
+ * vue-good-table v2.4.7
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -1150,6 +1150,12 @@ var GoodTable = { render: function () {
 
       // lets format the resultant data
       var type = column.typeDef;
+      // this will only happen if we try to collect formatted
+      // before types have been initialized. for example: on
+      // load when external query is specified.
+      if (!type) {
+        type = this.dataTypes[column.type] || defaultType;
+      }
       return type.format(value, column);
     },
 
@@ -1377,7 +1383,7 @@ var GoodTable = { render: function () {
         this.searchTrigger = trigger;
       }
 
-      if (typeof externalQuery === 'string' && externalQuery !== '') {
+      if (typeof externalQuery === 'string') {
         this.externalSearchQuery = externalQuery;
       }
 
