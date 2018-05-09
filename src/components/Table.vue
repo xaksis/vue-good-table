@@ -32,7 +32,7 @@
       :class="selectionInfoClass">
       {{selectionInfo}}
       <a href=""
-      @click.prevent="unselectAll(); unselectAllInternal()">
+      @click.prevent="unselectAllInternal()">
         {{clearSelectionText}}
       </a>
       <div class="vgt-selection-info-row__actions vgt-pull-right">
@@ -48,7 +48,7 @@
             <th v-if="selectable" class="vgt-checkbox-col">
               <input
                 type="checkbox"
-                v-model="allSelected"
+                :checked="allSelected"
                 @change="toggleSelectAll" />
             </th>
             <th v-for="(column, index) in columns"
@@ -320,10 +320,7 @@ export default {
     columnFilters: {},
     forceSearch: false,
     sortChanged: false,
-    dataTypes: dataTypes || {},
-
-    // to keep track of select-all
-    allSelected: false,
+    dataTypes: dataTypes || {}
   }),
 
   watch: {
@@ -369,6 +366,10 @@ export default {
   },
 
   computed: {
+    allSelected() {
+      return this.selectedRowCount === this.totalRowCount
+    },
+
     selectionInfo() {
       return `${this.selectedRowCount} ${this.selectionText}`;
     },
@@ -677,32 +678,19 @@ export default {
       this.filterRows();
     },
 
-    unselectAll() {
-      if (this.selectable && this.allSelected) {
-        this.allSelected = false;
-        // this.unselectAllInternal();
-      }
-    },
-
     toggleSelectAll() {
-      if (!this.allSelected) {
+      if (this.allSelected) {
         this.unselectAllInternal();
         return;
       }
-      each(this.paginated, (headerRow) => {
+      each(this.processedRows, (headerRow) => {
         each(headerRow.children, (row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
-      let selectedRows = [];
-      if (this.groupOptions.enabled) {
-        selectedRows = cloneDeep(this.paginated);
-      } else {
-        selectedRows = cloneDeep(this.paginated[0].children);
-      }
       this.$emit('on-select-all', {
         selected: this.allSelected,
-        selectedRows,
+        selectedRows: this.selectedRows
       });
     },
 
@@ -731,7 +719,6 @@ export default {
 
     pageChanged(pagination) {
       // every time we change page we have to unselect all
-      this.unselectAll();
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
@@ -758,7 +745,6 @@ export default {
         columnIndex: this.sortColumn,
       });
 
-      this.unselectAll();
       // every time we change sort we need to reset to page 1
       this.changePage(1);
 
@@ -773,11 +759,6 @@ export default {
       if (this.selectable) {
         selected = !row.vgtSelected;
         this.$set(row, 'vgtSelected', selected);
-        if (!selected) {
-          // if we're unselecting a row, we need to unselect
-          // selectall
-          this.unselectAll();
-        }
       }
       this.$emit('on-row-click', {
         row,
@@ -820,7 +801,6 @@ export default {
     },
 
     resetTable() {
-      this.unselectAll();
       this.unselectAllInternal();
       // every time we searchTable
       this.changePage(1);
@@ -932,7 +912,7 @@ export default {
         // every time we filter rows, we need to set current page
         // to 1
         this.changePage(1);
-        this.unselectAll();
+        this.unselectAllInternal();
         // if mode is remote, we don't do any filtering here.
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
