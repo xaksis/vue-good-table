@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.4.7
+ * vue-good-table v2.4.8
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5494,7 +5494,7 @@ var defaultType = {
   }
 };
 
-var VueGoodPagination = { render: function () {
+var VgtPagination = { render: function () {
     var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap__footer vgt-clearfix" }, [_c('div', { staticClass: "footer__row-count vgt-pull-left" }, [_c('span', { staticClass: "footer__row-count__label" }, [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.currentPerPage, expression: "currentPerPage" }], staticClass: "footer__row-count__select", attrs: { "autocomplete": "off", "name": "perPageSelect" }, on: { "change": [function ($event) {
           var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
             return o.selected;
@@ -5509,7 +5509,7 @@ var VueGoodPagination = { render: function () {
           $event.preventDefault();$event.stopPropagation();return _vm.nextPage($event);
         } } }, [_c('span', [_vm._v(_vm._s(_vm.nextText))]), _vm._v(" "), _c('span', { staticClass: "chevron", class: { 'right': !_vm.rtl, 'left': _vm.rtl } })])])]);
   }, staticRenderFns: [],
-  name: 'vue-good-pagination',
+  name: 'VgtPagination',
   props: {
     styleClass: { default: 'table table-bordered' },
     total: { default: null },
@@ -10225,7 +10225,7 @@ lodash_foreach(Object.keys(coreDataTypes), function (key) {
 });
 
 var GoodTable = { render: function () {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vue-good-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.resetTable, "on-enter": _vm.searchTable }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "vgt-wrap", class: { 'rtl': _vm.rtl, 'nocturnal': _vm.theme === 'nocturnal' } }, [_vm.paginate && _vm.paginateOnTop ? _c('vgt-pagination', { ref: "paginationTop", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', { attrs: { "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null, "global-search-placeholder": _vm.searchPlaceholder }, on: { "on-keyup": _vm.searchTableOnKeyUp, "on-enter": _vm.searchTableOnEnter }, model: { value: _vm.globalSearchTerm, callback: function ($$v) {
           _vm.globalSearchTerm = $$v;
         }, expression: "globalSearchTerm" } }, [_c('template', { slot: "internal-table-actions" }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount ? _c('div', { staticClass: "vgt-selection-info-row clearfix", class: _vm.selectionInfoClass }, [_vm._v(" " + _vm._s(_vm.selectionInfo) + " "), _c('a', { attrs: { "href": "" }, on: { "click": function ($event) {
           $event.preventDefault();_vm.unselectAll();_vm.unselectAllInternal();
@@ -10277,7 +10277,7 @@ var GoodTable = { render: function () {
       }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', { staticClass: "vgt-left-align vgt-row-header", attrs: { "colspan": _vm.columns.length } }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', { staticClass: "vgt-row-header" }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return headerRow.mode !== 'span' ? _c('th', { key: i, staticClass: "vgt-row-header", class: _vm.getClasses(i, 'td') }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
       })], 2) : _vm._e()], 2);
-    }), _vm._v(" "), !_vm.paginated.length ? _c('tbody', [_c('tr', [_c('td', { attrs: { "colspan": _vm.fullColspan } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align vgt-text-disabled" }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _c('vue-good-pagination', { ref: "paginationBottom", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
+    }), _vm._v(" "), !_vm.paginated.length ? _c('tbody', [_c('tr', [_c('td', { attrs: { "colspan": _vm.fullColspan } }, [_vm._t("emptystate", [_c('div', { staticClass: "vgt-center-align vgt-text-disabled" }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _c('vgt-pagination', { ref: "paginationBottom", attrs: { "perPage": _vm.perPage, "rtl": _vm.rtl, "total": _vm.totalRows || _vm.totalRowCount, "nextText": _vm.nextText, "prevText": _vm.prevText, "rowsPerPageText": _vm.rowsPerPageText, "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown, "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll, "ofText": _vm.ofText, "allText": _vm.allText }, on: { "page-changed": _vm.pageChanged, "per-page-changed": _vm.perPageChanged } }) : _vm._e()], 1);
   }, staticRenderFns: [],
   name: 'vue-good-table',
   props: {
@@ -10870,14 +10870,20 @@ var GoodTable = { render: function () {
       });
     },
 
-    searchTable: function searchTable() {
-      this.resetTable();
+    searchTableOnEnter: function searchTableOnEnter() {
       if (this.searchTrigger === 'enter') {
+        this.resetTable();
         // we reset the filteredRows here because
         // we want to search across everything.
         this.filteredRows = this.originalRows;
         this.forceSearch = true;
         this.sortChanged = true;
+      }
+    },
+
+    searchTableOnKeyUp: function searchTableOnKeyUp() {
+      if (this.searchTrigger !== 'enter') {
+        this.resetTable();
       }
     },
 
@@ -11239,7 +11245,7 @@ var GoodTable = { render: function () {
   },
 
   components: {
-    'vue-good-pagination': VueGoodPagination,
+    'vgt-pagination': VgtPagination,
     'vgt-global-search': VgtGlobalSearch,
     'vgt-filter-row': VgtFilterRow
   }
