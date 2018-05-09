@@ -53,6 +53,7 @@ Some example recipes for inspiration
     - [@on-per-page-change](#on-per-page-change)
     - [@on-sort-change](#on-sort-change)
     - [@on-select-all](#on-select-all)
+    - [@on-selected-rows-change](#on-selected-rows-change)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
@@ -496,6 +497,7 @@ Object containing select options
 ```html
 <vue-good-table
   @on-select-all="allSelected"
+  @on-selected-rows-change="onSelectedRowsChange"
   @on-row-click="rowSelected"
   :columns="columns"
   :rows="rows"
@@ -507,13 +509,7 @@ Object containing select options
   }">
  ```
 
- you can also programmatically get selected rows at any time by putting a `ref` on the table and then doing
- 
- ```html
- this.$refs['my-table'].selectedRows;
- ```
-
-Check out [a working example](https://jsfiddle.net/aks9800/keLjcssn/) for details
+ you can get the selectedRows listening the [@on-selected-rows-change](#on-selected-rows-change) event.
 
 
 #### Grouped Row Options
@@ -1001,6 +997,22 @@ event emitted when all is selected (only emitted for checkbox tables)
    }
  }
  ```
+ 
+ #on-selected-rows-change
+ event emitted each time selectedRows has changed
+ ```html
+ <vue-good-table
+   :columns="columns"
+   :rows="rows"
+   @on-selected-rows-change="onSelectedRowsChange">
+  ```
+  ```javascript
+  methods: {
+    onSelectedRowsChange(params) {
+      // params.selectedRows - all rows that are selected (this page)
+    }
+  }
+  ```
  
  #### @on-column-filter
 event emitted when column is filtered (only emitted for remote mode)
