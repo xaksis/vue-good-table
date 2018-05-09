@@ -102,7 +102,7 @@
             :class="getRowStyleClass(row)"
             @mouseenter="onMouseenter(row, index)"
             @mouseleave="onMouseleave(row, index)"
-            @click="click(row, index)">
+            @click="onRowClicked(row, index)">
             <th v-if="lineNumbers" class="line-numbers">
               {{ getCurrentIndex(index) }}
             </th>
@@ -754,7 +754,7 @@ export default {
       this.sortChanged = true;
     },
 
-    click(row, index) {
+    onRowClicked(row, index) {
       let selected = false;
       if (this.selectable) {
         selected = !row.vgtSelected;
