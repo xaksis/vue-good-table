@@ -109,7 +109,7 @@
             <th v-if="selectable" class="vgt-checkbox-col">
               <input
                 type="checkbox"
-                v-model="row.vgtSelected"/>
+                :checked="row.vgtSelected" />
             </th>
             <td
               @click="onCellClicked(row, column, index)"
@@ -755,15 +755,15 @@ export default {
     },
 
     onRowClicked(row, index) {
-      let selected = false;
       if (this.selectable) {
-        selected = !row.vgtSelected;
-        this.$set(row, 'vgtSelected', selected);
+        this.$set(row, 'vgtSelected', !row.vgtSelected);
       }
-      this.$emit('on-row-click', {
-        row,
-        pageIndex: index,
-        selected,
+      this.$nextTick(() => {
+        this.$emit('on-row-click', {
+          row,
+          pageIndex: index,
+          selected: !!row.vgtSelected,
+        });
       });
     },
 
