@@ -363,6 +363,12 @@ export default {
       deep: true,
       immediate: true,
     },
+
+    selectedRows: function() {
+      this.$emit('on-selected-rows-change', {
+        selectedRows: this.selectedRows,
+      });
+    }
   },
 
   computed: {
