@@ -8,7 +8,7 @@
       :pagination-options="{ enabled: true, perPage: 3}"
       :search-options="{
         enabled: true,
-        externalQuery: searchTerm,
+        trigger: 'enter',
       }">
     </vue-good-table>
     <h3>Grouped Table</h3>
