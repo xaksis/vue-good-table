@@ -41,7 +41,7 @@
 import cloneDeep from 'lodash.clonedeep';
 
 export default {
-  name: 'vue-good-pagination',
+  name: 'VgtPagination',
   props: {
     styleClass: { default: 'table table-bordered' },
     total: { default: null },

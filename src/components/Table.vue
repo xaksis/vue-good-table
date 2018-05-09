@@ -1,6 +1,6 @@
 <template>
   <div class="vgt-wrap" :class="{'rtl': rtl, 'nocturnal': theme==='nocturnal'}">
-    <vue-good-pagination
+    <vgt-pagination
       v-if="paginate && paginateOnTop"
       ref="paginationTop"
       @page-changed="pageChanged"
@@ -14,7 +14,7 @@
       :customRowsPerPageDropdown="customRowsPerPageDropdown"
       :paginateDropdownAllowAll="paginateDropdownAllowAll"
       :ofText="ofText"
-      :allText="allText"></vue-good-pagination>
+      :allText="allText"></vgt-pagination>
 
     <vgt-global-search
       @on-keyup="searchTableOnKeyUp"
@@ -169,7 +169,7 @@
         </tbody>
       </table>
     </div>
-    <vue-good-pagination
+    <vgt-pagination
       v-if="paginate && paginateOnBottom"
       ref="paginationBottom"
       @page-changed="pageChanged"
@@ -184,7 +184,7 @@
       :paginateDropdownAllowAll="paginateDropdownAllowAll"
       :ofText="ofText"
       :allText="allText"
-      ></vue-good-pagination>
+      ></vgt-pagination>
   </div>
 </template>
 
@@ -195,7 +195,7 @@ import cloneDeep from 'lodash.clonedeep';
 import filter from 'lodash.filter';
 import diacriticless from 'diacriticless';
 import defaultType from './types/default';
-import VueGoodPagination from './Pagination.vue';
+import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtFilterRow from './VgtFilterRow.vue';
 
@@ -1175,7 +1175,7 @@ export default {
   },
 
   components: {
-    'vue-good-pagination': VueGoodPagination,
+    'vgt-pagination': VgtPagination,
     'vgt-global-search': VgtGlobalSearch,
     'vgt-filter-row': VgtFilterRow,
   },
