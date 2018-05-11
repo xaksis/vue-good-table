@@ -156,7 +156,7 @@
             </th>
           </tr>
         </tbody>
-        <tbody v-if="!paginated.length">
+        <tbody v-if="showEmptySlot">
           <tr>
             <td :colspan="fullColspan">
               <slot name="emptystate">
@@ -369,6 +369,15 @@ export default {
   },
 
   computed: {
+    showEmptySlot() {
+      if (!this.paginated.length) return true;
+
+      if (this.paginated[0].label === 'no groups'
+        && !this.paginated[0].children.length) return true;
+
+      return false;
+    },
+
     selectionInfo() {
       return `${this.selectedRowCount} ${this.selectionText}`;
     },
