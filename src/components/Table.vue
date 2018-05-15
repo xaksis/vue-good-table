@@ -948,14 +948,17 @@ export default {
         // to 1
         this.changePage(1);
         this.unselectAll();
-        // if mode is remote, we don't do any filtering here.
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
         // not when row object is modified.
-        if (this.mode === 'remote' && fromFilter) {
+        if (fromFilter) {
           this.$emit('on-column-filter', {
             columnFilters: this.columnFilters,
           });
+        }
+
+        // if mode is remote, we don't do any filtering here.
+        if (this.mode === 'remote' && fromFilter) {
           return;
         }
 

@@ -802,11 +802,12 @@ columns: [
     field: 'user_name',
     filterOptions: {
   	  enabled: true, // enable filter for this column
-	  placeholder: 'Filter This Thing', // placeholder for filter input
-	  filterValue: 'Jane', // initial populated value for this filter
-	  filterDropdownItems: [], // dropdown (with selected values) instead of text input
-	  filterFn: this.columnFilterFn, //custom filter function that 
-	},
+      placeholder: 'Filter This Thing', // placeholder for filter input
+      filterValue: 'Jane', // initial populated value for this filter
+      filterDropdownItems: [], // dropdown (with selected values) instead of text input
+      filterFn: this.columnFilterFn, //custom filter function that
+      trigger: 'enter', //only trigger on enter not on keyup 
+    },
   },
   // ...
 ]

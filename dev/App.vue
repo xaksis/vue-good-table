@@ -3,11 +3,13 @@
     <button @click="rows = [];">empty row</button>
     <input type="text" v-model="searchTerm">
     <vue-good-table
+      @on-column-filter="onColumnFilter"
       :columns="columns"
       :rows="rows"
+      mode="remotee"
       :pagination-options="{ enabled: true, perPage: 3}"
       :search-options="{
-        enabled: true,
+        enabled: false,
         trigger: 'enter',
       }">
     </vue-good-table>
@@ -28,6 +30,10 @@ export default {
         {
           label: 'Name',
           field: 'name',
+          filterOptions: {
+            enabled: true,
+            trigger: 'enter',
+          },
         },
         {
           label: 'Age',
@@ -60,6 +66,9 @@ export default {
     };
   },
   methods: {
+    onColumnFilter(params) {
+      console.log(params);
+    },
     onSelectAll(params) {
       console.log(params);
       // this.unselectAll();
