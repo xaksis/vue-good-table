@@ -212,6 +212,23 @@ Show line number for each row
 </vue-good-table>
 ```
 
+##### mode `String`
+Set mode=`remote` to allow sorting/filtering etc to be powered by server side instead of client side. Setting mode to remote, expects the following workflow:
+
+* pagination, sort, filter, search will emit [Table Events](#table-events) (loading div appears) 
+* setup handlers for each event
+* in the handler call backend endpoints with the table params
+* update rows object with the returned response ( the loading div will disappear once you update the rows object)
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  mode="remote">
+</vue-good-table>
+```
+
+
 #### Sort Options
 ---
 Set of options related to table sorting
