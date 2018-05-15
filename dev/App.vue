@@ -6,7 +6,7 @@
       @on-column-filter="onColumnFilter"
       :columns="columns"
       :rows="rows"
-      mode="remotee"
+      mode="remote"
       :pagination-options="{ enabled: true, perPage: 3}"
       :search-options="{
         enabled: false,
