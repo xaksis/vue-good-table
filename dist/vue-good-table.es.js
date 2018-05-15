@@ -757,6 +757,7 @@ var VgtGlobalSearch = __vue_normalize__$1(__vue_template__$1, __vue_inject_style
 //
 //
 //
+//
 var script$2 = {
   name: 'VgtFilterRow',
   props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable', 'mode'],
@@ -809,6 +810,14 @@ var script$2 = {
     getPlaceholder: function getPlaceholder(column) {
       var placeholder = this.isFilterable(column) && column.filterOptions.placeholder || "Filter ".concat(column.label);
       return placeholder;
+    },
+    updateFiltersOnEnter: function updateFiltersOnEnter(column, value) {
+      this.updateFilters(column, value);
+    },
+    updateFiltersOnKeyup: function updateFiltersOnKeyup(column, value) {
+      // if the trigger is enter, we don't filter on keyup
+      if (column.filterOptions.trigger === 'enter') return;
+      this.updateFilters(column, value);
     },
     // since vue doesn't detect property addition and deletion, we
     // need to create helper function to set property etc
@@ -867,8 +876,15 @@ var __vue_render__$2 = function __vue_render__() {
         value: _vm.columnFilters[column.field]
       },
       on: {
+        keyup: function keyup($event) {
+          if (!("button" in $event) && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+            return null;
+          }
+
+          _vm.updateFiltersOnEnter(column, $event.target.value);
+        },
         input: function input($event) {
-          _vm.updateFilters(column, $event.target.value);
+          _vm.updateFiltersOnKeyup(column, $event.target.value);
         }
       }
     }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c("select", {
@@ -900,7 +916,7 @@ var __vue_render__$2 = function __vue_render__() {
       },
       on: {
         input: function input($event) {
-          _vm.updateFilters(column, $event.target.value);
+          _vm.updateFilters(column, $event.target.value, true);
         }
       }
     }, [_c("option", {
@@ -931,8 +947,8 @@ var __vue_template__$2 = typeof __vue_render__$2 !== 'undefined' ? {
 
 var __vue_inject_styles__$2 = function (inject) {
   if (!inject) return;
-  inject("data-v-2a7ff999_0", {
-    source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+  inject("data-v-1d6d352a_0", {
+    source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
     map: undefined,
     media: undefined
   });
@@ -940,7 +956,7 @@ var __vue_inject_styles__$2 = function (inject) {
 /* scoped */
 
 
-var __vue_scope_id__$2 = "data-v-2a7ff999";
+var __vue_scope_id__$2 = "data-v-1d6d352a";
 /* module identifier */
 
 
@@ -1157,6 +1173,10 @@ each(Object.keys(coreDataTypes), function (key) {
 var script$3 = {
   name: 'vue-good-table',
   props: {
+    isLoading: {
+      default: false,
+      type: Boolean
+    },
     theme: {
       default: ''
     },
@@ -1236,6 +1256,8 @@ var script$3 = {
   },
   data: function data() {
     return {
+      // loading state for remote mode
+      tableLoading: false,
       // text options
       nextText: 'Next',
       prevText: 'Prev',
@@ -1280,6 +1302,7 @@ var script$3 = {
   watch: {
     rows: {
       handler: function handler() {
+        this.tableLoading = false;
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
@@ -1315,6 +1338,9 @@ var script$3 = {
     }
   },
   computed: {
+    isTableLoading: function isTableLoading() {
+      return this.isLoading || this.tableLoading;
+    },
     showEmptySlot: function showEmptySlot() {
       if (!this.paginated.length) return true;
       if (this.paginated[0].label === 'no groups' && !this.paginated[0].children.length) return true;
@@ -1669,11 +1695,19 @@ var script$3 = {
       this.currentPage = pagination.currentPage;
       var pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
+
+      if (this.mode === 'remote') {
+        this.tableLoading = true;
+      }
     },
     perPageChanged: function perPageChanged(pagination) {
       this.currentPerPage = pagination.currentPerPage;
       var perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
+
+      if (this.mode === 'remote') {
+        this.tableLoading = true;
+      }
     },
     sort: function sort(index$$1) {
       if (!this.isSortableColumn(index$$1)) return;
@@ -1692,9 +1726,13 @@ var script$3 = {
       this.unselectAll(); // every time we change sort we need to reset to page 1
 
       this.changePage(1); // if the mode is remote, we don't need to do anything
-      // after this.
+      // after this. just set table loading to true
 
-      if (this.mode === 'remote') return;
+      if (this.mode === 'remote') {
+        this.tableLoading = true;
+        return;
+      }
+
       this.sortChanged = true;
     },
     click: function click(row, index$$1) {
@@ -1871,15 +1909,19 @@ var script$3 = {
         // every time we filter rows, we need to set current page
         // to 1
         this.changePage(1);
-        this.unselectAll(); // if mode is remote, we don't do any filtering here.
-        // we need to emit an event and that's that.
+        this.unselectAll(); // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
         // not when row object is modified.
 
-        if (this.mode === 'remote' && fromFilter) {
+        if (fromFilter) {
           this.$emit('on-column-filter', {
             columnFilters: this.columnFilters
           });
+        } // if mode is remote, we don't do any filtering here.
+
+
+        if (this.mode === 'remote' && fromFilter) {
+          this.tableLoading = true;
           return;
         }
 
@@ -2126,6 +2168,15 @@ var __vue_render__$3 = function __vue_render__() {
       rtl: _vm.rtl,
       nocturnal: _vm.theme === "nocturnal"
     }
+  }, [_vm.isTableLoading ? _c("div", {
+    staticClass: "vgt-loading vgt-center-align"
+  }, [_vm._t("loadingContent", [_c("span", {
+    staticClass: "vgt-loading__content"
+  }, [_vm._v("\n        Loading...\n      ")])])], 2) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "vgt-inner-wrap",
+    class: {
+      "is-loading": _vm.isTableLoading
+    }
   }, [_vm.paginate && _vm.paginateOnTop ? _c("vgt-pagination", {
     ref: "paginationTop",
     attrs: {
@@ -2165,7 +2216,7 @@ var __vue_render__$3 = function __vue_render__() {
   }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount ? _c("div", {
     staticClass: "vgt-selection-info-row clearfix",
     class: _vm.selectionInfoClass
-  }, [_vm._v("\n    " + _vm._s(_vm.selectionInfo) + "\n    "), _c("a", {
+  }, [_vm._v("\n      " + _vm._s(_vm.selectionInfo) + "\n      "), _c("a", {
     attrs: {
       href: ""
     },
@@ -2178,7 +2229,7 @@ var __vue_render__$3 = function __vue_render__() {
         _vm.unselectAllInternal();
       }
     }
-  }, [_vm._v("\n      " + _vm._s(_vm.clearSelectionText) + "\n    ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n        " + _vm._s(_vm.clearSelectionText) + "\n      ")]), _vm._v(" "), _c("div", {
     staticClass: "vgt-selection-info-row__actions vgt-pull-right"
   }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c("div", {
     class: {
@@ -2260,7 +2311,7 @@ var __vue_render__$3 = function __vue_render__() {
       attrs: {
         colspan: _vm.fullColspan
       }
-    }, [_vm._v("\n            " + _vm._s(headerRow.label) + "\n          ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== "span" && _vm.lineNumbers ? _c("th", {
+    }, [_vm._v("\n              " + _vm._s(headerRow.label) + "\n            ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== "span" && _vm.lineNumbers ? _c("th", {
       staticClass: "vgt-row-header"
     }) : _vm._e(), _vm._v(" "), headerRow.mode !== "span" && _vm.selectable ? _c("th", {
       staticClass: "vgt-row-header"
@@ -2269,7 +2320,7 @@ var __vue_render__$3 = function __vue_render__() {
         key: i,
         staticClass: "vgt-row-header",
         class: _vm.getClasses(i, "td")
-      }, [_vm._v("\n            " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + "\n          ")]) : _vm._e();
+      }, [_vm._v("\n              " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + "\n            ")]) : _vm._e();
     })], 2) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
       return _c("tr", {
         key: row.originalIndex,
@@ -2287,7 +2338,7 @@ var __vue_render__$3 = function __vue_render__() {
         }
       }, [_vm.lineNumbers ? _c("th", {
         staticClass: "line-numbers"
-      }, [_vm._v("\n            " + _vm._s(_vm.getCurrentIndex(index)) + "\n          ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c("th", {
+      }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(index)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c("th", {
         staticClass: "vgt-checkbox-col"
       }, [_c("input", {
         directives: [{
@@ -2331,7 +2382,7 @@ var __vue_render__$3 = function __vue_render__() {
               _vm.onCellClicked(row, column, index);
             }
           }
-        }, [_vm._t("table-row", [!column.html ? _c("span", [_vm._v("\n                " + _vm._s(_vm.collectFormatted(row, column)) + "\n              ")]) : _vm._e(), _vm._v(" "), column.html ? _c("span", {
+        }, [_vm._t("table-row", [!column.html ? _c("span", [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")]) : _vm._e(), _vm._v(" "), column.html ? _c("span", {
           domProps: {
             innerHTML: _vm._s(_vm.collect(row, column.field))
           }
@@ -2347,7 +2398,7 @@ var __vue_render__$3 = function __vue_render__() {
       attrs: {
         colspan: _vm.columns.length
       }
-    }, [_vm._v("\n            " + _vm._s(headerRow.label) + "\n          ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== "span" && _vm.lineNumbers ? _c("th", {
+    }, [_vm._v("\n              " + _vm._s(headerRow.label) + "\n            ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== "span" && _vm.lineNumbers ? _c("th", {
       staticClass: "vgt-row-header"
     }) : _vm._e(), _vm._v(" "), headerRow.mode !== "span" && _vm.selectable ? _c("th", {
       staticClass: "vgt-row-header"
@@ -2356,7 +2407,7 @@ var __vue_render__$3 = function __vue_render__() {
         key: i,
         staticClass: "vgt-row-header",
         class: _vm.getClasses(i, "td")
-      }, [_vm._v("\n            " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + "\n          ")]) : _vm._e();
+      }, [_vm._v("\n              " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + "\n            ")]) : _vm._e();
     })], 2) : _vm._e()], 2);
   }), _vm._v(" "), _vm.showEmptySlot ? _c("tbody", [_c("tr", [_c("td", {
     attrs: {
@@ -2364,7 +2415,7 @@ var __vue_render__$3 = function __vue_render__() {
     }
   }, [_vm._t("emptystate", [_c("div", {
     staticClass: "vgt-center-align vgt-text-disabled"
-  }, [_vm._v("\n                No data for table\n              ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _c("vgt-pagination", {
+  }, [_vm._v("\n                  No data for table\n                ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _c("vgt-pagination", {
     ref: "paginationBottom",
     attrs: {
       perPage: _vm.perPage,
@@ -2382,7 +2433,7 @@ var __vue_render__$3 = function __vue_render__() {
       "page-changed": _vm.pageChanged,
       "per-page-changed": _vm.perPageChanged
     }
-  }) : _vm._e()], 1);
+  }) : _vm._e()], 1)]);
 };
 
 var __vue_staticRenderFns__$3 = [];
@@ -2397,8 +2448,8 @@ var __vue_template__$3 = typeof __vue_render__$3 !== 'undefined' ? {
 
 var __vue_inject_styles__$3 = function (inject) {
   if (!inject) return;
-  inject("data-v-126ce30e_0", {
-    source: "/* Utility styles\n************************************************/\n.vgt-right-align {\n  text-align: right;\n}\n.vgt-left-align {\n  text-align: left;\n}\n.vgt-center-align {\n  text-align: center;\n}\n.vgt-pull-left {\n  float: left !important;\n}\n.vgt-pull-right {\n  float: right !important;\n}\n.vgt-clearfix::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n.vgt-responsive {\n  width: 100%;\n  overflow-x: auto;\n}\n.vgt-text-disabled {\n  color: #909399;\n}\ntable.vgt-table {\n  border-collapse: collapse;\n  background-color: transparent;\n  width: 100%;\n  max-width: 100%;\n  table-layout: auto;\n  border: 1px solid #DCDFE6;\n}\ntable.vgt-table td {\n    padding: .75rem .75rem .75rem .75rem;\n    vertical-align: top;\n    border-bottom: 1px solid #DCDFE6;\n    color: #606266;\n}\ntable.vgt-table tr.clickable {\n    cursor: pointer;\n}\ntable.vgt-table tr.clickable:hover {\n      background-color: #F1F5FD;\n}\n.vgt-table th {\n  padding: .75rem 1.5rem .75rem .75rem;\n  vertical-align: middle;\n}\n.vgt-table th.sorting:hover:after {\n    display: inline-block;\n    border-bottom-color: #73b8ff;\n}\n.vgt-table th.line-numbers, .vgt-table th.vgt-checkbox-col {\n  padding: 0 .75rem 0 .75rem;\n  color: #606266;\n  border-right: 1px solid #DCDFE6;\n  word-wrap: break-word;\n  width: 25px;\n  text-align: center;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-table th.filter-th {\n  padding: .75rem .75rem .75rem .75rem;\n}\n.vgt-table th.vgt-row-header {\n  border-bottom: 2px solid #DCDFE6;\n  border-top: 2px solid #DCDFE6;\n  background-color: #fafafb;\n}\n.vgt-table thead th {\n  color: #606266;\n  vertical-align: bottom;\n  border-bottom: 1px solid #DCDFE6;\n  padding-right: 1.5rem;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-table thead th.vgt-checkbox-col {\n    vertical-align: middle;\n}\n.vgt-table thead th.sorting-asc, .vgt-table thead th.sorting-desc {\n    color: #3b3c3f;\n    position: relative;\n    background-clip: padding-box;\n}\n.vgt-table thead th.sorting-asc:after, .vgt-table thead th.sorting-desc:after {\n      content: '';\n      display: block;\n      position: absolute;\n      height: 0px;\n      width: 0px;\n      right: 6px;\n      top: 50%;\n      margin-top: -3px;\n      border-left: 6px solid transparent;\n      border-right: 6px solid transparent;\n      border-bottom: 6px solid #409eff;\n}\n.vgt-table thead th.sorting-desc:after {\n    border-top: 6px solid #409eff;\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: none;\n}\n.vgt-input, .vgt-select {\n  width: 100%;\n  height: 32px;\n  line-height: 1;\n  display: block;\n  font-size: 14px;\n  font-weight: regular;\n  padding: 6px 12px;\n  color: #606266;\n  border-radius: 4px;\n  box-sizing: border-box;\n  background-image: none;\n  background-color: #fff;\n  border: 1px solid #DCDFE6;\n  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.vgt-input::placeholder, .vgt-select::placeholder {\n    /* Chrome, Firefox, Opera, Safari 10.1+ */\n    color: #606266;\n    opacity: 0.3;\n    /* Firefox */\n}\n.vgt-input:focus, .vgt-select:focus {\n    outline: none;\n    border-color: #409eff;\n}\n.vgt-table.bordered td, .vgt-table.bordered th {\n  border: 1px solid #DCDFE6;\n}\n.vgt-table.bordered th.vgt-row-header {\n  border-bottom: 3px solid #DCDFE6;\n}\n.vgt-table.striped tbody tr:nth-of-type(odd) {\n  background-color: rgba(51, 68, 109, 0.03);\n}\n.vgt-wrap.rtl {\n  direction: rtl;\n}\n.vgt-wrap.rtl .vgt-table td, .vgt-wrap.rtl .vgt-table th:not(.line-numbers) {\n    padding: .75rem .75rem .75rem 1.5rem;\n}\n.vgt-wrap.rtl .vgt-table thead th, .vgt-wrap.rtl .vgt-table.condensed thead th {\n    padding-left: 1.5rem;\n    padding-right: .75rem;\n}\n.vgt-wrap.rtl .vgt-table th.sorting:after,\n  .vgt-wrap.rtl .vgt-table th.sorting-asc:after {\n    margin-right: 5px;\n    margin-left: 0px;\n}\n.vgt-table.condensed td, .vgt-table.condensed th.vgt-row-header {\n  padding: .4rem .4rem .4rem .4rem;\n}\n.vgt-global-search {\n  padding: 5px 0px;\n  display: flex;\n  flex-wrap: no-wrap;\n  align-items: stretch;\n  border: 1px solid #DCDFE6;\n  border-bottom: 0px;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-global-search__input {\n  position: relative;\n  padding-left: 40px;\n  flex-grow: 1;\n}\n.vgt-global-search__input .input__icon {\n    position: absolute;\n    left: 0px;\n    max-width: 32px;\n}\n.vgt-global-search__input .input__icon .magnifying-glass {\n      margin-top: 3px;\n      margin-left: 8px;\n      display: block;\n      width: 16px;\n      height: 16px;\n      border: 2px solid #d6dae2;\n      position: relative;\n      border-radius: 50%;\n}\n.vgt-global-search__input .input__icon .magnifying-glass:before {\n        content: \"\";\n        display: block;\n        position: absolute;\n        right: -7px;\n        bottom: -5px;\n        background: #d6dae2;\n        width: 8px;\n        height: 4px;\n        border-radius: 2px;\n        transform: rotate(45deg);\n        -webkit-transform: rotate(45deg);\n        -moz-transform: rotate(45deg);\n        -ms-transform: rotate(45deg);\n        -o-transform: rotate(45deg);\n}\n.vgt-global-search__actions {\n  margin-left: 10px;\n}\n.vgt-selection-info-row {\n  background: #fdf9e8;\n  padding: 5px 16px;\n  font-size: 13px;\n  border-top: 1px solid #DCDFE6;\n  border-left: 1px solid #DCDFE6;\n  border-right: 1px solid #DCDFE6;\n  color: #d3aa3b;\n  font-weight: bold;\n}\n.vgt-selection-info-row a {\n    font-weight: bold;\n    display: inline-block;\n    margin-left: 10px;\n}\n.vgt-wrap__footer {\n  color: #606266;\n  padding: 1rem;\n  border: 1px solid #DCDFE6;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-wrap__footer .footer__row-count__label, .vgt-wrap__footer .footer__row-count__select {\n    display: inline-block;\n    vertical-align: middle;\n}\n.vgt-wrap__footer .footer__row-count__label {\n    font-size: 14px;\n    color: #909399;\n}\n.vgt-wrap__footer .footer__row-count__select {\n    background-color: transparent;\n    width: auto;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    height: auto;\n    font-size: 14px;\n    margin-left: 8px;\n    color: #606266;\n    font-weight: bold;\n}\n.vgt-wrap__footer .footer__row-count__select:focus {\n      outline: none;\n      border-color: #409eff;\n}\n.vgt-wrap__footer .footer__navigation {\n    font-size: 14px;\n}\n.vgt-wrap__footer .footer__navigation__page-btn, .vgt-wrap__footer .footer__navigation__info {\n      display: inline-block;\n      vertical-align: middle;\n}\n.vgt-wrap__footer .footer__navigation__page-btn {\n      text-decoration: none;\n      color: #606266;\n      font-weight: bold;\n      white-space: nowrap;\n}\n.vgt-wrap__footer .footer__navigation__page-btn:focus {\n        outline: none;\n        border: 0;\n}\n.vgt-wrap__footer .footer__navigation__page-btn.disabled, .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover {\n        opacity: 0.5;\n        cursor: not-allowed;\n}\n.vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.left:after, .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.left:after {\n          border-right-color: #606266;\n}\n.vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.right:after, .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.right:after {\n          border-left-color: #606266;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron {\n        width: 24px;\n        height: 24px;\n        border-radius: 15%;\n        position: relative;\n        margin: 0px 8px;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron:after {\n          content: '';\n          position: absolute;\n          display: block;\n          left: 50%;\n          top: 50%;\n          margin-top: -6px;\n          border-top: 6px solid transparent;\n          border-bottom: 6px solid transparent;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron.left::after {\n          border-right: 6px solid #409eff;\n          margin-left: -3px;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron.right::after {\n          border-left: 6px solid #409eff;\n          margin-left: -3px;\n}\n.vgt-wrap__footer .footer__navigation__info {\n      color: #909399;\n      margin: 0px 16px;\n}\n@media only screen and (max-width: 750px) {\n  /* on small screens hide the info */\n.vgt-wrap__footer .footer__navigation__info {\n    display: none;\n}\n.vgt-wrap__footer .footer__navigation__page-btn {\n    margin-left: 16px;\n}\n}\n.vgt-table.nocturnal {\n  border: 1px solid #435169;\n  background-color: #324057;\n}\n.vgt-table.nocturnal tr.clickable:hover {\n    background-color: #445168;\n}\n.vgt-table.nocturnal td {\n    border-bottom: 1px solid #435169;\n    color: #C7CED8;\n}\n.vgt-table.nocturnal th.line-numbers {\n    color: #C7CED8;\n    border-right: 1px solid #435169;\n    background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-table.nocturnal thead th {\n    color: #C7CED8;\n    border-bottom: 1px solid #435169;\n    background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-table.nocturnal thead th.sorting-asc, .vgt-table.nocturnal thead th.sorting-desc {\n      color: #9aa7b9;\n}\n.vgt-table.nocturnal.bordered td, .vgt-table.nocturnal.bordered th {\n    border: 1px solid #435169;\n}\n.vgt-table.nocturnal .vgt-input, .vgt-table.nocturnal .vgt-select {\n    color: #C7CED8;\n    background-color: #232d3f;\n    border: 1px solid #435169;\n}\n.vgt-table.nocturnal .vgt-input::placeholder, .vgt-table.nocturnal .vgt-select::placeholder {\n      /* Chrome, Firefox, Opera, Safari 10.1+ */\n      color: #C7CED8;\n      opacity: 0.3;\n      /* Firefox */\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer {\n  color: #C7CED8;\n  border: 1px solid #435169;\n  background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__row-count__label {\n    color: #8290A7;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__row-count__select {\n    color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__row-count__select:focus {\n      border-color: #409eff;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn {\n    color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.left:after, .vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.left:after {\n      border-right-color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.right:after, .vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.right:after {\n      border-left-color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__info {\n    color: #8290A7;\n}\n.vgt-wrap.nocturnal .vgt-global-search {\n  border: 1px solid #435169;\n  background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .input__icon .magnifying-glass {\n  border: 2px solid #3f4c63;\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .input__icon .magnifying-glass:before {\n    background: #3f4c63;\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .vgt-input, .vgt-wrap.nocturnal .vgt-global-search__input .vgt-select {\n  color: #C7CED8;\n  background-color: #232d3f;\n  border: 1px solid #435169;\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .vgt-input::placeholder, .vgt-wrap.nocturnal .vgt-global-search__input .vgt-select::placeholder {\n    /* Chrome, Firefox, Opera, Safari 10.1+ */\n    color: #C7CED8;\n    opacity: 0.3;\n    /* Firefox */\n}\n\n/*# sourceMappingURL=Table.vue.map */",
+  inject("data-v-2617cab9_0", {
+    source: "/* Utility styles\n************************************************/\n.vgt-right-align {\n  text-align: right;\n}\n.vgt-left-align {\n  text-align: left;\n}\n.vgt-center-align {\n  text-align: center;\n}\n.vgt-pull-left {\n  float: left !important;\n}\n.vgt-pull-right {\n  float: right !important;\n}\n.vgt-clearfix::after {\n  display: block;\n  content: \"\";\n  clear: both;\n}\n.vgt-responsive {\n  width: 100%;\n  overflow-x: auto;\n}\n.vgt-text-disabled {\n  color: #909399;\n}\n.vgt-wrap {\n  position: relative;\n}\ntable.vgt-table {\n  border-collapse: collapse;\n  background-color: transparent;\n  width: 100%;\n  max-width: 100%;\n  table-layout: auto;\n  border: 1px solid #DCDFE6;\n}\ntable.vgt-table td {\n    padding: .75rem .75rem .75rem .75rem;\n    vertical-align: top;\n    border-bottom: 1px solid #DCDFE6;\n    color: #606266;\n}\ntable.vgt-table tr.clickable {\n    cursor: pointer;\n}\ntable.vgt-table tr.clickable:hover {\n      background-color: #F1F5FD;\n}\n.vgt-table th {\n  padding: .75rem 1.5rem .75rem .75rem;\n  vertical-align: middle;\n}\n.vgt-table th.sorting:hover:after {\n    display: inline-block;\n    border-bottom-color: #73b8ff;\n}\n.vgt-table th.line-numbers, .vgt-table th.vgt-checkbox-col {\n  padding: 0 .75rem 0 .75rem;\n  color: #606266;\n  border-right: 1px solid #DCDFE6;\n  word-wrap: break-word;\n  width: 25px;\n  text-align: center;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-table th.filter-th {\n  padding: .75rem .75rem .75rem .75rem;\n}\n.vgt-table th.vgt-row-header {\n  border-bottom: 2px solid #DCDFE6;\n  border-top: 2px solid #DCDFE6;\n  background-color: #fafafb;\n}\n.vgt-table thead th {\n  color: #606266;\n  vertical-align: bottom;\n  border-bottom: 1px solid #DCDFE6;\n  padding-right: 1.5rem;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-table thead th.vgt-checkbox-col {\n    vertical-align: middle;\n}\n.vgt-table thead th.sorting-asc, .vgt-table thead th.sorting-desc {\n    color: #3b3c3f;\n    position: relative;\n    background-clip: padding-box;\n}\n.vgt-table thead th.sorting-asc:after, .vgt-table thead th.sorting-desc:after {\n      content: '';\n      display: block;\n      position: absolute;\n      height: 0px;\n      width: 0px;\n      right: 6px;\n      top: 50%;\n      margin-top: -3px;\n      border-left: 6px solid transparent;\n      border-right: 6px solid transparent;\n      border-bottom: 6px solid #409eff;\n}\n.vgt-table thead th.sorting-desc:after {\n    border-top: 6px solid #409eff;\n    border-left: 6px solid transparent;\n    border-right: 6px solid transparent;\n    border-bottom: none;\n}\n.vgt-input, .vgt-select {\n  width: 100%;\n  height: 32px;\n  line-height: 1;\n  display: block;\n  font-size: 14px;\n  font-weight: regular;\n  padding: 6px 12px;\n  color: #606266;\n  border-radius: 4px;\n  box-sizing: border-box;\n  background-image: none;\n  background-color: #fff;\n  border: 1px solid #DCDFE6;\n  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.vgt-input::placeholder, .vgt-select::placeholder {\n    /* Chrome, Firefox, Opera, Safari 10.1+ */\n    color: #606266;\n    opacity: 0.3;\n    /* Firefox */\n}\n.vgt-input:focus, .vgt-select:focus {\n    outline: none;\n    border-color: #409eff;\n}\n.vgt-loading {\n  position: absolute;\n  width: 100%;\n  z-index: 10;\n  margin-top: 117px;\n}\n.vgt-loading__content {\n    background-color: #c0dfff;\n    color: #409eff;\n    padding: 7px 30px;\n    border-radius: 3px;\n}\n.vgt-inner-wrap.is-loading {\n  opacity: 0.3;\n  pointer-events: none;\n}\n.vgt-table.bordered td, .vgt-table.bordered th {\n  border: 1px solid #DCDFE6;\n}\n.vgt-table.bordered th.vgt-row-header {\n  border-bottom: 3px solid #DCDFE6;\n}\n.vgt-table.striped tbody tr:nth-of-type(odd) {\n  background-color: rgba(51, 68, 109, 0.03);\n}\n.vgt-wrap.rtl {\n  direction: rtl;\n}\n.vgt-wrap.rtl .vgt-table td, .vgt-wrap.rtl .vgt-table th:not(.line-numbers) {\n    padding: .75rem .75rem .75rem 1.5rem;\n}\n.vgt-wrap.rtl .vgt-table thead th, .vgt-wrap.rtl .vgt-table.condensed thead th {\n    padding-left: 1.5rem;\n    padding-right: .75rem;\n}\n.vgt-wrap.rtl .vgt-table th.sorting:after,\n  .vgt-wrap.rtl .vgt-table th.sorting-asc:after {\n    margin-right: 5px;\n    margin-left: 0px;\n}\n.vgt-table.condensed td, .vgt-table.condensed th.vgt-row-header {\n  padding: .4rem .4rem .4rem .4rem;\n}\n.vgt-global-search {\n  padding: 5px 0px;\n  display: flex;\n  flex-wrap: no-wrap;\n  align-items: stretch;\n  border: 1px solid #DCDFE6;\n  border-bottom: 0px;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-global-search__input {\n  position: relative;\n  padding-left: 40px;\n  flex-grow: 1;\n}\n.vgt-global-search__input .input__icon {\n    position: absolute;\n    left: 0px;\n    max-width: 32px;\n}\n.vgt-global-search__input .input__icon .magnifying-glass {\n      margin-top: 3px;\n      margin-left: 8px;\n      display: block;\n      width: 16px;\n      height: 16px;\n      border: 2px solid #d6dae2;\n      position: relative;\n      border-radius: 50%;\n}\n.vgt-global-search__input .input__icon .magnifying-glass:before {\n        content: \"\";\n        display: block;\n        position: absolute;\n        right: -7px;\n        bottom: -5px;\n        background: #d6dae2;\n        width: 8px;\n        height: 4px;\n        border-radius: 2px;\n        transform: rotate(45deg);\n        -webkit-transform: rotate(45deg);\n        -moz-transform: rotate(45deg);\n        -ms-transform: rotate(45deg);\n        -o-transform: rotate(45deg);\n}\n.vgt-global-search__actions {\n  margin-left: 10px;\n}\n.vgt-selection-info-row {\n  background: #fdf9e8;\n  padding: 5px 16px;\n  font-size: 13px;\n  border-top: 1px solid #DCDFE6;\n  border-left: 1px solid #DCDFE6;\n  border-right: 1px solid #DCDFE6;\n  color: #d3aa3b;\n  font-weight: bold;\n}\n.vgt-selection-info-row a {\n    font-weight: bold;\n    display: inline-block;\n    margin-left: 10px;\n}\n.vgt-wrap__footer {\n  color: #606266;\n  padding: 1rem;\n  border: 1px solid #DCDFE6;\n  background: linear-gradient(#F4F5F8, #F1F3F6);\n}\n.vgt-wrap__footer .footer__row-count__label, .vgt-wrap__footer .footer__row-count__select {\n    display: inline-block;\n    vertical-align: middle;\n}\n.vgt-wrap__footer .footer__row-count__label {\n    font-size: 14px;\n    color: #909399;\n}\n.vgt-wrap__footer .footer__row-count__select {\n    background-color: transparent;\n    width: auto;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    height: auto;\n    font-size: 14px;\n    margin-left: 8px;\n    color: #606266;\n    font-weight: bold;\n}\n.vgt-wrap__footer .footer__row-count__select:focus {\n      outline: none;\n      border-color: #409eff;\n}\n.vgt-wrap__footer .footer__navigation {\n    font-size: 14px;\n}\n.vgt-wrap__footer .footer__navigation__page-btn, .vgt-wrap__footer .footer__navigation__info {\n      display: inline-block;\n      vertical-align: middle;\n}\n.vgt-wrap__footer .footer__navigation__page-btn {\n      text-decoration: none;\n      color: #606266;\n      font-weight: bold;\n      white-space: nowrap;\n}\n.vgt-wrap__footer .footer__navigation__page-btn:focus {\n        outline: none;\n        border: 0;\n}\n.vgt-wrap__footer .footer__navigation__page-btn.disabled, .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover {\n        opacity: 0.5;\n        cursor: not-allowed;\n}\n.vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.left:after, .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.left:after {\n          border-right-color: #606266;\n}\n.vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.right:after, .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.right:after {\n          border-left-color: #606266;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron {\n        width: 24px;\n        height: 24px;\n        border-radius: 15%;\n        position: relative;\n        margin: 0px 8px;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron:after {\n          content: '';\n          position: absolute;\n          display: block;\n          left: 50%;\n          top: 50%;\n          margin-top: -6px;\n          border-top: 6px solid transparent;\n          border-bottom: 6px solid transparent;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron.left::after {\n          border-right: 6px solid #409eff;\n          margin-left: -3px;\n}\n.vgt-wrap__footer .footer__navigation__page-btn .chevron.right::after {\n          border-left: 6px solid #409eff;\n          margin-left: -3px;\n}\n.vgt-wrap__footer .footer__navigation__info {\n      color: #909399;\n      margin: 0px 16px;\n}\n@media only screen and (max-width: 750px) {\n  /* on small screens hide the info */\n.vgt-wrap__footer .footer__navigation__info {\n    display: none;\n}\n.vgt-wrap__footer .footer__navigation__page-btn {\n    margin-left: 16px;\n}\n}\n.vgt-table.nocturnal {\n  border: 1px solid #435169;\n  background-color: #324057;\n}\n.vgt-table.nocturnal tr.clickable:hover {\n    background-color: #445168;\n}\n.vgt-table.nocturnal td {\n    border-bottom: 1px solid #435169;\n    color: #C7CED8;\n}\n.vgt-table.nocturnal th.line-numbers {\n    color: #C7CED8;\n    border-right: 1px solid #435169;\n    background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-table.nocturnal thead th {\n    color: #C7CED8;\n    border-bottom: 1px solid #435169;\n    background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-table.nocturnal thead th.sorting-asc, .vgt-table.nocturnal thead th.sorting-desc {\n      color: #9aa7b9;\n}\n.vgt-table.nocturnal.bordered td, .vgt-table.nocturnal.bordered th {\n    border: 1px solid #435169;\n}\n.vgt-table.nocturnal .vgt-input, .vgt-table.nocturnal .vgt-select {\n    color: #C7CED8;\n    background-color: #232d3f;\n    border: 1px solid #435169;\n}\n.vgt-table.nocturnal .vgt-input::placeholder, .vgt-table.nocturnal .vgt-select::placeholder {\n      /* Chrome, Firefox, Opera, Safari 10.1+ */\n      color: #C7CED8;\n      opacity: 0.3;\n      /* Firefox */\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer {\n  color: #C7CED8;\n  border: 1px solid #435169;\n  background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__row-count__label {\n    color: #8290A7;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__row-count__select {\n    color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__row-count__select:focus {\n      border-color: #409eff;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn {\n    color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.left:after, .vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.left:after {\n      border-right-color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.right:after, .vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.right:after {\n      border-left-color: #C7CED8;\n}\n.vgt-wrap.nocturnal .vgt-wrap__footer .footer__navigation__info {\n    color: #8290A7;\n}\n.vgt-wrap.nocturnal .vgt-global-search {\n  border: 1px solid #435169;\n  background: linear-gradient(#2C394F, #2C394F);\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .input__icon .magnifying-glass {\n  border: 2px solid #3f4c63;\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .input__icon .magnifying-glass:before {\n    background: #3f4c63;\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .vgt-input, .vgt-wrap.nocturnal .vgt-global-search__input .vgt-select {\n  color: #C7CED8;\n  background-color: #232d3f;\n  border: 1px solid #435169;\n}\n.vgt-wrap.nocturnal .vgt-global-search__input .vgt-input::placeholder, .vgt-wrap.nocturnal .vgt-global-search__input .vgt-select::placeholder {\n    /* Chrome, Firefox, Opera, Safari 10.1+ */\n    color: #C7CED8;\n    opacity: 0.3;\n    /* Firefox */\n}\n\n/*# sourceMappingURL=Table.vue.map */",
     map: undefined,
     media: undefined
   });
