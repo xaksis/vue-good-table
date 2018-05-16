@@ -28,6 +28,7 @@ date.format = function (v, column) {
   if (v === undefined || v === null) return '';
   // convert to date
   const date = parse(v, column.dateInputFormat, new Date());
+  console.log(parse("2018-02-18", 'yyyy-MM-dd', new Date()));
   return format(date, column.dateOutputFormat);
 };
 

@@ -38,7 +38,6 @@
     &.sorting-asc, &.sorting-desc {
       color: darken($text-color, 15%);
       position: relative;
-      background-clip: padding-box;
       &:after  {
         content: '';
         display: block;

@@ -37,7 +37,7 @@
     }
   },
   "dependencies": {
-    "date-fns": "^2.0.0-alpha.3",
+    "date-fns": "2.0.0-alpha.7",
     "diacriticless": "1.0.1",
     "lodash.assign": "^4.2.0",
     "lodash.clone": "^4.5.0",
