@@ -1108,7 +1108,6 @@ date.format = function (v, column) {
   if (v === undefined || v === null) return ''; // convert to date
 
   var date = dateFns.parse(v, column.dateInputFormat, new Date());
-  console.log(dateFns.parse("2018-02-18", 'yyyy-MM-dd', new Date()));
   return dateFns.format(date, column.dateOutputFormat);
 };
 
