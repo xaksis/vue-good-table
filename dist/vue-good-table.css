@@ -27,9 +27,12 @@
 .vgt-text-disabled {
   color: #909399; }
 
+.vgt-wrap {
+  position: relative; }
+
 table.vgt-table {
   border-collapse: collapse;
-  background-color: transparent;
+  background-color: white;
   width: 100%;
   max-width: 100%;
   table-layout: auto;
@@ -78,8 +81,7 @@ table.vgt-table {
     vertical-align: middle; }
   .vgt-table thead th.sorting-asc, .vgt-table thead th.sorting-desc {
     color: #3b3c3f;
-    position: relative;
-    background-clip: padding-box; }
+    position: relative; }
     .vgt-table thead th.sorting-asc:after, .vgt-table thead th.sorting-desc:after {
       content: '';
       display: block;
@@ -121,6 +123,21 @@ table.vgt-table {
   .vgt-input:focus, .vgt-select:focus {
     outline: none;
     border-color: #409eff; }
+
+.vgt-loading {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  margin-top: 117px; }
+  .vgt-loading__content {
+    background-color: #c0dfff;
+    color: #409eff;
+    padding: 7px 30px;
+    border-radius: 3px; }
+
+.vgt-inner-wrap.is-loading {
+  opacity: 0.5;
+  pointer-events: none; }
 
 .vgt-table.bordered td, .vgt-table.bordered th {
   border: 1px solid #DCDFE6; }
@@ -351,7 +368,6 @@ table.vgt-table {
     /* Firefox */ }
 
 
-/*# sourceMappingURL=VgtPagination.vue.map */
 
 
 
@@ -375,7 +391,6 @@ table.vgt-table {
 
 
 
-/*# sourceMappingURL=VgtGlobalSearch.vue.map */
 
 
 
@@ -384,5 +399,3 @@ table.vgt-table {
 
 
 
-
-/*# sourceMappingURL=VgtFilterRow.vue.map */
