@@ -375,9 +375,9 @@ table.vgt-table {
   .vgt-table.black-rhino td {
     border-bottom: 1px solid #bbc5d6;
     color: #49515e; }
-  .vgt-table.black-rhino th.line-numbers {
+  .vgt-table.black-rhino th.line-numbers, .vgt-table.black-rhino th.vgt-checkbox-col {
     color: #dae2f0;
-    border-right: 1px solid #435169;
+    border-right: 1px solid #bbc5d6;
     background: linear-gradient(#4c5c79, #4e5d7c); }
   .vgt-table.black-rhino thead th {
     color: #dae2f0;

@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.5.4
+ * vue-good-table v2.5.5
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -664,11 +664,38 @@ var percentage$1 = /*#__PURE__*/Object.freeze({
   default: percentage
 });
 
+var boolean = clone(def);
+boolean.isRight = true;
+
+boolean.filterPredicate = function (rowval, filter$$1) {
+  return boolean.compare(rowval, filter$$1) === 0;
+};
+
+boolean.compare = function (x, y) {
+  function cook(d) {
+    // if d is null or undefined we give it the smallest
+    // possible value
+    if (typeof d !== 'boolean') return -Infinity;
+    return d ? 1 : 0;
+  }
+
+  x = cook(x);
+  y = cook(y);
+  if (x < y) return -1;
+  if (x > y) return 1;
+  return 0;
+};
+
+var boolean$1 = /*#__PURE__*/Object.freeze({
+  default: boolean
+});
+
 var index = {
   date: date$1,
   decimal: decimal$1,
   number: number$1,
-  percentage: percentage$1
+  percentage: percentage$1,
+  boolean: boolean$1
 };
 
 var dataTypes = {};
@@ -1697,10 +1724,15 @@ var GoodTable = {
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
         // every time we filter rows, we need to set current page
         // to 1
-        this.changePage(1);
-        this.unselectAll(); // we need to emit an event and that's that.
+        // if the mode is remote, we only need to reset, if this is
+        // being called from filter, not when rows are changing
+        if (this.mode !== 'remote' || fromFilter) {
+          this.changePage(1);
+          this.unselectAll();
+        } // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
         // not when row object is modified.
+
 
         if (fromFilter) {
           this.$emit('on-column-filter', {
