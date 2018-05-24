@@ -371,19 +371,19 @@ table.vgt-table {
   border: 1px solid #435169;
   background-color: #dfe5ee; }
   .vgt-table.black-rhino tr.clickable:hover {
-    background-color: #445168; }
+    background-color: #fff; }
   .vgt-table.black-rhino td {
     border-bottom: 1px solid #bbc5d6;
     color: #49515e; }
   .vgt-table.black-rhino th.line-numbers {
     color: #dae2f0;
     border-right: 1px solid #435169;
-    background: linear-gradient(#4d648a, #495f83); }
+    background: linear-gradient(#4c5c79, #4e5d7c); }
   .vgt-table.black-rhino thead th {
     color: #dae2f0;
-    text-shadow: 1px 2px #3e5170;
+    text-shadow: 1px 1px #3e5170;
     border-bottom: 1px solid #435169;
-    background: linear-gradient(#4d648a, #495f83); }
+    background: linear-gradient(#4c5c79, #4e5d7c); }
     .vgt-table.black-rhino thead th.sorting-asc, .vgt-table.black-rhino thead th.sorting-desc {
       color: white; }
   .vgt-table.black-rhino.bordered td {
@@ -392,18 +392,18 @@ table.vgt-table {
     border: 1px solid #435169; }
   .vgt-table.black-rhino .vgt-input, .vgt-table.black-rhino .vgt-select {
     color: #dae2f0;
-    background-color: #8da0bf;
-    border: 1px solid #435169; }
+    background-color: #34445f;
+    border: 1px solid transparent; }
     .vgt-table.black-rhino .vgt-input::placeholder, .vgt-table.black-rhino .vgt-select::placeholder {
       /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: #dae2f0;
-      opacity: 0.7;
+      opacity: 0.3;
       /* Firefox */ }
 
 .vgt-wrap.black-rhino .vgt-wrap__footer {
   color: #dae2f0;
   border: 1px solid #435169;
-  background: linear-gradient(#4d648a, #495f83); }
+  background: linear-gradient(#4c5c79, #4e5d7c); }
   .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count {
     position: relative;
     padding-right: 3px; }
@@ -447,7 +447,7 @@ table.vgt-table {
 
 .vgt-wrap.black-rhino .vgt-global-search {
   border: 1px solid #435169;
-  background: linear-gradient(#4d648a, #495f83); }
+  background: linear-gradient(#4c5c79, #4e5d7c); }
 
 .vgt-wrap.black-rhino .vgt-global-search__input .input__icon .magnifying-glass {
   border: 2px solid #3f4c63; }
@@ -456,8 +456,8 @@ table.vgt-table {
 
 .vgt-wrap.black-rhino .vgt-global-search__input .vgt-input, .vgt-wrap.black-rhino .vgt-global-search__input .vgt-select {
   color: #dae2f0;
-  background-color: #405373;
-  border: 1px solid #435169; }
+  background-color: #44516c;
+  border: 1px solid transparent; }
   .vgt-wrap.black-rhino .vgt-global-search__input .vgt-input::placeholder, .vgt-wrap.black-rhino .vgt-global-search__input .vgt-select::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: #dae2f0;
