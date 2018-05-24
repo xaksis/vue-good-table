@@ -24,7 +24,7 @@
   }
   thead th{
     color: $text-color;
-    text-shadow: 1px 2px $text-shadow-color;
+    text-shadow: 1px 1px $text-shadow-color;
     border-bottom:  1px solid $border-color;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
     &.sorting-asc, &.sorting-desc {
@@ -44,11 +44,11 @@
   //input
   .vgt-input, .vgt-select{
     color: $text-color;
-    background-color: lighten($thead-bg-color-2, 25%);
+    background-color: $input-bg;
     border: 1px solid $input-border-color;
     &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: $text-color;
-      opacity: 0.7; /* Firefox */
+      opacity: 0.3; /* Firefox */
     }
   }
 }

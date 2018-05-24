@@ -7,6 +7,7 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
+      @on-row-click="onColumnFilter"
       :pagination-options="{ enabled: true, perPage: 5}"
       :search-options="{
         enabled: false,
