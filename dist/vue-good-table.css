@@ -367,6 +367,103 @@ table.vgt-table {
     opacity: 0.3;
     /* Firefox */ }
 
+.vgt-table.black-rhino {
+  border: 1px solid #435169;
+  background-color: #dfe5ee; }
+  .vgt-table.black-rhino tr.clickable:hover {
+    background-color: #445168; }
+  .vgt-table.black-rhino td {
+    border-bottom: 1px solid #bbc5d6;
+    color: #49515e; }
+  .vgt-table.black-rhino th.line-numbers {
+    color: #dae2f0;
+    border-right: 1px solid #435169;
+    background: linear-gradient(#4d648a, #495f83); }
+  .vgt-table.black-rhino thead th {
+    color: #dae2f0;
+    text-shadow: 1px 2px #3e5170;
+    border-bottom: 1px solid #435169;
+    background: linear-gradient(#4d648a, #495f83); }
+    .vgt-table.black-rhino thead th.sorting-asc, .vgt-table.black-rhino thead th.sorting-desc {
+      color: white; }
+  .vgt-table.black-rhino.bordered td {
+    border: 1px solid #bbc5d6; }
+  .vgt-table.black-rhino.bordered th {
+    border: 1px solid #435169; }
+  .vgt-table.black-rhino .vgt-input, .vgt-table.black-rhino .vgt-select {
+    color: #dae2f0;
+    background-color: #8da0bf;
+    border: 1px solid #435169; }
+    .vgt-table.black-rhino .vgt-input::placeholder, .vgt-table.black-rhino .vgt-select::placeholder {
+      /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: #dae2f0;
+      opacity: 0.7;
+      /* Firefox */ }
+
+.vgt-wrap.black-rhino .vgt-wrap__footer {
+  color: #dae2f0;
+  border: 1px solid #435169;
+  background: linear-gradient(#4d648a, #495f83); }
+  .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count {
+    position: relative;
+    padding-right: 3px; }
+    .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count__label {
+      color: #98a5b9; }
+    .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count__select {
+      color: #49515e;
+      background: #dfe5ee;
+      border: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding-right: 15px;
+      padding-left: 5px;
+      border-radius: 3px; }
+      .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count__select::-ms-expand {
+        display: none; }
+      .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count__select:focus {
+        border-color: #409eff; }
+    .vgt-wrap.black-rhino .vgt-wrap__footer .footer__row-count::after {
+      content: '';
+      display: block;
+      position: absolute;
+      height: 0px;
+      width: 0px;
+      right: 6px;
+      top: 50%;
+      margin-top: -1px;
+      border-top: 6px solid #49515e;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: none; }
+  .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn {
+    color: #dae2f0; }
+    .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.left:after, .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.left:after {
+      border-right-color: #dae2f0; }
+    .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.right:after, .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.right:after {
+      border-left-color: #dae2f0; }
+  .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__info {
+    color: #dae2f0; }
+
+.vgt-wrap.black-rhino .vgt-global-search {
+  border: 1px solid #435169;
+  background: linear-gradient(#4d648a, #495f83); }
+
+.vgt-wrap.black-rhino .vgt-global-search__input .input__icon .magnifying-glass {
+  border: 2px solid #3f4c63; }
+  .vgt-wrap.black-rhino .vgt-global-search__input .input__icon .magnifying-glass:before {
+    background: #3f4c63; }
+
+.vgt-wrap.black-rhino .vgt-global-search__input .vgt-input, .vgt-wrap.black-rhino .vgt-global-search__input .vgt-select {
+  color: #dae2f0;
+  background-color: #405373;
+  border: 1px solid #435169; }
+  .vgt-wrap.black-rhino .vgt-global-search__input .vgt-input::placeholder, .vgt-wrap.black-rhino .vgt-global-search__input .vgt-select::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #dae2f0;
+    opacity: 0.3;
+    /* Firefox */ }
+
 
 
 

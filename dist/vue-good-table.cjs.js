@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.5.2
+ * vue-good-table v2.5.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -695,7 +695,8 @@ var GoodTable = {
       staticClass: "vgt-wrap",
       class: {
         'rtl': _vm.rtl,
-        'nocturnal': _vm.theme === 'nocturnal'
+        'nocturnal': _vm.theme === 'nocturnal',
+        'black-rhino': _vm.theme === 'black-rhino'
       }
     }, [_vm.isTableLoading ? _c('div', {
       staticClass: "vgt-loading vgt-center-align"
