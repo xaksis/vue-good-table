@@ -646,6 +646,7 @@ type of column. default: 'text'. This determines the formatting for the column a
 * _number_ - right aligned
 * _decimal_ - right aligned, 2 decimal places
 * _percentage_ - expects a decimal like 0.03 and formats it as 3.00%
+* _boolean_ - right aligned
 * _date_ - expects a string representation of date eg `'20170530'`. You should also specify [dateInputFormat](#dateinputformat) and [dateOutputFormat](dateoutputformat)
 
 ```javascript

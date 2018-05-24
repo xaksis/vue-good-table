@@ -977,8 +977,12 @@ export default {
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
         // every time we filter rows, we need to set current page
         // to 1
-        this.changePage(1);
-        this.unselectAll();
+        // if the mode is remote, we only need to reset, if this is
+        // being called from filter, not when rows are changing
+        if (this.mode !== 'remote' || fromFilter) {
+          this.changePage(1);
+          this.unselectAll();
+        }
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
         // not when row object is modified.

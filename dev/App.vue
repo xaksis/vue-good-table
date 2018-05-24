@@ -7,8 +7,12 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
+      :line-numbers="true"
       @on-row-click="onColumnFilter"
       :pagination-options="{ enabled: true, perPage: 5}"
+      :select-options="{
+        enabled: true,
+      }"
       :search-options="{
         enabled: false,
         trigger: 'enter',
@@ -53,16 +57,21 @@ export default {
           field: 'score',
           type: 'percentage',
         },
+        {
+          label: 'Bool',
+          field: 'bool',
+          type: 'boolean',
+        },
       ],
       rows: [
         // { id:1, name:"John", age: 20, createdAt: '2018-02-18T00:00:43-05:00',score: 0.03343 },
-        { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
-        { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
-        { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
-        { id:5, name:"Dan", age: 40, createdAt: null, score: 0.03343 },
-        { id:6, name:"John", age: 20, createdAt: '2011-10-31', score: 0.03343 },
-        { id:7, name:"Jane", age: 24, createdAt: '2013-09-21', score: null },
-        { id:8, name:"Susan", age: 16, createdAt: '2013-10-31', score: 0.03343 },
+        { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343, vgtSelected: true, bool: true },
+        { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343, bool: true },
+        { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343, bool: false },
+        { id:5, name:"Dan", age: 40, createdAt: null, score: 0.03343, bool: null },
+        { id:6, name:"John", age: 20, createdAt: '2011-10-31', score: 0.03343, vgtSelected: true, bool: true },
+        { id:7, name:"Jane", age: 24, createdAt: '2013-09-21', score: null, bool: 'false' },
+        { id:8, name:"Susan", age: 16, createdAt: '2013-10-31', score: 0.03343, bool: true },
       ],
     };
   },
