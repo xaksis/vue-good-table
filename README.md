@@ -53,13 +53,15 @@ Some example recipes for inspiration
     - [@on-per-page-change](#on-per-page-change)
     - [@on-sort-change](#on-sort-change)
     - [@on-select-all](#on-select-all)
+    - [@on-column-filter](#on-column-filter)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
     - [.vgt-table .condensed](#vgt-table-condensed)
-- [Theme](#theme)
+- [Themes](#themes)
   - [default](#default)
   - [nocturnal `theme='nocturnal'`](#nocturnal-themenocturnal)
+  - [black-rhino `theme='black-rhino'`](#black-rhino-themeblack-rhino)
 - [Advanced Customization](#advanced-customization)
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
@@ -586,7 +588,11 @@ myStyleFn(row){
 ```      
 
 ##### theme `String`
-Allows using other themes. Currently there is one other theme - 'nocturnal'
+Allows using other themes. 
+Included themes: 
+* [nocturnal](#nocturnal-themenocturnal)
+* [black-rhino](#black-rhino-themeblack-rhino)
+
 ```html
 <vue-good-table
   :columns="columns"
@@ -1051,11 +1057,14 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ![Table Bordered Striped Screenshot](README/images/vgt-table.condensed.png)
 
 
-## Theme
-Vue-good-table currently comes in two themes
+## Themes
+
 ### default
 ### nocturnal `theme='nocturnal'`
 ![Nocturnal Theme Screenshot](README/images/vgt-table.nocturnal.png)
+
+### black-rhino `theme='black-rhino'`
+![Black Rhino Theme Screenshot](README/images/vgt-table.black-rhino.png)
 
 ## Advanced Customization
 

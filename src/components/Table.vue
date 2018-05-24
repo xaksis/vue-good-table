@@ -1,5 +1,9 @@
 <template>
-  <div class="vgt-wrap" :class="{'rtl': rtl, 'nocturnal': theme==='nocturnal'}">
+  <div class="vgt-wrap" :class="{
+    'rtl': rtl,
+    'nocturnal': theme==='nocturnal',
+    'black-rhino': theme==='black-rhino',
+  }">
     <div v-if="isTableLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
         <span class="vgt-loading__content">
