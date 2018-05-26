@@ -12,7 +12,7 @@
       :pagination-options="{ enabled: true, perPage: 5}"
       :select-options="{
         enabled: true,
-        selectOnCheckboxOnly: true,
+        selectOnCheckboxOnly: false,
       }"
       :search-options="{
         enabled: false,
