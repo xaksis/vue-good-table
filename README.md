@@ -11,6 +11,9 @@ Did vue-good-table just save you a bunch of time? Use some of them extra minutes
 
 <a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
+## Follow the project progress live
+[Vue-good-table Project](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
+
 ## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
