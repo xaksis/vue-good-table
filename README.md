@@ -518,8 +518,9 @@ Object containing select options
   @on-row-click="rowSelected"
   :columns="columns"
   :rows="rows"
-  :select-options="{
+  :selectOptions="{
     enabled: true,
+    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
     selectionInfoClass: 'custom-class',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',

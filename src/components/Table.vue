@@ -118,7 +118,9 @@
               <th v-if="lineNumbers" class="line-numbers">
                 {{ getCurrentIndex(index) }}
               </th>
-              <th v-if="selectable" class="vgt-checkbox-col">
+              <th
+                v-if="selectable"
+                @click.prevent.stop="checkboxClick(row, index, $event)" class="vgt-checkbox-col">
                 <input
                   type="checkbox"
                   v-model="row.vgtSelected"/>
@@ -305,6 +307,7 @@ export default {
 
     // internal select options
     selectable: false,
+    selectOnCheckboxOnly: false,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -808,9 +811,28 @@ export default {
       this.sortChanged = true;
     },
 
+    checkboxClick(row, index, event) {
+      let selected = false;
+      if (this.selectOnCheckboxOnly) {
+        selected = !row.vgtSelected;
+        this.$set(row, 'vgtSelected', selected);
+        if (!selected) {
+          // if we're unselecting a row, we need to unselect
+          // selectall
+          this.unselectAll();
+        }
+      }
+      this.$emit('on-row-click', {
+        row,
+        pageIndex: index,
+        selected,
+        event,
+      });
+    },
+
     click(row, index, event) {
       let selected = false;
-      if (this.selectable) {
+      if (this.selectable && !this.selectOnCheckboxOnly) {
         selected = !row.vgtSelected;
         this.$set(row, 'vgtSelected', selected);
         if (!selected) {
@@ -1183,10 +1205,15 @@ export default {
         selectionInfoClass,
         selectionText,
         clearSelectionText,
+        selectOnCheckboxOnly,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
         this.selectable = enabled;
+      }
+
+      if (typeof selectOnCheckboxOnly === 'boolean') {
+        this.selectOnCheckboxOnly = selectOnCheckboxOnly;
       }
 
       if (typeof selectionInfoClass === 'string') {
