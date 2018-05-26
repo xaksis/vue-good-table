@@ -114,7 +114,7 @@
               :class="getRowStyleClass(row)"
               @mouseenter="onMouseenter(row, index)"
               @mouseleave="onMouseleave(row, index)"
-              @click="click(row, index)">
+              @click="click(row, index, $event)">
               <th v-if="lineNumbers" class="line-numbers">
                 {{ getCurrentIndex(index) }}
               </th>
@@ -124,7 +124,7 @@
                   v-model="row.vgtSelected"/>
               </th>
               <td
-                @click="onCellClicked(row, column, index)"
+                @click="onCellClicked(row, column, index, $event)"
                 v-for="(column, i) in columns"
                 :key="i"
                 :class="getClasses(i, 'td')"
@@ -808,7 +808,7 @@ export default {
       this.sortChanged = true;
     },
 
-    click(row, index) {
+    click(row, index, event) {
       let selected = false;
       if (this.selectable) {
         selected = !row.vgtSelected;
@@ -823,14 +823,16 @@ export default {
         row,
         pageIndex: index,
         selected,
+        event,
       });
     },
 
-    onCellClicked(row, column, rowIndex) {
+    onCellClicked(row, column, rowIndex, event) {
       this.$emit('on-cell-click', {
         row,
         column,
         rowIndex,
+        event,
       });
     },
 

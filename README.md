@@ -883,6 +883,7 @@ event emitted on table row click
      // params.pageIndex - index of this row on the current page.
      // params.selected - if selection is enabled this argument 
      // indicates selected or not
+     // params.event - click event
    }
  }
  ```
@@ -901,6 +902,7 @@ event emitted on table cell click
      // params.row - row object 
      // params.column - column object
      // params.rowIndex - index of this row on the current page.
+     // params.event - click event
    }
  }
  ```
