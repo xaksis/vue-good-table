@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.5.5
+ * vue-good-table v2.6.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -272,7 +272,7 @@ var VgtPagination = {
       return "".concat(first, " - ").concat(last, " ").concat(this.ofText, " ").concat(this.total);
     },
     nextIsPossible: function nextIsPossible() {
-      return this.total > this.currentPerPage * this.currentPage;
+      return this.currentPerPage === -1 ? false : this.total > this.currentPerPage * this.currentPage;
     },
     prevIsPossible: function prevIsPossible() {
       return this.currentPage > 1;
@@ -890,13 +890,21 @@ var GoodTable = {
               _vm.onMouseleave(row, index$$1);
             },
             "click": function click($event) {
-              _vm.click(row, index$$1);
+              _vm.click(row, index$$1, $event);
             }
           }
         }, [_vm.lineNumbers ? _c('th', {
           staticClass: "line-numbers"
         }, [_vm._v(" " + _vm._s(_vm.getCurrentIndex(index$$1)) + " ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
-          staticClass: "vgt-checkbox-col"
+          staticClass: "vgt-checkbox-col",
+          on: {
+            "click": function click($event) {
+              $event.preventDefault();
+              $event.stopPropagation();
+
+              _vm.checkboxClick(row, index$$1, $event);
+            }
+          }
         }, [_c('input', {
           directives: [{
             name: "model",
@@ -936,7 +944,7 @@ var GoodTable = {
             class: _vm.getClasses(i, 'td'),
             on: {
               "click": function click($event) {
-                _vm.onCellClicked(row, column, index$$1);
+                _vm.onCellClicked(row, column, index$$1, $event);
               }
             }
           }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(row, column)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
@@ -1088,6 +1096,7 @@ var GoodTable = {
       allText: 'All',
       // internal select options
       selectable: false,
+      selectOnCheckboxOnly: false,
       selectionInfoClass: '',
       selectionText: 'rows selected',
       clearSelectionText: 'clear',
@@ -1557,10 +1566,10 @@ var GoodTable = {
 
       this.sortChanged = true;
     },
-    click: function click(row, index$$1) {
+    checkboxClick: function checkboxClick(row, index$$1, event) {
       var selected = false;
 
-      if (this.selectable) {
+      if (this.selectOnCheckboxOnly) {
         selected = !row.vgtSelected;
         this.$set(row, 'vgtSelected', selected);
 
@@ -1574,14 +1583,37 @@ var GoodTable = {
       this.$emit('on-row-click', {
         row: row,
         pageIndex: index$$1,
-        selected: selected
+        selected: selected,
+        event: event
       });
     },
-    onCellClicked: function onCellClicked(row, column, rowIndex) {
+    click: function click(row, index$$1, event) {
+      var selected = false;
+
+      if (this.selectable && !this.selectOnCheckboxOnly) {
+        selected = !row.vgtSelected;
+        this.$set(row, 'vgtSelected', selected);
+
+        if (!selected) {
+          // if we're unselecting a row, we need to unselect
+          // selectall
+          this.unselectAll();
+        }
+      }
+
+      this.$emit('on-row-click', {
+        row: row,
+        pageIndex: index$$1,
+        selected: selected,
+        event: event
+      });
+    },
+    onCellClicked: function onCellClicked(row, column, rowIndex, event) {
       this.$emit('on-cell-click', {
         row: row,
         column: column,
-        rowIndex: rowIndex
+        rowIndex: rowIndex,
+        event: event
       });
     },
     onMouseenter: function onMouseenter(row, index$$1) {
@@ -1932,10 +1964,15 @@ var GoodTable = {
           enabled = _this$selectOptions.enabled,
           selectionInfoClass = _this$selectOptions.selectionInfoClass,
           selectionText = _this$selectOptions.selectionText,
-          clearSelectionText = _this$selectOptions.clearSelectionText;
+          clearSelectionText = _this$selectOptions.clearSelectionText,
+          selectOnCheckboxOnly = _this$selectOptions.selectOnCheckboxOnly;
 
       if (typeof enabled === 'boolean') {
         this.selectable = enabled;
+      }
+
+      if (typeof selectOnCheckboxOnly === 'boolean') {
+        this.selectOnCheckboxOnly = selectOnCheckboxOnly;
       }
 
       if (typeof selectionInfoClass === 'string') {
