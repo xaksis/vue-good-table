@@ -691,7 +691,7 @@ custom sort function. If you want to supply your own sort function you can use t
 
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Name',
     field: 'name',
@@ -718,7 +718,7 @@ Allows for custom format of values, <code>function(value)</code>, should return 
 
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Salary',
     field: 'salary',
@@ -738,7 +738,7 @@ indicates whether this column will require html rendering.
 > The preferred way of creating columns that have html is by [using slots](#custom-row-template)
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Action',
     field: 'btn',
