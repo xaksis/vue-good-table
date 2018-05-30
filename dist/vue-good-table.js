@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.1
+ * vue-good-table v2.6.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -11342,18 +11342,14 @@
 
         this.sortChanged = true;
       },
+      // checkbox click should always do the following
       checkboxClick: function checkboxClick(row, index$$1, event) {
         var selected = false;
+        selected = !row.vgtSelected;
+        this.$set(row, 'vgtSelected', selected);
 
-        if (this.selectOnCheckboxOnly) {
-          selected = !row.vgtSelected;
-          this.$set(row, 'vgtSelected', selected);
-
-          if (!selected) {
-            // if we're unselecting a row, we need to unselect
-            // selectall
-            this.unselectAll();
-          }
+        if (!selected) {
+          this.unselectAll();
         }
 
         this.$emit('on-row-click', {
@@ -11363,6 +11359,7 @@
           event: event
         });
       },
+      // row click
       click: function click(row, index$$1, event) {
         var selected = false;
 
