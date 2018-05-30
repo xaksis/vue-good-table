@@ -4,11 +4,12 @@
     <input type="text" v-model="searchTerm">
     <vue-good-table
       @on-column-filter="onColumnFilter"
+      @on-row-click="onColumnFilter"
+      @on-select-all="onSelectAll"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
       :line-numbers="true"
-      @on-row-click="onColumnFilter"
       :pagination-options="{ enabled: true, perPage: 5}"
       :select-options="{
         enabled: true,

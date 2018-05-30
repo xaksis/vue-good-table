@@ -811,16 +811,13 @@ export default {
       this.sortChanged = true;
     },
 
+    // checkbox click should always do the following
     checkboxClick(row, index, event) {
       let selected = false;
-      if (this.selectOnCheckboxOnly) {
-        selected = !row.vgtSelected;
-        this.$set(row, 'vgtSelected', selected);
-        if (!selected) {
-          // if we're unselecting a row, we need to unselect
-          // selectall
-          this.unselectAll();
-        }
+      selected = !row.vgtSelected;
+      this.$set(row, 'vgtSelected', selected);
+      if (!selected) {
+        this.unselectAll();
       }
       this.$emit('on-row-click', {
         row,
@@ -830,6 +827,7 @@ export default {
       });
     },
 
+    // row click
     click(row, index, event) {
       let selected = false;
       if (this.selectable && !this.selectOnCheckboxOnly) {
