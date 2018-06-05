@@ -704,7 +704,7 @@ export default {
       });
     },
 
-    unselectAllInternal(fromFilter = false) {
+    unselectAllInternal() {
       this.emitSelectNone();
       each(this.originalRows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
@@ -713,9 +713,7 @@ export default {
       });
       // we need to call this to propagate changes to paginated
       // rows
-      if (!fromFilter) {
-        this.filterRows();
-      }
+      this.filterRows();
     },
 
     toggleSelectAll() {
@@ -981,7 +979,6 @@ export default {
         // being called from filter, not when rows are changing
         if (this.mode !== 'remote' || fromFilter) {
           this.changePage(1);
-          this.unselectAllInternal(true);
         }
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
