@@ -1,24 +1,36 @@
 <template>
-  <div class="vgt-wrap" :class="{'rtl': rtl, 'nocturnal': theme==='nocturnal'}">
-    <vue-good-pagination
-      v-if="paginate && paginateOnTop"
-      ref="paginationTop"
-      @page-changed="pageChanged"
-      @per-page-changed="perPageChanged"
-      :perPage="perPage"
-      :rtl="rtl"
-      :total="totalRows || totalRowCount"
-      :nextText="nextText"
-      :prevText="prevText"
-      :rowsPerPageText="rowsPerPageText"
-      :customRowsPerPageDropdown="customRowsPerPageDropdown"
-      :paginateDropdownAllowAll="paginateDropdownAllowAll"
-      :ofText="ofText"
-      :allText="allText"></vue-good-pagination>
+  <div class="vgt-wrap" :class="{
+    'rtl': rtl,
+    'nocturnal': theme==='nocturnal',
+    'black-rhino': theme==='black-rhino',
+  }">
+    <div v-if="isTableLoading" class="vgt-loading vgt-center-align">
+      <slot name="loadingContent">
+        <span class="vgt-loading__content">
+          Loading...
+        </span>
+      </slot>
+    </div>
+    <div class="vgt-inner-wrap" :class="{'is-loading': isTableLoading}">
+      <vgt-pagination
+        v-if="paginate && paginateOnTop"
+        ref="paginationTop"
+        @page-changed="pageChanged"
+        @per-page-changed="perPageChanged"
+        :perPage="perPage"
+        :rtl="rtl"
+        :total="totalRows || totalRowCount"
+        :nextText="nextText"
+        :prevText="prevText"
+        :rowsPerPageText="rowsPerPageText"
+        :customRowsPerPageDropdown="customRowsPerPageDropdown"
+        :paginateDropdownAllowAll="paginateDropdownAllowAll"
+        :ofText="ofText"
+        :allText="allText"></vgt-pagination>
 
     <vgt-global-search
-      @on-keyup="resetTable"
-      @on-enter="searchTable"
+      @on-keyup="searchTableOnKeyUp"
+      @on-enter="searchTableOnEnter"
       v-model="globalSearchTerm"
       :search-enabled="searchEnabled && externalSearchQuery == null"
       :global-search-placeholder="searchPlaceholder">
@@ -32,7 +44,7 @@
       :class="selectionInfoClass">
       {{selectionInfo}}
       <a href=""
-      @click.prevent="unselectAllInternal()">
+      @click.prevent=" unselectAllInternal()">
         {{clearSelectionText}}
       </a>
       <div class="vgt-selection-info-row__actions vgt-pull-right">
@@ -102,89 +114,90 @@
             :class="getRowStyleClass(row)"
             @mouseenter="onMouseenter(row, index)"
             @mouseleave="onMouseleave(row, index)"
-            @click="onRowClicked(row, index)">
+            @click="onRowClicked(row, index, $event)">
             <th v-if="lineNumbers" class="line-numbers">
               {{ getCurrentIndex(index) }}
             </th>
-            <th v-if="selectable" class="vgt-checkbox-col">
+            <th v-if="selectable"@click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
               <input
                 type="checkbox"
-                :checked="row.vgtSelected" />
+                :checked="row.vgtSelected"/>
             </th>
             <td
-              @click="onCellClicked(row, column, index)"
+              @click="onCellClicked(row, column, index, $event)"
               v-for="(column, i) in columns"
               :key="i"
               :class="getClasses(i, 'td')"
               v-if="!column.hidden && column.field">
 
-              <slot
-                name="table-row"
-                :row="row"
-                :column="column"
-                :formattedRow="formattedRow(row)"
-                :index="index">
-                <span v-if="!column.html">
-                  {{ collectFormatted(row, column) }}
-                </span>
-                <span v-if="column.html" v-html="collect(row, column.field)">
-                </span>
-              </slot>
+                <slot
+                  name="table-row"
+                  :row="row"
+                  :column="column"
+                  :formattedRow="formattedRow(row)"
+                  :index="index">
+                  <span v-if="!column.html">
+                    {{ collectFormatted(row, column) }}
+                  </span>
+                  <span v-if="column.html" v-html="collect(row, column.field)">
+                  </span>
+                </slot>
 
-            </td>
-          </tr>
-          <tr v-if="groupHeaderOnBottom">
-            <th
-              v-if="headerRow.mode === 'span'"
-              class="vgt-left-align vgt-row-header"
-              :colspan="columns.length">
-              {{ headerRow.label }}
-            </th>
-            <th
-              class="vgt-row-header"
-              v-if="headerRow.mode !== 'span' && lineNumbers"></th>
-            <th
-              class="vgt-row-header"
-              v-if="headerRow.mode !== 'span' && selectable"></th>
-            <th
-              v-if="headerRow.mode !== 'span'"
-              v-for="(column, i) in columns"
-              :key="i"
-              class="vgt-row-header"
-              :class="getClasses(i, 'td')">
-              {{ collectFormatted(headerRow, column, true) }}
-            </th>
-          </tr>
-        </tbody>
-        <tbody v-if="!paginated.length">
-          <tr>
-            <td :colspan="fullColspan">
-              <slot name="emptystate">
-                <div class="vgt-center-align vgt-text-disabled">
-                  No data for table
-                </div>
-              </slot>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+            <tr v-if="groupHeaderOnBottom">
+              <th
+                v-if="headerRow.mode === 'span'"
+                class="vgt-left-align vgt-row-header"
+                :colspan="columns.length">
+                {{ headerRow.label }}
+              </th>
+              <th
+                class="vgt-row-header"
+                v-if="headerRow.mode !== 'span' && lineNumbers"></th>
+              <th
+                class="vgt-row-header"
+                v-if="headerRow.mode !== 'span' && selectable"></th>
+              <th
+                v-if="headerRow.mode !== 'span'"
+                v-for="(column, i) in columns"
+                :key="i"
+                class="vgt-row-header"
+                :class="getClasses(i, 'td')">
+                {{ collectFormatted(headerRow, column, true) }}
+              </th>
+            </tr>
+          </tbody>
+          <tbody v-if="showEmptySlot">
+            <tr>
+              <td :colspan="fullColspan">
+                <slot name="emptystate">
+                  <div class="vgt-center-align vgt-text-disabled">
+                    No data for table
+                  </div>
+                </slot>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <vgt-pagination
+        v-if="paginate && paginateOnBottom"
+        ref="paginationBottom"
+        @page-changed="pageChanged"
+        @per-page-changed="perPageChanged"
+        :perPage="perPage"
+        :rtl="rtl"
+        :total="totalRows || totalRowCount"
+        :nextText="nextText"
+        :prevText="prevText"
+        :rowsPerPageText="rowsPerPageText"
+        :customRowsPerPageDropdown="customRowsPerPageDropdown"
+        :paginateDropdownAllowAll="paginateDropdownAllowAll"
+        :ofText="ofText"
+        :allText="allText"
+        ></vgt-pagination>
     </div>
-    <vue-good-pagination
-      v-if="paginate && paginateOnBottom"
-      ref="paginationBottom"
-      @page-changed="pageChanged"
-      @per-page-changed="perPageChanged"
-      :perPage="perPage"
-      :rtl="rtl"
-      :total="totalRows || totalRowCount"
-      :nextText="nextText"
-      :prevText="prevText"
-      :rowsPerPageText="rowsPerPageText"
-      :customRowsPerPageDropdown="customRowsPerPageDropdown"
-      :paginateDropdownAllowAll="paginateDropdownAllowAll"
-      :ofText="ofText"
-      :allText="allText"
-      ></vue-good-pagination>
   </div>
 </template>
 
@@ -195,7 +208,7 @@ import cloneDeep from 'lodash.clonedeep';
 import filter from 'lodash.filter';
 import diacriticless from 'diacriticless';
 import defaultType from './types/default';
-import VueGoodPagination from './Pagination.vue';
+import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtFilterRow from './VgtFilterRow.vue';
 
@@ -212,6 +225,7 @@ each(Object.keys(coreDataTypes), (key) => {
 export default {
   name: 'vue-good-table',
   props: {
+    isLoading: { default: false, type: Boolean },
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: { }, // required if mode = 'remote'
@@ -279,6 +293,9 @@ export default {
   },
 
   data: () => ({
+    // loading state for remote mode
+    tableLoading: false,
+
     // text options
     nextText: 'Next',
     prevText: 'Prev',
@@ -288,6 +305,7 @@ export default {
 
     // internal select options
     selectable: false,
+    selectOnCheckboxOnly: false,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -326,6 +344,7 @@ export default {
   watch: {
     rows: {
       handler() {
+        this.tableLoading = false;
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
@@ -372,6 +391,19 @@ export default {
   },
 
   computed: {
+    isTableLoading() {
+      return this.isLoading || this.tableLoading;
+    },
+
+    showEmptySlot() {
+      if (!this.paginated.length) return true;
+
+      if (this.paginated[0].label === 'no groups'
+        && !this.paginated[0].children.length) return true;
+
+      return false;
+    },
+
     allSelected() {
       return this.selectedRowCount === this.totalRowCount
     },
@@ -728,12 +760,18 @@ export default {
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
+      if (this.mode === 'remote') {
+        this.tableLoading = true;
+      }
     },
 
     perPageChanged(pagination) {
       this.currentPerPage = pagination.currentPerPage;
       const perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
+      if (this.mode === 'remote') {
+        this.tableLoading = true;
+      }
     },
 
     sort(index) {
@@ -755,29 +793,43 @@ export default {
       this.changePage(1);
 
       // if the mode is remote, we don't need to do anything
-      // after this.
-      if (this.mode === 'remote') return;
+      // after this. just set table loading to true
+      if (this.mode === 'remote') {
+        this.tableLoading = true;
+        return;
+      }
       this.sortChanged = true;
     },
 
-    onRowClicked(row, index) {
-      if (this.selectable) {
-        this.$set(row, 'vgtSelected', !row.vgtSelected);
-      }
-      this.$nextTick(() => {
-        this.$emit('on-row-click', {
-          row,
-          pageIndex: index,
-          selected: !!row.vgtSelected,
-        });
+    // checkbox click should always do the following
+    onCheckboxClicked(row, index, event) {
+      this.$set(row, 'vgtSelected', !row.vgtSelected);
+      this.$emit('on-row-click', {
+        row,
+        pageIndex: index,
+        selected,
+        event
       });
     },
 
-    onCellClicked(row, column, rowIndex) {
+    onRowClicked(row, index, event) {
+      if (this.selectable && !this.selectOnCheckboxOnly) {
+        this.$set(row, 'vgtSelected', !row.vgtSelected);
+      }
+      this.$emit('on-row-click', {
+        row,
+        pageIndex: index,
+        selected,
+        event
+      });
+    },
+
+    onCellClicked(row, column, rowIndex, event) {
       this.$emit('on-cell-click', {
         row,
         column,
         rowIndex,
+        event
       });
     },
 
@@ -795,14 +847,20 @@ export default {
       });
     },
 
-    searchTable() {
-      this.resetTable();
+    searchTableOnEnter() {
       if (this.searchTrigger === 'enter') {
+        this.resetTable();
         // we reset the filteredRows here because
         // we want to search across everything.
         this.filteredRows = this.originalRows;
         this.forceSearch = true;
         this.sortChanged = true;
+      }
+    },
+
+    searchTableOnKeyUp() {
+      if (this.searchTrigger !== 'enter') {
+        this.resetTable();
       }
     },
 
@@ -917,16 +975,24 @@ export default {
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
         // every time we filter rows, we need to set current page
         // to 1
-        this.changePage(1);
-        this.unselectAllInternal();
-        // if mode is remote, we don't do any filtering here.
+        // if the mode is remote, we only need to reset, if this is
+        // being called from filter, not when rows are changing
+        if (this.mode !== 'remote' || fromFilter) {
+          this.changePage(1);
+          this.unselectAllInternal();
+        }
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
         // not when row object is modified.
-        if (this.mode === 'remote' && fromFilter) {
+        if (fromFilter) {
           this.$emit('on-column-filter', {
             columnFilters: this.columnFilters,
           });
+        }
+
+        // if mode is remote, we don't do any filtering here.
+        if (this.mode === 'remote' && fromFilter) {
+          this.tableLoading = true;
           return;
         }
 
@@ -1113,10 +1179,15 @@ export default {
         selectionInfoClass,
         selectionText,
         clearSelectionText,
+        selectOnCheckboxOnly,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
         this.selectable = enabled;
+      }
+
+      if (typeof selectOnCheckboxOnly === 'boolean') {
+        this.selectOnCheckboxOnly = selectOnCheckboxOnly;
       }
 
       if (typeof selectionInfoClass === 'string') {
@@ -1155,7 +1226,7 @@ export default {
   },
 
   components: {
-    'vue-good-pagination': VueGoodPagination,
+    'vgt-pagination': VgtPagination,
     'vgt-global-search': VgtGlobalSearch,
     'vgt-filter-row': VgtFilterRow,
   },

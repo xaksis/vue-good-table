@@ -10,7 +10,7 @@
     @on-row-mouseenter="onMouseover"
     @on-row-mouseleave="onMouseover"
     :search-options="{
-      enabled: true,
+      enabled: false,
     }"
     :group-options="{
       enabled: true,

@@ -11,6 +11,9 @@ Did vue-good-table just save you a bunch of time? Use some of them extra minutes
 
 <a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
+## Follow the project progress live
+[Vue-good-table Project](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
+
 ## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
@@ -53,14 +56,16 @@ Some example recipes for inspiration
     - [@on-per-page-change](#on-per-page-change)
     - [@on-sort-change](#on-sort-change)
     - [@on-select-all](#on-select-all)
+    - [@on-column-filter](#on-column-filter)
     - [@on-selected-rows-change](#on-selected-rows-change)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
     - [.vgt-table .condensed](#vgt-table-condensed)
-- [Theme](#theme)
+- [Themes](#themes)
   - [default](#default)
   - [nocturnal `theme='nocturnal'`](#nocturnal-themenocturnal)
+  - [black-rhino `theme='black-rhino'`](#black-rhino-themeblack-rhino)
 - [Advanced Customization](#advanced-customization)
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
@@ -212,6 +217,23 @@ Show line number for each row
   :lineNumbers="true">
 </vue-good-table>
 ```
+
+##### mode `String`
+Set mode=`remote` to allow sorting/filtering etc to be powered by server side instead of client side. Setting mode to remote, expects the following workflow:
+
+* pagination, sort, filter, search will emit [Table Events](#table-events) (loading div appears) 
+* setup handlers for each event
+* in the handler call backend endpoints with the table params
+* update rows object with the returned response ( the loading div will disappear once you update the rows object)
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  mode="remote">
+</vue-good-table>
+```
+
 
 #### Sort Options
 ---
@@ -501,8 +523,9 @@ Object containing select options
   @on-row-click="rowSelected"
   :columns="columns"
   :rows="rows"
-  :select-options="{
+  :selectOptions="{
     enabled: true,
+    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
     selectionInfoClass: 'custom-class',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -565,7 +588,11 @@ myStyleFn(row){
 ```      
 
 ##### theme `String`
-Allows using other themes. Currently there is one other theme - 'nocturnal'
+Allows using other themes. 
+Included themes: 
+* [nocturnal](#nocturnal-themenocturnal)
+* [black-rhino](#black-rhino-themeblack-rhino)
+
 ```html
 <vue-good-table
   :columns="columns"
@@ -619,6 +646,7 @@ type of column. default: 'text'. This determines the formatting for the column a
 * _number_ - right aligned
 * _decimal_ - right aligned, 2 decimal places
 * _percentage_ - expects a decimal like 0.03 and formats it as 3.00%
+* _boolean_ - right aligned
 * _date_ - expects a string representation of date eg `'20170530'`. You should also specify [dateInputFormat](#dateinputformat) and [dateOutputFormat](dateoutputformat)
 
 ```javascript
@@ -659,7 +687,7 @@ custom sort function. If you want to supply your own sort function you can use t
 
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Name',
     field: 'name',
@@ -686,7 +714,7 @@ Allows for custom format of values, <code>function(value)</code>, should return 
 
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Salary',
     field: 'salary',
@@ -706,7 +734,7 @@ indicates whether this column will require html rendering.
 > The preferred way of creating columns that have html is by [using slots](#custom-row-template)
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Action',
     field: 'btn',
@@ -798,11 +826,12 @@ columns: [
     field: 'user_name',
     filterOptions: {
   	  enabled: true, // enable filter for this column
-	  placeholder: 'Filter This Thing', // placeholder for filter input
-	  filterValue: 'Jane', // initial populated value for this filter
-	  filterDropdownItems: [], // dropdown (with selected values) instead of text input
-	  filterFn: this.columnFilterFn, //custom filter function that 
-	},
+      placeholder: 'Filter This Thing', // placeholder for filter input
+      filterValue: 'Jane', // initial populated value for this filter
+      filterDropdownItems: [], // dropdown (with selected values) instead of text input
+      filterFn: this.columnFilterFn, //custom filter function that
+      trigger: 'enter', //only trigger on enter not on keyup 
+    },
   },
   // ...
 ]
@@ -854,6 +883,7 @@ event emitted on table row click
      // params.pageIndex - index of this row on the current page.
      // params.selected - if selection is enabled this argument 
      // indicates selected or not
+     // params.event - click event
    }
  }
  ```
@@ -872,6 +902,7 @@ event emitted on table cell click
      // params.row - row object 
      // params.column - column object
      // params.rowIndex - index of this row on the current page.
+     // params.event - click event
    }
  }
  ```
@@ -1045,11 +1076,14 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ![Table Bordered Striped Screenshot](README/images/vgt-table.condensed.png)
 
 
-## Theme
-Vue-good-table currently comes in two themes
+## Themes
+
 ### default
 ### nocturnal `theme='nocturnal'`
 ![Nocturnal Theme Screenshot](README/images/vgt-table.nocturnal.png)
+
+### black-rhino `theme='black-rhino'`
+![Black Rhino Theme Screenshot](README/images/vgt-table.black-rhino.png)
 
 ## Advanced Customization
 

@@ -41,7 +41,7 @@
 import cloneDeep from 'lodash.clonedeep';
 
 export default {
-  name: 'vue-good-pagination',
+  name: 'VgtPagination',
   props: {
     styleClass: { default: 'table table-bordered' },
     total: { default: null },
@@ -99,7 +99,8 @@ export default {
       return `${first} - ${last} ${this.ofText} ${this.total}`;
     },
     nextIsPossible() {
-      return (this.total > this.currentPerPage * this.currentPage);
+      return this.currentPerPage === -1 ?
+        false : (this.total > this.currentPerPage * this.currentPage);
     },
     prevIsPossible() {
       return this.currentPage > 1;

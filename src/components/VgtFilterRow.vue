@@ -13,7 +13,8 @@
         class="vgt-input"
         :placeholder="getPlaceholder(column)"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value)" />
+        @keyup.enter="updateFiltersOnEnter(column, $event.target.value)"
+        v-on:input="updateFiltersOnKeyup(column, $event.target.value)" />
 
       <!-- options are a list of primitives -->
       <select v-if="isDropdownArray(column)"
@@ -33,7 +34,7 @@
       <select v-if="isDropdownObjects(column)"
         class="vgt-select"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value)">
+        v-on:input="updateFilters(column, $event.target.value, true)">
         <option value="" key="-1">{{ getPlaceholder(column) }}</option>
         <option
           v-for="(option, i) in column.filterOptions.filterDropdownItems"
@@ -54,7 +55,7 @@ export default {
     'typedColumns',
     'globalSearchEnabled',
     'selectable',
-    'mode'
+    'mode',
   ],
   watch: {
     columns: {
@@ -112,6 +113,16 @@ export default {
     getPlaceholder(column) {
       const placeholder = (this.isFilterable(column) && column.filterOptions.placeholder) || `Filter ${column.label}`;
       return placeholder;
+    },
+
+    updateFiltersOnEnter(column, value) {
+      this.updateFilters(column, value);
+    },
+
+    updateFiltersOnKeyup(column, value) {
+      // if the trigger is enter, we don't filter on keyup
+      if (column.filterOptions.trigger === 'enter') return;
+      this.updateFilters(column, value);
     },
 
     // since vue doesn't detect property addition and deletion, we
