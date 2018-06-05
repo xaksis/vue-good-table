@@ -405,7 +405,7 @@ export default {
     },
 
     allSelected() {
-      return this.selectedRowCount === this.totalRowCount
+      return this.selectedRowCount > 0 && this.selectedRowCount === this.totalRowCount
     },
 
     selectionInfo() {
@@ -704,7 +704,7 @@ export default {
       });
     },
 
-    unselectAllInternal() {
+    unselectAllInternal(fromFilter = false) {
       this.emitSelectNone();
       each(this.originalRows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
@@ -713,7 +713,9 @@ export default {
       });
       // we need to call this to propagate changes to paginated
       // rows
-      this.filterRows();
+      if (!fromFilter) {
+        this.filterRows();
+      }
     },
 
     toggleSelectAll() {
@@ -807,7 +809,7 @@ export default {
       this.$emit('on-row-click', {
         row,
         pageIndex: index,
-        selected,
+        selected: !!row.vgtSelected,
         event
       });
     },
@@ -819,7 +821,7 @@ export default {
       this.$emit('on-row-click', {
         row,
         pageIndex: index,
-        selected,
+        selected: !!row.vgtSelected,
         event
       });
     },
@@ -979,7 +981,7 @@ export default {
         // being called from filter, not when rows are changing
         if (this.mode !== 'remote' || fromFilter) {
           this.changePage(1);
-          this.unselectAllInternal();
+          this.unselectAllInternal(true);
         }
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
