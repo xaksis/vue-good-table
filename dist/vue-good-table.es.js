@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.3
+ * vue-good-table v2.6.4
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -1504,10 +1504,10 @@ var GoodTable = {
         }
 
         if (paginationWidget) {
-          paginationWidget.changePage(value); // paginationWidget.currentPage = value;
-          // // we also need to set the currentPage
-          // // for table.
-          // this.currentPage = value;
+          paginationWidget.currentPage = value; // we also need to set the currentPage
+          // for table.
+
+          this.currentPage = value;
         }
       }
     },
