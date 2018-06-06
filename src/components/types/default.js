@@ -1,5 +1,7 @@
 import diacriticless from 'diacriticless';
 
+const escapeRegExp = str => str.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+
 export default {
   format(x) {
     return x;
@@ -14,7 +16,7 @@ export default {
     const rowValue = diacriticless(String(rowval).toLowerCase());
 
     // search term
-    const searchTerm = diacriticless((filter).toLowerCase());
+    const searchTerm = diacriticless(escapeRegExp(filter).toLowerCase());
 
     // comparison
     return (rowValue.search(searchTerm) > -1);
