@@ -116,6 +116,13 @@ export default {
 
     },
 
+    changePage(pageNumber) {
+      if (pageNumber > 0 && this.total > this.currentPerPage * pageNumber) {
+        this.currentPage = pageNumber;
+        this.pageChanged();
+      }
+    },
+
     nextPage() {
       if (this.currentPerPage === -1) return;
       if (this.nextIsPossible) {
