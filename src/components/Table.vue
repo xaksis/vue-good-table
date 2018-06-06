@@ -742,11 +742,10 @@ export default {
           paginationWidget = this.$refs.paginationTop;
         }
         if (paginationWidget) {
-          paginationWidget.changePage(value);
-          // paginationWidget.currentPage = value;
-          // // we also need to set the currentPage
-          // // for table.
-          // this.currentPage = value;
+          paginationWidget.currentPage = value;
+          // we also need to set the currentPage
+          // for table.
+          this.currentPage = value;
         }
       }
     },
