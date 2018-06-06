@@ -61,6 +61,7 @@
               <input
                 type="checkbox"
                 :checked="allSelected"
+                :indeterminate.prop="allSelectedIndeterminate"
                 @change="toggleSelectAll" />
             </th>
             <th v-for="(column, index) in columns"
@@ -249,6 +250,7 @@ export default {
       default() {
         return {
           enabled: false,
+          selectAllByPage: true,
           selectionInfoClass: '',
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
@@ -305,7 +307,7 @@ export default {
 
     // internal select options
     selectable: false,
-    selectOnCheckboxOnly: false,
+    selectAllByPage: true,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -344,7 +346,6 @@ export default {
   watch: {
     rows: {
       handler() {
-        this.tableLoading = false;
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
@@ -405,7 +406,13 @@ export default {
     },
 
     allSelected() {
-      return this.selectedRowCount > 0 && this.selectedRowCount === this.totalRowCount
+      return this.selectedRowCount > 0 &&
+        ((this.selectAllByPage && this.selectedPageRowsCount === this.totalPageRowCount)
+          || (!this.selectAllByPage && this.selectedRowCount === this.totalRowCount));
+    },
+
+    allSelectedIndeterminate() {
+      return this.selectAllByPage && !this.allSelected && this.selectedPageRowsCount > 0;
     },
 
     selectionInfo() {
@@ -414,6 +421,22 @@ export default {
 
     selectedRowCount() {
       return this.selectedRows.length;
+    },
+
+    selectedPageRowsCount() {
+      return this.selectedPageRows.length;
+    },
+
+    selectedPageRows() {
+      const selectedRows = [];
+      each(this.paginated, (headerRow) => {
+        each(headerRow.children, (row) => {
+          if (row.vgtSelected) {
+            selectedRows.push(row);
+          }
+        });
+      });
+      return selectedRows;
     },
 
     selectedRows() {
@@ -458,6 +481,13 @@ export default {
     totalRowCount() {
       let total = 0;
       each(this.processedRows, (headerRow) => {
+        total += headerRow.children ? headerRow.children.length : 0;
+      });
+      return total;
+    },
+    totalPageRowCount() {
+      let total = 0;
+      each(this.paginated, (headerRow) => {
         total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
@@ -610,6 +640,7 @@ export default {
     },
 
     paginated() {
+      console.warn('paginated');
       if (!this.processedRows.length) return [];
 
       if (this.mode === 'remote') {
@@ -697,23 +728,22 @@ export default {
   },
 
   methods: {
-    emitSelectNone() {
+    emitSelectedRows() {
       this.$emit('on-select-all', {
-        selected: false,
-        selectedRows: [],
+        selected: this.selectedRowCount === this.totalRowCount,
+        selectedRows: this.selectedRows
       });
     },
 
-    unselectAllInternal() {
-      this.emitSelectNone();
-      each(this.originalRows, (headerRow, i) => {
+    unselectAllInternal(forceAll) {
+      const rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
+      console.log('unselectAllInternal');
+      each(rows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
           this.$set(row, 'vgtSelected', false);
         });
       });
-      // we need to call this to propagate changes to paginated
-      // rows
-      this.filterRows();
+      this.emitSelectedRows();
     },
 
     toggleSelectAll() {
@@ -721,15 +751,13 @@ export default {
         this.unselectAllInternal();
         return;
       }
-      each(this.processedRows, (headerRow) => {
+      const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
+      each(rows, (headerRow) => {
         each(headerRow.children, (row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
-      this.$emit('on-select-all', {
-        selected: this.allSelected,
-        selectedRows: this.selectedRows
-      });
+      this.emitSelectedRows();
     },
 
     changePage(value) {
@@ -852,7 +880,7 @@ export default {
         this.resetTable();
         // we reset the filteredRows here because
         // we want to search across everything.
-        this.filteredRows = this.originalRows;
+        this.filteredRows = cloneDeep(this.originalRows);
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -865,7 +893,7 @@ export default {
     },
 
     resetTable() {
-      this.unselectAllInternal();
+      this.unselectAllInternal(true);
       // every time we searchTable
       this.changePage(1);
     },
@@ -1179,6 +1207,7 @@ export default {
         selectionText,
         clearSelectionText,
         selectOnCheckboxOnly,
+        selectAllByPage
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1187,6 +1216,10 @@ export default {
 
       if (typeof selectOnCheckboxOnly === 'boolean') {
         this.selectOnCheckboxOnly = selectOnCheckboxOnly;
+      }
+
+      if (typeof selectAllByPage === 'boolean') {
+        this.selectAllByPage = selectAllByPage;
       }
 
       if (typeof selectionInfoClass === 'string') {
