@@ -435,7 +435,8 @@ table.vgt-table {
       border-top: 6px solid #49515e;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-bottom: none; }
+      border-bottom: none;
+      pointer-events: none; }
   .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn {
     color: #dae2f0; }
     .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn.disabled .chevron.left:after, .vgt-wrap.black-rhino .vgt-wrap__footer .footer__navigation__page-btn.disabled:hover .chevron.left:after {

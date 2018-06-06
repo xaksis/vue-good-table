@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.2
+ * vue-good-table v2.6.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -68,6 +68,10 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
+var escapeRegExp = function escapeRegExp(str) {
+  return str.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
 var def = {
   format: function format(x) {
     return x;
@@ -81,7 +85,7 @@ var def = {
 
     var rowValue = diacriticless(String(rowval).toLowerCase()); // search term
 
-    var searchTerm = diacriticless(filter$$1.toLowerCase()); // comparison
+    var searchTerm = diacriticless(escapeRegExp(filter$$1).toLowerCase()); // comparison
 
     return rowValue.search(searchTerm) > -1;
   },
@@ -283,6 +287,12 @@ var VgtPagination = {
     //   return this.currentPerPage === option;
     // },
     reset: function reset() {},
+    changePage: function changePage(pageNumber) {
+      if (pageNumber > 0 && this.total > this.currentPerPage * pageNumber) {
+        this.currentPage = pageNumber;
+        this.pageChanged();
+      }
+    },
     nextPage: function nextPage() {
       if (this.currentPerPage === -1) return;
 
@@ -546,7 +556,8 @@ var VgtFilterRow = {
       return placeholder;
     },
     updateFiltersOnEnter: function updateFiltersOnEnter(column, value) {
-      this.updateFilters(column, value);
+      if (this.timer) clearTimeout(this.timer);
+      this.updateFiltersImmediately(column, value);
     },
     updateFiltersOnKeyup: function updateFiltersOnKeyup(column, value) {
       // if the trigger is enter, we don't filter on keyup
@@ -1285,19 +1296,12 @@ var GoodTable = {
                   return false; // break the loop
                 }
               } else {
-                // lets get the formatted row/col value
-                var tableValue = _this.collectFormatted(row, col);
+                // comparison
+                var matched = def.filterPredicate(_this.collectFormatted(row, col), _this.searchTerm);
 
-                if (typeof tableValue !== 'undefined' && tableValue !== null) {
-                  // table value
-                  tableValue = diacriticless(String(tableValue).toLowerCase()); // search term
-
-                  var searchTerm = diacriticless(_this.searchTerm.toLowerCase()); // comparison
-
-                  if (tableValue.search(searchTerm) > -1) {
-                    filteredRows.push(row);
-                    return false; // break loop
-                  }
+                if (matched) {
+                  filteredRows.push(row);
+                  return false; // break loop
                 }
               }
             }
@@ -1506,10 +1510,10 @@ var GoodTable = {
         }
 
         if (paginationWidget) {
-          paginationWidget.currentPage = value; // we also need to set the currentPage
-          // for table.
-
-          this.currentPage = value;
+          paginationWidget.changePage(value); // paginationWidget.currentPage = value;
+          // // we also need to set the currentPage
+          // // for table.
+          // this.currentPage = value;
         }
       }
     },
