@@ -307,6 +307,7 @@ export default {
 
     // internal select options
     selectable: false,
+    selectOnCheckboxOnly: false,
     selectAllByPage: true,
     selectionInfoClass: '',
     selectionText: 'rows selected',
@@ -346,6 +347,7 @@ export default {
   watch: {
     rows: {
       handler() {
+        this.tableLoading = false;
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
