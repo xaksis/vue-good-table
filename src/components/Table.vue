@@ -412,7 +412,9 @@ export default {
     },
 
     allSelectedIndeterminate() {
-      return this.selectAllByPage && !this.allSelected && this.selectedPageRowsCount > 0;
+      return !this.allSelected &&
+        ((this.selectAllByPage && this.selectedPageRowsCount > 0)
+        || (!this.selectAllByPage && this.selectedRowCount > 0));
     },
 
     selectionInfo() {
