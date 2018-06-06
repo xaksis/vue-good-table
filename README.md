@@ -317,14 +317,14 @@ Enable Pagination for table. By default the paginator is created at the bottom o
 ```
 
 ##### paginationOptions.position `String (default: 'bottom')`
-Add pagination on `'top'`, `'bottom'`, or `'both'` (top and bottom) of the table (default position is bottom)
+Add pagination on `'top'` or `'bottom'` (top and bottom) of the table (default position is bottom)
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
     enabled: true,
-    position: 'both'
+    position: 'top'
   }">
 </vue-good-table>
 ```

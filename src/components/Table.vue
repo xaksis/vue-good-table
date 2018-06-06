@@ -527,7 +527,11 @@ export default {
                 }
               } else {
                 // comparison
-                if (defaultType.filterPredicate(this.collectFormatted(row, col), this.searchTerm)) {
+                const matched = defaultType.filterPredicate(
+                  this.collectFormatted(row, col),
+                  this.searchTerm
+                );
+                if (matched) {
                   filteredRows.push(row);
                   return false; // break loop
                 }

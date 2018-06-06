@@ -38,7 +38,7 @@ export default {
           field: 'name',
           filterOptions: {
             enabled: true,
-            trigger: '',
+            trigger: 'enter',
           },
         },
         {
