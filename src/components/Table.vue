@@ -372,6 +372,9 @@ export default {
 
     searchOptions: {
       handler() {
+        if (this.searchOptions.externalQuery !== undefined && this.searchOptions.externalQuery !== this.searchTerm) {
+          this.resetTable();
+        }
         this.initializeSearch();
       },
       deep: true,
@@ -741,7 +744,6 @@ export default {
 
     unselectAllInternal(forceAll) {
       const rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-      console.log('unselectAllInternal');
       each(rows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
           this.$set(row, 'vgtSelected', false);
