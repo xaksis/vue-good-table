@@ -14,7 +14,7 @@
         :placeholder="getPlaceholder(column)"
         :value="columnFilters[column.field]"
         @keyup.enter="updateFiltersOnEnter(column, $event.target.value)"
-        v-on:input="updateFiltersOnKeyup(column, $event.target.value)" />
+        @input="updateFiltersOnKeyup(column, $event.target.value)" />
 
       <!-- options are a list of primitives -->
       <select v-if="isDropdownArray(column)"
@@ -116,7 +116,8 @@ export default {
     },
 
     updateFiltersOnEnter(column, value) {
-      this.updateFilters(column, value);
+      if (this.timer) clearTimeout(this.timer);
+      this.updateFiltersImmediately(column, value);
     },
 
     updateFiltersOnKeyup(column, value) {
