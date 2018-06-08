@@ -356,6 +356,14 @@ export default {
       immediate: true,
     },
 
+    columns: {
+      handler() {
+        this.initializeColumns();
+      },
+      deep: true,
+      immediate: true,
+    },
+
     selectOptions: {
       handler() {
         this.initializeSelect();
@@ -1089,6 +1097,18 @@ export default {
     //   }
     // },
 
+    handleDefaultSort() {
+      for (let index = 0; index < this.columns.length; index++) {
+        const col = this.columns[index];
+        if (col.field === this.defaultSortBy.field) {
+          this.sortColumn = index;
+          this.sortType = this.defaultSortBy.type || 'asc';
+          this.sortChanged = true;
+          break;
+        }
+      }
+    },
+
     initializePagination() {
       const {
         enabled,
@@ -1194,6 +1214,7 @@ export default {
 
       if (typeof initialSortBy === 'object') {
         this.defaultSortBy = initialSortBy;
+        this.handleDefaultSort();
       }
     },
 
@@ -1226,6 +1247,13 @@ export default {
         this.clearSelectionText = clearSelectionText;
       }
     },
+
+    initializeColumns() {
+      // take care of default sort on mount
+      if (this.defaultSortBy) {
+        this.handleDefaultSort();
+      }
+    },
   },
 
   mounted() {
@@ -1233,19 +1261,6 @@ export default {
 
     if (this.perPage) {
       this.currentPerPage = this.perPage;
-    }
-
-    // take care of default sort on mount
-    if (this.defaultSortBy) {
-      for (let index = 0; index < this.columns.length; index++) {
-        const col = this.columns[index];
-        if (col.field === this.defaultSortBy.field) {
-          this.sortColumn = index;
-          this.sortType = this.defaultSortBy.type || 'asc';
-          this.sortChanged = true;
-          break;
-        }
-      }
     }
   },
 
