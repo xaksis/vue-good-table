@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.4
+ * vue-good-table v2.6.5
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -259,6 +259,9 @@ var VgtPagination = {
     }
   },
   computed: {
+    currentPerPageString: function currentPerPageString() {
+      return this.currentPerPage === -1 ? 'All' : this.currentPerPage;
+    },
     paginatedInfo: function paginatedInfo() {
       if (this.currentPerPage === -1) {
         return "1 - ".concat(this.total, " ").concat(this.ofText, " ").concat(this.total);
@@ -338,7 +341,7 @@ var VgtPagination = {
           }
         }
 
-        if (!found) this.rowsPerPageOptions.push(this.perPage);
+        if (!found && this.perPage !== -1) this.rowsPerPageOptions.push(this.perPage);
       } else {
         // reset to default
         this.currentPerPage = 10;
@@ -1780,8 +1783,14 @@ var GoodTable = {
         } // if mode is remote, we don't do any filtering here.
 
 
-        if (this.mode === 'remote' && fromFilter) {
-          this.tableLoading = true;
+        if (this.mode === 'remote') {
+          if (fromFilter) {
+            this.tableLoading = true;
+          } else {
+            // if remote filtering has already been taken care of.
+            this.filteredRows = computedRows;
+          }
+
           return;
         }
 
