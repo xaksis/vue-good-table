@@ -82,6 +82,10 @@ export default {
   },
 
   computed: {
+    currentPerPageString() {
+      return this.currentPerPage === -1 ? 'All' : this.currentPerPage;
+    },
+
     paginatedInfo() {
       if (this.currentPerPage === -1) {
         return `1 - ${this.total} ${this.ofText} ${this.total}`;
@@ -164,7 +168,7 @@ export default {
             found = true;
           }
         }
-        if (!found) this.rowsPerPageOptions.push(this.perPage);
+        if (!found && this.perPage !== -1) this.rowsPerPageOptions.push(this.perPage);
       } else {
         // reset to default
         this.currentPerPage = 10;

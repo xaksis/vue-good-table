@@ -1010,8 +1010,13 @@ export default {
         }
 
         // if mode is remote, we don't do any filtering here.
-        if (this.mode === 'remote' && fromFilter) {
-          this.tableLoading = true;
+        if (this.mode === 'remote') {
+          if (fromFilter) {
+            this.tableLoading = true;
+          } else {
+            // if remote filtering has already been taken care of.
+            this.filteredRows = computedRows;
+          }
           return;
         }
 

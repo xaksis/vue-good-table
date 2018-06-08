@@ -69,6 +69,7 @@ Some example recipes for inspiration
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
   - [Grouped Rows](#grouped-rows)
+  - [Remote Mode](#remote-mode)
   - [Table Actions Slot](#table-actions-slot)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
@@ -224,6 +225,8 @@ Set mode=`remote` to allow sorting/filtering etc to be powered by server side in
 * setup handlers for each event
 * in the handler call backend endpoints with the table params
 * update rows object with the returned response ( the loading div will disappear once you update the rows object)
+
+for a detailed workflow example check out [The remote mode workflow wiki](https://github.com/xaksis/vue-good-table/wiki/Remote-Mode-Workflow)
 
 ```html
 <vue-good-table
@@ -1171,6 +1174,9 @@ rows: [{
 you can check out some live examples on the recipes page: 
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
 
+
+### Remote Mode
+Sometimes you might want to power the table from the backend. Where filtering, paging, sorting etc are done serverside. In order to accomplish that you can follow [The remote mode workflow wiki](https://github.com/xaksis/vue-good-table/wiki/Remote-Mode-Workflow)
 
 ### Table Actions Slot
 If you want to add table specific actions like a print button for example, you can use the Table Actions Slot. If you have global search enabled, the action panel will show up to the right of that.
