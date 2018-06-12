@@ -88,6 +88,13 @@ export default {
     },
   },
   methods: {
+    reset(emitEvent = false) {
+      this.columnFilters = {};
+      if (emitEvent) {
+        this.$emit('filter-changed', this.columnFilters);
+      }
+    },
+
     isFilterable(column) {
       return column.filterOptions
         && column.filterOptions.enabled;

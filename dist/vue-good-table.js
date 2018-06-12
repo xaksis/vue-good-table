@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.5
+ * vue-good-table v2.6.6
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10929,6 +10929,13 @@
         deep: true,
         immediate: true
       },
+      columns: {
+        handler: function handler() {
+          this.initializeColumns();
+        },
+        deep: true,
+        immediate: true
+      },
       selectOptions: {
         handler: function handler() {
           this.initializeSelect();
@@ -11637,6 +11644,18 @@
       //     this.filteredRows = this.handleGrouped(this.originalRows);
       //   }
       // },
+      handleDefaultSort: function handleDefaultSort() {
+        for (var index$$1 = 0; index$$1 < this.columns.length; index$$1++) {
+          var col = this.columns[index$$1];
+
+          if (col.field === this.defaultSortBy.field) {
+            this.sortColumn = index$$1;
+            this.sortType = this.defaultSortBy.type || 'asc';
+            this.sortChanged = true;
+            break;
+          }
+        }
+      },
       initializePagination: function initializePagination() {
         var _this5 = this;
 
@@ -11743,6 +11762,7 @@
 
         if (_typeof(initialSortBy) === 'object') {
           this.defaultSortBy = initialSortBy;
+          this.handleDefaultSort();
         }
       },
       initializeSelect: function initializeSelect() {
@@ -11772,26 +11792,18 @@
         if (typeof clearSelectionText === 'string') {
           this.clearSelectionText = clearSelectionText;
         }
+      },
+      initializeColumns: function initializeColumns() {
+        // take care of default sort on mount
+        if (this.defaultSortBy) {
+          this.handleDefaultSort();
+        }
       }
     },
     mounted: function mounted() {
       // this.filteredRows = this.originalRows;
       if (this.perPage) {
         this.currentPerPage = this.perPage;
-      } // take care of default sort on mount
-
-
-      if (this.defaultSortBy) {
-        for (var index$$1 = 0; index$$1 < this.columns.length; index$$1++) {
-          var col = this.columns[index$$1];
-
-          if (col.field === this.defaultSortBy.field) {
-            this.sortColumn = index$$1;
-            this.sortType = this.defaultSortBy.type || 'asc';
-            this.sortChanged = true;
-            break;
-          }
-        }
       }
     },
     components: {

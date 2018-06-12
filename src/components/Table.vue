@@ -75,6 +75,7 @@
               </th>
             </tr>
             <tr is="vgt-filter-row"
+              ref="filter-row"
               @filter-changed="filterRows"
               :global-search-enabled="searchEnabled"
               :line-numbers="lineNumbers"
@@ -695,6 +696,12 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.initializeSort();
+      this.changePage(1);
+      this.$refs['filter-row'].reset(true);
+    },
+
     emitSelectNone() {
       this.$emit('on-select-all', {
         selected: false,
