@@ -357,14 +357,6 @@ export default {
       immediate: true,
     },
 
-    columns: {
-      handler() {
-        this.initializeColumns();
-      },
-      deep: true,
-      immediate: true,
-    },
-
     selectOptions: {
       handler() {
         this.initializeSelect();
