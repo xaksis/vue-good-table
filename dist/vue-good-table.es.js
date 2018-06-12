@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.6
+ * vue-good-table v2.7.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -535,6 +535,14 @@ var VgtFilterRow = {
     }
   },
   methods: {
+    reset: function reset() {
+      var emitEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      this.columnFilters = {};
+
+      if (emitEvent) {
+        this.$emit('filter-changed', this.columnFilters);
+      }
+    },
     isFilterable: function isFilterable(column) {
       return column.filterOptions && column.filterOptions.enabled;
     },
@@ -856,6 +864,7 @@ var GoodTable = {
         column: column
       })], 2) : _vm._e();
     })], 2), _vm._v(" "), _c("vgt-filter-row", {
+      ref: "filter-row",
       tag: "tr",
       attrs: {
         "global-search-enabled": _vm.searchEnabled,
@@ -1455,6 +1464,11 @@ var GoodTable = {
     }
   },
   methods: {
+    reset: function reset() {
+      this.initializeSort();
+      this.changePage(1);
+      this.$refs['filter-row'].reset(true);
+    },
     emitSelectNone: function emitSelectNone() {
       this.$emit('on-select-all', {
         selected: false,
