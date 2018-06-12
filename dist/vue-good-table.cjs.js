@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.7.0
+ * vue-good-table v2.7.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -1158,13 +1158,6 @@ var GoodTable = {
       handler: function handler() {
         this.tableLoading = false;
         this.filterRows(this.columnFilters, false);
-      },
-      deep: true,
-      immediate: true
-    },
-    columns: {
-      handler: function handler() {
-        this.initializeColumns();
       },
       deep: true,
       immediate: true
