@@ -11,6 +11,8 @@
   "scripts": {
     "bundle": "bili",
     "dev": "poi",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -53,6 +55,7 @@
     "sass-loader": "^6.0.6",
     "vue": "^2.5.16",
     "vue-template-compiler": "^2.5.16",
+    "vuepress": "^0.10.1",
     "webpack": "^4.8.3"
   }
 }
