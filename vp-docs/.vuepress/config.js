@@ -2,6 +2,7 @@ module.exports = {
   title: 'vue-good-table',
   description: 'A powerful and easy to use data table plugin for VueJS',
   base: '/vue-good-table/',
+  dest: 'docs',
   themeConfig: {
     repo: 'xaksis/vue-good-table',
     sidebar: {

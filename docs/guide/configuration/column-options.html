@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Column Options | vue-good-table</title>
+    <meta name="description" content="A powerful and easy to use data table plugin for VueJS">
+    
+    
+    <link rel="preload" href="/vue-good-table/assets/css/0.styles.dc09cd34.css" as="style"><link rel="preload" href="/vue-good-table/assets/js/app.8f54be07.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/7.ac2077aa.js" as="script"><link rel="prefetch" href="/vue-good-table/assets/js/10.5ef69947.js"><link rel="prefetch" href="/vue-good-table/assets/js/1.61fbe945.js"><link rel="prefetch" href="/vue-good-table/assets/js/2.b59e28e5.js"><link rel="prefetch" href="/vue-good-table/assets/js/3.225e2c71.js"><link rel="prefetch" href="/vue-good-table/assets/js/4.6c9b7007.js"><link rel="prefetch" href="/vue-good-table/assets/js/5.5ccf6042.js"><link rel="prefetch" href="/vue-good-table/assets/js/6.02bd3e3e.js"><link rel="prefetch" href="/vue-good-table/assets/js/8.cb809268.js"><link rel="prefetch" href="/vue-good-table/assets/js/9.afab0069.js"><link rel="prefetch" href="/vue-good-table/assets/js/11.06fc552c.js"><link rel="prefetch" href="/vue-good-table/assets/js/12.8ec1cf5a.js"><link rel="prefetch" href="/vue-good-table/assets/js/13.e3776197.js"><link rel="prefetch" href="/vue-good-table/assets/js/14.0f678a88.js"><link rel="prefetch" href="/vue-good-table/assets/js/15.23bd2582.js"><link rel="prefetch" href="/vue-good-table/assets/js/16.0b3f865a.js"><link rel="prefetch" href="/vue-good-table/assets/js/17.825ef31f.js"><link rel="prefetch" href="/vue-good-table/assets/js/18.fb564727.js"><link rel="prefetch" href="/vue-good-table/assets/js/19.14ff716f.js"><link rel="prefetch" href="/vue-good-table/assets/js/20.6d302d91.js"><link rel="prefetch" href="/vue-good-table/assets/js/21.a2eb70e3.js">
+    <link rel="stylesheet" href="/vue-good-table/assets/css/0.styles.dc09cd34.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div><a href="/vue-good-table/" class="home-link router-link-active"><!----><span class="site-name">
+      vue-good-table
+    </span></a><div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""><!----></div><nav class="nav-links can-hide"><a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header><div class="sidebar-mask"></div><div class="sidebar"><nav class="nav-links"><a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav><ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading"><span>Introduction</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/" class="sidebar-link">Getting Started</a></li></ul></div></li><li><div class="sidebar-group"><p class="sidebar-heading open"><span>Configuration</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/configuration/" class="sidebar-link">Table Options</a></li><li><a href="/vue-good-table/guide/configuration/table-events.html" class="sidebar-link">Table Events</a></li><li><a href="/vue-good-table/guide/configuration/search-options.html" class="sidebar-link">Search Options</a></li><li><a href="/vue-good-table/guide/configuration/sort-options.html" class="sidebar-link">Sort Options</a></li><li><a href="/vue-good-table/guide/configuration/pagination-options.html" class="sidebar-link">Pagination Options</a></li><li><a href="/vue-good-table/guide/configuration/column-options.html" class="active sidebar-link">Column Options</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#label" class="sidebar-link">label</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#field" class="sidebar-link">field</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#type" class="sidebar-link">type</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#dateinputformat" class="sidebar-link">dateInputFormat</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#dateoutputformat" class="sidebar-link">dateOutputFormat</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#sortable" class="sidebar-link">sortable</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#sortfn" class="sidebar-link">sortFn</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#formatfn" class="sidebar-link">formatFn</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#html" class="sidebar-link">html</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#width" class="sidebar-link">width</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#hidden" class="sidebar-link">hidden</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#thclass" class="sidebar-link">thClass</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#tdclass" class="sidebar-link">tdClass</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/column-options.html#globalsearchdisabled" class="sidebar-link">globalSearchDisabled</a></li></ul></li><li><a href="/vue-good-table/guide/configuration/column-filter-options.html" class="sidebar-link">Column Filter Options</a></li></ul></div></li><li><div class="sidebar-group"><p class="sidebar-heading"><span>Avanced Configuration</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/advanced/" class="sidebar-link">Customizations</a></li><li><a href="/vue-good-table/guide/advanced/checkbox-table.html" class="sidebar-link">Checkbox Table</a></li><li><a href="/vue-good-table/guide/advanced/grouped-table.html" class="sidebar-link">Grouped Table</a></li><li><a href="/vue-good-table/guide/advanced/remote-workflow.html" class="sidebar-link">Server Side Table</a></li></ul></div></li><li><div class="sidebar-group"><p class="sidebar-heading"><span>Style Configuration</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/style-configuration/" class="sidebar-link">Themes</a></li><li><a href="/vue-good-table/guide/style-configuration/style-classes.html" class="sidebar-link">Style Classes</a></li></ul></div></li></ul></div><div class="page"><div class="content"><h1 id="column-options"><a href="#column-options" aria-hidden="true" class="header-anchor">#</a> Column Options</h1><p>Each column objects can contain the following configuration options:</p><h2 id="label"><a href="#label" aria-hidden="true" class="header-anchor">#</a> label</h2><p>type <code>String</code></p><p>Text to put on column header.</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="field"><a href="#field" aria-hidden="true" class="header-anchor">#</a> field</h2><p>type <code>String</code></p><p>Row object property that this column corresponds to. This can be:</p><ul><li>String <code>eg: 'name'</code> - simple row property name</li><li>String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'</li><li>Function - a function that returns a value to be displayed based on the row object</li></ul><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fealdFn<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+<span class="token comment">// in methods</span>
+<span class="token function">fieldFn</span><span class="token punctuation">(</span>rowObj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> rowObj<span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="type"><a href="#type" aria-hidden="true" class="header-anchor">#</a> type</h2><p>type <code>String</code></p><p>type of column. default: 'text'. This determines the formatting for the column and filter behavior as well. Possible values:</p><ul><li><em>number</em> - right aligned</li><li><em>decimal</em> - right aligned, 2 decimal places</li><li><em>percentage</em> - expects a decimal like 0.03 and formats it as 3.00%</li><li><em>boolean</em> - right aligned</li><li><em>date</em> - expects a string representation of date eg '20170530'. You should also specify <a href="#dateinputformat">dateInputFormat</a> and <a href="#dateoutputformat">dateOutputFormat</a></li></ul><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'joined On'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'createdAt'</span><span class="token punctuation">,</span>
+    type<span class="token punctuation">:</span> <span class="token string">'date'</span><span class="token punctuation">,</span>
+    dateInputFormat<span class="token punctuation">:</span> <span class="token string">'YYYY-MM-DD'</span><span class="token punctuation">,</span> <span class="token comment">// expects 2018-03-16</span>
+    dateOutputFormat<span class="token punctuation">:</span> <span class="token string">'MMM Do YYYY'</span><span class="token punctuation">,</span> <span class="token comment">// outputs Mar 16th 2018</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="dateinputformat"><a href="#dateinputformat" aria-hidden="true" class="header-anchor">#</a> dateInputFormat</h2><p>type <code>String</code></p><p>provide the format to parse date string.</p><div class="tip custom-block"><p class="custom-block-title">TIP</p><p>Vue-good-table uses date-fns for date parsing. <a href="https://date-fns.org/v2.0.0-alpha.7/docs/parse" target="_blank" rel="noopener noreferrer">Check out their formats here<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>.</p></div><h2 id="dateoutputformat"><a href="#dateoutputformat" aria-hidden="true" class="header-anchor">#</a> dateOutputFormat</h2><p>type <code>String</code></p><p>provide the format for output date</p><h2 id="sortable"><a href="#sortable" aria-hidden="true" class="header-anchor">#</a> sortable</h2><p>type <code>Boolean</code></p><p>enable/disable sorting on columns. This property is higher priority than global sortable property</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+    sortable<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="sortfn"><a href="#sortfn" aria-hidden="true" class="header-anchor">#</a> sortFn</h2><p>type <code>Function</code></p><p>custom sort function. If you want to supply your own sort function you can use this property.</p><div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// in data</span>
+columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    label<span class="token punctuation">:</span> <span class="token string">'Name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    sortable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    sortFn<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>sortFn<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token comment">// in methods</span>
+methods<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  <span class="token function">sortFn</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> col<span class="token punctuation">,</span> rowX<span class="token punctuation">,</span> rowY<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// x - row1 value for column</span>
+    <span class="token comment">// y - row2 value for column</span>
+    <span class="token comment">// col - column being sorted</span>
+    <span class="token comment">// rowX - row object for row1</span>
+    <span class="token comment">// rowY - row object for row2</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;</span> y <span class="token operator">?</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span>x <span class="token operator">&gt;</span> y <span class="token operator">?</span> <span class="token number">1</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="formatfn"><a href="#formatfn" aria-hidden="true" class="header-anchor">#</a> formatFn</h2><p>type <code>Function</code></p><p>Allows for custom format of values, <code>function(value)</code>, should return the formatted value to display.</p><div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// in data</span>
+columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    label<span class="token punctuation">:</span> <span class="token string">'Salary'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'salary'</span><span class="token punctuation">,</span>
+    sortable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    formatFn<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>formatFn<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token comment">// in methods</span>
+formatFn<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">'$'</span> <span class="token operator">+</span> value<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="html"><a href="#html" aria-hidden="true" class="header-anchor">#</a> html</h2><p>type <code>Boolean</code></p><p>indicates whether this column will require html rendering.</p><div class="tip custom-block"><p class="custom-block-title">TIP</p><p>The preferred way of creating columns that have html is by <a href="#custom-row-template">using slots</a></p></div><div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// in data</span>
+columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    label<span class="token punctuation">:</span> <span class="token string">'Action'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'btn'</span><span class="token punctuation">,</span>
+    html<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+rows<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    btn<span class="token punctuation">:</span> <span class="token string">'&lt;button&gt;My Action&lt;/button&gt;'</span><span class="token punctuation">,</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="width"><a href="#width" aria-hidden="true" class="header-anchor">#</a> width</h2><p>type <code>Number</code></p><p>provide a width value for this column</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+    width<span class="token punctuation">:</span> <span class="token string">'50px'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="hidden"><a href="#hidden" aria-hidden="true" class="header-anchor">#</a> hidden</h2><p>type <code>Boolean</code></p><p>hide a column</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+    hidden<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="thclass"><a href="#thclass" aria-hidden="true" class="header-anchor">#</a> thClass</h2><p>type <code>String</code></p><p>provide custom class(es) to the table header</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+    thClass<span class="token punctuation">:</span> <span class="token string">'custom-th-class'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="tdclass"><a href="#tdclass" aria-hidden="true" class="header-anchor">#</a> tdClass</h2><p>type <code>String</code></p><p>provide custom class(es) to the table cells</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+    tdClass<span class="token punctuation">:</span> <span class="token string">'text-center'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div><h2 id="globalsearchdisabled"><a href="#globalsearchdisabled" aria-hidden="true" class="header-anchor">#</a> globalSearchDisabled</h2><p>type <code>Boolean (default: false)</code></p><p>if true, this column will be ignored by the global search</p><div class="language-javascript extra-class"><pre class="language-javascript"><code>columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> 
+    label<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    field<span class="token punctuation">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+    globalSearchDisabled<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">]</span>
+</code></pre></div></div><div class="page-edit"><!----><!----></div><div class="page-nav"><p class="inner"><span class="prev">
+        ← <a href="/vue-good-table/guide/configuration/pagination-options.html" class="prev">
+          Pagination Options
+        </a></span><span class="next"><a href="/vue-good-table/guide/configuration/column-filter-options.html">
+          Column Filter Options
+        </a> →
+      </span></p></div></div></div></div>
+    <script src="/vue-good-table/assets/js/7.ac2077aa.js" defer></script><script src="/vue-good-table/assets/js/app.8f54be07.js" defer></script>
+  </body>
+</html>
