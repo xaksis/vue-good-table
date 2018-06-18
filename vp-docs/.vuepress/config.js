@@ -3,8 +3,14 @@ module.exports = {
   description: 'A powerful and easy to use data table plugin for VueJS',
   base: '/vue-good-table/',
   dest: 'docs',
+  ga: 'UA-120929110-1',
   themeConfig: {
     repo: 'xaksis/vue-good-table',
+    lastUpdated: true,
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Guide', link: '/guide/' },
+    ],
     sidebar: {
       '/guide/': [
         {

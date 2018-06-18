@@ -5,4 +5,5 @@ node_modules/
 dev
 src
 docs
+vp-docs
 .babelrc
