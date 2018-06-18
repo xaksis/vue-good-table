@@ -38,7 +38,7 @@ Array containing row objects. Each row object contains data that will be display
 ]
 ```
 ::: tip
-for **grouped rows**, you need a nested format. Refer to [Grouped Rows](#grouped-rows) for an example.
+for **grouped rows**, you need a nested format. Refer to [Grouped Table](/guide/advanced/grouped-table.md) for examples.
 :::
 
 ## lineNumbers
@@ -72,7 +72,7 @@ type: `String`
 
 Set mode=`remote` to allow sorting/filtering etc to be powered by server side instead of client side.
 
-for a detailed workflow example check out [Server Side Workflow](https://github.com/xaksis/vue-good-table/wiki/Remote-Mode-Workflow)
+for a detailed workflow example check out [Server Side Workflow](/guide/advanced/remote-workflow.md)
 
 ```html
 <vue-good-table

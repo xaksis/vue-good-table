@@ -1,6 +1,7 @@
 module.exports = {
   title: 'vue-good-table',
   description: 'A powerful and easy to use data table plugin for VueJS',
+  base: '/vue-good-table/',
   themeConfig: {
     repo: 'xaksis/vue-good-table',
     sidebar: {
@@ -23,6 +24,16 @@ module.exports = {
             '/guide/configuration/pagination-options',
             '/guide/configuration/column-options',
             '/guide/configuration/column-filter-options',
+          ]
+        },
+        {
+          title: 'Avanced Configuration',
+          collapsable: false,
+          children: [
+            '/guide/advanced/',
+            '/guide/advanced/checkbox-table',
+            '/guide/advanced/grouped-table',
+            '/guide/advanced/remote-workflow',
           ]
         },
         {
