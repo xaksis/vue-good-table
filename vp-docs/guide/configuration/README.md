@@ -66,6 +66,32 @@ Enable Right-To-Left layout for the table
 </vue-good-table>
 ```
 
+## Table Actions Slot
+If you want to add table specific actions like a print button for example, you can use the Table Actions Slot. If you have global search enabled, the action panel will show up to the right of that.
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <div slot="table-actions">
+    This will show up on the top right of the table. 
+  </div>
+</vue-good-table>
+```
+
+## Empty state slot
+You can provide html for empty state slot as well. Example:
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <div slot="emptystate">
+    This will show up when there are no rows
+  </div>
+</vue-good-table>
+```
+
 ## mode
 
 type: `String`
@@ -91,4 +117,3 @@ totalRecords is only useful for remote mode. When server controls pagination the
 :::
 
 total number of rows that exist given a table/filter. refer to [remote workflow]() for more details
-

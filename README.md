@@ -5,33 +5,28 @@
 [![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
 [![](https://data.jsdelivr.com/v1/package/npm/vue-good-table/badge)](https://www.jsdelivr.com/package/npm/vue-good-table)
 
-A simple, clean data table for VueJS with essential features like sorting, column filtering, pagination etc
+An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
 
 Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
 
 <a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
-## Follow the project progress live
-[Vue-good-table Project](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
+**Follow the project progress live** - [Vue-good-table Project on TimerBit](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
 
-## Upgrade Guide
-Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
-
+<!-- 
 ### Basic Table
-![Basic Screenshot](README/images/vgt-table.regular.png)
-### Table with grouped rows and column filters
-![Advanced Screenshot](README/images/vgt-table.advanced.png)
+![Basic Screenshot](README/images/vgt-table.regular.png) -->
 
-## Recipes
+<!-- ## Recipes
 Some example recipes for inspiration 
-[vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
-
-## Table of contents
+[vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x)) -->
+<!-- 
+## Table of contents -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
+<!-- 
 - [Getting Started](#getting-started)
   - [Installing](#installing)
   - [Example Usage](#example-usage)
@@ -73,13 +68,11 @@ Some example recipes for inspiration
   - [Table Actions Slot](#table-actions-slot)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
-- [License](#license)
+- [License](#license) -->
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Getting Started
-
-### Installing
+## Installing
 
 Install with npm:
 ```bash
@@ -97,6 +90,24 @@ import 'vue-good-table/dist/vue-good-table.css'
 Vue.use(VueGoodTable);
 ```
 
+##### Example table with grouped rows and column filters
+![Advanced Screenshot](README/images/vgt-table.advanced.png)
+
+## Features
+* [Table Search](https://xaksis.github.io/vue-good-table/guide/configuration/search-options.html)
+* [Sorting](https://xaksis.github.io/vue-good-table/guide/configuration/sort-options.html)
+* [Column Filtering](https://xaksis.github.io/vue-good-table/guide/configuration/column-filter-options.html#filteroptions)
+* [Pagination](https://xaksis.github.io/vue-good-table/guide/configuration/pagination-options.html)
+* [Highly Customizable](https://xaksis.github.io/vue-good-table/guide/advanced/#custom-row-template)
+* [Checkbox Table](https://xaksis.github.io/vue-good-table/guide/advanced/checkbox-table.html)
+* [Grouped Rows Table](https://xaksis.github.io/vue-good-table/guide/advanced/grouped-table.html)
+* [Server Powered Table](https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#why-remote-mode)
+* [Customizable Style and Themes](https://xaksis.github.io/vue-good-table/guide/style-configuration/)
+
+## Upgrade Guide
+Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
+
+<!-- 
 ### Example Usage
 ```html
 <template>
@@ -160,9 +171,8 @@ export default {
   },
 };
 </script>
-```
-This should result in the screenshot seen above
-
+``` -->
+<!-- 
 ## Configuration
 ### Component Options
 #### Table
@@ -1203,7 +1213,7 @@ You can provide html for empty state slot as well. Example:
     This will show up when there are no columns
   </div>
 </vue-good-table>
-```
+``` -->
 
 ## Authors
 
