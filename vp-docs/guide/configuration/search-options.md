@@ -39,6 +39,7 @@ Enabling this option disables column filters
   }">
 </vue-good-table>
 ```
+<search-demo />
 
 ## trigger
 
@@ -56,6 +57,7 @@ Allows you to specify if you want search to trigger on 'enter' event of the inpu
   }">
 </vue-good-table>
 ```
+<search-demo trigger="enter" />
 
 ## searchFn
 
@@ -126,3 +128,4 @@ data(){
   };
 }
 ```
+<external-query />

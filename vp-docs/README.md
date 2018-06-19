@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /vgt-table.regular.png
+heroImage: /hero-image.png
 actionText: Get Started →
 actionLink: /guide/
 features:
@@ -12,3 +12,9 @@ features:
   details: Leverage checkbox table, grouped rows and remote workflow for your table.
 footer: MIT Licensed | Copyright © 2018-present Akshay Anand
 ---
+
+<style>
+.hero img{
+   box-shadow: 0px 0px 30px #ccc;
+}
+</style>

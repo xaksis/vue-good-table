@@ -1,6 +1,6 @@
 module.exports = {
   title: 'vue-good-table',
-  description: 'A powerful and easy to use data table plugin for VueJS',
+  description: 'A powerful data table plugin for VueJS',
   base: '/vue-good-table/',
   dest: 'docs',
   ga: 'UA-120929110-1',

@@ -52,6 +52,7 @@ Show line number for each row
   :lineNumbers="true">
 </vue-good-table>
 ```
+<line-numbers-table />
 
 ## rtl 
 
@@ -65,9 +66,14 @@ Enable Right-To-Left layout for the table
   :rtl="true">
 </vue-good-table>
 ```
+<rtl-table />
 
 ## Table Actions Slot
 If you want to add table specific actions like a print button for example, you can use the Table Actions Slot. If you have global search enabled, the action panel will show up to the right of that.
+
+::: tip Note
+You don't have to have global search enabled to use this slot.
+:::
 
 ```html
 <vue-good-table
@@ -78,6 +84,8 @@ If you want to add table specific actions like a print button for example, you c
   </div>
 </vue-good-table>
 ```
+<action-slot-table />
+
 
 ## Empty state slot
 You can provide html for empty state slot as well. Example:
