@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.7.2
+ * vue-good-table v2.8.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -10579,9 +10579,7 @@
           "click": function click($event) {
             $event.preventDefault();
 
-            _vm.unselectAll();
-
-            _vm.unselectAllInternal();
+            _vm.unselectAllInternal(true);
           }
         }
       }, [_vm._v(" " + _vm._s(_vm.clearSelectionText) + " ")]), _vm._v(" "), _c('div', {
@@ -10598,37 +10596,15 @@
       }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
         staticClass: "vgt-checkbox-col"
       }, [_c('input', {
-        directives: [{
-          name: "model",
-          rawName: "v-model",
-          value: _vm.allSelected,
-          expression: "allSelected"
-        }],
         attrs: {
           "type": "checkbox"
         },
         domProps: {
-          "checked": Array.isArray(_vm.allSelected) ? _vm._i(_vm.allSelected, null) > -1 : _vm.allSelected
+          "checked": _vm.allSelected,
+          "indeterminate": _vm.allSelectedIndeterminate
         },
         on: {
-          "change": [function ($event) {
-            var $$a = _vm.allSelected,
-                $$el = $event.target,
-                $$c = $$el.checked ? true : false;
-
-            if (Array.isArray($$a)) {
-              var $$v = null,
-                  $$i = _vm._i($$a, $$v);
-
-              if ($$el.checked) {
-                $$i < 0 && (_vm.allSelected = $$a.concat([$$v]));
-              } else {
-                $$i > -1 && (_vm.allSelected = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
-              }
-            } else {
-              _vm.allSelected = $$c;
-            }
-          }, _vm.toggleSelectAll]
+          "change": _vm.toggleSelectAll
         }
       })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
         return !column.hidden ? _c('th', {
@@ -10689,7 +10665,7 @@
                 _vm.onMouseleave(row, index$$1);
               },
               "click": function click($event) {
-                _vm.click(row, index$$1, $event);
+                _vm.onRowClicked(row, index$$1, $event);
               }
             }
           }, [_vm.lineNumbers ? _c('th', {
@@ -10701,41 +10677,15 @@
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                _vm.checkboxClick(row, index$$1, $event);
+                _vm.onCheckboxClicked(row, index$$1, $event);
               }
             }
           }, [_c('input', {
-            directives: [{
-              name: "model",
-              rawName: "v-model",
-              value: row.vgtSelected,
-              expression: "row.vgtSelected"
-            }],
             attrs: {
               "type": "checkbox"
             },
             domProps: {
-              "checked": Array.isArray(row.vgtSelected) ? _vm._i(row.vgtSelected, null) > -1 : row.vgtSelected
-            },
-            on: {
-              "change": function change($event) {
-                var $$a = row.vgtSelected,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false;
-
-                if (Array.isArray($$a)) {
-                  var $$v = null,
-                      $$i = _vm._i($$a, $$v);
-
-                  if ($$el.checked) {
-                    $$i < 0 && _vm.$set(row, "vgtSelected", $$a.concat([$$v]));
-                  } else {
-                    $$i > -1 && _vm.$set(row, "vgtSelected", $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
-                  }
-                } else {
-                  _vm.$set(row, "vgtSelected", $$c);
-                }
-              }
+              "checked": row.vgtSelected
             }
           })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
             return !column.hidden && column.field ? _c('td', {
@@ -10896,6 +10846,7 @@
         // internal select options
         selectable: false,
         selectOnCheckboxOnly: false,
+        selectAllByPage: true,
         selectionInfoClass: '',
         selectionText: 'rows selected',
         clearSelectionText: 'clear',
@@ -10924,9 +10875,7 @@
         columnFilters: {},
         forceSearch: false,
         sortChanged: false,
-        dataTypes: dataTypes || {},
-        // to keep track of select-all
-        allSelected: false
+        dataTypes: dataTypes || {}
       };
     },
     watch: {
@@ -10954,6 +10903,10 @@
       },
       searchOptions: {
         handler: function handler() {
+          if (this.searchOptions.externalQuery !== undefined && this.searchOptions.externalQuery !== this.searchTerm) {
+            this.handleSearch();
+          }
+
           this.initializeSearch();
         },
         deep: true,
@@ -10965,6 +10918,11 @@
         },
         deep: true,
         immediate: true
+      },
+      selectedRows: function selectedRows() {
+        this.$emit('on-selected-rows-change', {
+          selectedRows: this.selectedRows
+        });
       }
     },
     computed: {
@@ -10976,11 +10934,31 @@
         if (this.paginated[0].label === 'no groups' && !this.paginated[0].children.length) return true;
         return false;
       },
+      allSelected: function allSelected() {
+        return this.selectedRowCount > 0 && (this.selectAllByPage && this.selectedPageRowsCount === this.totalPageRowCount || !this.selectAllByPage && this.selectedRowCount === this.totalRowCount);
+      },
+      allSelectedIndeterminate: function allSelectedIndeterminate() {
+        return !this.allSelected && (this.selectAllByPage && this.selectedPageRowsCount > 0 || !this.selectAllByPage && this.selectedRowCount > 0);
+      },
       selectionInfo: function selectionInfo() {
         return "".concat(this.selectedRowCount, " ").concat(this.selectionText);
       },
       selectedRowCount: function selectedRowCount() {
         return this.selectedRows.length;
+      },
+      selectedPageRowsCount: function selectedPageRowsCount() {
+        return this.selectedPageRows.length;
+      },
+      selectedPageRows: function selectedPageRows() {
+        var selectedRows = [];
+        lodash_foreach(this.paginated, function (headerRow) {
+          lodash_foreach(headerRow.children, function (row) {
+            if (row.vgtSelected) {
+              selectedRows.push(row);
+            }
+          });
+        });
+        return selectedRows;
       },
       selectedRows: function selectedRows() {
         var selectedRows = [];
@@ -11018,6 +10996,13 @@
       totalRowCount: function totalRowCount() {
         var total = 0;
         lodash_foreach(this.processedRows, function (headerRow) {
+          total += headerRow.children ? headerRow.children.length : 0;
+        });
+        return total;
+      },
+      totalPageRowCount: function totalPageRowCount() {
+        var total = 0;
+        lodash_foreach(this.paginated, function (headerRow) {
           total += headerRow.children ? headerRow.children.length : 0;
         });
         return total;
@@ -11239,60 +11224,52 @@
       }
     },
     methods: {
+      handleSearch: function handleSearch() {
+        this.resetTable(); // for remote mode, we need to emit on-search
+
+        if (this.mode === 'remote') {
+          this.$emit('on-search', {
+            searchTerm: this.searchTerm
+          });
+        }
+      },
       reset: function reset() {
         this.initializeSort();
         this.changePage(1);
         this.$refs['filter-row'].reset(true);
       },
-      emitSelectNone: function emitSelectNone() {
+      emitSelectedRows: function emitSelectedRows() {
         this.$emit('on-select-all', {
-          selected: false,
-          selectedRows: []
+          selected: this.selectedRowCount === this.totalRowCount,
+          selectedRows: this.selectedRows
         });
       },
-      unselectAllInternal: function unselectAllInternal() {
+      unselectAllInternal: function unselectAllInternal(forceAll) {
         var _this2 = this;
 
-        this.emitSelectNone();
-        lodash_foreach(this.originalRows, function (headerRow, i) {
+        var rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
+        lodash_foreach(rows, function (headerRow, i) {
           lodash_foreach(headerRow.children, function (row, j) {
             _this2.$set(row, 'vgtSelected', false);
           });
-        }); // we need to call this to propagate changes to paginated
-        // rows
-
-        this.filterRows();
-      },
-      unselectAll: function unselectAll() {
-        if (this.selectable && this.allSelected) {
-          this.allSelected = false; // this.unselectAllInternal();
-        }
+        });
+        this.emitSelectedRows();
       },
       toggleSelectAll: function toggleSelectAll() {
         var _this3 = this;
 
-        if (!this.allSelected) {
+        if (this.allSelected) {
           this.unselectAllInternal();
           return;
         }
 
-        lodash_foreach(this.paginated, function (headerRow) {
+        var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
+        lodash_foreach(rows, function (headerRow) {
           lodash_foreach(headerRow.children, function (row) {
             _this3.$set(row, 'vgtSelected', true);
           });
         });
-        var selectedRows = [];
-
-        if (this.groupOptions.enabled) {
-          selectedRows = lodash_clonedeep(this.paginated);
-        } else {
-          selectedRows = lodash_clonedeep(this.paginated[0].children);
-        }
-
-        this.$emit('on-select-all', {
-          selected: this.allSelected,
-          selectedRows: selectedRows
-        });
+        this.emitSelectedRows();
       },
       changePage: function changePage(value) {
         if (this.paginationOptions.enabled) {
@@ -11319,7 +11296,6 @@
       },
       pageChanged: function pageChanged(pagination) {
         // every time we change page we have to unselect all
-        this.unselectAll();
         this.currentPage = pagination.currentPage;
         var pageChangedEvent = this.pageChangedEvent();
         this.$emit('on-page-change', pageChangedEvent);
@@ -11350,8 +11326,7 @@
         this.$emit('on-sort-change', {
           sortType: this.sortType,
           columnIndex: this.sortColumn
-        });
-        this.unselectAll(); // every time we change sort we need to reset to page 1
+        }); // every time we change sort we need to reset to page 1
 
         this.changePage(1); // if the mode is remote, we don't need to do anything
         // after this. just set table loading to true
@@ -11364,41 +11339,24 @@
         this.sortChanged = true;
       },
       // checkbox click should always do the following
-      checkboxClick: function checkboxClick(row, index$$1, event) {
-        var selected = false;
-        selected = !row.vgtSelected;
-        this.$set(row, 'vgtSelected', selected);
-
-        if (!selected) {
-          this.unselectAll();
-        }
-
+      onCheckboxClicked: function onCheckboxClicked(row, index$$1, event) {
+        this.$set(row, 'vgtSelected', !row.vgtSelected);
         this.$emit('on-row-click', {
           row: row,
           pageIndex: index$$1,
-          selected: selected,
+          selected: !!row.vgtSelected,
           event: event
         });
       },
-      // row click
-      click: function click(row, index$$1, event) {
-        var selected = false;
-
+      onRowClicked: function onRowClicked(row, index$$1, event) {
         if (this.selectable && !this.selectOnCheckboxOnly) {
-          selected = !row.vgtSelected;
-          this.$set(row, 'vgtSelected', selected);
-
-          if (!selected) {
-            // if we're unselecting a row, we need to unselect
-            // selectall
-            this.unselectAll();
-          }
+          this.$set(row, 'vgtSelected', !row.vgtSelected);
         }
 
         this.$emit('on-row-click', {
           row: row,
           pageIndex: index$$1,
-          selected: selected,
+          selected: !!row.vgtSelected,
           event: event
         });
       },
@@ -11424,22 +11382,21 @@
       },
       searchTableOnEnter: function searchTableOnEnter() {
         if (this.searchTrigger === 'enter') {
-          this.resetTable(); // we reset the filteredRows here because
+          this.handleSearch(); // we reset the filteredRows here because
           // we want to search across everything.
 
-          this.filteredRows = this.originalRows;
+          this.filteredRows = lodash_clonedeep(this.originalRows);
           this.forceSearch = true;
           this.sortChanged = true;
         }
       },
       searchTableOnKeyUp: function searchTableOnKeyUp() {
         if (this.searchTrigger !== 'enter') {
-          this.resetTable();
+          this.handleSearch();
         }
       },
       resetTable: function resetTable() {
-        this.unselectAll();
-        this.unselectAllInternal(); // every time we searchTable
+        this.unselectAllInternal(true); // every time we searchTable
 
         this.changePage(1);
       },
@@ -11560,7 +11517,6 @@
           // being called from filter, not when rows are changing
           if (this.mode !== 'remote' || fromFilter) {
             this.changePage(1);
-            this.unselectAll();
           } // we need to emit an event and that's that.
           // but this only needs to be invoked if filter is changing
           // not when row object is modified.
@@ -11778,7 +11734,8 @@
             selectionInfoClass = _this$selectOptions.selectionInfoClass,
             selectionText = _this$selectOptions.selectionText,
             clearSelectionText = _this$selectOptions.clearSelectionText,
-            selectOnCheckboxOnly = _this$selectOptions.selectOnCheckboxOnly;
+            selectOnCheckboxOnly = _this$selectOptions.selectOnCheckboxOnly,
+            selectAllByPage = _this$selectOptions.selectAllByPage;
 
         if (typeof enabled === 'boolean') {
           this.selectable = enabled;
@@ -11786,6 +11743,10 @@
 
         if (typeof selectOnCheckboxOnly === 'boolean') {
           this.selectOnCheckboxOnly = selectOnCheckboxOnly;
+        }
+
+        if (typeof selectAllByPage === 'boolean') {
+          this.selectAllByPage = selectAllByPage;
         }
 
         if (typeof selectionInfoClass === 'string') {
