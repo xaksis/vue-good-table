@@ -4,8 +4,12 @@ module.exports = {
   base: '/vue-good-table/',
   dest: 'docs',
   ga: 'UA-120929110-1',
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }]
+  ],
   themeConfig: {
     repo: 'xaksis/vue-good-table',
+    logo: '/vgt-logo.png',
     lastUpdated: true,
     nav: [
       { text: 'Home', link: '/' },
