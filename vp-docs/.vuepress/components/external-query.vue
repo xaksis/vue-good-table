@@ -19,7 +19,7 @@ export default {
   ],
   data() {
     return {
-      externalQuery: null,
+      externalQuery: '',
       columns: [
         {
           label: 'Name',

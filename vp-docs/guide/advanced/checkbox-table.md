@@ -10,8 +10,7 @@ type: `Object`
 Object containing select options
 ```html
 <vue-good-table
-  @on-select-all="allSelected"
-  @on-row-click="rowSelected"
+  @on-selected-rows-change="selectionChanged"
   :columns="columns"
   :rows="rows"
   :selectOptions="{
@@ -23,9 +22,7 @@ Object containing select options
   }">
 ```
 
-
-
-you can also programmatically get selected rows at any time by putting a `ref` on the table and then doing
+Although, the `on-selected-rows-change` event should be enough for you to keep track of selected rows. If at any time you need to know what rows are selected, you can get it via ref.
 
 ```js
 this.$refs['my-table'].selectedRows;
@@ -34,8 +31,7 @@ this.$refs['my-table'].selectedRows;
 ### Example
 ```vue
 <vue-good-table
-  @on-select-all="selectAll"
-  @on-row-click="toggleSelectRow"
+  @on-selected-rows-change="selectionChanged"
   :columns="columns"
   :rows="rows"
   :select-options="{ enabled: true }"
@@ -53,8 +49,7 @@ Once you select a row, an info bar shows up. This bar allows for a customizable 
 
 ```html
 <vue-good-table
-  @on-select-all="selectAll"
-  @on-row-click="toggleSelectRow"
+  @on-selected-rows-change="selectionChanged"
   :columns="columns"
   :rows="rows"
   :select-options="{ 
@@ -65,6 +60,11 @@ Once you select a row, an info bar shows up. This bar allows for a customizable 
     <button>Action 1</button>
   </div>
 </vue-good-table>
+<!-- click on a row below to show the action button -->
 ```
 
+<checkbox-table :show-slot="true" />
 
+::: tip Note
+You can style the selection info bar by supplying a css class to `selectionInfoClass` property.
+:::

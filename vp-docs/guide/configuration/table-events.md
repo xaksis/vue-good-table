@@ -142,26 +142,9 @@ methods: {
   }
 }
 ```
- 
 
-## @on-select-all
-event emitted when all is selected (only emitted for checkbox tables)
-```html
-<vue-good-table
-  :columns="columns"
-  :rows="rows"
-  @on-select-all="onSelectAll">
- ```
- ```javascript
- methods: {
-   onSelectAll(params) {
-     // params.selected - whether the select-all checkbox is checked or unchecked
-     // params.selectedRows - all rows that are selected (this page)
-   }
- }
- ```
  
- ## @on-column-filter
+## @on-column-filter
 event emitted when column is filtered (only emitted for remote mode)
 ```html
 <vue-good-table
@@ -174,6 +157,41 @@ event emitted when column is filtered (only emitted for remote mode)
    onColumnFilter(params) {
      // params.columnFilters - filter values for each column in the following format:
      // {field1: 'filterTerm', field3: 'filterTerm2')
+   }
+ }
+ ```
+
+ ## @on-select-all
+event emitted when all is selected (only emitted for checkbox tables)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :select-options="{ enabled: true }"
+  @on-select-all="onSelectAll">
+ ```
+ ```javascript
+ methods: {
+   onSelectAll(params) {
+     // params.selected - whether the select-all checkbox is checked or unchecked
+     // params.selectedRows - all rows that are selected (this page)
+   }
+ }
+ ```
+
+ ## @on-selected-rows-change
+ event emitted whenever selection is changed (on checkbox tables)
+ ```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :select-options="{ enabled: true }"
+  @on-selected-rows-change="selectionChanged">
+ ```
+ ```javascript
+ methods: {
+   selectionChanged(params) {
+     // params.selectedRows - all rows that are selected (this page)
    }
  }
  ```

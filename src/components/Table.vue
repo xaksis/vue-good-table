@@ -75,8 +75,10 @@
               </slot>
             </th>
           </tr>
-          <tr is="vgt-filter-row"
-            ref="filter-row"@filter-changed="filterRows"
+          <tr
+            is="vgt-filter-row"
+            ref="filter-row"
+            @filter-changed="filterRows"
             :global-search-enabled="searchEnabled"
             :line-numbers="lineNumbers"
             :selectable="selectable"
@@ -119,7 +121,9 @@
             <th v-if="lineNumbers" class="line-numbers">
               {{ getCurrentIndex(index) }}
             </th>
-            <th v-if="selectable"@click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
+            <th 
+              v-if="selectable"
+              @click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
               <input
                 type="checkbox"
                 :checked="row.vgtSelected"/>
@@ -340,7 +344,7 @@ export default {
     columnFilters: {},
     forceSearch: false,
     sortChanged: false,
-    dataTypes: dataTypes || {}
+    dataTypes: dataTypes || {},
   }),
 
   watch: {
@@ -371,8 +375,9 @@ export default {
 
     searchOptions: {
       handler() {
-        if (this.searchOptions.externalQuery !== undefined && this.searchOptions.externalQuery !== this.searchTerm) {
-          this.resetTable();
+        if (this.searchOptions.externalQuery !== undefined
+          && this.searchOptions.externalQuery !== this.searchTerm) {
+          this.handleSearch();
         }
         this.initializeSearch();
       },
@@ -388,11 +393,11 @@ export default {
       immediate: true,
     },
 
-    selectedRows: function() {
+    selectedRows() {
       this.$emit('on-selected-rows-change', {
         selectedRows: this.selectedRows,
       });
-    }
+    },
   },
 
   computed: {
@@ -728,6 +733,16 @@ export default {
   },
 
   methods: {
+    handleSearch() {
+      this.resetTable();
+      // for remote mode, we need to emit on-search
+      if (this.mode === 'remote') {
+        this.$emit('on-search', {
+          searchTerm: this.searchTerm,
+        });
+      }
+    },
+
     reset() {
       this.initializeSort();
       this.changePage(1);
@@ -737,7 +752,7 @@ export default {
     emitSelectedRows() {
       this.$emit('on-select-all', {
         selected: this.selectedRowCount === this.totalRowCount,
-        selectedRows: this.selectedRows
+        selectedRows: this.selectedRows,
       });
     },
 
@@ -841,7 +856,7 @@ export default {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
-        event
+        event,
       });
     },
 
@@ -853,7 +868,7 @@ export default {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
-        event
+        event,
       });
     },
 
@@ -862,7 +877,7 @@ export default {
         row,
         column,
         rowIndex,
-        event
+        event,
       });
     },
 
@@ -882,7 +897,7 @@ export default {
 
     searchTableOnEnter() {
       if (this.searchTrigger === 'enter') {
-        this.resetTable();
+        this.handleSearch();
         // we reset the filteredRows here because
         // we want to search across everything.
         this.filteredRows = cloneDeep(this.originalRows);
@@ -893,7 +908,7 @@ export default {
 
     searchTableOnKeyUp() {
       if (this.searchTrigger !== 'enter') {
-        this.resetTable();
+        this.handleSearch();
       }
     },
 
@@ -1230,7 +1245,7 @@ export default {
         selectionText,
         clearSelectionText,
         selectOnCheckboxOnly,
-        selectAllByPage
+        selectAllByPage,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {

@@ -16,5 +16,6 @@ footer: MIT Licensed | Copyright © 2018-present xaksis
 <style>
 .hero img{
    box-shadow: 0px 0px 30px #ccc;
+   max-width: 100%;
 }
 </style>

@@ -1,12 +1,14 @@
 <template>
 <div>
   <vue-good-table
-    @on-select-all="selectAll"
-    @on-row-click="toggleSelectRow"
+    @on-selected-rows-change="toggleSelectRow"
     :columns="columns"
     :rows="rows"
     :select-options="{ enabled: true }"
     :search-options="{ enabled: true }">
+    <div v-if="showSlot" slot="selected-row-actions">
+      <button>Action 1</button>
+    </div>
   </vue-good-table>  
 </div>
 </template>
@@ -14,7 +16,7 @@
 <script>
 export default {
   name: 'checkbox-table',
-  props: [],
+  props: ['showSlot'],
   data() {
     return {
       columns: [
