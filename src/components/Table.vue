@@ -44,7 +44,7 @@
       :class="selectionInfoClass">
       {{selectionInfo}}
       <a href=""
-      @click.prevent=" unselectAllInternal()">
+      @click.prevent="unselectAllInternal()">
         {{clearSelectionText}}
       </a>
       <div class="vgt-selection-info-row__actions vgt-pull-right">
@@ -76,7 +76,7 @@
             </th>
           </tr>
           <tr is="vgt-filter-row"
-            @filter-changed="filterRows"
+            ref="filter-row"@filter-changed="filterRows"
             :global-search-enabled="searchEnabled"
             :line-numbers="lineNumbers"
             :selectable="selectable"
@@ -250,7 +250,6 @@ export default {
       default() {
         return {
           enabled: false,
-          selectAllByPage: true,
           selectionInfoClass: '',
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
@@ -568,19 +567,14 @@ export default {
                   return false; // break the loop
                 }
               } else {
-                // lets get the formatted row/col value
-                let tableValue = this.collectFormatted(row, col);
-                if (typeof tableValue !== 'undefined' && tableValue !== null) {
-                  // table value
-                  tableValue = diacriticless(String(tableValue).toLowerCase());
-                  // search term
-                  const searchTerm = diacriticless(this.searchTerm.toLowerCase());
-
-                  // comparison
-                  if (tableValue.search(searchTerm) > -1) {
-                    filteredRows.push(row);
-                    return false; // break loop
-                  }
+                // comparison
+                const matched = defaultType.filterPredicate(
+                  this.collectFormatted(row, col),
+                  this.searchTerm
+                );
+                if (matched) {
+                  filteredRows.push(row);
+                  return false; // break loop
                 }
               }
             }
@@ -647,7 +641,6 @@ export default {
     },
 
     paginated() {
-      console.warn('paginated');
       if (!this.processedRows.length) return [];
 
       if (this.mode === 'remote') {
@@ -735,6 +728,12 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.initializeSort();
+      this.changePage(1);
+      this.$refs['filter-row'].reset(true);
+    },
+
     emitSelectedRows() {
       this.$emit('on-select-all', {
         selected: this.selectedRowCount === this.totalRowCount,
@@ -1024,8 +1023,13 @@ export default {
         }
 
         // if mode is remote, we don't do any filtering here.
-        if (this.mode === 'remote' && fromFilter) {
-          this.tableLoading = true;
+        if (this.mode === 'remote') {
+          if (fromFilter) {
+            this.tableLoading = true;
+          } else {
+            // if remote filtering has already been taken care of.
+            this.filteredRows = computedRows;
+          }
           return;
         }
 
@@ -1097,6 +1101,18 @@ export default {
     //     this.filteredRows = this.handleGrouped(this.originalRows);
     //   }
     // },
+
+    handleDefaultSort() {
+      for (let index = 0; index < this.columns.length; index++) {
+        const col = this.columns[index];
+        if (col.field === this.defaultSortBy.field) {
+          this.sortColumn = index;
+          this.sortType = this.defaultSortBy.type || 'asc';
+          this.sortChanged = true;
+          break;
+        }
+      }
+    },
 
     initializePagination() {
       const {
@@ -1203,6 +1219,7 @@ export default {
 
       if (typeof initialSortBy === 'object') {
         this.defaultSortBy = initialSortBy;
+        this.handleDefaultSort();
       }
     },
 
@@ -1240,6 +1257,13 @@ export default {
         this.clearSelectionText = clearSelectionText;
       }
     },
+
+    initializeColumns() {
+      // take care of default sort on mount
+      if (this.defaultSortBy) {
+        this.handleDefaultSort();
+      }
+    },
   },
 
   mounted() {
@@ -1247,19 +1271,6 @@ export default {
 
     if (this.perPage) {
       this.currentPerPage = this.perPage;
-    }
-
-    // take care of default sort on mount
-    if (this.defaultSortBy) {
-      for (let index = 0; index < this.columns.length; index++) {
-        const col = this.columns[index];
-        if (col.field === this.defaultSortBy.field) {
-          this.sortColumn = index;
-          this.sortType = this.defaultSortBy.type || 'asc';
-          this.sortChanged = true;
-          break;
-        }
-      }
     }
   },
 

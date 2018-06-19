@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.6.2
+ * vue-good-table v2.7.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -62,6 +62,10 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
+var escapeRegExp = function escapeRegExp(str) {
+  return str.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
 var def = {
   format: function format$$1(x) {
     return x;
@@ -75,7 +79,7 @@ var def = {
 
     var rowValue = diacriticless(String(rowval).toLowerCase()); // search term
 
-    var searchTerm = diacriticless(filter$$1.toLowerCase()); // comparison
+    var searchTerm = diacriticless(escapeRegExp(filter$$1).toLowerCase()); // comparison
 
     return rowValue.search(searchTerm) > -1;
   },
@@ -249,6 +253,9 @@ var VgtPagination = {
     }
   },
   computed: {
+    currentPerPageString: function currentPerPageString() {
+      return this.currentPerPage === -1 ? 'All' : this.currentPerPage;
+    },
     paginatedInfo: function paginatedInfo() {
       if (this.currentPerPage === -1) {
         return "1 - ".concat(this.total, " ").concat(this.ofText, " ").concat(this.total);
@@ -277,6 +284,12 @@ var VgtPagination = {
     //   return this.currentPerPage === option;
     // },
     reset: function reset() {},
+    changePage: function changePage(pageNumber) {
+      if (pageNumber > 0 && this.total > this.currentPerPage * pageNumber) {
+        this.currentPage = pageNumber;
+        this.pageChanged();
+      }
+    },
     nextPage: function nextPage() {
       if (this.currentPerPage === -1) return;
 
@@ -322,7 +335,7 @@ var VgtPagination = {
           }
         }
 
-        if (!found) this.rowsPerPageOptions.push(this.perPage);
+        if (!found && this.perPage !== -1) this.rowsPerPageOptions.push(this.perPage);
       } else {
         // reset to default
         this.currentPerPage = 10;
@@ -522,6 +535,14 @@ var VgtFilterRow = {
     }
   },
   methods: {
+    reset: function reset() {
+      var emitEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      this.columnFilters = {};
+
+      if (emitEvent) {
+        this.$emit('filter-changed', this.columnFilters);
+      }
+    },
     isFilterable: function isFilterable(column) {
       return column.filterOptions && column.filterOptions.enabled;
     },
@@ -540,7 +561,8 @@ var VgtFilterRow = {
       return placeholder;
     },
     updateFiltersOnEnter: function updateFiltersOnEnter(column, value) {
-      this.updateFilters(column, value);
+      if (this.timer) clearTimeout(this.timer);
+      this.updateFiltersImmediately(column, value);
     },
     updateFiltersOnKeyup: function updateFiltersOnKeyup(column, value) {
       // if the trigger is enter, we don't filter on keyup
@@ -842,6 +864,7 @@ var GoodTable = {
         column: column
       })], 2) : _vm._e();
     })], 2), _vm._v(" "), _c("vgt-filter-row", {
+      ref: "filter-row",
       tag: "tr",
       attrs: {
         "global-search-enabled": _vm.searchEnabled,
@@ -1279,19 +1302,12 @@ var GoodTable = {
                   return false; // break the loop
                 }
               } else {
-                // lets get the formatted row/col value
-                var tableValue = _this.collectFormatted(row, col);
+                // comparison
+                var matched = def.filterPredicate(_this.collectFormatted(row, col), _this.searchTerm);
 
-                if (typeof tableValue !== 'undefined' && tableValue !== null) {
-                  // table value
-                  tableValue = diacriticless(String(tableValue).toLowerCase()); // search term
-
-                  var searchTerm = diacriticless(_this.searchTerm.toLowerCase()); // comparison
-
-                  if (tableValue.search(searchTerm) > -1) {
-                    filteredRows.push(row);
-                    return false; // break loop
-                  }
+                if (matched) {
+                  filteredRows.push(row);
+                  return false; // break loop
                 }
               }
             }
@@ -1441,6 +1457,11 @@ var GoodTable = {
     }
   },
   methods: {
+    reset: function reset() {
+      this.initializeSort();
+      this.changePage(1);
+      this.$refs['filter-row'].reset(true);
+    },
     emitSelectNone: function emitSelectNone() {
       this.$emit('on-select-all', {
         selected: false,
@@ -1770,8 +1791,14 @@ var GoodTable = {
         } // if mode is remote, we don't do any filtering here.
 
 
-        if (this.mode === 'remote' && fromFilter) {
-          this.tableLoading = true;
+        if (this.mode === 'remote') {
+          if (fromFilter) {
+            this.tableLoading = true;
+          } else {
+            // if remote filtering has already been taken care of.
+            this.filteredRows = computedRows;
+          }
+
           return;
         }
 
@@ -1842,6 +1869,18 @@ var GoodTable = {
     //     this.filteredRows = this.handleGrouped(this.originalRows);
     //   }
     // },
+    handleDefaultSort: function handleDefaultSort() {
+      for (var index$$1 = 0; index$$1 < this.columns.length; index$$1++) {
+        var col = this.columns[index$$1];
+
+        if (col.field === this.defaultSortBy.field) {
+          this.sortColumn = index$$1;
+          this.sortType = this.defaultSortBy.type || 'asc';
+          this.sortChanged = true;
+          break;
+        }
+      }
+    },
     initializePagination: function initializePagination() {
       var _this5 = this;
 
@@ -1948,6 +1987,7 @@ var GoodTable = {
 
       if (_typeof(initialSortBy) === 'object') {
         this.defaultSortBy = initialSortBy;
+        this.handleDefaultSort();
       }
     },
     initializeSelect: function initializeSelect() {
@@ -1977,26 +2017,18 @@ var GoodTable = {
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
+    },
+    initializeColumns: function initializeColumns() {
+      // take care of default sort on mount
+      if (this.defaultSortBy) {
+        this.handleDefaultSort();
+      }
     }
   },
   mounted: function mounted() {
     // this.filteredRows = this.originalRows;
     if (this.perPage) {
       this.currentPerPage = this.perPage;
-    } // take care of default sort on mount
-
-
-    if (this.defaultSortBy) {
-      for (var index$$1 = 0; index$$1 < this.columns.length; index$$1++) {
-        var col = this.columns[index$$1];
-
-        if (col.field === this.defaultSortBy.field) {
-          this.sortColumn = index$$1;
-          this.sortType = this.defaultSortBy.type || 'asc';
-          this.sortChanged = true;
-          break;
-        }
-      }
     }
   },
   components: {

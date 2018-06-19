@@ -1,6 +1,6 @@
 {
   "name": "vue-good-table",
-  "version": "2.6.2",
+  "version": "2.7.2",
   "description": "A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc",
   "main": "dist/vue-good-table.cjs.js",
   "module": "dist/vue-good-table.es.js",
@@ -11,6 +11,8 @@
   "scripts": {
     "bundle": "bili",
     "dev": "poi",
+    "docs:dev": "vuepress dev vp-docs",
+    "docs:build": "vuepress build vp-docs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -53,6 +55,7 @@
     "sass-loader": "^6.0.6",
     "vue": "^2.5.16",
     "vue-template-compiler": "^2.5.16",
+    "vuepress": "^0.10.1",
     "webpack": "^4.8.3"
   }
 }

@@ -4,4 +4,6 @@ node_modules/
 *.log
 dev
 src
+docs
+vp-docs
 .babelrc

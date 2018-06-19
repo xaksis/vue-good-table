@@ -1,11 +1,14 @@
 <template>
   <div>
     <button @click="rows = [];">empty row</button>
+    <button @click="resetTable">reset Table</button>
     <input type="text" v-model="searchTerm">
     <vue-good-table
+      ref="my-table"
       @on-column-filter="onColumnFilter"
       @on-row-click="onColumnFilter"
       @on-select-all="onSelectAll"
+      @on-sort-change="onSortChange"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
@@ -15,6 +18,7 @@
         enabled: true,
         selectOnCheckboxOnly: false,
       }"
+      :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
       :search-options="{
         enabled: false,
       }">
@@ -38,7 +42,7 @@ export default {
           field: 'name',
           filterOptions: {
             enabled: true,
-            trigger: '',
+            trigger: 'enter',
           },
         },
         {
@@ -126,8 +130,8 @@ export default {
     };
   },
   methods: {
-    onColumnFilter(params) {
-      console.log(params);
+    resetTable() {
+      this.$refs['my-table'].reset();
     },
     onSelectAll(params) {
       console.log(params);

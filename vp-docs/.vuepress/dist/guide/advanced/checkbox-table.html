@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Checkbox Table | vue-good-table</title>
+    <meta name="description" content="A powerful and easy to use data table plugin for VueJS">
+    
+    
+    <link rel="preload" href="/vue-good-table/assets/css/0.styles.dc09cd34.css" as="style"><link rel="preload" href="/vue-good-table/assets/js/app.a59d9aef.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/12.1e137b63.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/19.5eb669bb.js" as="script"><link rel="prefetch" href="/vue-good-table/assets/js/10.22204d40.js"><link rel="prefetch" href="/vue-good-table/assets/js/1.db5b5d46.js"><link rel="prefetch" href="/vue-good-table/assets/js/2.bc66dc77.js"><link rel="prefetch" href="/vue-good-table/assets/js/3.932b86fb.js"><link rel="prefetch" href="/vue-good-table/assets/js/4.df9755ec.js"><link rel="prefetch" href="/vue-good-table/assets/js/5.ec8c1dd2.js"><link rel="prefetch" href="/vue-good-table/assets/js/6.9b55dfec.js"><link rel="prefetch" href="/vue-good-table/assets/js/7.ef1b984d.js"><link rel="prefetch" href="/vue-good-table/assets/js/8.ae2ce3ba.js"><link rel="prefetch" href="/vue-good-table/assets/js/9.5e089b24.js"><link rel="prefetch" href="/vue-good-table/assets/js/11.ffee6580.js"><link rel="prefetch" href="/vue-good-table/assets/js/13.17ea8c39.js"><link rel="prefetch" href="/vue-good-table/assets/js/14.3727652d.js"><link rel="prefetch" href="/vue-good-table/assets/js/15.125b08dc.js"><link rel="prefetch" href="/vue-good-table/assets/js/16.9e087e7c.js"><link rel="prefetch" href="/vue-good-table/assets/js/17.0ee802cb.js"><link rel="prefetch" href="/vue-good-table/assets/js/18.57facccb.js"><link rel="prefetch" href="/vue-good-table/assets/js/20.6c61e0f6.js"><link rel="prefetch" href="/vue-good-table/assets/js/21.6ce211a6.js">
+    <link rel="stylesheet" href="/vue-good-table/assets/css/0.styles.dc09cd34.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div><a href="/vue-good-table/" class="home-link router-link-active"><!----><span class="site-name">
+      vue-good-table
+    </span></a><div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""><!----></div><nav class="nav-links can-hide"><a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header><div class="sidebar-mask"></div><div class="sidebar"><nav class="nav-links"><a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav><ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading"><span>Introduction</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/" class="sidebar-link">Getting Started</a></li></ul></div></li><li><div class="sidebar-group"><p class="sidebar-heading"><span>Configuration</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/configuration/" class="sidebar-link">Table Options</a></li><li><a href="/vue-good-table/guide/configuration/table-events.html" class="sidebar-link">Table Events</a></li><li><a href="/vue-good-table/guide/configuration/search-options.html" class="sidebar-link">Search Options</a></li><li><a href="/vue-good-table/guide/configuration/sort-options.html" class="sidebar-link">Sort Options</a></li><li><a href="/vue-good-table/guide/configuration/pagination-options.html" class="sidebar-link">Pagination Options</a></li><li><a href="/vue-good-table/guide/configuration/column-options.html" class="sidebar-link">Column Options</a></li><li><a href="/vue-good-table/guide/configuration/column-filter-options.html" class="sidebar-link">Column Filter Options</a></li></ul></div></li><li><div class="sidebar-group"><p class="sidebar-heading open"><span>Avanced Configuration</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/advanced/" class="sidebar-link">Customizations</a></li><li><a href="/vue-good-table/guide/advanced/checkbox-table.html" class="active sidebar-link">Checkbox Table</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/vue-good-table/guide/advanced/checkbox-table.html#configuration" class="sidebar-link">Configuration</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/advanced/checkbox-table.html#selected-row-action-slot" class="sidebar-link">Selected row action slot</a></li></ul></li><li><a href="/vue-good-table/guide/advanced/grouped-table.html" class="sidebar-link">Grouped Table</a></li><li><a href="/vue-good-table/guide/advanced/remote-workflow.html" class="sidebar-link">Server Side Table</a></li></ul></div></li><li><div class="sidebar-group"><p class="sidebar-heading"><span>Style Configuration</span><!----></p><ul class="sidebar-group-items"><li><a href="/vue-good-table/guide/style-configuration/" class="sidebar-link">Themes</a></li><li><a href="/vue-good-table/guide/style-configuration/style-classes.html" class="sidebar-link">Style Classes</a></li></ul></div></li></ul></div><div class="page"><div class="content"><h1 id="checkbox-table"><a href="#checkbox-table" aria-hidden="true" class="header-anchor">#</a> Checkbox Table</h1><p>One of the most common customizations in datatables is selectable rows. Creating a checkbox table with <strong>vue-good-table</strong> is easier than ever.</p><h2 id="configuration"><a href="#configuration" aria-hidden="true" class="header-anchor">#</a> Configuration</h2><p>type: <code>Object</code></p><p>Object containing select options</p><div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">@on-select-all</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>allSelected<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">@on-row-click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rowSelected<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:selectOptions</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+    enabled: true,
+    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
+    selectionInfoClass: <span class="token punctuation">'</span>custom-class<span class="token punctuation">'</span>,
+    selectionText: <span class="token punctuation">'</span>rows selected<span class="token punctuation">'</span>,
+    clearSelectionText: <span class="token punctuation">'</span>clear<span class="token punctuation">'</span>,
+  }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><p>you can also programmatically get selected rows at any time by putting a <code>ref</code> on the table and then doing</p><div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">this</span><span class="token punctuation">.</span>$refs<span class="token punctuation">[</span><span class="token string">'my-table'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>selectedRows<span class="token punctuation">;</span>
+</code></pre></div><h3 id="example"><a href="#example" aria-hidden="true" class="header-anchor">#</a> Example</h3><div class="language-vue extra-class"><pre class="language-vue"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">@on-select-all</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>selectAll<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">@on-row-click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>toggleSelectRow<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:select-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{ enabled: true }<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:search-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{ enabled: true }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><div><div class="vgt-wrap"><!----><div class="vgt-inner-wrap"><!----><div class="vgt-global-search vgt-clearfix"><div class="vgt-global-search__input vgt-pull-left"><span class="input__icon"><div class="magnifying-glass"></div></span><input type="text" placeholder="Search Table" value="" class="vgt-input vgt-pull-left"></div><div class="vgt-global-search__actions vgt-pull-right"></div></div><!----><div class="vgt-responsive"><table class="vgt-table bordered "><thead><tr><!----><th class="vgt-checkbox-col"><input type="checkbox"></th><th class="vgt-left-align sorting" style="width:auto;"><span>Name</span></th><th class="vgt-right-align sorting" style="width:auto;"><span>Age</span></th><th class="vgt-right-align sorting" style="width:auto;"><span>Created On</span></th><th class="vgt-right-align sorting" style="width:auto;"><span>Percent</span></th></tr><!----></thead><tbody><!----><tr class="clickable"><!----><th class="vgt-checkbox-col"><input type="checkbox"></th><td class="vgt-left-align"><span>
+                  John
+                </span><!----></td><td class="vgt-right-align"><span>
+                  20
+                </span><!----></td><td class="vgt-right-align"><span>
+                  Oct 31st 01
+                </span><!----></td><td class="vgt-right-align"><span>
+                  3.34%
+                </span><!----></td></tr><tr class="clickable"><!----><th class="vgt-checkbox-col"><input type="checkbox"></th><td class="vgt-left-align"><span>
+                  Jane
+                </span><!----></td><td class="vgt-right-align"><span>
+                  24
+                </span><!----></td><td class="vgt-right-align"><span>
+                  Oct 31st 11
+                </span><!----></td><td class="vgt-right-align"><span>
+                  3.34%
+                </span><!----></td></tr><tr class="clickable"><!----><th class="vgt-checkbox-col"><input type="checkbox"></th><td class="vgt-left-align"><span>
+                  Susan
+                </span><!----></td><td class="vgt-right-align"><span>
+                  16
+                </span><!----></td><td class="vgt-right-align"><span>
+                  Oct 30th 11
+                </span><!----></td><td class="vgt-right-align"><span>
+                  3.34%
+                </span><!----></td></tr><!----></tbody><!----></table></div><!----></div></div></div><h2 id="selected-row-action-slot"><a href="#selected-row-action-slot" aria-hidden="true" class="header-anchor">#</a> Selected row action slot</h2><p>Once you select a row, an info bar shows up. This bar allows for a customizable slot for your action buttons.</p><h3 id="example-2"><a href="#example-2" aria-hidden="true" class="header-anchor">#</a> Example</h3><div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">@on-select-all</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>selectAll<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">@on-row-click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>toggleSelectRow<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:select-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{ 
+    enabled: true,
+  }<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:search-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{ enabled: true }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">slot</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>selected-row-actions<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span><span class="token punctuation">&gt;</span></span>Action 1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div><div class="page-edit"><!----><!----></div><div class="page-nav"><p class="inner"><span class="prev">
+        ← <a href="/vue-good-table/guide/advanced/" class="prev router-link-active">
+          Customizations
+        </a></span><span class="next"><a href="/vue-good-table/guide/advanced/grouped-table.html">
+          Grouped Table
+        </a> →
+      </span></p></div></div></div></div>
+    <script src="/vue-good-table/assets/js/12.1e137b63.js" defer></script><script src="/vue-good-table/assets/js/19.5eb669bb.js" defer></script><script src="/vue-good-table/assets/js/app.a59d9aef.js" defer></script>
+  </body>
+</html>
