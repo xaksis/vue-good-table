@@ -28,110 +28,108 @@
         :ofText="ofText"
         :allText="allText"></vgt-pagination>
 
-      <vgt-global-search
-        @on-keyup="searchTableOnKeyUp"
-        @on-enter="searchTableOnEnter"
-        v-model="globalSearchTerm"
-        :search-enabled="searchEnabled && externalSearchQuery == null"
-        :global-search-placeholder="searchPlaceholder">
-        <template slot="internal-table-actions">
-          <slot name="table-actions">
-          </slot>
-        </template>
-      </vgt-global-search>
-      <div v-if="selectedRowCount"
-        class="vgt-selection-info-row clearfix"
-        :class="selectionInfoClass">
-        {{selectionInfo}}
-        <a href=""
-        @click.prevent="unselectAll(); unselectAllInternal()">
-          {{clearSelectionText}}
-        </a>
-        <div class="vgt-selection-info-row__actions vgt-pull-right">
-          <slot name="selected-row-actions">
-          </slot>
-        </div>
+    <vgt-global-search
+      @on-keyup="searchTableOnKeyUp"
+      @on-enter="searchTableOnEnter"
+      v-model="globalSearchTerm"
+      :search-enabled="searchEnabled && externalSearchQuery == null"
+      :global-search-placeholder="searchPlaceholder">
+      <template slot="internal-table-actions">
+        <slot name="table-actions">
+        </slot>
+      </template>
+    </vgt-global-search>
+    <div v-if="selectedRowCount"
+      class="vgt-selection-info-row clearfix"
+      :class="selectionInfoClass">
+      {{selectionInfo}}
+      <a href=""
+      @click.prevent="unselectAllInternal(true)">
+        {{clearSelectionText}}
+      </a>
+      <div class="vgt-selection-info-row__actions vgt-pull-right">
+        <slot name="selected-row-actions">
+        </slot>
       </div>
-      <div :class="{'vgt-responsive': responsive}">
-        <table ref="table" :class="tableStyleClasses">
-          <thead>
-            <tr>
-              <th v-if="lineNumbers" class="line-numbers"></th>
-              <th v-if="selectable" class="vgt-checkbox-col">
-                <input
-                  type="checkbox"
-                  v-model="allSelected"
-                  @change="toggleSelectAll" />
-              </th>
-              <th v-for="(column, index) in columns"
-                :key="index"
-                @click="sort(index)"
-                :class="getHeaderClasses(column, index)"
-                :style="{width: column.width ? column.width : 'auto'}"
-                v-if="!column.hidden">
-                <slot name="table-column" :column="column">
-                  <span>{{column.label}}</span>
-                </slot>
-              </th>
-            </tr>
-            <tr is="vgt-filter-row"
-              ref="filter-row"
-              @filter-changed="filterRows"
-              :global-search-enabled="searchEnabled"
-              :line-numbers="lineNumbers"
-              :selectable="selectable"
-              :columns="columns"
-              :mode="mode"
-              :typed-columns="typedColumns">
-            </tr>
-          </thead>
-          <tbody v-for="(headerRow, index) in paginated" :key="index">
-            <tr v-if="groupHeaderOnTop">
-              <th
-                v-if="headerRow.mode === 'span'"
-                class="vgt-left-align vgt-row-header"
-                :colspan="fullColspan">
-                {{ headerRow.label }}
-              </th>
-              <th
-                class="vgt-row-header"
-                v-if="headerRow.mode !== 'span' && lineNumbers"></th>
-              <th
-                class="vgt-row-header"
-                v-if="headerRow.mode !== 'span' && selectable"></th>
-              <th
-                v-if="headerRow.mode !== 'span'"
-                v-for="(column, i) in columns"
-                :key="i"
-                class="vgt-row-header"
-                :class="getClasses(i, 'td')">
-                {{ collectFormatted(headerRow, column, true) }}
-              </th>
-            </tr>
-            <!-- normal rows here. we loop over all rows -->
-            <tr
-              v-for="(row, index) in headerRow.children"
-              :key="row.originalIndex"
-              :class="getRowStyleClass(row)"
-              @mouseenter="onMouseenter(row, index)"
-              @mouseleave="onMouseleave(row, index)"
-              @click="click(row, index, $event)">
-              <th v-if="lineNumbers" class="line-numbers">
-                {{ getCurrentIndex(index) }}
-              </th>
-              <th
-                v-if="selectable"
-                @click.prevent.stop="checkboxClick(row, index, $event)" class="vgt-checkbox-col">
-                <input
-                  type="checkbox"
-                  v-model="row.vgtSelected"/>
-              </th>
-              <td
-                @click="onCellClicked(row, column, index, $event)"
-                v-for="(column, i) in columns"
-                :key="i"
-                :class="getClasses(i, 'td')"
-                v-if="!column.hidden && column.field">
+    </div>
+    <div :class="{'vgt-responsive': responsive}">
+      <table ref="table" :class="tableStyleClasses">
+        <thead>
+          <tr>
+            <th v-if="lineNumbers" class="line-numbers"></th>
+            <th v-if="selectable" class="vgt-checkbox-col">
+              <input
+                type="checkbox"
+                :checked="allSelected"
+                :indeterminate.prop="allSelectedIndeterminate"
+                @change="toggleSelectAll" />
+            </th>
+            <th v-for="(column, index) in columns"
+              :key="index"
+              @click="sort(index)"
+              :class="getHeaderClasses(column, index)"
+              :style="{width: column.width ? column.width : 'auto'}"
+              v-if="!column.hidden">
+              <slot name="table-column" :column="column">
+                <span>{{column.label}}</span>
+              </slot>
+            </th>
+          </tr>
+          <tr is="vgt-filter-row"
+            ref="filter-row"@filter-changed="filterRows"
+            :global-search-enabled="searchEnabled"
+            :line-numbers="lineNumbers"
+            :selectable="selectable"
+            :columns="columns"
+            :mode="mode"
+            :typed-columns="typedColumns">
+          </tr>
+        </thead>
+        <tbody v-for="(headerRow, index) in paginated" :key="index">
+          <tr v-if="groupHeaderOnTop">
+            <th
+              v-if="headerRow.mode === 'span'"
+              class="vgt-left-align vgt-row-header"
+              :colspan="fullColspan">
+              {{ headerRow.label }}
+            </th>
+            <th
+              class="vgt-row-header"
+              v-if="headerRow.mode !== 'span' && lineNumbers"></th>
+            <th
+              class="vgt-row-header"
+              v-if="headerRow.mode !== 'span' && selectable"></th>
+            <th
+              v-if="headerRow.mode !== 'span'"
+              v-for="(column, i) in columns"
+              :key="i"
+              class="vgt-row-header"
+              :class="getClasses(i, 'td')">
+              {{ collectFormatted(headerRow, column, true) }}
+            </th>
+          </tr>
+          <!-- normal rows here. we loop over all rows -->
+          <tr
+            v-for="(row, index) in headerRow.children"
+            :key="row.originalIndex"
+            :class="getRowStyleClass(row)"
+            @mouseenter="onMouseenter(row, index)"
+            @mouseleave="onMouseleave(row, index)"
+            @click="onRowClicked(row, index, $event)">
+            <th v-if="lineNumbers" class="line-numbers">
+              {{ getCurrentIndex(index) }}
+            </th>
+            <th v-if="selectable"@click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
+              <input
+                type="checkbox"
+                :checked="row.vgtSelected"/>
+            </th>
+            <td
+              @click="onCellClicked(row, column, index, $event)"
+              v-for="(column, i) in columns"
+              :key="i"
+              :class="getClasses(i, 'td')"
+              v-if="!column.hidden && column.field">
 
                 <slot
                   name="table-row"
@@ -309,6 +307,7 @@ export default {
     // internal select options
     selectable: false,
     selectOnCheckboxOnly: false,
+    selectAllByPage: true,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -341,10 +340,7 @@ export default {
     columnFilters: {},
     forceSearch: false,
     sortChanged: false,
-    dataTypes: dataTypes || {},
-
-    // to keep track of select-all
-    allSelected: false,
+    dataTypes: dataTypes || {}
   }),
 
   watch: {
@@ -375,6 +371,9 @@ export default {
 
     searchOptions: {
       handler() {
+        if (this.searchOptions.externalQuery !== undefined && this.searchOptions.externalQuery !== this.searchTerm) {
+          this.resetTable();
+        }
         this.initializeSearch();
       },
       deep: true,
@@ -388,6 +387,12 @@ export default {
       deep: true,
       immediate: true,
     },
+
+    selectedRows: function() {
+      this.$emit('on-selected-rows-change', {
+        selectedRows: this.selectedRows,
+      });
+    }
   },
 
   computed: {
@@ -404,12 +409,40 @@ export default {
       return false;
     },
 
+    allSelected() {
+      return this.selectedRowCount > 0 &&
+        ((this.selectAllByPage && this.selectedPageRowsCount === this.totalPageRowCount)
+          || (!this.selectAllByPage && this.selectedRowCount === this.totalRowCount));
+    },
+
+    allSelectedIndeterminate() {
+      return !this.allSelected &&
+        ((this.selectAllByPage && this.selectedPageRowsCount > 0)
+        || (!this.selectAllByPage && this.selectedRowCount > 0));
+    },
+
     selectionInfo() {
       return `${this.selectedRowCount} ${this.selectionText}`;
     },
 
     selectedRowCount() {
       return this.selectedRows.length;
+    },
+
+    selectedPageRowsCount() {
+      return this.selectedPageRows.length;
+    },
+
+    selectedPageRows() {
+      const selectedRows = [];
+      each(this.paginated, (headerRow) => {
+        each(headerRow.children, (row) => {
+          if (row.vgtSelected) {
+            selectedRows.push(row);
+          }
+        });
+      });
+      return selectedRows;
     },
 
     selectedRows() {
@@ -454,6 +487,13 @@ export default {
     totalRowCount() {
       let total = 0;
       each(this.processedRows, (headerRow) => {
+        total += headerRow.children ? headerRow.children.length : 0;
+      });
+      return total;
+    },
+    totalPageRowCount() {
+      let total = 0;
+      each(this.paginated, (headerRow) => {
         total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
@@ -694,52 +734,35 @@ export default {
       this.$refs['filter-row'].reset(true);
     },
 
-    emitSelectNone() {
+    emitSelectedRows() {
       this.$emit('on-select-all', {
-        selected: false,
-        selectedRows: [],
+        selected: this.selectedRowCount === this.totalRowCount,
+        selectedRows: this.selectedRows
       });
     },
 
-    unselectAllInternal() {
-      this.emitSelectNone();
-      each(this.originalRows, (headerRow, i) => {
+    unselectAllInternal(forceAll) {
+      const rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
+      each(rows, (headerRow, i) => {
         each(headerRow.children, (row, j) => {
           this.$set(row, 'vgtSelected', false);
         });
       });
-      // we need to call this to propagate changes to paginated
-      // rows
-      this.filterRows();
-    },
-
-    unselectAll() {
-      if (this.selectable && this.allSelected) {
-        this.allSelected = false;
-        // this.unselectAllInternal();
-      }
+      this.emitSelectedRows();
     },
 
     toggleSelectAll() {
-      if (!this.allSelected) {
+      if (this.allSelected) {
         this.unselectAllInternal();
         return;
       }
-      each(this.paginated, (headerRow) => {
+      const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
+      each(rows, (headerRow) => {
         each(headerRow.children, (row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
-      let selectedRows = [];
-      if (this.groupOptions.enabled) {
-        selectedRows = cloneDeep(this.paginated);
-      } else {
-        selectedRows = cloneDeep(this.paginated[0].children);
-      }
-      this.$emit('on-select-all', {
-        selected: this.allSelected,
-        selectedRows,
-      });
+      this.emitSelectedRows();
     },
 
     changePage(value) {
@@ -767,7 +790,6 @@ export default {
 
     pageChanged(pagination) {
       // every time we change page we have to unselect all
-      this.unselectAll();
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
       this.$emit('on-page-change', pageChangedEvent);
@@ -800,7 +822,6 @@ export default {
         columnIndex: this.sortColumn,
       });
 
-      this.unselectAll();
       // every time we change sort we need to reset to page 1
       this.changePage(1);
 
@@ -814,38 +835,25 @@ export default {
     },
 
     // checkbox click should always do the following
-    checkboxClick(row, index, event) {
-      let selected = false;
-      selected = !row.vgtSelected;
-      this.$set(row, 'vgtSelected', selected);
-      if (!selected) {
-        this.unselectAll();
-      }
+    onCheckboxClicked(row, index, event) {
+      this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row,
         pageIndex: index,
-        selected,
-        event,
+        selected: !!row.vgtSelected,
+        event
       });
     },
 
-    // row click
-    click(row, index, event) {
-      let selected = false;
+    onRowClicked(row, index, event) {
       if (this.selectable && !this.selectOnCheckboxOnly) {
-        selected = !row.vgtSelected;
-        this.$set(row, 'vgtSelected', selected);
-        if (!selected) {
-          // if we're unselecting a row, we need to unselect
-          // selectall
-          this.unselectAll();
-        }
+        this.$set(row, 'vgtSelected', !row.vgtSelected);
       }
       this.$emit('on-row-click', {
         row,
         pageIndex: index,
-        selected,
-        event,
+        selected: !!row.vgtSelected,
+        event
       });
     },
 
@@ -854,7 +862,7 @@ export default {
         row,
         column,
         rowIndex,
-        event,
+        event
       });
     },
 
@@ -877,7 +885,7 @@ export default {
         this.resetTable();
         // we reset the filteredRows here because
         // we want to search across everything.
-        this.filteredRows = this.originalRows;
+        this.filteredRows = cloneDeep(this.originalRows);
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -890,8 +898,7 @@ export default {
     },
 
     resetTable() {
-      this.unselectAll();
-      this.unselectAllInternal();
+      this.unselectAllInternal(true);
       // every time we searchTable
       this.changePage(1);
     },
@@ -1005,7 +1012,6 @@ export default {
         // being called from filter, not when rows are changing
         if (this.mode !== 'remote' || fromFilter) {
           this.changePage(1);
-          this.unselectAll();
         }
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
@@ -1224,6 +1230,7 @@ export default {
         selectionText,
         clearSelectionText,
         selectOnCheckboxOnly,
+        selectAllByPage
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1232,6 +1239,10 @@ export default {
 
       if (typeof selectOnCheckboxOnly === 'boolean') {
         this.selectOnCheckboxOnly = selectOnCheckboxOnly;
+      }
+
+      if (typeof selectAllByPage === 'boolean') {
+        this.selectAllByPage = selectAllByPage;
       }
 
       if (typeof selectionInfoClass === 'string') {
