@@ -44,7 +44,7 @@
       :class="selectionInfoClass">
       {{selectionInfo}}
       <a href=""
-      @click.prevent="unselectAllInternal()">
+      @click.prevent="unselectAllInternal(true)">
         {{clearSelectionText}}
       </a>
       <div class="vgt-selection-info-row__actions vgt-pull-right">
