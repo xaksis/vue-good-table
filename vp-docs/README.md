@@ -10,7 +10,7 @@ features:
   details: Easily customize anything from table cells to column headers.
 - title: Advanced Features
   details: Leverage checkbox table, grouped rows and remote workflow for your table.
-footer: MIT Licensed | Copyright © 2018-present Akshay Anand
+footer: MIT Licensed | Copyright © 2018-present xaksis
 ---
 
 <style>
