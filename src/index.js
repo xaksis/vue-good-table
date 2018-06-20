@@ -1,15 +1,15 @@
-import GoodTable from './components/Table.vue';
+import VueGoodTable from './components/Table.vue';
 
-const GoodTablePlugin = {
+const VueGoodTablePlugin = {
   install(Vue, options) {
-    Vue.component(GoodTable.name, GoodTable);
+    Vue.component(VueGoodTable.name, VueGoodTable);
   },
 };
 
 // Automatic installation if Vue has been added to the global scope.
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(GoodTablePlugin);
+  window.Vue.use(VueGoodTablePlugin);
 }
 
-export default GoodTablePlugin;
-export { GoodTable };
+export default VueGoodTablePlugin;
+export { VueGoodTable };

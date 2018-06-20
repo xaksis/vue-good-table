@@ -12,21 +12,21 @@ npm install --save vue-good-table
 Import globally in app:
 
 ```javascript
-import VueGoodTable from 'vue-good-table';
+import VueGoodTablePlugin from 'vue-good-table';
 
 // import the styles 
 import 'vue-good-table/dist/vue-good-table.css'
 
-Vue.use(VueGoodTable);
+Vue.use(VueGoodTablePlugin);
 ```
 
 Import into your component
 ```js
-import VueGoodTable from 'vue-good-table';
+import { VueGoodTable } from 'vue-good-table';
 
 // add to component
 components: {
-  'vue-good-table': VueGoodTable,
+  VueGoodTable,
 }
 ```
 

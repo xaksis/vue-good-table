@@ -80,16 +80,27 @@ Install with npm:
 npm install --save vue-good-table
 ```
 
-Import into project:
-```javascript
-import Vue from 'vue';
+Import globally in app:
 
-import VueGoodTable from 'vue-good-table';
+```javascript
+import VueGoodTablePlugin from 'vue-good-table';
+
 // import the styles 
 import 'vue-good-table/dist/vue-good-table.css'
 
-Vue.use(VueGoodTable);
+Vue.use(VueGoodTablePlugin);
 ```
+
+Import into your component
+```js
+import { VueGoodTable } from 'vue-good-table';
+
+// add to component
+components: {
+  VueGoodTable,
+}
+```
+
 
 ##### Example table with grouped rows and column filters
 ![Advanced Screenshot](README/images/vgt-table.advanced.png)

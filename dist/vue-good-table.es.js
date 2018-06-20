@@ -726,7 +726,7 @@ each(Object.keys(coreDataTypes), function (key) {
   var compName = key.replace(/^\.\//, '').replace(/\.js/, '');
   dataTypes[compName] = coreDataTypes[key].default;
 });
-var GoodTable = {
+var VueGoodTable = {
   render: function render() {
     var _vm = this;
 
@@ -1999,15 +1999,15 @@ var GoodTable = {
   }
 };
 
-var GoodTablePlugin = {
+var VueGoodTablePlugin = {
   install: function install(Vue, options) {
-    Vue.component(GoodTable.name, GoodTable);
+    Vue.component(VueGoodTable.name, VueGoodTable);
   }
 }; // Automatic installation if Vue has been added to the global scope.
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(GoodTablePlugin);
+  window.Vue.use(VueGoodTablePlugin);
 }
 
-export default GoodTablePlugin;
-export { GoodTable };
+export default VueGoodTablePlugin;
+export { VueGoodTable };
