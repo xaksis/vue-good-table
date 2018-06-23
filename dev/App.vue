@@ -2,6 +2,7 @@
   <div>
     <button @click="rows = [];">empty row</button>
     <button @click="resetTable">reset Table</button>
+    <button @click="hideColumn">hide column</button>
     <input type="text" v-model="searchTerm">
     <vue-good-table
       ref="my-table"
@@ -131,6 +132,9 @@ export default {
     };
   },
   methods: {
+    hideColumn() {
+      this.$set(this.columns[0], 'hidden', true);
+    },
     resetTable() {
       this.$refs['my-table'].reset();
     },
