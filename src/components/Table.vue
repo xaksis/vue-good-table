@@ -28,113 +28,104 @@
         :ofText="ofText"
         :allText="allText"></vgt-pagination>
 
-    <vgt-global-search
-      @on-keyup="searchTableOnKeyUp"
-      @on-enter="searchTableOnEnter"
-      v-model="globalSearchTerm"
-      :search-enabled="searchEnabled && externalSearchQuery == null"
-      :global-search-placeholder="searchPlaceholder">
-      <template slot="internal-table-actions">
-        <slot name="table-actions">
-        </slot>
-      </template>
-    </vgt-global-search>
-    <div v-if="selectedRowCount"
-      class="vgt-selection-info-row clearfix"
-      :class="selectionInfoClass">
-      {{selectionInfo}}
-      <a href=""
-      @click.prevent="unselectAllInternal(true)">
-        {{clearSelectionText}}
-      </a>
-      <div class="vgt-selection-info-row__actions vgt-pull-right">
-        <slot name="selected-row-actions">
-        </slot>
+      <vgt-global-search
+        @on-keyup="searchTableOnKeyUp"
+        @on-enter="searchTableOnEnter"
+        v-model="globalSearchTerm"
+        :search-enabled="searchEnabled && externalSearchQuery == null"
+        :global-search-placeholder="searchPlaceholder">
+        <template slot="internal-table-actions">
+          <slot name="table-actions">
+          </slot>
+        </template>
+      </vgt-global-search>
+      <div v-if="selectedRowCount"
+        class="vgt-selection-info-row clearfix"
+        :class="selectionInfoClass">
+        {{selectionInfo}}
+        <a href=""
+        @click.prevent="unselectAllInternal(true)">
+          {{clearSelectionText}}
+        </a>
+        <div class="vgt-selection-info-row__actions vgt-pull-right">
+          <slot name="selected-row-actions">
+          </slot>
+        </div>
       </div>
-    </div>
-    <div :class="{'vgt-responsive': responsive}">
-      <table ref="table" :class="tableStyleClasses">
-        <thead>
-          <tr>
-            <th v-if="lineNumbers" class="line-numbers"></th>
-            <th v-if="selectable" class="vgt-checkbox-col">
-              <input
-                type="checkbox"
-                :checked="allSelected"
-                :indeterminate.prop="allSelectedIndeterminate"
-                @change="toggleSelectAll" />
-            </th>
-            <th v-for="(column, index) in columns"
-              :key="index"
-              @click="sort(index)"
-              :class="getHeaderClasses(column, index)"
-              :style="{width: column.width ? column.width : 'auto'}"
-              v-if="!column.hidden">
-              <slot name="table-column" :column="column">
-                <span>{{column.label}}</span>
-              </slot>
-            </th>
-          </tr>
-          <tr
-            is="vgt-filter-row"
-            ref="filter-row"
-            @filter-changed="filterRows"
-            :global-search-enabled="searchEnabled"
-            :line-numbers="lineNumbers"
-            :selectable="selectable"
-            :columns="columns"
-            :mode="mode"
-            :typed-columns="typedColumns">
-          </tr>
-        </thead>
-        <tbody v-for="(headerRow, index) in paginated" :key="index">
-          <tr v-if="groupHeaderOnTop">
-            <th
-              v-if="headerRow.mode === 'span'"
-              class="vgt-left-align vgt-row-header"
-              :colspan="fullColspan">
-              {{ headerRow.label }}
-            </th>
-            <th
-              class="vgt-row-header"
-              v-if="headerRow.mode !== 'span' && lineNumbers"></th>
-            <th
-              class="vgt-row-header"
-              v-if="headerRow.mode !== 'span' && selectable"></th>
-            <th
-              v-if="headerRow.mode !== 'span'"
-              v-for="(column, i) in columns"
-              :key="i"
-              class="vgt-row-header"
-              :class="getClasses(i, 'td')">
-              {{ collectFormatted(headerRow, column, true) }}
-            </th>
-          </tr>
-          <!-- normal rows here. we loop over all rows -->
-          <tr
-            v-for="(row, index) in headerRow.children"
-            :key="row.originalIndex"
-            :class="getRowStyleClass(row)"
-            @mouseenter="onMouseenter(row, index)"
-            @mouseleave="onMouseleave(row, index)"
-            @click="onRowClicked(row, index, $event)">
-            <th v-if="lineNumbers" class="line-numbers">
-              {{ getCurrentIndex(index) }}
-            </th>
-            <th 
-              v-if="selectable"
-              @click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
-              <input
-                type="checkbox"
-                :checked="row.vgtSelected"/>
-            </th>
-            <td
-              @click="onCellClicked(row, column, index, $event)"
-              v-for="(column, i) in columns"
-              :key="i"
-              :class="getClasses(i, 'td')"
-              v-if="!column.hidden && column.field">
+      <div :class="{'vgt-responsive': responsive}">
+        <table ref="table" :class="tableStyleClasses">
+          <!-- Table header -->
+          <thead>
+            <tr>
+              <th v-if="lineNumbers" class="line-numbers"></th>
+              <th v-if="selectable" class="vgt-checkbox-col">
+                <input
+                  type="checkbox"
+                  :checked="allSelected"
+                  :indeterminate.prop="allSelectedIndeterminate"
+                  @change="toggleSelectAll" />
+              </th>
+              <th v-for="(column, index) in columns"
+                :key="index"
+                @click="sort(index)"
+                :class="getHeaderClasses(column, index)"
+                :style="{width: column.width ? column.width : 'auto'}"
+                v-if="!column.hidden">
+                <slot name="table-column" :column="column">
+                  <span>{{column.label}}</span>
+                </slot>
+              </th>
+            </tr>
+            <tr
+              is="vgt-filter-row"
+              ref="filter-row"
+              @filter-changed="filterRows"
+              :global-search-enabled="searchEnabled"
+              :line-numbers="lineNumbers"
+              :selectable="selectable"
+              :columns="columns"
+              :mode="mode"
+              :typed-columns="typedColumns">
+            </tr>
+          </thead>
 
+          <!-- Table body starts here -->
+          <tbody v-for="(headerRow, index) in paginated" :key="index">
+            <!-- if group row header is at the top -->
+            <vgt-header-row
+              v-if="groupHeaderOnTop"
+              :header-row="headerRow"
+              :columns="columns"
+              :line-numbers="lineNumbers"
+              :selectable="selectable"
+              :collect-formatted="collectFormatted"
+              :get-classes="getClasses"
+              :full-colspan="fullColspan">
+            </vgt-header-row>
+            <!-- normal rows here. we loop over all rows -->
+            <tr
+              v-for="(row, index) in headerRow.children"
+              :key="row.originalIndex"
+              :class="getRowStyleClass(row)"
+              @mouseenter="onMouseenter(row, index)"
+              @mouseleave="onMouseleave(row, index)"
+              @click="onRowClicked(row, index, $event)">
+              <th v-if="lineNumbers" class="line-numbers">
+                {{ getCurrentIndex(index) }}
+              </th>
+              <th
+                v-if="selectable"
+                @click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
+                <input
+                  type="checkbox"
+                  :checked="row.vgtSelected"/>
+              </th>
+              <td
+                @click="onCellClicked(row, column, index, $event)"
+                v-for="(column, i) in columns"
+                :key="i"
+                :class="getClasses(i, 'td')"
+                v-if="!column.hidden && column.field">
                 <slot
                   name="table-row"
                   :row="row"
@@ -147,32 +138,21 @@
                   <span v-if="column.html" v-html="collect(row, column.field)">
                   </span>
                 </slot>
-
               </td>
             </tr>
-            <tr v-if="groupHeaderOnBottom">
-              <th
-                v-if="headerRow.mode === 'span'"
-                class="vgt-left-align vgt-row-header"
-                :colspan="columns.length">
-                {{ headerRow.label }}
-              </th>
-              <th
-                class="vgt-row-header"
-                v-if="headerRow.mode !== 'span' && lineNumbers"></th>
-              <th
-                class="vgt-row-header"
-                v-if="headerRow.mode !== 'span' && selectable"></th>
-              <th
-                v-if="headerRow.mode !== 'span'"
-                v-for="(column, i) in columns"
-                :key="i"
-                class="vgt-row-header"
-                :class="getClasses(i, 'td')">
-                {{ collectFormatted(headerRow, column, true) }}
-              </th>
-            </tr>
+            <!-- if group row header is at the bottom -->
+            <vgt-header-row
+              v-if="groupHeaderOnBottom"
+              :header-row="headerRow"
+              :columns="columns"
+              :line-numbers="lineNumbers"
+              :selectable="selectable"
+              :collect-formatted="collectFormatted"
+              :get-classes="getClasses"
+              :full-colspan="fullColspan">
+            </vgt-header-row>
           </tbody>
+
           <tbody v-if="showEmptySlot">
             <tr>
               <td :colspan="fullColspan">
@@ -216,6 +196,7 @@ import defaultType from './types/default';
 import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtFilterRow from './VgtFilterRow.vue';
+import VgtHeaderRow from './VgtHeaderRow.vue';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -1293,6 +1274,7 @@ export default {
     'vgt-pagination': VgtPagination,
     'vgt-global-search': VgtGlobalSearch,
     'vgt-filter-row': VgtFilterRow,
+    'vgt-header-row': VgtHeaderRow,
   },
 };
 </script>
