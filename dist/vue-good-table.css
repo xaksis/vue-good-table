@@ -31,6 +31,7 @@
   position: relative; }
 
 table.vgt-table {
+  font-size: 16px;
   border-collapse: collapse;
   background-color: white;
   width: 100%;
@@ -38,7 +39,7 @@ table.vgt-table {
   table-layout: auto;
   border: 1px solid #DCDFE6; }
   table.vgt-table td {
-    padding: .75rem .75rem .75rem .75rem;
+    padding: .75em .75em .75em .75em;
     vertical-align: top;
     border-bottom: 1px solid #DCDFE6;
     color: #606266; }
@@ -48,14 +49,29 @@ table.vgt-table {
       background-color: #F1F5FD; }
 
 .vgt-table th {
-  padding: .75rem 1.5rem .75rem .75rem;
-  vertical-align: middle; }
+  padding: .75em 1.5em .75em .75em;
+  vertical-align: middle;
+  position: relative; }
+  .vgt-table th.sorting {
+    cursor: pointer; }
+  .vgt-table th.sorting:after {
+    content: '';
+    display: none;
+    position: absolute;
+    height: 0px;
+    width: 0px;
+    right: 6px;
+    top: 50%;
+    margin-top: -3px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #409eff; }
   .vgt-table th.sorting:hover:after {
     display: inline-block;
     border-bottom-color: #73b8ff; }
 
 .vgt-table th.line-numbers, .vgt-table th.vgt-checkbox-col {
-  padding: 0 .75rem 0 .75rem;
+  padding: 0 .75em 0 .75em;
   color: #606266;
   border-right: 1px solid #DCDFE6;
   word-wrap: break-word;
@@ -64,7 +80,7 @@ table.vgt-table {
   background: linear-gradient(#F4F5F8, #F1F3F6); }
 
 .vgt-table th.filter-th {
-  padding: .75rem .75rem .75rem .75rem; }
+  padding: .75em .75em .75em .75em; }
 
 .vgt-table th.vgt-row-header {
   border-bottom: 2px solid #DCDFE6;
@@ -75,25 +91,15 @@ table.vgt-table {
   color: #606266;
   vertical-align: bottom;
   border-bottom: 1px solid #DCDFE6;
-  padding-right: 1.5rem;
+  padding-right: 1.5em;
   background: linear-gradient(#F4F5F8, #F1F3F6); }
   .vgt-table thead th.vgt-checkbox-col {
     vertical-align: middle; }
   .vgt-table thead th.sorting-asc, .vgt-table thead th.sorting-desc {
-    color: #3b3c3f;
-    position: relative; }
+    color: #3b3c3f; }
     .vgt-table thead th.sorting-asc:after, .vgt-table thead th.sorting-desc:after {
       content: '';
-      display: block;
-      position: absolute;
-      height: 0px;
-      width: 0px;
-      right: 6px;
-      top: 50%;
-      margin-top: -3px;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 6px solid #409eff; }
+      display: block; }
   .vgt-table thead th.sorting-desc:after {
     border-top: 6px solid #409eff;
     border-left: 6px solid transparent;
@@ -151,17 +157,17 @@ table.vgt-table {
 .vgt-wrap.rtl {
   direction: rtl; }
   .vgt-wrap.rtl .vgt-table td, .vgt-wrap.rtl .vgt-table th:not(.line-numbers) {
-    padding: .75rem .75rem .75rem 1.5rem; }
+    padding: .75em .75em .75em 1.5em; }
   .vgt-wrap.rtl .vgt-table thead th, .vgt-wrap.rtl .vgt-table.condensed thead th {
-    padding-left: 1.5rem;
-    padding-right: .75rem; }
+    padding-left: 1.5em;
+    padding-right: .75em; }
   .vgt-wrap.rtl .vgt-table th.sorting:after,
   .vgt-wrap.rtl .vgt-table th.sorting-asc:after {
     margin-right: 5px;
     margin-left: 0px; }
 
 .vgt-table.condensed td, .vgt-table.condensed th.vgt-row-header {
-  padding: .4rem .4rem .4rem .4rem; }
+  padding: .4em .4em .4em .4em; }
 
 .vgt-global-search {
   padding: 5px 0px;
@@ -224,7 +230,7 @@ table.vgt-table {
 
 .vgt-wrap__footer {
   color: #606266;
-  padding: 1rem;
+  padding: 1em;
   border: 1px solid #DCDFE6;
   background: linear-gradient(#F4F5F8, #F1F3F6); }
   .vgt-wrap__footer .footer__row-count__label, .vgt-wrap__footer .footer__row-count__select {
@@ -377,7 +383,7 @@ table.vgt-table {
     color: #49515e; }
   .vgt-table.black-rhino th.line-numbers, .vgt-table.black-rhino th.vgt-checkbox-col {
     color: #dae2f0;
-    border-right: 1px solid #bbc5d6;
+    border-right: 1px solid #435169;
     background: linear-gradient(#4c5c79, #4e5d7c); }
   .vgt-table.black-rhino thead th {
     color: #dae2f0;
@@ -464,6 +470,7 @@ table.vgt-table {
     color: #dae2f0;
     opacity: 0.3;
     /* Firefox */ }
+
 
 
 

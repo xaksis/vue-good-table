@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.8.1
+ * vue-good-table v2.8.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -601,6 +601,73 @@ var VgtFilterRow = {
   }
 };
 
+var VgtHeaderRow = {
+  render: function render() {
+    var _vm = this;
+
+    var _h = _vm.$createElement;
+
+    var _c = _vm._self._c || _h;
+
+    return _c('tr', [_vm.headerRow.mode === 'span' ? _c('th', {
+      staticClass: "vgt-left-align vgt-row-header",
+      attrs: {
+        "colspan": _vm.fullColspan
+      }
+    }, [_vm.headerRow.html ? _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(_vm.headerRow.label)
+      }
+    }) : _c('span', [_vm._v(" " + _vm._s(_vm.headerRow.label) + " ")])]) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
+      staticClass: "vgt-row-header"
+    }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
+      staticClass: "vgt-row-header"
+    }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+      return _vm.headerRow.mode !== 'span' ? _c('th', {
+        key: i,
+        staticClass: "vgt-row-header",
+        class: _vm.getClasses(i, 'td')
+      }, [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+        domProps: {
+          "innerHTML": _vm._s(_vm.collectFormatted(_vm.headerRow, column, true))
+        }
+      }) : _vm._e()]) : _vm._e();
+    })], 2);
+  },
+  staticRenderFns: [],
+  name: 'VgtHeaderRow',
+  props: {
+    headerRow: {
+      type: Object
+    },
+    columns: {
+      type: Array
+    },
+    lineNumbers: {
+      type: Boolean
+    },
+    selectable: {
+      type: Boolean
+    },
+    collectFormatted: {
+      type: Function
+    },
+    getClasses: {
+      type: Function
+    },
+    fullColspan: {
+      type: Number
+    }
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {},
+  methods: {},
+  mounted: function mounted() {},
+  components: {}
+};
+
 var date = clone(def);
 date.isRight = true;
 
@@ -856,22 +923,17 @@ var VueGoodTable = {
     })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
       return _c('tbody', {
         key: index$$1
-      }, [_vm.groupHeaderOnTop ? _c('tr', [headerRow.mode === 'span' ? _c('th', {
-        staticClass: "vgt-left-align vgt-row-header",
+      }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
         attrs: {
-          "colspan": _vm.fullColspan
+          "header-row": headerRow,
+          "columns": _vm.columns,
+          "line-numbers": _vm.lineNumbers,
+          "selectable": _vm.selectable,
+          "collect-formatted": _vm.collectFormatted,
+          "get-classes": _vm.getClasses,
+          "full-colspan": _vm.fullColspan
         }
-      }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
-        staticClass: "vgt-row-header"
-      }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
-        staticClass: "vgt-row-header"
-      }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-        return headerRow.mode !== 'span' ? _c('th', {
-          key: i,
-          staticClass: "vgt-row-header",
-          class: _vm.getClasses(i, 'td')
-        }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
-      })], 2) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
+      }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
         return _c('tr', {
           key: row.originalIndex,
           class: _vm.getRowStyleClass(row),
@@ -925,22 +987,17 @@ var VueGoodTable = {
             index: index$$1
           })], 2) : _vm._e();
         })], 2);
-      }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('tr', [headerRow.mode === 'span' ? _c('th', {
-        staticClass: "vgt-left-align vgt-row-header",
+      }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('vgt-header-row', {
         attrs: {
-          "colspan": _vm.columns.length
+          "header-row": headerRow,
+          "columns": _vm.columns,
+          "line-numbers": _vm.lineNumbers,
+          "selectable": _vm.selectable,
+          "collect-formatted": _vm.collectFormatted,
+          "get-classes": _vm.getClasses,
+          "full-colspan": _vm.fullColspan
         }
-      }, [_vm._v(" " + _vm._s(headerRow.label) + " ")]) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
-        staticClass: "vgt-row-header"
-      }) : _vm._e(), _vm._v(" "), headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
-        staticClass: "vgt-row-header"
-      }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-        return headerRow.mode !== 'span' ? _c('th', {
-          key: i,
-          staticClass: "vgt-row-header",
-          class: _vm.getClasses(i, 'td')
-        }, [_vm._v(" " + _vm._s(_vm.collectFormatted(headerRow, column, true)) + " ")]) : _vm._e();
-      })], 2) : _vm._e()], 2);
+      }) : _vm._e()], 2);
     }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', [_c('tr', [_c('td', {
       attrs: {
         "colspan": _vm.fullColspan
@@ -1995,7 +2052,8 @@ var VueGoodTable = {
   components: {
     'vgt-pagination': VgtPagination,
     'vgt-global-search': VgtGlobalSearch,
-    'vgt-filter-row': VgtFilterRow
+    'vgt-filter-row': VgtFilterRow,
+    'vgt-header-row': VgtHeaderRow
   }
 };
 
