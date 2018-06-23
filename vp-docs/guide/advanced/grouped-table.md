@@ -18,6 +18,7 @@ To create grouped rows, you need two things.
 rows: [{
   mode: 'span', // span means this header will span all columns
   label: 'Header Two', // this is the label that'll be used for the header
+  html: false, // if this is true, label will be rendered as html
   children: [
     { name: 'Chris', age: 55, createdAt: '2011-10-11', score: 0.03343 },
     { name: 'Dan', age: 40, createdAt: '2011-10-21', score: 0.03343 },

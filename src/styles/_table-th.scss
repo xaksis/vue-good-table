@@ -2,6 +2,23 @@
   & th{
     padding: .75rem 1.5rem .75rem .75rem;
     vertical-align: middle;
+    position: relative;
+    &.sorting{
+      cursor: pointer;
+    }
+    &.sorting:after  {
+      content: '';
+      display: none;
+      position: absolute;
+      height: 0px;
+      width: 0px;
+      right: 6px;
+      top: 50%;
+      margin-top: -3px;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid $link-color;
+    }
     &.sorting:hover:after{
       display: inline-block;
       border-bottom-color: lighten($link-color, 10%);
@@ -37,19 +54,9 @@
     }
     &.sorting-asc, &.sorting-desc {
       color: darken($text-color, 15%);
-      position: relative;
       &:after  {
         content: '';
         display: block;
-        position: absolute;
-        height: 0px;
-        width: 0px;
-        right: 6px;
-        top: 50%;
-        margin-top: -3px;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 6px solid $link-color;
       }
     }
     &.sorting-desc:after {
