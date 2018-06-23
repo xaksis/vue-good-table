@@ -18,6 +18,7 @@
         enabled: true,
         selectOnCheckboxOnly: false,
       }"
+      styleClass="vgt-table condensed"
       :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
       :search-options="{
         enabled: false,

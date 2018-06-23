@@ -19,7 +19,7 @@
   //th
   & th.line-numbers, & th.vgt-checkbox-col {
     color: $text-color;
-    border-right: 1px solid $border-color-td;
+    border-right: 1px solid $border-color;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
   }
   thead th{
