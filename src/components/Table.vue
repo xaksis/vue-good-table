@@ -12,22 +12,27 @@
       </slot>
     </div>
     <div class="vgt-inner-wrap" :class="{'is-loading': isTableLoading}">
-      <vgt-pagination
+      <slot
         v-if="paginate && paginateOnTop"
-        ref="paginationTop"
-        @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"
-        :perPage="perPage"
-        :rtl="rtl"
-        :total="totalRows || totalRowCount"
-        :nextText="nextText"
-        :prevText="prevText"
-        :rowsPerPageText="rowsPerPageText"
-        :customRowsPerPageDropdown="customRowsPerPageDropdown"
-        :paginateDropdownAllowAll="paginateDropdownAllowAll"
-        :ofText="ofText"
-        :allText="allText"></vgt-pagination>
-
+        name="pagination-top"
+        :pageChanged="pageChanged"
+        :perPageChanged="perPageChanged"
+        :total="totalRows || totalRowCount">
+        <vgt-pagination
+          ref="paginationTop"
+          @page-changed="pageChanged"
+          @per-page-changed="perPageChanged"
+          :perPage="perPage"
+          :rtl="rtl"
+          :total="totalRows || totalRowCount"
+          :nextText="nextText"
+          :prevText="prevText"
+          :rowsPerPageText="rowsPerPageText"
+          :customRowsPerPageDropdown="customRowsPerPageDropdown"
+          :paginateDropdownAllowAll="paginateDropdownAllowAll"
+          :ofText="ofText"
+          :allText="allText"></vgt-pagination>
+      </slot>
       <vgt-global-search
         @on-keyup="searchTableOnKeyUp"
         @on-enter="searchTableOnEnter"
@@ -166,22 +171,28 @@
           </tbody>
         </table>
       </div>
-      <vgt-pagination
+      <slot
         v-if="paginate && paginateOnBottom"
-        ref="paginationBottom"
-        @page-changed="pageChanged"
-        @per-page-changed="perPageChanged"
-        :perPage="perPage"
-        :rtl="rtl"
-        :total="totalRows || totalRowCount"
-        :nextText="nextText"
-        :prevText="prevText"
-        :rowsPerPageText="rowsPerPageText"
-        :customRowsPerPageDropdown="customRowsPerPageDropdown"
-        :paginateDropdownAllowAll="paginateDropdownAllowAll"
-        :ofText="ofText"
-        :allText="allText"
-        ></vgt-pagination>
+        name="pagination-bottom"
+        :pageChanged="pageChanged"
+        :perPageChanged="perPageChanged"
+        :total="totalRows || totalRowCount">
+        <vgt-pagination
+          ref="paginationBottom"
+          @page-changed="pageChanged"
+          @per-page-changed="perPageChanged"
+          :perPage="perPage"
+          :rtl="rtl"
+          :total="totalRows || totalRowCount"
+          :nextText="nextText"
+          :prevText="prevText"
+          :rowsPerPageText="rowsPerPageText"
+          :customRowsPerPageDropdown="customRowsPerPageDropdown"
+          :paginateDropdownAllowAll="paginateDropdownAllowAll"
+          :ofText="ofText"
+          :allText="allText"
+          ></vgt-pagination>
+      </slot>
     </div>
   </div>
 </template>
