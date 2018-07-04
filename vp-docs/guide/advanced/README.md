@@ -70,3 +70,35 @@ Sometimes you might want to customize column headers. You can do that in the fol
   </template>
 </vue-good-table>
 ```
+
+## Custom pagination
+
+Sometimes you might want to customize the pagination. You can do that in the following way:
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <template slot="pagination-top" slot-scope="props">
+    <custom-top-pagination
+      :total="props.total"
+      :pageChanged="props.pageChanged"
+      :perPageChanged="props.perPageChanged">
+    </custom-top-pagination>
+  </template>
+  <template slot="pagination-bottom" slot-scope="props">
+    <custom-bottom-pagination
+      :total="props.total"
+      :pageChanged="props.pageChanged"
+      :perPageChanged="props.perPageChanged">
+    </custom-bottom-pagination>
+  </template>
+</vue-good-table>
+```
+
+::: tip NOTE
+You will have to implement your own pagination system:
+
+* The total number of rows can be accessed via `props.total`
+* The function to call when the current page has changed can be accessed via `props.pageChanged`.
+* The function to call when the per page value has changed can be accessed via `props.perPageChanged` .
+:::
