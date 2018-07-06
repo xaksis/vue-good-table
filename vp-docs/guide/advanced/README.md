@@ -77,20 +77,14 @@ Sometimes you might want to customize the pagination. You can do that in the fol
 ```html
 <vue-good-table
   :columns="columns"
-  :rows="rows">
-  <template slot="pagination-top" slot-scope="props">
-    <custom-top-pagination
-      :total="props.total"
-      :pageChanged="props.pageChanged"
-      :perPageChanged="props.perPageChanged">
-    </custom-top-pagination>
-  </template>
+  :rows="rows"
+  :pagination-options="{enabled: true}">
   <template slot="pagination-bottom" slot-scope="props">
-    <custom-bottom-pagination
+    <custom-pagination
       :total="props.total"
       :pageChanged="props.pageChanged"
       :perPageChanged="props.perPageChanged">
-    </custom-bottom-pagination>
+    </custom-pagination>
   </template>
 </vue-good-table>
 ```
