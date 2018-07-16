@@ -22,7 +22,7 @@
       styleClass="vgt-table condensed"
       :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
       :search-options="{
-        enabled: false,
+        enabled: true,
       }">
     </vue-good-table>
     <h3>Grouped Table</h3>
