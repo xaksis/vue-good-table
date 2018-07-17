@@ -4,11 +4,15 @@
     v-if="headerRow.mode === 'span'"
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan">
-    <span v-if="headerRow.html" v-html="headerRow.label">
-    </span>
-    <span v-else>
-      {{ headerRow.label }}
-    </span>
+    <slot
+      :row="headerRow"
+      name="table-header-row">
+      <span v-if="headerRow.html" v-html="headerRow.label">
+      </span>
+      <span v-else>
+        {{ headerRow.label }}
+      </span>
+    </slot>
   </th>
   <!-- if the mode is not span, we display every column -->
   <th
@@ -23,11 +27,17 @@
     :key="i"
     class="vgt-row-header"
     :class="getClasses(i, 'td')">
-    <span v-if="!column.html">
-      {{ collectFormatted(headerRow, column, true) }}
-    </span>
-    <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
-    </span>
+    <slot
+      :row="headerRow"
+      :column="column"
+      :formattedRow="formattedRow(headerRow, true)"
+      name="table-header-row">
+      <span v-if="!column.html">
+        {{ collectFormatted(headerRow, column, true) }}
+      </span>
+      <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
+      </span>
+    </slot>
   </th>
 </tr>
 </template>
@@ -49,6 +59,9 @@ export default {
       type: Boolean,
     },
     collectFormatted: {
+      type: Function,
+    },
+    formattedRow: {
       type: Function,
     },
     getClasses: {

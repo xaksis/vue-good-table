@@ -104,8 +104,19 @@
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collect-formatted="collectFormatted"
+              :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan">
+              <template
+                v-if="hasHeaderRowTemplate"
+                slot="table-header-row"
+                slot-scope="props">
+                <slot name="table-header-row"
+                  :column="props.column"
+                  :formattedRow="props.formattedRow"
+                  :row="props.row">
+                </slot>
+              </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <tr
@@ -153,8 +164,19 @@
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collect-formatted="collectFormatted"
+              :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan">
+              <template
+                v-if="hasHeaderRowTemplate"
+                slot="table-header-row"
+                slot-scope="props">
+                <slot name="table-header-row"
+                  :column="props.column"
+                  :formattedRow="props.formattedRow"
+                  :row="props.row">
+                </slot>
+              </template>
             </vgt-header-row>
           </tbody>
 
@@ -393,6 +415,11 @@ export default {
   },
 
   computed: {
+    hasHeaderRowTemplate() {
+      return !!this.$slots['table-header-row']
+        || !!this.$scopedSlots['table-header-row'];
+    },
+
     isTableLoading() {
       return this.isLoading || this.tableLoading;
     },
@@ -959,13 +986,13 @@ export default {
       return type.format(value, column);
     },
 
-    formattedRow(row) {
+    formattedRow(row, isHeaderRow = false) {
       const formattedRow = {};
       for (let i = 0; i < this.typedColumns.length; i++) {
         const col = this.typedColumns[i];
         // what happens if field is
         if (col.field) {
-          formattedRow[col.field] = this.collectFormatted(row, col);
+          formattedRow[col.field] = this.collectFormatted(row, col, isHeaderRow);
         }
       }
       return formattedRow;

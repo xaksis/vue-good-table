@@ -17,6 +17,14 @@
       headerPosition: 'top',
     }"
     styleClass="vgt-table condensed bordered">
+    <!-- <template slot="table-header-row" slot-scope="props">
+      <span v-if="props.row.mode === 'span'">
+        My header label is - <strong>{{ props.row.label }}</strong>
+      </span>
+      <span v-else>
+        {{props.formattedRow[props.column.field]}}
+      </span>
+    </template> -->
   </vue-good-table>
 </div>
 </template>
@@ -49,7 +57,8 @@ export default {
       ],
       rows: [
         {
-          name: 'Mammal Total',
+          label: 'Mammal Total',
+          mode: 'span',
           diet: '',
           count: '',
           children: [
