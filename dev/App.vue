@@ -13,8 +13,9 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
+      table-height="200px"
       :line-numbers="true"
-      :pagination-options="{ enabled: true, perPage: 5}"
+      :pagination-options="{ enabled: false, perPage: 5}"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: false,

@@ -11,7 +11,8 @@
         </span>
       </slot>
     </div>
-    <div class="vgt-inner-wrap" :class="{'is-loading': isTableLoading}">
+    <div class="vgt-inner-wrap"
+      :class="{'is-loading': isTableLoading}">
       <slot
         v-if="paginate && paginateOnTop"
         name="pagination-top"
@@ -57,7 +58,45 @@
           </slot>
         </div>
       </div>
-      <div :class="{'vgt-responsive': responsive}">
+      <table ref="table" :class="tableStyleClasses">
+        <!-- Table header -->
+        <thead>
+          <tr>
+            <th v-if="lineNumbers" class="line-numbers"></th>
+            <th v-if="selectable" class="vgt-checkbox-col">
+              <input
+                type="checkbox"
+                :checked="allSelected"
+                :indeterminate.prop="allSelectedIndeterminate"
+                @change="toggleSelectAll" />
+            </th>
+            <th v-for="(column, index) in columns"
+              :key="index"
+              @click="sort(index)"
+              :class="getHeaderClasses(column, index)"
+              :style="{width: column.width ? column.width : 'auto'}"
+              v-if="!column.hidden">
+              <slot name="table-column" :column="column">
+                <span>{{column.label}}</span>
+              </slot>
+            </th>
+          </tr>
+          <tr
+            is="vgt-filter-row"
+            ref="filter-row"
+            @filter-changed="filterRows"
+            :global-search-enabled="searchEnabled"
+            :line-numbers="lineNumbers"
+            :selectable="selectable"
+            :columns="columns"
+            :mode="mode"
+            :typed-columns="typedColumns">
+          </tr>
+        </thead>
+      </table>
+      <div
+        :class="{'vgt-responsive': responsive}"
+        :style="wrapperStyles">
         <table ref="table" :class="tableStyleClasses">
           <!-- Table header -->
           <thead>
@@ -120,7 +159,8 @@
               </th>
               <th
                 v-if="selectable"
-                @click.prevent.stop="onCheckboxClicked(row, index, $event)" class="vgt-checkbox-col">
+                @click.prevent.stop="onCheckboxClicked(row, index, $event)"
+                class="vgt-checkbox-col">
                 <input
                   type="checkbox"
                   :checked="row.vgtSelected"/>
@@ -223,6 +263,7 @@ export default {
   name: 'vue-good-table',
   props: {
     isLoading: { default: false, type: Boolean },
+    tableHeight: { default: null, type: String },
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: { }, // required if mode = 'remote'
@@ -393,6 +434,13 @@ export default {
   },
 
   computed: {
+    wrapperStyles() {
+      return {
+        overflow: 'scroll-y',
+        height: this.tableHeight ? this.tableHeight : 'auto',
+      };
+    },
+
     isTableLoading() {
       return this.isLoading || this.tableLoading;
     },
