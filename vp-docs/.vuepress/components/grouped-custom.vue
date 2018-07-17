@@ -9,7 +9,7 @@
     }">
     <template slot="table-header-row" slot-scope="props">
       <span v-if="props.column.field == 'action'">
-        <button class="fancy-btn">Action</button>
+        <button class="fancy-btn" @click="showAlert(props)">Action</button>
       </span>
       <span v-else>
         {{props.formattedRow[props.column.field]}}
@@ -81,6 +81,9 @@ export default {
   computed: {
   },
   methods: {
+    showAlert(props) {
+      alert(JSON.stringify(props));
+    }
   },
   mounted() {
   },

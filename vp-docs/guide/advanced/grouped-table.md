@@ -84,11 +84,11 @@ methods: {
 
 ```
 
-### Customizing Header Row
+## Customizing Header Row
 
 If you want more control over what the header row looks like, you can use slots the same way you [customize rows](/guide/advanced/#custom-row-template). For example if you want to add a button in the header row or something, this would be the way to do it. 
 
-#### When mode is 'span'
+### When mode is 'span'
 
 In this case, the header row spans across all columns
 
@@ -110,7 +110,7 @@ In this case, the header row spans across all columns
 <grouped-custom-span :options="{enabled: true, headerPosition: 'top'}"/>
 
 
-#### When mode is not 'span'
+### When mode is not 'span'
 
 In this case header row expects a value for each column
 
@@ -134,3 +134,9 @@ In this case header row expects a value for each column
 ```
 
 <grouped-custom :options="{enabled: true, headerPosition: 'top'}"/>
+
+::: tip NOTE
+* The original row object can be accessed via `props.row` 
+* The column object can be accessed via `props.column`
+* You can access the formatted row data (for example - formatted date) via `props.formattedRow`
+:::

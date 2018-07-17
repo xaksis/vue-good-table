@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.9.0
+ * vue-good-table v2.10.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -6058,11 +6058,13 @@
         attrs: {
           "colspan": _vm.fullColspan
         }
-      }, [_vm.headerRow.html ? _c('span', {
+      }, [_vm._t("table-header-row", [_vm.headerRow.html ? _c('span', {
         domProps: {
           "innerHTML": _vm._s(_vm.headerRow.label)
         }
-      }) : _c('span', [_vm._v(" " + _vm._s(_vm.headerRow.label) + " ")])]) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
+      }) : _c('span', [_vm._v(" " + _vm._s(_vm.headerRow.label) + " ")])], {
+        row: _vm.headerRow
+      })], 2) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
         staticClass: "vgt-row-header"
       }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
         staticClass: "vgt-row-header"
@@ -6071,11 +6073,15 @@
           key: i,
           staticClass: "vgt-row-header",
           class: _vm.getClasses(i, 'td')
-        }, [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+        }, [_vm._t("table-header-row", [!column.html ? _c('span', [_vm._v(" " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + " ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
           domProps: {
             "innerHTML": _vm._s(_vm.collectFormatted(_vm.headerRow, column, true))
           }
-        }) : _vm._e()]) : _vm._e();
+        }) : _vm._e()], {
+          row: _vm.headerRow,
+          column: column,
+          formattedRow: _vm.formattedRow(_vm.headerRow, true)
+        })], 2) : _vm._e();
       })], 2);
     },
     staticRenderFns: [],
@@ -6094,6 +6100,9 @@
         type: Boolean
       },
       collectFormatted: {
+        type: Function
+      },
+      formattedRow: {
         type: Function
       },
       getClasses: {
@@ -10716,9 +10725,20 @@
             "line-numbers": _vm.lineNumbers,
             "selectable": _vm.selectable,
             "collect-formatted": _vm.collectFormatted,
+            "formatted-row": _vm.formattedRow,
             "get-classes": _vm.getClasses,
             "full-colspan": _vm.fullColspan
-          }
+          },
+          scopedSlots: _vm._u([{
+            key: "table-header-row",
+            fn: function fn(props) {
+              return _vm.hasHeaderRowTemplate ? [_vm._t("table-header-row", null, {
+                column: props.column,
+                formattedRow: props.formattedRow,
+                row: props.row
+              })] : undefined;
+            }
+          }])
         }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index$$1) {
           return _c('tr', {
             key: row.originalIndex,
@@ -10780,9 +10800,20 @@
             "line-numbers": _vm.lineNumbers,
             "selectable": _vm.selectable,
             "collect-formatted": _vm.collectFormatted,
+            "formatted-row": _vm.formattedRow,
             "get-classes": _vm.getClasses,
             "full-colspan": _vm.fullColspan
-          }
+          },
+          scopedSlots: _vm._u([{
+            key: "table-header-row",
+            fn: function fn(props) {
+              return _vm.hasHeaderRowTemplate ? [_vm._t("table-header-row", null, {
+                column: props.column,
+                formattedRow: props.formattedRow,
+                row: props.row
+              })] : undefined;
+            }
+          }])
         }) : _vm._e()], 2);
       }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', [_c('tr', [_c('td', {
         attrs: {
@@ -10991,6 +11022,9 @@
       }
     },
     computed: {
+      hasHeaderRowTemplate: function hasHeaderRowTemplate() {
+        return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
+      },
       isTableLoading: function isTableLoading() {
         return this.isLoading || this.tableLoading;
       },
@@ -11519,13 +11553,14 @@
         return type.format(value, column);
       },
       formattedRow: function formattedRow(row) {
+        var isHeaderRow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
         var formattedRow = {};
 
         for (var i = 0; i < this.typedColumns.length; i++) {
           var col = this.typedColumns[i]; // what happens if field is
 
           if (col.field) {
-            formattedRow[col.field] = this.collectFormatted(row, col);
+            formattedRow[col.field] = this.collectFormatted(row, col, isHeaderRow);
           }
         }
 
