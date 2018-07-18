@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.10.0
+ * vue-good-table v2.11.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -97,6 +97,87 @@ var def = {
   }
 };
 
+var VgtPaginationPageInfo = {
+  render: function render() {
+    var _vm = this;
+
+    var _h = _vm.$createElement;
+
+    var _c = _vm._self._c || _h;
+
+    return _c('div', {
+      staticClass: "footer__navigation__page-info"
+    }, [_vm._v(" " + _vm._s(_vm.pageText) + " "), _c('input', {
+      staticClass: "footer__navigation__page-info__current-entry",
+      attrs: {
+        "type": "text"
+      },
+      domProps: {
+        "value": _vm.currentPage
+      },
+      on: {
+        "keyup": function keyup($event) {
+          if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+            return null;
+          }
+
+          $event.stopPropagation();
+          return _vm.changePage($event);
+        }
+      }
+    }), _vm._v(" " + _vm._s(_vm.pageInfo) + " ")]);
+  },
+  staticRenderFns: [],
+  _scopeId: 'data-v-731a4dda',
+  name: 'VgtPaginationPageInfo',
+  props: {
+    currentPerPage: {
+      default: 10
+    },
+    currentPage: {
+      default: 1
+    },
+    totalRecords: {
+      default: 0
+    },
+    ofText: {
+      default: 'of',
+      type: String
+    },
+    pageText: {
+      default: 'page',
+      type: String
+    }
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {
+    pageInfo: function pageInfo() {
+      return "".concat(this.ofText, " ").concat(this.lastPage);
+    },
+    lastPage: function lastPage() {
+      return Math.ceil(this.totalRecords / this.currentPerPage);
+    }
+  },
+  methods: {
+    changePage: function changePage(event) {
+      var value = parseInt(event.target.value, 10); //! invalid number
+
+      if (Number.isNaN(value) || value > this.lastPage || value < 1) {
+        event.target.value = this.currentPage;
+        return false;
+      } //* valid number
+
+
+      event.target.value = value;
+      this.$emit('page-changed', value);
+    }
+  },
+  mounted: function mounted() {},
+  components: {}
+};
+
 var VgtPagination = {
   render: function render() {
     var _vm = this;
@@ -169,7 +250,18 @@ var VgtPagination = {
         'left': !_vm.rtl,
         'right': _vm.rtl
       }
-    }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _c('div', {
+    }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _vm.mode === 'pages' ? _c('pagination-page-info', {
+      attrs: {
+        "totalRecords": _vm.total,
+        "currentPerPage": _vm.currentPerPage,
+        "currentPage": _vm.currentPage,
+        "ofText": _vm.ofText,
+        "pageText": _vm.pageText
+      },
+      on: {
+        "page-changed": _vm.changePage
+      }
+    }) : _c('div', {
       staticClass: "footer__navigation__info"
     }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('a', {
       staticClass: "footer__navigation__page-btn",
@@ -193,7 +285,7 @@ var VgtPagination = {
         'right': !_vm.rtl,
         'left': _vm.rtl
       }
-    })])])]);
+    })])], 1)]);
   },
   staticRenderFns: [],
   name: 'VgtPagination',
@@ -216,6 +308,9 @@ var VgtPagination = {
     paginateDropdownAllowAll: {
       default: true
     },
+    mode: {
+      default: 'records'
+    },
     // text options
     nextText: {
       default: 'Next'
@@ -228,6 +323,9 @@ var VgtPagination = {
     },
     ofText: {
       default: 'of'
+    },
+    pageText: {
+      default: 'page'
     },
     allText: {
       default: 'All'
@@ -285,7 +383,7 @@ var VgtPagination = {
     // },
     reset: function reset() {},
     changePage: function changePage(pageNumber) {
-      if (pageNumber > 0 && this.total > this.currentPerPage * pageNumber) {
+      if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
         this.currentPage = pageNumber;
         this.pageChanged();
       }
@@ -348,6 +446,9 @@ var VgtPagination = {
   },
   mounted: function mounted() {
     this.handlePerPage();
+  },
+  components: {
+    'pagination-page-info': VgtPaginationPageInfo
   }
 };
 
@@ -832,12 +933,14 @@ var VueGoodTable = {
         "perPage": _vm.perPage,
         "rtl": _vm.rtl,
         "total": _vm.totalRows || _vm.totalRowCount,
+        "mode": _vm.paginationMode,
         "nextText": _vm.nextText,
         "prevText": _vm.prevText,
         "rowsPerPageText": _vm.rowsPerPageText,
         "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
         "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
         "ofText": _vm.ofText,
+        "pageText": _vm.pageText,
         "allText": _vm.allText
       },
       on: {
@@ -1045,12 +1148,14 @@ var VueGoodTable = {
         "perPage": _vm.perPage,
         "rtl": _vm.rtl,
         "total": _vm.totalRows || _vm.totalRowCount,
+        "mode": _vm.paginationMode,
         "nextText": _vm.nextText,
         "prevText": _vm.prevText,
         "rowsPerPageText": _vm.rowsPerPageText,
         "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
         "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
         "ofText": _vm.ofText,
+        "pageText": _vm.pageText,
         "allText": _vm.allText
       },
       on: {
@@ -1131,7 +1236,9 @@ var VueGoodTable = {
           perPage: 10,
           perPageDropdown: null,
           position: 'bottom',
-          dropdownAllowAll: true
+          dropdownAllowAll: true,
+          mode: 'records' // or pages
+
         };
       }
     },
@@ -1157,6 +1264,7 @@ var VueGoodTable = {
       rowsPerPageText: 'Rows per page',
       ofText: 'of',
       allText: 'All',
+      pageText: 'page',
       // internal select options
       selectable: false,
       selectOnCheckboxOnly: false,
@@ -1180,6 +1288,7 @@ var VueGoodTable = {
       paginateOnBottom: true,
       customRowsPerPageDropdown: [],
       paginateDropdownAllowAll: true,
+      paginationMode: 'records',
       currentPage: 1,
       currentPerPage: 10,
       sortColumn: -1,
@@ -1950,8 +2059,10 @@ var VueGoodTable = {
           prevLabel = _this$paginationOptio.prevLabel,
           rowsPerPageLabel = _this$paginationOptio.rowsPerPageLabel,
           ofLabel = _this$paginationOptio.ofLabel,
+          pageLabel = _this$paginationOptio.pageLabel,
           allLabel = _this$paginationOptio.allLabel,
-          setCurrentPage = _this$paginationOptio.setCurrentPage;
+          setCurrentPage = _this$paginationOptio.setCurrentPage,
+          mode = _this$paginationOptio.mode;
 
       if (typeof enabled === 'boolean') {
         this.paginate = enabled;
@@ -1978,6 +2089,10 @@ var VueGoodTable = {
         this.paginateDropdownAllowAll = dropdownAllowAll;
       }
 
+      if (typeof mode === 'string') {
+        this.paginationMode = mode;
+      }
+
       if (typeof nextLabel === 'string') {
         this.nextText = nextLabel;
       }
@@ -1992,6 +2107,10 @@ var VueGoodTable = {
 
       if (typeof ofLabel === 'string') {
         this.ofText = ofLabel;
+      }
+
+      if (typeof pageLabel === 'string') {
+        this.pageText = pageLabel;
       }
 
       if (typeof allLabel === 'string') {
