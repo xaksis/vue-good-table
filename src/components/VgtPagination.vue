@@ -48,7 +48,7 @@
 
 <script>
 import cloneDeep from 'lodash.clonedeep';
-import VgtPaginationPageInfo from './VgtPaginationPageInfo';
+import VgtPaginationPageInfo from './VgtPaginationPageInfo.vue';
 
 export default {
   name: 'VgtPagination',
