@@ -25,12 +25,14 @@
           :perPage="perPage"
           :rtl="rtl"
           :total="totalRows || totalRowCount"
+          :mode="paginationMode"
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
+          :pageText="pageText"
           :allText="allText"></vgt-pagination>
       </slot>
       <vgt-global-search
@@ -206,12 +208,14 @@
           :perPage="perPage"
           :rtl="rtl"
           :total="totalRows || totalRowCount"
+          :mode="paginationMode"
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
+          :pageText="pageText"
           :allText="allText"
           ></vgt-pagination>
       </slot>
@@ -294,6 +298,7 @@ export default {
           perPageDropdown: null,
           position: 'bottom',
           dropdownAllowAll: true,
+          mode: 'records', // or pages
         };
       },
     },
@@ -321,6 +326,7 @@ export default {
     rowsPerPageText: 'Rows per page',
     ofText: 'of',
     allText: 'All',
+    pageText: 'page',
 
     // internal select options
     selectable: false,
@@ -348,6 +354,7 @@ export default {
     paginateOnBottom: true,
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
+    paginationMode: 'records',
 
     currentPage: 1,
     currentPerPage: 10,
@@ -1159,8 +1166,10 @@ export default {
         prevLabel,
         rowsPerPageLabel,
         ofLabel,
+        pageLabel,
         allLabel,
         setCurrentPage,
+        mode,
       } = this.paginationOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1187,6 +1196,10 @@ export default {
         this.paginateDropdownAllowAll = dropdownAllowAll;
       }
 
+      if (typeof mode === 'string') {
+        this.paginationMode = mode;
+      }
+
       if (typeof nextLabel === 'string') {
         this.nextText = nextLabel;
       }
@@ -1202,10 +1215,15 @@ export default {
       if (typeof ofLabel === 'string') {
         this.ofText = ofLabel;
       }
+      
+      if (typeof pageLabel === 'string') {
+        this.pageText = pageLabel;
+      }
 
       if (typeof allLabel === 'string') {
         this.allText = allLabel;
       }
+
 
       if (typeof setCurrentPage === 'number') {
         setTimeout(() => {

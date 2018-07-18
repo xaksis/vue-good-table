@@ -27,7 +27,16 @@
         <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
         <span>{{prevText}}</span>
       </a>
-      <div class="footer__navigation__info">{{paginatedInfo}}</div>
+      <pagination-page-info
+        @page-changed="changePage"
+        :totalRecords="total"
+        :currentPerPage="currentPerPage"
+        :currentPage="currentPage"
+        :ofText="ofText"
+        :pageText="pageText"
+        v-if="mode === 'pages'">
+      </pagination-page-info>
+      <div v-else class="footer__navigation__info">{{paginatedInfo}}</div>
       <a href="javascript:undefined" class="footer__navigation__page-btn"
          :class="{ disabled: !nextIsPossible }" @click.prevent.stop="nextPage" tabindex="0">
         <span>{{nextText}}</span>
@@ -39,6 +48,7 @@
 
 <script>
 import cloneDeep from 'lodash.clonedeep';
+import VgtPaginationPageInfo from './VgtPaginationPageInfo';
 
 export default {
   name: 'VgtPagination',
@@ -49,12 +59,14 @@ export default {
     rtl: { default: false },
     customRowsPerPageDropdown: { default() { return []; } },
     paginateDropdownAllowAll: { default: true },
+    mode: { default: 'records' },
 
     // text options
     nextText: { default: 'Next' },
     prevText: { default: 'Prev' },
     rowsPerPageText: { default: 'Rows per page:' },
     ofText: { default: 'of' },
+    pageText: { default: 'page' },
     allText: { default: 'All' },
   },
 
@@ -121,7 +133,7 @@ export default {
     },
 
     changePage(pageNumber) {
-      if (pageNumber > 0 && this.total > this.currentPerPage * pageNumber) {
+      if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
         this.currentPage = pageNumber;
         this.pageChanged();
       }
@@ -184,6 +196,10 @@ export default {
 
   mounted() {
     this.handlePerPage();
+  },
+
+  components: {
+    'pagination-page-info': VgtPaginationPageInfo, 
   },
 };
 </script>

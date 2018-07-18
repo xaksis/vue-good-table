@@ -12,9 +12,13 @@
       @on-sort-change="onSortChange"
       :columns="columns"
       :rows="rows"
-      theme="black-rhino"
+      theme="nocturnal"
       :line-numbers="true"
-      :pagination-options="{ enabled: true, perPage: 5}"
+      :pagination-options="{
+        enabled: true,
+        perPage: 5,
+        mode: 'pages',
+      }"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: false,
