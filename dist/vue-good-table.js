@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.11.0
+ * vue-good-table v2.11.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5601,7 +5601,7 @@
         return "".concat(this.ofText, " ").concat(this.lastPage);
       },
       lastPage: function lastPage() {
-        return Math.ceil(this.totalRecords / this.currentPerPage);
+        return this.currentPerPage === -1 ? 1 : Math.ceil(this.totalRecords / this.currentPerPage);
       }
     },
     methods: {
@@ -5854,6 +5854,11 @@
       perPageChanged: function perPageChanged(event) {
         if (event) {
           this.currentPerPage = parseInt(event.target.value, 10);
+        }
+
+        if (this.currentPerPage === -1) {
+          // reset current page to 1
+          this.currentPage = 1;
         }
 
         this.$emit('per-page-changed', {
