@@ -89,6 +89,27 @@ Sometimes you might want to customize the pagination. You can do that in the fol
 </vue-good-table>
 ```
 
+```js
+// within your <custom-pagination> component
+props: {
+  pageChanged: {
+    type: Function,
+  },
+  perPageChanged: {
+    type: Function,
+  },
+}
+// and...
+methods: {
+  customPageChange(customCurrentPage) {
+    this.pageChanged({currentPage: customCurrentPage});
+  },
+  customPerPageChange(customPerPage) {
+    this.perPageChanged({currentPerPage: customPerPage});
+  }
+}
+```
+
 ::: tip NOTE
 You will have to implement your own pagination system:
 

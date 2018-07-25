@@ -187,3 +187,7 @@ you can change one or more of the texts shown on pagination by overriding the la
   }">
 </vue-good-table>
 ```
+
+## Replace Pagination Component
+
+you can also replace the pagination component with your own component - [Custom Pagination](/guide/advanced/#custom-pagination)
