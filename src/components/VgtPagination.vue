@@ -162,6 +162,10 @@ export default {
       if (event) {
         this.currentPerPage = parseInt(event.target.value, 10);
       }
+      if (this.currentPerPage === -1) {
+        // reset current page to 1
+        this.currentPage = 1;
+      }
       this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
     },
 

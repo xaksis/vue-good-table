@@ -39,7 +39,7 @@ export default {
       return `${this.ofText} ${this.lastPage}`;
     },
     lastPage() {
-      return Math.ceil(this.totalRecords / this.currentPerPage);
+      return this.currentPerPage === -1 ? 1 : Math.ceil(this.totalRecords / this.currentPerPage);
     },
   },
   methods: {
