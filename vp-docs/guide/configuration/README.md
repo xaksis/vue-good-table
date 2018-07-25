@@ -54,6 +54,29 @@ Show line number for each row
 ```
 <line-numbers-table />
 
+## rowStyleClass 
+
+type: `String` or `Function`
+
+property to assign a class to rows. This can either be a string representing a css class-name or a function.
+
+```vue
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :rowStyleClass="rowStyleClassFn">
+</vue-good-table>
+```
+
+```js
+methods: {
+  rowStyleClassFn(row) {
+    return row.age > 18 ? 'green' : 'red';
+  },
+}
+```
+
+
 ## rtl 
 
 type: `Boolean (default: false)`
@@ -115,7 +138,6 @@ for a detailed workflow example check out [Server Side Workflow](/guide/advanced
   mode="remote">
 </vue-good-table>
 ```
-
 
 ## totalRecords
 
