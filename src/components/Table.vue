@@ -26,12 +26,14 @@
           :perPage="perPage"
           :rtl="rtl"
           :total="totalRows || totalRowCount"
+          :mode="paginationMode"
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
+          :pageText="pageText"
           :allText="allText"></vgt-pagination>
       </slot>
       <vgt-global-search
@@ -143,8 +145,19 @@
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collect-formatted="collectFormatted"
+              :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan">
+              <template
+                v-if="hasHeaderRowTemplate"
+                slot="table-header-row"
+                slot-scope="props">
+                <slot name="table-header-row"
+                  :column="props.column"
+                  :formattedRow="props.formattedRow"
+                  :row="props.row">
+                </slot>
+              </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <tr
@@ -193,8 +206,19 @@
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collect-formatted="collectFormatted"
+              :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan">
+              <template
+                v-if="hasHeaderRowTemplate"
+                slot="table-header-row"
+                slot-scope="props">
+                <slot name="table-header-row"
+                  :column="props.column"
+                  :formattedRow="props.formattedRow"
+                  :row="props.row">
+                </slot>
+              </template>
             </vgt-header-row>
           </tbody>
 
@@ -224,12 +248,14 @@
           :perPage="perPage"
           :rtl="rtl"
           :total="totalRows || totalRowCount"
+          :mode="paginationMode"
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
+          :pageText="pageText"
           :allText="allText"
           ></vgt-pagination>
       </slot>
@@ -313,6 +339,7 @@ export default {
           perPageDropdown: null,
           position: 'bottom',
           dropdownAllowAll: true,
+          mode: 'records', // or pages
         };
       },
     },
@@ -340,6 +367,7 @@ export default {
     rowsPerPageText: 'Rows per page',
     ofText: 'of',
     allText: 'All',
+    pageText: 'page',
 
     // internal select options
     selectable: false,
@@ -367,6 +395,7 @@ export default {
     paginateOnBottom: true,
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
+    paginationMode: 'records',
 
     currentPage: 1,
     currentPerPage: 10,
@@ -434,11 +463,17 @@ export default {
   },
 
   computed: {
+<<<<<<< HEAD
     wrapperStyles() {
       return {
         overflow: 'scroll-y',
         height: this.tableHeight ? this.tableHeight : 'auto',
       };
+=======
+    hasHeaderRowTemplate() {
+      return !!this.$slots['table-header-row']
+        || !!this.$scopedSlots['table-header-row'];
+>>>>>>> master
     },
 
     isTableLoading() {
@@ -1007,13 +1042,13 @@ export default {
       return type.format(value, column);
     },
 
-    formattedRow(row) {
+    formattedRow(row, isHeaderRow = false) {
       const formattedRow = {};
       for (let i = 0; i < this.typedColumns.length; i++) {
         const col = this.typedColumns[i];
         // what happens if field is
         if (col.field) {
-          formattedRow[col.field] = this.collectFormatted(row, col);
+          formattedRow[col.field] = this.collectFormatted(row, col, isHeaderRow);
         }
       }
       return formattedRow;
@@ -1180,8 +1215,10 @@ export default {
         prevLabel,
         rowsPerPageLabel,
         ofLabel,
+        pageLabel,
         allLabel,
         setCurrentPage,
+        mode,
       } = this.paginationOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1208,6 +1245,10 @@ export default {
         this.paginateDropdownAllowAll = dropdownAllowAll;
       }
 
+      if (typeof mode === 'string') {
+        this.paginationMode = mode;
+      }
+
       if (typeof nextLabel === 'string') {
         this.nextText = nextLabel;
       }
@@ -1223,10 +1264,15 @@ export default {
       if (typeof ofLabel === 'string') {
         this.ofText = ofLabel;
       }
+      
+      if (typeof pageLabel === 'string') {
+        this.pageText = pageLabel;
+      }
 
       if (typeof allLabel === 'string') {
         this.allText = allLabel;
       }
+
 
       if (typeof setCurrentPage === 'number') {
         setTimeout(() => {

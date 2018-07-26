@@ -8,6 +8,7 @@ A set of options that are related to table pagination. Each of these are optiona
   :rows="rows"
   :pagination-options="{
     enabled: true,
+    mode: 'records',
     perPage: 5,
     position: 'top',
     perPageDropdown: [3, 7, 9],
@@ -17,6 +18,7 @@ A set of options that are related to table pagination. Each of these are optiona
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
     ofLabel: 'of',
+    pageLabel: 'page', // for 'pages' mode
     allLabel: 'All',
   }">
 </vue-good-table>
@@ -36,6 +38,52 @@ Enable Pagination for table. By default the paginator is created at the bottom o
   }">
 </vue-good-table>
 ```
+
+## mode
+
+type: `String (default: 'records')`
+
+You can render pagination controls in two modes - 'records' and 'pages'. Below, you'll find examples of both. 
+
+:::tip TIP
+For tables that may have many pages, 'pages' mode offers the ability to jump to any valid page. 
+:::
+
+### records mode (default)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :pagination-options="{
+    enabled: true,
+    mode: 'records'
+  }">
+</vue-good-table>
+```
+<pagination-table
+  :options="{
+    enabled: true,
+    mode: 'records',
+    perPage: 2,
+  }" />
+
+### pages mode
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :pagination-options="{
+    enabled: true,
+    mode: 'pages'
+  }">
+</vue-good-table>
+```
+<pagination-table
+  :options="{
+    enabled: true,
+    mode: 'pages',
+    perPage: 2,
+  }" />
 
 ## position
 
@@ -134,7 +182,12 @@ you can change one or more of the texts shown on pagination by overriding the la
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
     ofLabel: 'of',
+    pageLabel: 'page', // for 'pages' mode
     allLabel: 'All',
   }">
 </vue-good-table>
 ```
+
+## Replace Pagination Component
+
+you can also replace the pagination component with your own component - [Custom Pagination](/guide/advanced/#custom-pagination)

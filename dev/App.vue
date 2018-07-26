@@ -20,6 +20,7 @@
         enabled: true,
         selectOnCheckboxOnly: false,
       }"
+      :rowStyleClass="getRowStyle"
       styleClass="vgt-table condensed"
       :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
       :search-options="{
@@ -133,6 +134,9 @@ export default {
     };
   },
   methods: {
+    getRowStyle() {
+      return '';
+    },
     hideColumn() {
       this.$set(this.columns[0], 'hidden', true);
     },

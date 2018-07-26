@@ -84,5 +84,59 @@ methods: {
 
 ```
 
+## Customizing Header Row
+
+If you want more control over what the header row looks like, you can use slots the same way you [customize rows](/guide/advanced/#custom-row-template). For example if you want to add a button in the header row or something, this would be the way to do it. 
+
+### When mode is 'span'
+
+In this case, the header row spans across all columns
+
+```vue
+  <vue-good-table
+    :columns="columns"
+    :rows="rows"
+    :group-options="{
+      enabled: true,
+      headerPosition: 'top',
+    }">
+    <template slot="table-header-row" slot-scope="props">
+      <span class="my-fancy-class">
+        {{ props.row.label }}
+      </span>
+    </template>
+  </vue-good-table>
+```
+<grouped-custom-span :options="{enabled: true, headerPosition: 'top'}"/>
 
 
+### When mode is not 'span'
+
+In this case header row expects a value for each column
+
+```vue
+  <vue-good-table
+    :columns="columns"
+    :rows="rows"
+    :group-options="{
+      enabled: true,
+      headerPosition: 'top',
+    }">
+    <template slot="table-header-row" slot-scope="props">
+      <span v-if="props.column.field == 'action'">
+        <button class="fancy-btn">Action</button>
+      </span>
+      <span v-else>
+        {{props.formattedRow[props.column.field]}}
+      </span>
+    </template>
+  </vue-good-table>
+```
+
+<grouped-custom :options="{enabled: true, headerPosition: 'top'}"/>
+
+::: tip NOTE
+* The original row object can be accessed via `props.row` 
+* The column object can be accessed via `props.column`
+* You can access the formatted row data (for example - formatted date) via `props.formattedRow`
+:::
