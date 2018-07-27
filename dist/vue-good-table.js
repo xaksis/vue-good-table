@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.11.1
+ * vue-good-table v2.12.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -6151,6 +6151,199 @@
     }
   };
 
+  var VgtTableHeader = {
+    render: function render() {
+      var _vm = this;
+
+      var _h = _vm.$createElement;
+
+      var _c = _vm._self._c || _h;
+
+      return _c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', {
+        staticClass: "line-numbers"
+      }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+        staticClass: "vgt-checkbox-col"
+      }, [_c('input', {
+        attrs: {
+          "type": "checkbox"
+        },
+        domProps: {
+          "checked": _vm.allSelected,
+          "indeterminate": _vm.allSelectedIndeterminate
+        },
+        on: {
+          "change": _vm.toggleSelectAll
+        }
+      })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+        return !column.hidden ? _c('th', {
+          key: index,
+          class: _vm.getHeaderClasses(column, index),
+          style: _vm.columnStyles[index],
+          on: {
+            "click": function click($event) {
+              _vm.sort(index);
+            }
+          }
+        }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], {
+          column: column
+        })], 2) : _vm._e();
+      })], 2), _vm._v(" "), _c("vgt-filter-row", {
+        ref: "filter-row",
+        tag: "tr",
+        attrs: {
+          "global-search-enabled": _vm.searchEnabled,
+          "line-numbers": _vm.lineNumbers,
+          "selectable": _vm.selectable,
+          "columns": _vm.columns,
+          "mode": _vm.mode,
+          "typed-columns": _vm.typedColumns
+        },
+        on: {
+          "filter-changed": _vm.filterRows
+        }
+      })]);
+    },
+    staticRenderFns: [],
+    _scopeId: 'data-v-0c8b4370',
+    name: 'VgtTableHeader',
+    props: {
+      lineNumbers: {
+        default: false,
+        type: Boolean
+      },
+      selectable: {
+        default: false,
+        type: Boolean
+      },
+      allSelected: {
+        default: false,
+        type: Boolean
+      },
+      allSelectedIndeterminate: {
+        default: false,
+        type: Boolean
+      },
+      columns: {
+        type: Array
+      },
+      mode: {
+        type: String
+      },
+      typedColumns: {},
+      //* Sort related
+      sortColumn: {
+        type: Number
+      },
+      sortType: {
+        type: String
+      },
+      // utility functions
+      isSortableColumn: {
+        type: Function
+      },
+      getClasses: {
+        type: Function
+      },
+      //* search related
+      searchEnabled: {
+        type: Boolean
+      },
+      tableRef: {},
+      paginated: {}
+    },
+    watch: {
+      tableRef: {
+        handler: function handler() {
+          this.setColumnStyles();
+        },
+        immediate: true
+      },
+      paginated: {
+        handler: function handler() {
+          if (this.tableRef) {
+            this.setColumnStyles();
+          }
+        },
+        deep: true
+      }
+    },
+    data: function data() {
+      return {
+        checkBoxThStyle: {},
+        lineNumberThStyle: {},
+        columnStyles: []
+      };
+    },
+    computed: {},
+    methods: {
+      toggleSelectAll: function toggleSelectAll() {
+        this.$emit('on-toggle-select-all');
+      },
+      sort: function sort(index) {
+        this.$emit('on-sort-change', index);
+      },
+      getHeaderClasses: function getHeaderClasses(column, index) {
+        var isSortable = this.isSortableColumn(index);
+        var classes = lodash_assign({}, this.getClasses(index, 'th'), {
+          sorting: isSortable,
+          'sorting-desc': isSortable && this.sortColumn === index && this.sortType === 'desc',
+          'sorting-asc': isSortable && this.sortColumn === index && this.sortType === 'asc'
+        });
+        return classes;
+      },
+      filterRows: function filterRows(columnFilters) {
+        this.$emit('filter-changed', columnFilters);
+      },
+      getWidthStyle: function getWidthStyle(dom) {
+        var cellStyle = window.getComputedStyle(dom, null);
+        return {
+          width: cellStyle.width
+        };
+      },
+      setColumnStyles: function setColumnStyles() {
+        var _this = this;
+
+        var colStyles = [];
+        setTimeout(function () {
+          for (var i = 0; i < _this.columns.length; i++) {
+            if (_this.tableRef) {
+              var skip = 0;
+              if (_this.selectable) skip++;
+              if (_this.lineNumbers) skip++;
+              var cell = _this.tableRef.rows[0].cells[i + skip];
+              colStyles.push(_this.getWidthStyle(cell));
+            } else {
+              colStyles.push({
+                width: _this.columns[i].width ? _this.columns[i].width : 'auto'
+              });
+            }
+          }
+
+          _this.columnStyles = colStyles;
+        }, 200);
+      },
+      getColumnStyle: function getColumnStyle(column, index) {
+        var styleObject = {
+          width: column.width ? column.width : 'auto'
+        }; //* if fixed header we need to get width from original table
+
+        if (this.tableRef) {
+          if (this.selectable) index++;
+          if (this.lineNumbers) index++;
+          var cell = this.tableRef.rows[0].cells[index];
+          var cellStyle = window.getComputedStyle(cell, null);
+          styleObject.width = cellStyle.width;
+        }
+
+        return styleObject;
+      }
+    },
+    mounted: function mounted() {},
+    components: {
+      'vgt-filter-row': VgtFilterRow
+    }
+  };
+
   var VgtHeaderRow = {
     render: function render() {
       var _vm = this;
@@ -10772,58 +10965,62 @@
         }
       }, [_vm._v(" " + _vm._s(_vm.clearSelectionText) + " ")]), _vm._v(" "), _c('div', {
         staticClass: "vgt-selection-info-row__actions vgt-pull-right"
-      }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
+      }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _vm.$refs.table && _vm.fixedHeader ? _c('table', {
+        staticClass: "vgt-fixed-header",
+        class: _vm.tableStyleClasses
+      }, [_c("vgt-table-header", {
+        tag: "thead",
+        attrs: {
+          "columns": _vm.columns,
+          "line-numbers": _vm.lineNumbers,
+          "selectable": _vm.selectable,
+          "all-selected": _vm.allSelected,
+          "all-selected-indeterminate": _vm.allSelectedIndeterminate,
+          "mode": _vm.mode,
+          "typed-columns": _vm.typedColumns,
+          "sort-column": _vm.sortColumn,
+          "sort-type": _vm.sortType,
+          "isSortableColumn": _vm.isSortableColumn,
+          "getClasses": _vm.getClasses,
+          "searchEnabled": _vm.searchEnabled,
+          "paginated": _vm.paginated,
+          "table-ref": _vm.$refs.table
+        },
+        on: {
+          "on-toggle-select-all": _vm.toggleSelectAll,
+          "on-sort-change": _vm.sort,
+          "filter-changed": _vm.filterRows
+        }
+      })]) : _vm._e(), _vm._v(" "), _c('div', {
         class: {
           'vgt-responsive': _vm.responsive
-        }
+        },
+        style: _vm.wrapperStyles
       }, [_c('table', {
         ref: "table",
         class: _vm.tableStyleClasses
-      }, [_c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', {
-        staticClass: "line-numbers"
-      }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
-        staticClass: "vgt-checkbox-col"
-      }, [_c('input', {
+      }, [_c("vgt-table-header", {
+        tag: "thead",
         attrs: {
-          "type": "checkbox"
-        },
-        domProps: {
-          "checked": _vm.allSelected,
-          "indeterminate": _vm.allSelectedIndeterminate
-        },
-        on: {
-          "change": _vm.toggleSelectAll
-        }
-      })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index$$1) {
-        return !column.hidden ? _c('th', {
-          key: index$$1,
-          class: _vm.getHeaderClasses(column, index$$1),
-          style: {
-            width: column.width ? column.width : 'auto'
-          },
-          on: {
-            "click": function click($event) {
-              _vm.sort(index$$1);
-            }
-          }
-        }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], {
-          column: column
-        })], 2) : _vm._e();
-      })], 2), _vm._v(" "), _c("vgt-filter-row", {
-        ref: "filter-row",
-        tag: "tr",
-        attrs: {
-          "global-search-enabled": _vm.searchEnabled,
+          "columns": _vm.columns,
           "line-numbers": _vm.lineNumbers,
           "selectable": _vm.selectable,
-          "columns": _vm.columns,
+          "all-selected": _vm.allSelected,
+          "all-selected-indeterminate": _vm.allSelectedIndeterminate,
           "mode": _vm.mode,
-          "typed-columns": _vm.typedColumns
+          "typed-columns": _vm.typedColumns,
+          "sort-column": _vm.sortColumn,
+          "sort-type": _vm.sortType,
+          "isSortableColumn": _vm.isSortableColumn,
+          "getClasses": _vm.getClasses,
+          "searchEnabled": _vm.searchEnabled
         },
         on: {
+          "on-toggle-select-all": _vm.toggleSelectAll,
+          "on-sort-change": _vm.sort,
           "filter-changed": _vm.filterRows
         }
-      })]), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
+      }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
         return _c('tbody', {
           key: index$$1
         }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
@@ -10959,6 +11156,14 @@
     name: 'vue-good-table',
     props: {
       isLoading: {
+        default: false,
+        type: Boolean
+      },
+      maxHeight: {
+        default: null,
+        type: String
+      },
+      fixedHeader: {
         default: false,
         type: Boolean
       },
@@ -11136,6 +11341,12 @@
       }
     },
     computed: {
+      wrapperStyles: function wrapperStyles() {
+        return {
+          overflow: 'scroll-y',
+          maxHeight: this.maxHeight ? this.maxHeight : 'auto'
+        };
+      },
       hasHeaderRowTemplate: function hasHeaderRowTemplate() {
         return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
       },
@@ -11686,16 +11897,6 @@
         var isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
         return isSortable;
       },
-      // Get classes for the given header column.
-      getHeaderClasses: function getHeaderClasses(column, index$$1) {
-        var isSortable = this.isSortableColumn(index$$1);
-        var classes = lodash_assign({}, this.getClasses(index$$1, 'th'), {
-          sorting: isSortable,
-          'sorting-desc': isSortable && this.sortColumn === index$$1 && this.sortType === 'desc',
-          'sorting-asc': isSortable && this.sortColumn === index$$1 && this.sortType === 'asc'
-        });
-        return classes;
-      },
       // Get classes for the given column index & element.
       getClasses: function getClasses(index$$1, element) {
         var _this$typedColumns$in = this.typedColumns[index$$1],
@@ -11993,7 +12194,6 @@
       }
     },
     mounted: function mounted() {
-      // this.filteredRows = this.originalRows;
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
@@ -12001,8 +12201,8 @@
     components: {
       'vgt-pagination': VgtPagination,
       'vgt-global-search': VgtGlobalSearch,
-      'vgt-filter-row': VgtFilterRow,
-      'vgt-header-row': VgtHeaderRow
+      'vgt-header-row': VgtHeaderRow,
+      'vgt-table-header': VgtTableHeader
     }
   };
 
