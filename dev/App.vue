@@ -12,22 +12,20 @@
       @on-sort-change="onSortChange"
       :columns="columns"
       :rows="rows"
-      theme="nocturnal"
+      theme="black-rhino"
+      :fixed-header="true"
+      max-height="300px"
       :line-numbers="true"
-      :pagination-options="{
-        enabled: true,
-        perPage: 5,
-        mode: 'pages',
-      }"
+      :pagination-options="{ enabled: true, perPage: 5}"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: false,
       }"
       :rowStyleClass="getRowStyle"
-      styleClass="vgt-table condensed"
+      styleClass="vgt-table bordered"
       :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
       :search-options="{
-        enabled: true,
+        enabled: false,
       }">
     </vue-good-table>
     <h3>Grouped Table</h3>

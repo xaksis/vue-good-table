@@ -1,4 +1,8 @@
 table.vgt-table{
+  &.vgt-fixed-header{
+    position: absolute;
+    z-index: 10;
+  }
   font-size: 16px;
   border-collapse: collapse;
   background-color: white;
