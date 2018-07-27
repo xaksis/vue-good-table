@@ -13,18 +13,19 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
-      table-height="200px"
+      :fixed-header="true"
+      max-height="300px"
       :line-numbers="true"
-      :pagination-options="{ enabled: false, perPage: 5}"
+      :pagination-options="{ enabled: true, perPage: 5}"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: false,
       }"
       :rowStyleClass="getRowStyle"
-      styleClass="vgt-table condensed"
+      styleClass="vgt-table bordered"
       :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
       :search-options="{
-        enabled: true,
+        enabled: false,
       }">
     </vue-good-table>
     <h3>Grouped Table</h3>

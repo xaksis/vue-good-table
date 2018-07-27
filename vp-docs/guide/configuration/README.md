@@ -41,6 +41,39 @@ Array containing row objects. Each row object contains data that will be display
 for **grouped rows**, you need a nested format. Refer to [Grouped Table](/guide/advanced/grouped-table.md) for examples.
 :::
 
+## max-height
+
+type: `String`
+Set a maximum height for table body
+
+```vue
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  max-height="300px">
+</vue-good-table>
+```
+
+## fixed-header
+
+type: `Boolean (default: false)`
+fix header so it stays in view as you scroll the table.
+
+```vue
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  max-height="200px"
+  :fixed-header="true">
+</vue-good-table>
+```
+<fixed-header />
+
+::: tip
+Fixed header should probably be used with max-height
+:::
+
+
 ## lineNumbers
 
 type: `Boolean (default: false)`

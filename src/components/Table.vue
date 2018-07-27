@@ -60,40 +60,29 @@
           </slot>
         </div>
       </div>
-      <table ref="table" :class="tableStyleClasses">
+      <table
+        v-if="$refs.table && fixedHeader"
+        class="vgt-fixed-header"
+        :class="tableStyleClasses">
         <!-- Table header -->
-        <thead>
-          <tr>
-            <th v-if="lineNumbers" class="line-numbers"></th>
-            <th v-if="selectable" class="vgt-checkbox-col">
-              <input
-                type="checkbox"
-                :checked="allSelected"
-                :indeterminate.prop="allSelectedIndeterminate"
-                @change="toggleSelectAll" />
-            </th>
-            <th v-for="(column, index) in columns"
-              :key="index"
-              @click="sort(index)"
-              :class="getHeaderClasses(column, index)"
-              :style="{width: column.width ? column.width : 'auto'}"
-              v-if="!column.hidden">
-              <slot name="table-column" :column="column">
-                <span>{{column.label}}</span>
-              </slot>
-            </th>
-          </tr>
-          <tr
-            is="vgt-filter-row"
-            ref="filter-row"
-            @filter-changed="filterRows"
-            :global-search-enabled="searchEnabled"
-            :line-numbers="lineNumbers"
-            :selectable="selectable"
-            :columns="columns"
-            :mode="mode"
-            :typed-columns="typedColumns">
-          </tr>
+        <thead is="vgt-table-header"
+          @on-toggle-select-all="toggleSelectAll"
+          @on-sort-change="sort"
+          @filter-changed="filterRows"
+          :columns="columns"
+          :line-numbers="lineNumbers"
+          :selectable="selectable"
+          :all-selected="allSelected"
+          :all-selected-indeterminate="allSelectedIndeterminate"
+          :mode="mode"
+          :typed-columns="typedColumns"
+          :sort-column="sortColumn"
+          :sort-type="sortType"
+          :isSortableColumn="isSortableColumn"
+          :getClasses="getClasses"
+          :searchEnabled="searchEnabled"
+          :paginated="paginated"
+          :table-ref="$refs.table">
         </thead>
       </table>
       <div
@@ -101,38 +90,22 @@
         :style="wrapperStyles">
         <table ref="table" :class="tableStyleClasses">
           <!-- Table header -->
-          <thead>
-            <tr>
-              <th v-if="lineNumbers" class="line-numbers"></th>
-              <th v-if="selectable" class="vgt-checkbox-col">
-                <input
-                  type="checkbox"
-                  :checked="allSelected"
-                  :indeterminate.prop="allSelectedIndeterminate"
-                  @change="toggleSelectAll" />
-              </th>
-              <th v-for="(column, index) in columns"
-                :key="index"
-                @click="sort(index)"
-                :class="getHeaderClasses(column, index)"
-                :style="{width: column.width ? column.width : 'auto'}"
-                v-if="!column.hidden">
-                <slot name="table-column" :column="column">
-                  <span>{{column.label}}</span>
-                </slot>
-              </th>
-            </tr>
-            <tr
-              is="vgt-filter-row"
-              ref="filter-row"
-              @filter-changed="filterRows"
-              :global-search-enabled="searchEnabled"
-              :line-numbers="lineNumbers"
-              :selectable="selectable"
-              :columns="columns"
-              :mode="mode"
-              :typed-columns="typedColumns">
-            </tr>
+          <thead is="vgt-table-header"
+            @on-toggle-select-all="toggleSelectAll"
+            @on-sort-change="sort"
+            @filter-changed="filterRows"
+            :columns="columns"
+            :line-numbers="lineNumbers"
+            :selectable="selectable"
+            :all-selected="allSelected"
+            :all-selected-indeterminate="allSelectedIndeterminate"
+            :mode="mode"
+            :typed-columns="typedColumns"
+            :sort-column="sortColumn"
+            :sort-type="sortType"
+            :isSortableColumn="isSortableColumn"
+            :getClasses="getClasses"
+            :searchEnabled="searchEnabled">
           </thead>
 
           <!-- Table body starts here -->
@@ -272,7 +245,7 @@ import diacriticless from 'diacriticless';
 import defaultType from './types/default';
 import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
-import VgtFilterRow from './VgtFilterRow.vue';
+import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
 
 // here we load each data type module.
@@ -289,7 +262,8 @@ export default {
   name: 'vue-good-table',
   props: {
     isLoading: { default: false, type: Boolean },
-    tableHeight: { default: null, type: String },
+    maxHeight: { default: null, type: String },
+    fixedHeader: { default: false, type: Boolean },
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: { }, // required if mode = 'remote'
@@ -463,17 +437,16 @@ export default {
   },
 
   computed: {
-<<<<<<< HEAD
     wrapperStyles() {
       return {
         overflow: 'scroll-y',
-        height: this.tableHeight ? this.tableHeight : 'auto',
+        maxHeight: this.maxHeight ? this.maxHeight : 'auto',
       };
-=======
+    },
+
     hasHeaderRowTemplate() {
       return !!this.$slots['table-header-row']
         || !!this.$scopedSlots['table-header-row'];
->>>>>>> master
     },
 
     isTableLoading() {
@@ -1061,17 +1034,6 @@ export default {
       return isSortable;
     },
 
-    // Get classes for the given header column.
-    getHeaderClasses(column, index) {
-      const isSortable = this.isSortableColumn(index);
-      const classes = assign({}, this.getClasses(index, 'th'), {
-        sorting: isSortable,
-        'sorting-desc': isSortable && this.sortColumn === index && this.sortType === 'desc',
-        'sorting-asc': isSortable && this.sortColumn === index && this.sortType === 'asc',
-      });
-      return classes;
-    },
-
     // Get classes for the given column index & element.
     getClasses(index, element) {
       const { typeDef, [`${element}Class`]: custom } = this.typedColumns[index];
@@ -1368,8 +1330,6 @@ export default {
   },
 
   mounted() {
-    // this.filteredRows = this.originalRows;
-
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
@@ -1378,8 +1338,8 @@ export default {
   components: {
     'vgt-pagination': VgtPagination,
     'vgt-global-search': VgtGlobalSearch,
-    'vgt-filter-row': VgtFilterRow,
     'vgt-header-row': VgtHeaderRow,
+    'vgt-table-header': VgtTableHeader,
   },
 };
 </script>
