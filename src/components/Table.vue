@@ -61,7 +61,7 @@
         </div>
       </div>
       <table
-        v-if="$refs.table && fixedHeader"
+        v-if="fixedHeader"
         class="vgt-fixed-header"
         :class="tableStyleClasses">
         <!-- Table header -->
