@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.12.0
+ * vue-good-table v2.12.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -1183,7 +1183,7 @@ var VueGoodTable = {
       }
     }, [_vm._v(" " + _vm._s(_vm.clearSelectionText) + " ")]), _vm._v(" "), _c('div', {
       staticClass: "vgt-selection-info-row__actions vgt-pull-right"
-    }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _vm.$refs.table && _vm.fixedHeader ? _c('table', {
+    }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _vm.fixedHeader ? _c('table', {
       staticClass: "vgt-fixed-header",
       class: _vm.tableStyleClasses
     }, [_c("vgt-table-header", {
