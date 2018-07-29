@@ -27,6 +27,14 @@
       :search-options="{
         enabled: false,
       }">
+      <template slot="table-column" slot-scope="props">
+        <span v-if="props.column.label =='Name'">
+            hi {{props.column.label}}
+        </span>
+        <span v-else>
+            {{props.column.label}}
+        </span>
+      </template>
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
