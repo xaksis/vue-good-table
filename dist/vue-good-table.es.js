@@ -1208,7 +1208,15 @@ var VueGoodTable = {
         "on-toggle-select-all": _vm.toggleSelectAll,
         "on-sort-change": _vm.sort,
         "filter-changed": _vm.filterRows
-      }
+      },
+      scopedSlots: _vm._u([{
+        key: "table-column",
+        fn: function fn(props) {
+          return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
+            column: props.column
+          })];
+        }
+      }])
     })]) : _vm._e(), _vm._v(" "), _c('div', {
       class: {
         'vgt-responsive': _vm.responsive
@@ -1237,7 +1245,15 @@ var VueGoodTable = {
         "on-toggle-select-all": _vm.toggleSelectAll,
         "on-sort-change": _vm.sort,
         "filter-changed": _vm.filterRows
-      }
+      },
+      scopedSlots: _vm._u([{
+        key: "table-column",
+        fn: function fn(props) {
+          return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
+            column: props.column
+          })];
+        }
+      }])
     }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index$$1) {
       return _c('tbody', {
         key: index$$1
