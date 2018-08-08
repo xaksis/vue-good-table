@@ -210,7 +210,7 @@
               <td :colspan="fullColspan">
                 <slot name="emptystate">
                   <div class="vgt-center-align vgt-text-disabled">
-                    No data for table
+                    {{ noDataForTableMessage }}
                   </div>
                 </slot>
               </td>
@@ -283,6 +283,7 @@ export default {
     lineNumbers: { default: false },
     responsive: { default: true },
     rtl: { default: false },
+    noDataForTableMessage: 'No data for table',
     rowStyleClass: { default: null, type: [Function, String] },
 
     groupOptions: {
