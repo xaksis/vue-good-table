@@ -137,9 +137,14 @@ export default {
     },
 
     getWidthStyle(dom) {
-      const cellStyle = window.getComputedStyle(dom, null);
+      if (window && window.getComputedStyle) {
+        const cellStyle = window.getComputedStyle(dom, null);
+        return {
+          width: cellStyle.width,
+        };
+      }
       return {
-        width: cellStyle.width,
+        width: 'auto',
       };
     },
 
