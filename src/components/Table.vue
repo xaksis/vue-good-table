@@ -149,6 +149,7 @@
               :class="getRowStyleClass(row)"
               @mouseenter="onMouseenter(row, index)"
               @mouseleave="onMouseleave(row, index)"
+              @dblclick="onRowDoubleClicked(row, index, $event)"
               @click="onRowClicked(row, index, $event)">
               <th v-if="lineNumbers" class="line-numbers">
                 {{ getCurrentIndex(index) }}
@@ -911,6 +912,15 @@ export default {
     onCheckboxClicked(row, index, event) {
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
+        row,
+        pageIndex: index,
+        selected: !!row.vgtSelected,
+        event,
+      });
+    },
+
+    onRowDoubleClicked(row, index, event) {
+      this.$emit('on-row-dblclick', {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,

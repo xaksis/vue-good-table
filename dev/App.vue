@@ -7,7 +7,7 @@
     <vue-good-table
       ref="my-table"
       @on-column-filter="onColumnFilter"
-      @on-row-click="onColumnFilter"
+      @on-row-dblclick="onColumnFilter"
       @on-select-all="onSelectAll"
       @on-sort-change="onSortChange"
       :columns="columns"
@@ -18,7 +18,7 @@
       :line-numbers="true"
       :pagination-options="{ enabled: true, perPage: 5}"
       :select-options="{
-        enabled: true,
+        enabled: false,
         selectOnCheckboxOnly: false,
       }"
       :rowStyleClass="getRowStyle"

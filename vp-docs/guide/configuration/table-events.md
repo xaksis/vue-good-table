@@ -20,6 +20,26 @@ event emitted on table row click
  }
  ```
 
+## @on-row-dblclick
+event emitted on table row click
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-row-dblclick="onRowDoubleClick">
+ ```
+ ```javascript
+ methods: {
+   onRowDoubleClick(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
+     // params.selected - if selection is enabled this argument 
+     // indicates selected or not
+     // params.event - click event
+   }
+}
+```
+
  ## @on-cell-click
 event emitted on table cell click
 ```html
