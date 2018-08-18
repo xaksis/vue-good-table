@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.12.2
+ * vue-good-table v2.13.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5778,6 +5778,7 @@
     data: function data() {
       return {
         currentPage: 1,
+        prevPage: 0,
         currentPerPage: 10,
         rowsPerPageOptions: [],
         defaultRowsPerPageDropdown: [10, 20, 30, 40, 50]
@@ -5809,6 +5810,7 @@
           // this probably happened as a result of filtering
           first = 1;
           this.currentPage = 1;
+          this.prevPage = 0;
         }
 
         var last = Math.min(this.total, this.currentPerPage * this.currentPage);
@@ -5828,6 +5830,7 @@
       reset: function reset() {},
       changePage: function changePage(pageNumber) {
         if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
+          this.prevPage = this.currentPage;
           this.currentPage = pageNumber;
           this.pageChanged();
         }
@@ -5836,19 +5839,22 @@
         if (this.currentPerPage === -1) return;
 
         if (this.nextIsPossible) {
+          this.prevPage = this.currentPage;
           ++this.currentPage;
           this.pageChanged();
         }
       },
       previousPage: function previousPage() {
         if (this.currentPage > 1) {
+          this.prevPage = this.currentPage;
           --this.currentPage;
           this.pageChanged();
         }
       },
       pageChanged: function pageChanged() {
         this.$emit('page-changed', {
-          currentPage: this.currentPage
+          currentPage: this.currentPage,
+          prevPage: this.prevPage
         });
       },
       perPageChanged: function perPageChanged(event) {
@@ -6295,9 +6301,15 @@
         this.$emit('filter-changed', columnFilters);
       },
       getWidthStyle: function getWidthStyle(dom) {
-        var cellStyle = window.getComputedStyle(dom, null);
+        if (window && window.getComputedStyle) {
+          var cellStyle = window.getComputedStyle(dom, null);
+          return {
+            width: cellStyle.width
+          };
+        }
+
         return {
-          width: cellStyle.width
+          width: 'auto'
         };
       },
       setColumnStyles: function setColumnStyles() {
@@ -11071,6 +11083,9 @@
               "mouseleave": function mouseleave($event) {
                 _vm.onMouseleave(row, index$$1);
               },
+              "dblclick": function dblclick($event) {
+                _vm.onRowDoubleClicked(row, index$$1, $event);
+              },
               "click": function click($event) {
                 _vm.onRowClicked(row, index$$1, $event);
               }
@@ -11735,9 +11750,9 @@
         };
       },
       pageChanged: function pageChanged(pagination) {
-        // every time we change page we have to unselect all
         this.currentPage = pagination.currentPage;
         var pageChangedEvent = this.pageChangedEvent();
+        pageChangedEvent.prevPage = pagination.prevPage;
         this.$emit('on-page-change', pageChangedEvent);
 
         if (this.mode === 'remote') {
@@ -11782,6 +11797,14 @@
       onCheckboxClicked: function onCheckboxClicked(row, index$$1, event) {
         this.$set(row, 'vgtSelected', !row.vgtSelected);
         this.$emit('on-row-click', {
+          row: row,
+          pageIndex: index$$1,
+          selected: !!row.vgtSelected,
+          event: event
+        });
+      },
+      onRowDoubleClicked: function onRowDoubleClicked(row, index$$1, event) {
+        this.$emit('on-row-dblclick', {
           row: row,
           pageIndex: index$$1,
           selected: !!row.vgtSelected,
