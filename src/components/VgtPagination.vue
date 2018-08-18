@@ -72,6 +72,7 @@ export default {
 
   data: () => ({
     currentPage: 1,
+    prevPage: 0,
     currentPerPage: 10,
     rowsPerPageOptions: [],
     defaultRowsPerPageDropdown: [10, 20, 30, 40, 50],
@@ -109,6 +110,7 @@ export default {
         // this probably happened as a result of filtering
         first = 1;
         this.currentPage = 1;
+        this.prevPage = 0;
       }
 
       const last = Math.min(this.total, this.currentPerPage * this.currentPage);
@@ -134,6 +136,7 @@ export default {
 
     changePage(pageNumber) {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
+        this.prevPage = this.currentPage;
         this.currentPage = pageNumber;
         this.pageChanged();
       }
@@ -142,6 +145,7 @@ export default {
     nextPage() {
       if (this.currentPerPage === -1) return;
       if (this.nextIsPossible) {
+        this.prevPage = this.currentPage;
         ++this.currentPage;
         this.pageChanged();
       }
@@ -149,13 +153,17 @@ export default {
 
     previousPage() {
       if (this.currentPage > 1) {
+        this.prevPage = this.currentPage;
         --this.currentPage;
         this.pageChanged();
       }
     },
 
     pageChanged() {
-      this.$emit('page-changed', { currentPage: this.currentPage });
+      this.$emit('page-changed', {
+        currentPage: this.currentPage,
+        prevPage: this.prevPage,
+      });
     },
 
     perPageChanged(event) {
@@ -203,7 +211,7 @@ export default {
   },
 
   components: {
-    'pagination-page-info': VgtPaginationPageInfo, 
+    'pagination-page-info': VgtPaginationPageInfo,
   },
 };
 </script>

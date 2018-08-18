@@ -122,6 +122,7 @@ event emitted on pagination page change (when pagination is enabled)
  methods: {
    onPageChange(params) {
      // params.currentPage - current page that pagination is at
+     // params.prevPage - previous page
      // params.currentPerPage - number of items per page
      // params.total - total number of items in the table
    }

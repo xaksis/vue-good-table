@@ -863,9 +863,9 @@ export default {
     },
 
     pageChanged(pagination) {
-      // every time we change page we have to unselect all
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
+      pageChangedEvent.prevPage = pagination.prevPage;
       this.$emit('on-page-change', pageChangedEvent);
       if (this.mode === 'remote') {
         this.tableLoading = true;

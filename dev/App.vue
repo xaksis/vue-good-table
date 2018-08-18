@@ -10,13 +10,14 @@
       @on-row-dblclick="onColumnFilter"
       @on-select-all="onSelectAll"
       @on-sort-change="onSortChange"
+      @on-page-change="onPageChange"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
       :fixed-header="true"
       max-height="300px"
       :line-numbers="true"
-      :pagination-options="{ enabled: true, perPage: 5}"
+      :pagination-options="{ mode: 'pages', enabled: true, perPage: 5}"
       :select-options="{
         enabled: false,
         selectOnCheckboxOnly: false,
