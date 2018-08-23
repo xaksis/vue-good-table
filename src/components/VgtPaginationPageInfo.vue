@@ -12,10 +12,10 @@
 export default {
   name: 'VgtPaginationPageInfo',
   props: {
-    currentPerPage: {
-      default: 10,
-    },
     currentPage: {
+      default: 1,
+    },
+    lastPage: {
       default: 1,
     },
     totalRecords: {
@@ -37,9 +37,6 @@ export default {
   computed: {
     pageInfo() {
       return `${this.ofText} ${this.lastPage}`;
-    },
-    lastPage() {
-      return this.currentPerPage === -1 ? 1 : Math.ceil(this.totalRecords / this.currentPerPage);
     },
   },
   methods: {

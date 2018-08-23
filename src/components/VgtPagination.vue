@@ -30,7 +30,7 @@
       <pagination-page-info
         @page-changed="changePage"
         :totalRecords="total"
-        :currentPerPage="currentPerPage"
+        :lastPage="pagesCount"
         :currentPage="currentPage"
         :ofText="ofText"
         :pageText="pageText"
