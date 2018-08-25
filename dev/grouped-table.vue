@@ -47,6 +47,7 @@ export default {
           label: 'Diet',
           field: 'diet',
           type: 'text',
+          hidden: true,
         },
         {
           label: 'Count',

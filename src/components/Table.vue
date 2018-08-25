@@ -522,7 +522,12 @@ export default {
     },
 
     fullColspan() {
-      let fullColspan = this.columns.length;
+      let fullColspan = 0;
+      for (let i=0; i < this.columns.length; i += 1) {
+        if (!this.columns[i].hidden) {
+          fullColspan += 1;
+        }
+      }
       if (this.lineNumbers) fullColspan++;
       if (this.selectable) fullColspan++;
       return fullColspan;

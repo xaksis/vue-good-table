@@ -22,7 +22,7 @@
     class="vgt-row-header"
     v-if="headerRow.mode !== 'span' && selectable"></th>
   <th
-    v-if="headerRow.mode !== 'span'"
+    v-if="headerRow.mode !== 'span' && !column.hidden"
     v-for="(column, i) in columns"
     :key="i"
     class="vgt-row-header"
