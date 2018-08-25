@@ -17,7 +17,12 @@
       :fixed-header="true"
       max-height="300px"
       :line-numbers="true"
-      :pagination-options="{ mode: 'pages', enabled: true, perPage: 5}"
+      :pagination-options="{
+        mode: 'pages',
+        enabled: true,
+        perPage: 2,
+        perPageDropdown: [3, 5, 9],
+      }"
       :select-options="{
         enabled: false,
         selectOnCheckboxOnly: false,

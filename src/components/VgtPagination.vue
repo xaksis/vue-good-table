@@ -170,7 +170,8 @@ export default {
       if (event) {
         this.currentPerPage = parseInt(event.target.value, 10);
       }
-      if (this.currentPerPage === -1) {
+      if (this.currentPerPage === -1
+      || this.total < this.currentPerPage * this.currentPage) {
         // reset current page to 1
         this.currentPage = 1;
       }
@@ -182,7 +183,16 @@ export default {
     },
 
     handlePerPage() {
-      this.rowsPerPageOptions = cloneDeep(this.defaultRowsPerPageDropdown);
+      //* if there's a custom dropdown then we use that
+      if (this.customRowsPerPageDropdown !== null
+        && (Array.isArray(this.customRowsPerPageDropdown)
+        && this.customRowsPerPageDropdown.length !== 0)) {
+        this.rowsPerPageOptions = this.customRowsPerPageDropdown;
+      } else {
+        //* otherwise we use the default rows per page dropdown
+        this.rowsPerPageOptions = cloneDeep(this.defaultRowsPerPageDropdown);
+      }
+
       if (this.perPage) {
         this.currentPerPage = this.perPage;
         // if perPage doesn't already exist, we add it
@@ -196,12 +206,6 @@ export default {
       } else {
         // reset to default
         this.currentPerPage = 10;
-      }
-
-      if (this.customRowsPerPageDropdown !== null
-        && (Array.isArray(this.customRowsPerPageDropdown)
-        && this.customRowsPerPageDropdown.length !== 0)) {
-        this.rowsPerPageOptions = this.customRowsPerPageDropdown;
       }
     },
   },
