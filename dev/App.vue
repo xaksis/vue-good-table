@@ -14,8 +14,6 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
-      :fixed-header="true"
-      max-height="300px"
       :line-numbers="true"
       :pagination-options="{
         mode: 'pages',
@@ -61,7 +59,8 @@ export default {
           field: 'name',
           filterOptions: {
             enabled: true,
-            trigger: 'enter',
+            placeholder: 'All',
+            filterDropdownItems: ['Chris', 'Dan', 'Susan'],
           },
         },
         {

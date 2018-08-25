@@ -20,7 +20,7 @@
       <select v-if="isDropdownArray(column)"
         class="vgt-select"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value)">
+        @change="updateFilters(column, $event.target.value)">
           <option value="" key="-1">{{ getPlaceholder(column) }}</option>
           <option
             v-for="(option, i) in column.filterOptions.filterDropdownItems"
