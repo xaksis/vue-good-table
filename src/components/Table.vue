@@ -66,6 +66,7 @@
         :class="tableStyleClasses">
         <!-- Table header -->
         <thead is="vgt-table-header"
+          ref="table-header-secondary"
           @on-toggle-select-all="toggleSelectAll"
           @on-sort-change="sort"
           @filter-changed="filterRows"
@@ -96,6 +97,7 @@
         <table ref="table" :class="tableStyleClasses">
           <!-- Table header -->
           <thead is="vgt-table-header"
+            ref="table-header-primary"
             @on-toggle-select-all="toggleSelectAll"
             @on-sort-change="sort"
             @filter-changed="filterRows"
@@ -810,7 +812,10 @@ export default {
     reset() {
       this.initializeSort();
       this.changePage(1);
-      this.$refs['filter-row'].reset(true);
+      this.$refs['table-header-primary'].reset(true);
+      if (this.$refs['table-header-secondary']) {
+        this.$refs['table-header-secondary'].reset(true);
+      }
     },
 
     emitSelectedRows() {

@@ -116,6 +116,9 @@ export default {
   computed: {
   },
   methods: {
+    reset() {
+      this.$refs['filter-row'].reset(true);
+    },
     toggleSelectAll() {
       this.$emit('on-toggle-select-all');
     },
