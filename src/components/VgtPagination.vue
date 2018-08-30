@@ -9,12 +9,12 @@
         v-model="currentPerPage"
         @change="perPageChanged">
         <option
-          v-for="(option, idx) in getRowsPerPageDropdown()"
+          v-for="(option, idx) in rowsPerPageOptions"
           v-bind:key="'rows-dropdown-option-' + idx"
           :value="option">
           {{ option }}
         </option>
-        <option v-if="paginateDropdownAllowAll" value="-1">{{allText}}</option>
+        <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
       </select>
     </div>
     <div class="footer__navigation vgt-pull-right">
@@ -30,7 +30,7 @@
       <pagination-page-info
         @page-changed="changePage"
         :totalRecords="total"
-        :currentPerPage="currentPerPage"
+        :lastPage="pagesCount"
         :currentPage="currentPage"
         :ofText="ofText"
         :pageText="pageText"
@@ -49,6 +49,8 @@
 <script>
 import cloneDeep from 'lodash.clonedeep';
 import VgtPaginationPageInfo from './VgtPaginationPageInfo.vue';
+
+const DEFAULT_ROWS_PER_PAGE_DROPDOWN = [10, 20, 30, 40, 50];
 
 export default {
   name: 'VgtPagination',
@@ -75,7 +77,6 @@ export default {
     prevPage: 0,
     currentPerPage: 10,
     rowsPerPageOptions: [],
-    defaultRowsPerPageDropdown: [10, 20, 30, 40, 50],
   }),
 
   watch: {
@@ -91,49 +92,38 @@ export default {
         this.rowsPerPageOptions = this.customRowsPerPageDropdown;
       }
     },
-
   },
 
   computed: {
-    currentPerPageString() {
-      return this.currentPerPage === -1 ? 'All' : this.currentPerPage;
+    // Number of pages
+    pagesCount() {
+      const quotient = Math.floor(this.total / this.currentPerPage);
+      const remainder = this.total % this.currentPerPage;
+
+      return remainder === 0 ? quotient : quotient + 1;
     },
 
+    // Current displayed items
     paginatedInfo() {
-      if (this.currentPerPage === -1) {
-        return `1 - ${this.total} ${this.ofText} ${this.total}`;
-      }
-      let first = ((this.currentPage - 1) * this.currentPerPage) + 1 ?
-        ((this.currentPage - 1) * this.currentPerPage) + 1 : 1;
+      const first = ((this.currentPage - 1) * this.currentPerPage) + 1;
+      const last = Math.min(this.total, this.currentPage * this.currentPerPage);
 
-      if (first > this.total) {
-        // this probably happened as a result of filtering
-        first = 1;
-        this.currentPage = 1;
-        this.prevPage = 0;
-      }
-
-      const last = Math.min(this.total, this.currentPerPage * this.currentPage);
       return `${first} - ${last} ${this.ofText} ${this.total}`;
     },
+
+    // Can go to next page
     nextIsPossible() {
-      return this.currentPerPage === -1 ?
-        false : (this.total > this.currentPerPage * this.currentPage);
+      return this.currentPage < this.pagesCount;
     },
+
+    // Can go to previous page
     prevIsPossible() {
       return this.currentPage > 1;
     },
   },
 
   methods: {
-    // optionSelected(option) {
-    //   return this.currentPerPage === option;
-    // },
-
-    reset() {
-
-    },
-
+    // Change current page
     changePage(pageNumber) {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
         this.prevPage = this.currentPage;
@@ -142,8 +132,8 @@ export default {
       }
     },
 
+    // Go to next page
     nextPage() {
-      if (this.currentPerPage === -1) return;
       if (this.nextIsPossible) {
         this.prevPage = this.currentPage;
         ++this.currentPage;
@@ -151,14 +141,16 @@ export default {
       }
     },
 
+    // Go to previous page
     previousPage() {
-      if (this.currentPage > 1) {
+      if (this.prevIsPossible) {
         this.prevPage = this.currentPage;
         --this.currentPage;
         this.pageChanged();
       }
     },
 
+    // Indicate page changing
     pageChanged() {
       this.$emit('page-changed', {
         currentPage: this.currentPage,
@@ -166,19 +158,14 @@ export default {
       });
     },
 
-    perPageChanged(event) {
-      if (event) {
-        this.currentPerPage = parseInt(event.target.value, 10);
-      }
-      //* go back to first page
+    // Indicate per page changing
+    perPageChanged() {
+      // go back to first page
       this.changePage(1);
       this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
     },
 
-    getRowsPerPageDropdown() {
-      return this.rowsPerPageOptions;
-    },
-
+    // Handle per page changing
     handlePerPage() {
       //* if there's a custom dropdown then we use that
       if (this.customRowsPerPageDropdown !== null
@@ -187,7 +174,7 @@ export default {
         this.rowsPerPageOptions = this.customRowsPerPageDropdown;
       } else {
         //* otherwise we use the default rows per page dropdown
-        this.rowsPerPageOptions = cloneDeep(this.defaultRowsPerPageDropdown);
+        this.rowsPerPageOptions = cloneDeep(DEFAULT_ROWS_PER_PAGE_DROPDOWN);
       }
 
       if (this.perPage) {
@@ -199,7 +186,9 @@ export default {
             found = true;
           }
         }
-        if (!found && this.perPage !== -1) this.rowsPerPageOptions.push(this.perPage);
+        if (!found && this.perPage !== -1) {
+          this.rowsPerPageOptions.push(this.perPage);
+        }
       } else {
         // reset to default
         this.currentPerPage = 10;
