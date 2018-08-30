@@ -18,8 +18,6 @@
       :pagination-options="{
         mode: 'pages',
         enabled: true,
-        perPage: 2,
-        perPageDropdown: [3, 5, 9],
       }"
       :select-options="{
         enabled: false,
@@ -81,9 +79,16 @@ export default {
           type: 'percentage',
         },
         {
-          label: 'Bool',
+          label: 'Valid',
           field: 'bool',
           type: 'boolean',
+          filterOptions: {
+            enabled: true,
+            filterDropdownItems: [
+              true,
+              false,
+            ],
+          },
         },
       ],
       rows: [

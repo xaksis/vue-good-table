@@ -12,10 +12,9 @@ boolean.filterPredicate = function (rowval, filter) {
 
 boolean.compare = function (x, y) {
   function cook(d) {
-    // if d is null or undefined we give it the smallest
-    // possible value
-    if (typeof d !== 'boolean') return -Infinity;
-    return d ? 1 : 0;
+    if (typeof d === 'boolean') return d ? 1 : 0;
+    if (typeof d === 'string') return d === 'true' ? 1 : 0;
+    return -Infinity;
   }
 
   x = cook(x);
