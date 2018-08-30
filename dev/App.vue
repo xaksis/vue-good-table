@@ -3,6 +3,7 @@
     <button @click="rows = [];">empty row</button>
     <button @click="resetTable">reset Table</button>
     <button @click="hideColumn">hide column</button>
+    <button @click="setFilter">SetFilter</button>
     <input type="text" v-model="searchTerm">
     <vue-good-table
       ref="my-table"
@@ -193,6 +194,13 @@ export default {
     },
     searchedRow(params) {
       console.log(params);
+    },
+    setFilter() {
+      console.log('setting john');
+      // this.columns[0].filterOptions.filterValue = 'John';
+      console.log(this.columns);
+      // this.$set(this.columns[0].filterOptions, 'filterValue', 'John');
+      this.$set(this.columns[1], 'filterOptions', { enabled: true, filterValue: 20 });
     },
     autofilter(type) {
       if (type === 'name') {

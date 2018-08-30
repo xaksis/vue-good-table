@@ -1256,7 +1256,7 @@ export default {
       if (typeof ofLabel === 'string') {
         this.ofText = ofLabel;
       }
-      
+
       if (typeof pageLabel === 'string') {
         this.pageText = pageLabel;
       }
