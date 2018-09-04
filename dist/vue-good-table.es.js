@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.13.2
+ * vue-good-table v2.13.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -405,10 +405,10 @@ var VgtPagination = {
     // Indicate per page changing
     perPageChanged: function perPageChanged() {
       // go back to first page
-      this.changePage(1);
       this.$emit('per-page-changed', {
         currentPerPage: this.currentPerPage
       });
+      this.changePage(1);
     },
     // Handle per page changing
     handlePerPage: function handlePerPage() {
