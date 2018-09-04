@@ -161,8 +161,8 @@ export default {
     // Indicate per page changing
     perPageChanged() {
       // go back to first page
-      this.changePage(1);
       this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
+      this.changePage(1);
     },
 
     // Handle per page changing

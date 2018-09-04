@@ -18,6 +18,7 @@
       :line-numbers="true"
       :pagination-options="{
         mode: 'pages',
+        perPage: 3,
         enabled: true,
       }"
       :select-options="{
