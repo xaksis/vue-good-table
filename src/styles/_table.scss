@@ -1,12 +1,17 @@
 table.vgt-table{
+  &.vgt-fixed-header{
+    position: absolute;
+    z-index: 10;
+  }
+  font-size: 16px;
   border-collapse: collapse;
-  background-color: transparent;
+  background-color: white;
   width: 100%;
   max-width: 100%;
   table-layout: auto;
   border: 1px solid $border-color;
   & td {
-    padding: .75rem .75rem .75rem .75rem;
+    padding: .75em .75em .75em .75em;
     vertical-align: top;
     border-bottom:  1px solid $border-color;
     color: $text-color;

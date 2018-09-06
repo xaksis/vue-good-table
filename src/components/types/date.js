@@ -25,6 +25,7 @@ date.compare = function (x, y, column) {
 };
 
 date.format = function (v, column) {
+  if (v === undefined || v === null) return '';
   // convert to date
   const date = parse(v, column.dateInputFormat, new Date());
   return format(date, column.dateOutputFormat);

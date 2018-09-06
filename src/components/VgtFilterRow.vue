@@ -13,13 +13,14 @@
         class="vgt-input"
         :placeholder="getPlaceholder(column)"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value)" />
+        @keyup.enter="updateFiltersOnEnter(column, $event.target.value)"
+        @input="updateFiltersOnKeyup(column, $event.target.value)" />
 
       <!-- options are a list of primitives -->
       <select v-if="isDropdownArray(column)"
         class="vgt-select"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value)">
+        @change="updateFilters(column, $event.target.value)">
           <option value="" key="-1">{{ getPlaceholder(column) }}</option>
           <option
             v-for="(option, i) in column.filterOptions.filterDropdownItems"
@@ -33,7 +34,7 @@
       <select v-if="isDropdownObjects(column)"
         class="vgt-select"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value)">
+        v-on:input="updateFilters(column, $event.target.value, true)">
         <option value="" key="-1">{{ getPlaceholder(column) }}</option>
         <option
           v-for="(option, i) in column.filterOptions.filterDropdownItems"
@@ -54,6 +55,7 @@ export default {
     'typedColumns',
     'globalSearchEnabled',
     'selectable',
+    'mode',
   ],
   watch: {
     columns: {
@@ -74,7 +76,7 @@ export default {
     // make sure that there is atleast 1 column
     // that requires filtering
     hasFilterRow() {
-      if (!this.globalSearchEnabled) {
+      if (this.mode === 'remote' || !this.globalSearchEnabled) {
         for (let i = 0; i < this.columns.length; i++) {
           const col = this.columns[i];
           if (col.filterOptions && col.filterOptions.enabled) {
@@ -86,6 +88,13 @@ export default {
     },
   },
   methods: {
+    reset(emitEvent = false) {
+      this.columnFilters = {};
+      if (emitEvent) {
+        this.$emit('filter-changed', this.columnFilters);
+      }
+    },
+
     isFilterable(column) {
       return column.filterOptions
         && column.filterOptions.enabled;
@@ -111,6 +120,17 @@ export default {
     getPlaceholder(column) {
       const placeholder = (this.isFilterable(column) && column.filterOptions.placeholder) || `Filter ${column.label}`;
       return placeholder;
+    },
+
+    updateFiltersOnEnter(column, value) {
+      if (this.timer) clearTimeout(this.timer);
+      this.updateFiltersImmediately(column, value);
+    },
+
+    updateFiltersOnKeyup(column, value) {
+      // if the trigger is enter, we don't filter on keyup
+      if (column.filterOptions.trigger === 'enter') return;
+      this.updateFilters(column, value);
     },
 
     // since vue doesn't detect property addition and deletion, we

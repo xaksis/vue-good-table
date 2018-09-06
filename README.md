@@ -1,33 +1,32 @@
 # Vue-good-table
 
-[![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=for-the-badge)](https://www.npmjs.com/package/vue-good-table)
-[![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/releases)
-[![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=for-the-badge)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=flat-square)](https://www.npmjs.com/package/vue-good-table)
+[![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/releases)
+[![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
+[![](https://data.jsdelivr.com/v1/package/npm/vue-good-table/badge)](https://www.jsdelivr.com/package/npm/vue-good-table)
 
-A simple, clean data table for VueJS with essential features like sorting, column filtering, pagination etc
+An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
 
 Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
 
 <a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
-## Upgrade Guide
-Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
+**Follow the project progress live** - [Vue-good-table Project on TimerBit](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
 
+<!-- 
 ### Basic Table
-![Basic Screenshot](README/images/vgt-table.regular.png)
-### Table with grouped rows and column filters
-![Advanced Screenshot](README/images/vgt-table.advanced.png)
+![Basic Screenshot](README/images/vgt-table.regular.png) -->
 
-## Recipes
+<!-- ## Recipes
 Some example recipes for inspiration 
-[vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
-
-## Table of contents
+[vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x)) -->
+<!-- 
+## Table of contents -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
+<!-- 
 - [Getting Started](#getting-started)
   - [Installing](#installing)
   - [Example Usage](#example-usage)
@@ -44,6 +43,7 @@ Some example recipes for inspiration
     - [Column filter option in-depth](#column-filter-option-in-depth)
   - [Table Events](#table-events)
     - [@on-row-click](#on-row-click)
+    - [@on-cell-click](#on-cell-click)
     - [@on-row-mouseenter](#on-row-mouseenter)
     - [@on-row-mouseleave](#on-row-mouseleave)
     - [@on-search](#on-search)
@@ -51,44 +51,75 @@ Some example recipes for inspiration
     - [@on-per-page-change](#on-per-page-change)
     - [@on-sort-change](#on-sort-change)
     - [@on-select-all](#on-select-all)
+    - [@on-column-filter](#on-column-filter)
+    - [@on-selected-rows-change](#on-selected-rows-change)
   - [Style Options](#style-options)
     - [.vgt-table](#vgt-table)
     - [.vgt-table .stripped](#vgt-table-stripped)
     - [.vgt-table .condensed](#vgt-table-condensed)
-- [Theme](#theme)
+- [Themes](#themes)
   - [default](#default)
   - [nocturnal `theme='nocturnal'`](#nocturnal-themenocturnal)
+  - [black-rhino `theme='black-rhino'`](#black-rhino-themeblack-rhino)
 - [Advanced Customization](#advanced-customization)
   - [Custom row template](#custom-row-template)
   - [Custom column headers](#custom-column-headers)
   - [Grouped Rows](#grouped-rows)
+  - [Remote Mode](#remote-mode)
   - [Table Actions Slot](#table-actions-slot)
   - [Empty state slot](#empty-state-slot)
 - [Authors](#authors)
-- [License](#license)
+- [License](#license) -->
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Getting Started
-
-### Installing
+## Installing
 
 Install with npm:
 ```bash
 npm install --save vue-good-table
 ```
 
-Import into project:
-```javascript
-import Vue from 'vue';
+Import globally in app:
 
-import VueGoodTable from 'vue-good-table';
+```javascript
+import VueGoodTablePlugin from 'vue-good-table';
+
 // import the styles 
 import 'vue-good-table/dist/vue-good-table.css'
 
-Vue.use(VueGoodTable);
+Vue.use(VueGoodTablePlugin);
 ```
 
+Import into your component
+```js
+import { VueGoodTable } from 'vue-good-table';
+
+// add to component
+components: {
+  VueGoodTable,
+}
+```
+
+
+##### Example table with grouped rows and column filters
+![Advanced Screenshot](README/images/vgt-table.advanced.png)
+
+## Features
+* [Table Search](https://xaksis.github.io/vue-good-table/guide/configuration/search-options.html)
+* [Sorting](https://xaksis.github.io/vue-good-table/guide/configuration/sort-options.html)
+* [Column Filtering](https://xaksis.github.io/vue-good-table/guide/configuration/column-filter-options.html#filteroptions)
+* [Pagination](https://xaksis.github.io/vue-good-table/guide/configuration/pagination-options.html)
+* [Highly Customizable](https://xaksis.github.io/vue-good-table/guide/advanced/#custom-row-template)
+* [Checkbox Table](https://xaksis.github.io/vue-good-table/guide/advanced/checkbox-table.html)
+* [Grouped Rows Table](https://xaksis.github.io/vue-good-table/guide/advanced/grouped-table.html)
+* [Server Powered Table](https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#why-remote-mode)
+* [Customizable Style and Themes](https://xaksis.github.io/vue-good-table/guide/style-configuration/)
+
+## Upgrade Guide
+Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
+
+<!-- 
 ### Example Usage
 ```html
 <template>
@@ -152,9 +183,8 @@ export default {
   },
 };
 </script>
-```
-This should result in the screenshot seen above
-
+``` -->
+<!-- 
 ## Configuration
 ### Component Options
 #### Table
@@ -209,6 +239,25 @@ Show line number for each row
   :lineNumbers="true">
 </vue-good-table>
 ```
+
+##### mode `String`
+Set mode=`remote` to allow sorting/filtering etc to be powered by server side instead of client side. Setting mode to remote, expects the following workflow:
+
+* pagination, sort, filter, search will emit [Table Events](#table-events) (loading div appears) 
+* setup handlers for each event
+* in the handler call backend endpoints with the table params
+* update rows object with the returned response ( the loading div will disappear once you update the rows object)
+
+for a detailed workflow example check out [The remote mode workflow wiki](https://github.com/xaksis/vue-good-table/wiki/Remote-Mode-Workflow)
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  mode="remote">
+</vue-good-table>
+```
+
 
 #### Sort Options
 ---
@@ -293,14 +342,14 @@ Enable Pagination for table. By default the paginator is created at the bottom o
 ```
 
 ##### paginationOptions.position `String (default: 'bottom')`
-Add pagination on `'top'`, `'bottom'`, or `'both'` (top and bottom) of the table (default position is bottom)
+Add pagination on `'top'` or `'bottom'` (top and bottom) of the table (default position is bottom)
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
   :paginationOptions="{
     enabled: true,
-    position: 'both'
+    position: 'top'
   }">
 </vue-good-table>
 ```
@@ -494,24 +543,20 @@ Object containing select options
 ```html
 <vue-good-table
   @on-select-all="allSelected"
+  @on-selected-rows-change="onSelectedRowsChange"
   @on-row-click="rowSelected"
   :columns="columns"
   :rows="rows"
-  :select-options="{
+  :selectOptions="{
     enabled: true,
+    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
     selectionInfoClass: 'custom-class',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
   }">
  ```
 
- you can also programmatically get selected rows at any time by putting a `ref` on the table and then doing
- 
- ```html
- this.$refs['my-table'].selectedRows;
- ```
-
-Check out [a working example](https://jsfiddle.net/aks9800/keLjcssn/) for details
+ you can get the selectedRows listening the [@on-selected-rows-change](#on-selected-rows-change) event.
 
 
 #### Grouped Row Options
@@ -567,7 +612,11 @@ myStyleFn(row){
 ```      
 
 ##### theme `String`
-Allows using other themes. Currently there is one other theme - 'nocturnal'
+Allows using other themes. 
+Included themes: 
+* [nocturnal](#nocturnal-themenocturnal)
+* [black-rhino](#black-rhino-themeblack-rhino)
+
 ```html
 <vue-good-table
   :columns="columns"
@@ -621,6 +670,7 @@ type of column. default: 'text'. This determines the formatting for the column a
 * _number_ - right aligned
 * _decimal_ - right aligned, 2 decimal places
 * _percentage_ - expects a decimal like 0.03 and formats it as 3.00%
+* _boolean_ - right aligned
 * _date_ - expects a string representation of date eg `'20170530'`. You should also specify [dateInputFormat](#dateinputformat) and [dateOutputFormat](dateoutputformat)
 
 ```javascript
@@ -661,7 +711,7 @@ custom sort function. If you want to supply your own sort function you can use t
 
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Name',
     field: 'name',
@@ -672,7 +722,12 @@ column: [
 ],
 // in methods
 methods: {
-  sortFn(x, y, col) {
+  sortFn(x, y, col, rowX, rowY) {
+    // x - row1 value for column
+    // y - row2 value for column
+    // col - column being sorted
+    // rowX - row object for row1
+    // rowY - row object for row2
     return (x < y ? -1 : (x > y ? 1 : 0));
   }
 }
@@ -683,7 +738,7 @@ Allows for custom format of values, <code>function(value)</code>, should return 
 
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Salary',
     field: 'salary',
@@ -703,7 +758,7 @@ indicates whether this column will require html rendering.
 > The preferred way of creating columns that have html is by [using slots](#custom-row-template)
 ```javascript
 // in data
-column: [
+columns: [
   {
     label: 'Action',
     field: 'btn',
@@ -795,11 +850,12 @@ columns: [
     field: 'user_name',
     filterOptions: {
   	  enabled: true, // enable filter for this column
-	  placeholder: 'Filter This Thing', // placeholder for filter input
-	  filterValue: 'Jane', // initial populated value for this filter
-	  filterDropdownItems: [], // dropdown (with selected values) instead of text input
-	  filterFn: this.columnFilterFn, //custom filter function that 
-	},
+      placeholder: 'Filter This Thing', // placeholder for filter input
+      filterValue: 'Jane', // initial populated value for this filter
+      filterDropdownItems: [], // dropdown (with selected values) instead of text input
+      filterFn: this.columnFilterFn, //custom filter function that
+      trigger: 'enter', //only trigger on enter not on keyup 
+    },
   },
   // ...
 ]
@@ -846,11 +902,31 @@ event emitted on table row click
  ```
  ```javascript
  methods: {
-   onRowClick(row, pageIndex, selected) {
-     // row - row object 
-     // pageIndex - index of this row on the current page.
-     // selected - if selection is enabled this argument 
+   onRowClick(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
+     // params.selected - if selection is enabled this argument 
      // indicates selected or not
+     // params.event - click event
+   }
+ }
+ ```
+
+ #### @on-cell-click
+event emitted on table cell click
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-cell-click="onCellClick">
+ ```
+ ```javascript
+ methods: {
+   onCellClick(params) {
+     // params.row - row object 
+     // params.column - column object
+     // params.rowIndex - index of this row on the current page.
+     // params.event - click event
    }
  }
  ```
@@ -865,9 +941,9 @@ event emitted on row mouseenter
  ```
  ```javascript
  methods: {
-   onRowMouseover(row, pageIndex) {
-     // row - row object 
-     // pageIndex - index of this row on the current page.
+   onRowMouseover(params) {
+     // params.row - row object 
+     // params.pageIndex - index of this row on the current page.
    }
  }
  ```
@@ -899,9 +975,9 @@ event emitted on global search (when global search is enabled)
  ```
  ```javascript
  methods: {
-   onSearch(searchTerm, rowCount) {
-     // searchTerm - term being searched for
-     // rowCount - number of rows that match search
+   onSearch(params) {
+     // params.searchTerm - term being searched for
+     // params.rowCount - number of rows that match search
    }
  }
  ```
@@ -916,10 +992,10 @@ event emitted on pagination page change (when pagination is enabled)
  ```
  ```javascript
  methods: {
-   onPageChange(currentPage, currentPerPage, total) {
-     // currentPage - current page that pagination is at
-     // currentPerPage - number of items per page
-     // total - total number of items in the table
+   onPageChange(params) {
+     // params.currentPage - current page that pagination is at
+     // params.currentPerPage - number of items per page
+     // params.total - total number of items in the table
    }
  }
  ```
@@ -934,10 +1010,10 @@ event emitted on per page dropdown change (when pagination is enabled)
 ```
 ```javascript
 methods: {
-  onPageChange(currentPage, currentPerPage, total) {
-    // currentPage - current page that pagination is at
-    // currentPerPage - number of items per page
-    // total - total number of items in the table
+  onPageChange(params) {
+    // params.currentPage - current page that pagination is at
+    // params.currentPerPage - number of items per page
+    // params.total - total number of items in the table
   }
 }
 ```
@@ -952,9 +1028,9 @@ event emitted on sort change
 ```
 ```javascript
 methods: {
-  onSortChange(sortType, columnIndex) {
-    // sortType - ascending or descending
-    // columnIndex - index of column being sorted
+  onSortChange(params) {
+    // params.sortType - ascending or descending
+    // params.columnIndex - index of column being sorted
   }
 }
 ```
@@ -970,9 +1046,42 @@ event emitted when all is selected (only emitted for checkbox tables)
  ```
  ```javascript
  methods: {
-   onSelectAll(selected, selectedRows) {
-     // selected - whether the select-all checkbox is checked or unchecked
-     // selectedRows - all rows that are selected (this page)
+   onSelectAll(params) {
+     // params.selected - whether the select-all checkbox is checked or unchecked
+     // params.selectedRows - all rows that are selected (this page)
+   }
+ }
+ ```
+ 
+ #on-selected-rows-change
+ event emitted each time selectedRows has changed
+ ```html
+ <vue-good-table
+   :columns="columns"
+   :rows="rows"
+   @on-selected-rows-change="onSelectedRowsChange">
+  ```
+  ```javascript
+  methods: {
+    onSelectedRowsChange(params) {
+      // params.selectedRows - all rows that are selected (this page)
+    }
+  }
+  ```
+ 
+ #### @on-column-filter
+event emitted when column is filtered (only emitted for remote mode)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-column-filter="onColumnFilter">
+ ```
+ ```javascript
+ methods: {
+   onColumnFilter(params) {
+     // params.columnFilters - filter values for each column in the following format:
+     // {field1: 'filterTerm', field3: 'filterTerm2')
    }
  }
  ```
@@ -991,11 +1100,14 @@ Vue-good-table allows providing your own css classes for the table via **styleCl
 ![Table Bordered Striped Screenshot](README/images/vgt-table.condensed.png)
 
 
-## Theme
-Vue-good-table currently comes in two themes
+## Themes
+
 ### default
 ### nocturnal `theme='nocturnal'`
 ![Nocturnal Theme Screenshot](README/images/vgt-table.nocturnal.png)
+
+### black-rhino `theme='black-rhino'`
+![Black Rhino Theme Screenshot](README/images/vgt-table.black-rhino.png)
 
 ## Advanced Customization
 
@@ -1096,6 +1208,9 @@ you can check out some live examples on the recipes page:
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
 
 
+### Remote Mode
+Sometimes you might want to power the table from the backend. Where filtering, paging, sorting etc are done serverside. In order to accomplish that you can follow [The remote mode workflow wiki](https://github.com/xaksis/vue-good-table/wiki/Remote-Mode-Workflow)
+
 ### Table Actions Slot
 If you want to add table specific actions like a print button for example, you can use the Table Actions Slot. If you have global search enabled, the action panel will show up to the right of that.
 
@@ -1121,7 +1236,7 @@ You can provide html for empty state slot as well. Example:
     This will show up when there are no columns
   </div>
 </vue-good-table>
-```
+``` -->
 
 ## Authors
 

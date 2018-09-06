@@ -3,11 +3,11 @@
 
   .vgt-table{
     td, th:not(.line-numbers) {
-      padding: .75rem .75rem .75rem 1.5rem;
+      padding: .75em .75em .75em 1.5em;
     }
     thead th, &.condensed thead th {
-      padding-left:  1.5rem;
-      padding-right:  .75rem;
+      padding-left:  1.5em;
+      padding-right:  .75em;
     }
     th.sorting:after,
     th.sorting-asc:after{

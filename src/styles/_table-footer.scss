@@ -1,6 +1,6 @@
 .vgt-wrap__footer{
   color: $text-color;
-  padding:  1rem;
+  padding:  1em;
   border: 1px solid $border-color;
   background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
   .footer__row-count{
@@ -31,7 +31,7 @@
   }
   .footer__navigation{
     font-size: 14px;
-    &__page-btn, &__info{
+    &__page-btn, &__info, &__page-info{
       display: inline-block;
       vertical-align: middle;
     }
@@ -82,9 +82,19 @@
         }
       }
     }
-    &__info{
+    &__info, &__page-info{
+      display: inline-block;
       color: $secondary-text-color;
       margin:  0px 16px;
+    }
+    &__page-info{
+      &__current-entry{
+        width: 30px;
+        text-align: center;
+        display: inline-block;
+        margin: 0px 10px;
+        font-weight: bold;
+      }
     }
   }
 }

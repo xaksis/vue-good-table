@@ -1,9 +1,11 @@
 // base table styles
 @import './variables';
 @import './utils';
+@import './wrap';
 @import './table';
 @import './table-th';
 @import './input';
+@import './loading';
 
 // table enhancements
 @import './bordered';
@@ -19,3 +21,4 @@
 
 //themes
 @import './nocturnal/nocturnal';
+@import './black-rhino/black-rhino';
