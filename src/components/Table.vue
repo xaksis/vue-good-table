@@ -1006,7 +1006,7 @@ export default {
         let result = obj;
         const splitter = selector.split('.');
         for (let i = 0; i < splitter.length; i++) {
-          if (typeof result === 'undefined') {
+          if (typeof result === 'undefined' || result === null) {
             return undefined;
           }
           result = result[splitter[i]];
