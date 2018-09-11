@@ -168,7 +168,7 @@
                 @click="onCellClicked(row, column, index, $event)"
                 v-for="(column, i) in columns"
                 :key="i"
-                :class="getClasses(i, 'td')"
+                :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field">
                 <slot
                   name="table-row"
@@ -525,7 +525,7 @@ export default {
 
     fullColspan() {
       let fullColspan = 0;
-      for (let i=0; i < this.columns.length; i += 1) {
+      for (let i = 0; i < this.columns.length; i += 1) {
         if (!this.columns[i].hidden) {
           fullColspan += 1;
         }
@@ -1065,15 +1065,23 @@ export default {
     },
 
     // Get classes for the given column index & element.
-    getClasses(index, element) {
+    getClasses(index, element, row) {
       const { typeDef, [`${element}Class`]: custom } = this.typedColumns[index];
       let { isRight } = typeDef;
       if (this.rtl) isRight = true;
+
       const classes = {
         'vgt-right-align': isRight,
         'vgt-left-align': !isRight,
-        [custom]: !!custom,
       };
+
+      // for td we need to check if value is
+      // a function.
+      if (typeof custom === 'function') {
+        classes[custom(row)] = true;
+      } else if (typeof custom === 'string') {
+        classes[custom] = true;
+      }
       return classes;
     },
 

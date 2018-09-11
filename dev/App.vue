@@ -57,6 +57,7 @@ export default {
         {
           label: 'Name',
           field: 'name',
+          tdClass: this.tdClassFunc,
           filterOptions: {
             enabled: true,
             placeholder: 'All',
@@ -155,6 +156,12 @@ export default {
     };
   },
   methods: {
+    tdClassFunc(row) {
+      if (row.age > 50) {
+        return 'red';
+      }
+      return 'green';
+    },
     getRowStyle() {
       return '';
     },
@@ -310,6 +317,12 @@ export default {
   }
   *{
     font-family: 'Open Sans';
+  }
+  .red{
+    background-color: red;
+  }
+  .green{
+    background-color: green;
   }
   /* .vgt-selection-info-row.info-custom{
     background: red;

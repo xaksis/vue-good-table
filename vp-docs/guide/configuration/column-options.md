@@ -228,7 +228,7 @@ columns: [
 
 ## tdClass
 
-type `String`
+type `String` or `Function`
 
 provide custom class(es) to the table cells
 ```javascript
@@ -240,6 +240,27 @@ columns: [
   },
   // ...
 ]
+```
+or
+
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    tdClass: this.tdClassFunc,
+  },
+  // ...
+]
+// and later
+methods: {
+  tdClassFunc(row) {
+    if (row.field > 50) {
+      return 'red-class';
+    }
+    return 'green-class';
+  },
+}
 ```
 
 ## globalSearchDisabled
