@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.14.0
+ * vue-good-table v2.14.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -6047,15 +6047,15 @@
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow: function hasFilterRow() {
-        if (this.mode === 'remote' || !this.globalSearchEnabled) {
-          for (var i = 0; i < this.columns.length; i++) {
-            var col = this.columns[i];
+        // if (this.mode === 'remote' || !this.globalSearchEnabled) {
+        for (var i = 0; i < this.columns.length; i++) {
+          var col = this.columns[i];
 
-            if (col.filterOptions && col.filterOptions.enabled) {
-              return true;
-            }
+          if (col.filterOptions && col.filterOptions.enabled) {
+            return true;
           }
-        }
+        } // }
+
 
         return false;
       }
@@ -11324,6 +11324,8 @@
       searchOptions: {
         handler: function handler() {
           if (this.searchOptions.externalQuery !== undefined && this.searchOptions.externalQuery !== this.searchTerm) {
+            //* we need to set searchTerm to externalQuery first.
+            this.externalSearchQuery = this.searchOptions.externalQuery;
             this.handleSearch();
           }
 
