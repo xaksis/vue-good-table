@@ -426,6 +426,8 @@ export default {
       handler() {
         if (this.searchOptions.externalQuery !== undefined
           && this.searchOptions.externalQuery !== this.searchTerm) {
+          //* we need to set searchTerm to externalQuery first.
+          this.externalSearchQuery = this.searchOptions.externalQuery;
           this.handleSearch();
         }
         this.initializeSearch();

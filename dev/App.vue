@@ -12,6 +12,7 @@
       @on-select-all="onSelectAll"
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
+      @on-search="onSearch"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
@@ -36,6 +37,7 @@
       }"
       :search-options="{
         enabled: true,
+        externalQuery: searchTerm,
       }">
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">
