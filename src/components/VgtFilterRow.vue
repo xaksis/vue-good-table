@@ -76,14 +76,14 @@ export default {
     // make sure that there is atleast 1 column
     // that requires filtering
     hasFilterRow() {
-      if (this.mode === 'remote' || !this.globalSearchEnabled) {
-        for (let i = 0; i < this.columns.length; i++) {
-          const col = this.columns[i];
-          if (col.filterOptions && col.filterOptions.enabled) {
-            return true;
-          }
+      // if (this.mode === 'remote' || !this.globalSearchEnabled) {
+      for (let i = 0; i < this.columns.length; i++) {
+        const col = this.columns[i];
+        if (col.filterOptions && col.filterOptions.enabled) {
+          return true;
         }
       }
+      // }
       return false;
     },
   },

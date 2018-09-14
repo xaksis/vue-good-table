@@ -27,9 +27,15 @@
       }"
       :rowStyleClass="getRowStyle"
       styleClass="vgt-table bordered"
-      :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
+      :sort-options="{
+        enabled: true,
+        initialSortBy: [
+          {field: 'name', type: 'asc'},
+          {field: 'age', type: 'desc'}
+        ],
+      }"
       :search-options="{
-        enabled: false,
+        enabled: true,
       }">
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">
@@ -68,6 +74,9 @@ export default {
           label: 'Age',
           field: 'age',
           type: 'number',
+          filterOptions: {
+            enabled: true,
+          },
         },
         {
           label: 'Created On',
@@ -139,7 +148,7 @@ export default {
         {
           id: 7,
           name: 'Jane',
-          age: 24,
+          age: 20,
           createdAt: '2013-09-21',
           score: null,
           bool: 'false',

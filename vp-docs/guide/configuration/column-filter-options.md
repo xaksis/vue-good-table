@@ -27,11 +27,7 @@ columns: [
 ## enabled
 
 type: `Boolean`
-Switch to enable column filter. 
-
-::: warning
-Column filters cannot be used if global search is enabled
-:::
+Switch to enable column filter.
 
 ## placeholder
 
