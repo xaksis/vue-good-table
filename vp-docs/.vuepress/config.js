@@ -38,7 +38,7 @@ module.exports = {
           ]
         },
         {
-          title: 'Avanced Configuration',
+          title: 'Advanced Configuration',
           collapsable: false,
           children: [
             '/guide/advanced/',
