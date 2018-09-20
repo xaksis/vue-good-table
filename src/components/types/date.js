@@ -1,4 +1,7 @@
-import { format, parse, isValid, compareAsc } from 'date-fns';
+var format = require('date-fns/format');
+var parse = require('date-fns/parse');
+var isValid = require('date-fns/isValid');
+var compareAsc = require('date-fns/compareAsc');
 import clone from 'lodash.clone';
 import def from './default';
 
