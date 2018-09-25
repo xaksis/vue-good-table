@@ -105,8 +105,12 @@ export default {
 
     // Current displayed items
     paginatedInfo() {
-      const first = ((this.currentPage - 1) * this.currentPerPage) + 1;
+      let first = ((this.currentPage - 1) * this.currentPerPage) + 1;
       const last = Math.min(this.total, this.currentPage * this.currentPerPage);
+
+      if (last === 0) {
+        first = 0;
+      }
 
       return `${first} - ${last} ${this.ofText} ${this.total}`;
     },
