@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.13.3
+ * vue-good-table v2.14.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -23,21 +23,6 @@
     }
 
     return _typeof(obj);
-  }
-
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-
-    return obj;
   }
 
   function _toConsumableArray(arr) {
@@ -6062,15 +6047,15 @@
       // make sure that there is atleast 1 column
       // that requires filtering
       hasFilterRow: function hasFilterRow() {
-        if (this.mode === 'remote' || !this.globalSearchEnabled) {
-          for (var i = 0; i < this.columns.length; i++) {
-            var col = this.columns[i];
+        // if (this.mode === 'remote' || !this.globalSearchEnabled) {
+        for (var i = 0; i < this.columns.length; i++) {
+          var col = this.columns[i];
 
-            if (col.filterOptions && col.filterOptions.enabled) {
-              return true;
-            }
+          if (col.filterOptions && col.filterOptions.enabled) {
+            return true;
           }
-        }
+        } // }
+
 
         return false;
       }
@@ -11101,7 +11086,7 @@
           })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
             return !column.hidden && column.field ? _c('td', {
               key: i,
-              class: _vm.getClasses(i, 'td'),
+              class: _vm.getClasses(i, 'td', row),
               on: {
                 "click": function click($event) {
                   _vm.onCellClicked(row, column, index$$1, $event);
@@ -11339,6 +11324,8 @@
       searchOptions: {
         handler: function handler() {
           if (this.searchOptions.externalQuery !== undefined && this.searchOptions.externalQuery !== this.searchTerm) {
+            //* we need to set searchTerm to externalQuery first.
+            this.externalSearchQuery = this.searchOptions.externalQuery;
             this.handleSearch();
           }
 
@@ -11874,7 +11861,7 @@
           var splitter = selector.split('.');
 
           for (var i = 0; i < splitter.length; i++) {
-            if (typeof result === 'undefined') {
+            if (typeof result === 'undefined' || result === null) {
               return undefined;
             }
 
@@ -11937,18 +11924,24 @@
         return isSortable;
       },
       // Get classes for the given column index & element.
-      getClasses: function getClasses(index$$1, element) {
+      getClasses: function getClasses(index$$1, element, row) {
         var _this$typedColumns$in = this.typedColumns[index$$1],
             typeDef = _this$typedColumns$in.typeDef,
             custom = _this$typedColumns$in["".concat(element, "Class")];
 
         var isRight = typeDef.isRight;
         if (this.rtl) isRight = true;
-
-        var classes = _defineProperty({
+        var classes = {
           'vgt-right-align': isRight,
           'vgt-left-align': !isRight
-        }, custom, !!custom);
+        }; // for td we need to check if value is
+        // a function.
+
+        if (typeof custom === 'function') {
+          classes[custom(row)] = true;
+        } else if (typeof custom === 'string') {
+          classes[custom] = true;
+        }
 
         return classes;
       },

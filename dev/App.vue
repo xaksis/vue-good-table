@@ -12,6 +12,7 @@
       @on-select-all="onSelectAll"
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
+      @on-search="onSearch"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
@@ -27,9 +28,16 @@
       }"
       :rowStyleClass="getRowStyle"
       styleClass="vgt-table bordered"
-      :sort-options="{enabled: true, initialSortBy: {field: 'name', type: 'asc'}}"
+      :sort-options="{
+        enabled: true,
+        initialSortBy: [
+          {field: 'name', type: 'asc'},
+          {field: 'age', type: 'desc'}
+        ],
+      }"
       :search-options="{
-        enabled: false,
+        enabled: true,
+        externalQuery: searchTerm,
       }">
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">
@@ -57,6 +65,7 @@ export default {
         {
           label: 'Name',
           field: 'name',
+          tdClass: this.tdClassFunc,
           filterOptions: {
             enabled: true,
             placeholder: 'All',
@@ -67,6 +76,9 @@ export default {
           label: 'Age',
           field: 'age',
           type: 'number',
+          filterOptions: {
+            enabled: true,
+          },
         },
         {
           label: 'Created On',
@@ -138,7 +150,7 @@ export default {
         {
           id: 7,
           name: 'Jane',
-          age: 24,
+          age: 20,
           createdAt: '2013-09-21',
           score: null,
           bool: 'false',
@@ -155,6 +167,12 @@ export default {
     };
   },
   methods: {
+    tdClassFunc(row) {
+      if (row.age > 50) {
+        return 'red';
+      }
+      return 'green';
+    },
     getRowStyle() {
       return '';
     },
@@ -310,6 +328,12 @@ export default {
   }
   *{
     font-family: 'Open Sans';
+  }
+  .red{
+    background-color: red;
+  }
+  .green{
+    background-color: green;
   }
   /* .vgt-selection-info-row.info-custom{
     background: red;
