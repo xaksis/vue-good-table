@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.14.1
+ * vue-good-table v2.14.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -14,7 +14,6 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var diacriticless = _interopDefault(require('diacriticless'));
 var cloneDeep = _interopDefault(require('lodash.clonedeep'));
 var assign = _interopDefault(require('lodash.assign'));
-var dateFns = require('date-fns');
 var clone = _interopDefault(require('lodash.clone'));
 var each = _interopDefault(require('lodash.foreach'));
 var filter = _interopDefault(require('lodash.filter'));
@@ -350,6 +349,11 @@ var VgtPagination = {
     paginatedInfo: function paginatedInfo() {
       var first = (this.currentPage - 1) * this.currentPerPage + 1;
       var last = Math.min(this.total, this.currentPage * this.currentPerPage);
+
+      if (last === 0) {
+        first = 0;
+      }
+
       return "".concat(first, " - ").concat(last, " ").concat(this.ofText, " ").concat(this.total);
     },
     // Can go to next page
@@ -967,13 +971,20 @@ var VgtHeaderRow = {
   components: {}
 };
 
+var format = require('date-fns/format');
+
+var parse = require('date-fns/parse');
+
+var isValid = require('date-fns/isValid');
+
+var compareAsc = require('date-fns/compareAsc');
 var date = clone(def);
 date.isRight = true;
 
 date.compare = function (x, y, column) {
   function cook(d) {
     if (column && column.dateInputFormat) {
-      return dateFns.parse("".concat(d), "".concat(column.dateInputFormat), new Date());
+      return parse("".concat(d), "".concat(column.dateInputFormat), new Date());
     }
 
     return d;
@@ -982,22 +993,22 @@ date.compare = function (x, y, column) {
   x = cook(x);
   y = cook(y);
 
-  if (!dateFns.isValid(x)) {
+  if (!isValid(x)) {
     return -1;
   }
 
-  if (!dateFns.isValid(y)) {
+  if (!isValid(y)) {
     return 1;
   }
 
-  return dateFns.compareAsc(x, y);
+  return compareAsc(x, y);
 };
 
 date.format = function (v, column) {
   if (v === undefined || v === null) return ''; // convert to date
 
-  var date = dateFns.parse(v, column.dateInputFormat, new Date());
-  return dateFns.format(date, column.dateOutputFormat);
+  var date = parse(v, column.dateInputFormat, new Date());
+  return format(date, column.dateOutputFormat);
 };
 
 var date$1 = /*#__PURE__*/Object.freeze({
