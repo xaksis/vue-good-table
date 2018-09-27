@@ -1,7 +1,7 @@
-import * as format from 'date-fns/format';
-import * as parse from 'date-fns/parse';
-import * as isValid from 'date-fns/isValid';
-import * as compareAsc from 'date-fns/compareAsc';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
+import isValid from 'date-fns/isValid';
+import compareAsc from 'date-fns/compareAsc';
 import clone from 'lodash.clone';
 import def from './default';
 

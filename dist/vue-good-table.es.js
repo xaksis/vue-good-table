@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.14.2
+ * vue-good-table v2.14.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8,6 +8,10 @@
 import diacriticless from 'diacriticless';
 import cloneDeep from 'lodash.clonedeep';
 import assign from 'lodash.assign';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
+import isValid from 'date-fns/isValid';
+import compareAsc from 'date-fns/compareAsc';
 import clone from 'lodash.clone';
 import each from 'lodash.foreach';
 import filter from 'lodash.filter';
@@ -51,7 +55,7 @@ var escapeRegExp = function escapeRegExp(str) {
 };
 
 var def = {
-  format: function format(x) {
+  format: function format$$1(x) {
     return x;
   },
   filterPredicate: function filterPredicate(rowval, filter$$1) {
@@ -965,13 +969,6 @@ var VgtHeaderRow = {
   components: {}
 };
 
-var format = require('date-fns/format');
-
-var parse = require('date-fns/parse');
-
-var isValid = require('date-fns/isValid');
-
-var compareAsc = require('date-fns/compareAsc');
 var date = clone(def);
 date.isRight = true;
 

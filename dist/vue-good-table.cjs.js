@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.14.2
+ * vue-good-table v2.14.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -14,6 +14,10 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var diacriticless = _interopDefault(require('diacriticless'));
 var cloneDeep = _interopDefault(require('lodash.clonedeep'));
 var assign = _interopDefault(require('lodash.assign'));
+var format = _interopDefault(require('date-fns/format'));
+var parse = _interopDefault(require('date-fns/parse'));
+var isValid = _interopDefault(require('date-fns/isValid'));
+var compareAsc = _interopDefault(require('date-fns/compareAsc'));
 var clone = _interopDefault(require('lodash.clone'));
 var each = _interopDefault(require('lodash.foreach'));
 var filter = _interopDefault(require('lodash.filter'));
@@ -57,7 +61,7 @@ var escapeRegExp = function escapeRegExp(str) {
 };
 
 var def = {
-  format: function format(x) {
+  format: function format$$1(x) {
     return x;
   },
   filterPredicate: function filterPredicate(rowval, filter$$1) {
@@ -971,13 +975,6 @@ var VgtHeaderRow = {
   components: {}
 };
 
-var format = require('date-fns/format');
-
-var parse = require('date-fns/parse');
-
-var isValid = require('date-fns/isValid');
-
-var compareAsc = require('date-fns/compareAsc');
 var date = clone(def);
 date.isRight = true;
 
