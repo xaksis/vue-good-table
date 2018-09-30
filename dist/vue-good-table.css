@@ -22,7 +22,8 @@
 
 .vgt-responsive {
   width: 100%;
-  overflow-x: auto; }
+  overflow-x: auto;
+  position: relative; }
 
 .vgt-text-disabled {
   color: #909399; }
