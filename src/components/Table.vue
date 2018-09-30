@@ -60,37 +60,40 @@
           </slot>
         </div>
       </div>
-      <table
-        v-if="fixedHeader"
-        class="vgt-fixed-header"
-        :class="tableStyleClasses">
-        <!-- Table header -->
-        <thead is="vgt-table-header"
-          ref="table-header-secondary"
-          @on-toggle-select-all="toggleSelectAll"
-          @on-sort-change="sort"
-          @filter-changed="filterRows"
-          :columns="columns"
-          :line-numbers="lineNumbers"
-          :selectable="selectable"
-          :all-selected="allSelected"
-          :all-selected-indeterminate="allSelectedIndeterminate"
-          :mode="mode"
-          :typed-columns="typedColumns"
-          :sort-column="sortColumn"
-          :sort-type="sortType"
-          :isSortableColumn="isSortableColumn"
-          :getClasses="getClasses"
-          :searchEnabled="searchEnabled"
-          :paginated="paginated"
-          :table-ref="$refs.table">
-          <template slot="table-column" slot-scope="props">
-            <slot name="table-column" :column="props.column">
-              <span>{{props.column.label}}</span>
-            </slot>
-          </template>
-        </thead>
-      </table>
+      <div
+        :class="{'vgt-responsive': responsive}">
+        <table
+          v-if="fixedHeader"
+          class="vgt-fixed-header"
+          :class="tableStyleClasses">
+          <!-- Table header -->
+          <thead is="vgt-table-header"
+            ref="table-header-secondary"
+            @on-toggle-select-all="toggleSelectAll"
+            @on-sort-change="sort"
+            @filter-changed="filterRows"
+            :columns="columns"
+            :line-numbers="lineNumbers"
+            :selectable="selectable"
+            :all-selected="allSelected"
+            :all-selected-indeterminate="allSelectedIndeterminate"
+            :mode="mode"
+            :typed-columns="typedColumns"
+            :sort-column="sortColumn"
+            :sort-type="sortType"
+            :isSortableColumn="isSortableColumn"
+            :getClasses="getClasses"
+            :searchEnabled="searchEnabled"
+            :paginated="paginated"
+            :table-ref="$refs.table">
+            <template slot="table-column" slot-scope="props">
+              <slot name="table-column" :column="props.column">
+                <span>{{props.column.label}}</span>
+              </slot>
+            </template>
+          </thead>
+        </table>
+      </div>
       <div
         :class="{'vgt-responsive': responsive}"
         :style="wrapperStyles">

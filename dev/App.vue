@@ -17,10 +17,12 @@
       :rows="rows"
       theme="black-rhino"
       :line-numbers="true"
+      max-height="200px"
+      :fixed-header="true"
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
-        enabled: true,
+        enabled: false,
       }"
       :select-options="{
         enabled: false,
