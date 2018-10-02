@@ -17,6 +17,7 @@
       :rows="rows"
       theme="black-rhino"
       :line-numbers="true"
+      :resizeable="true"
       max-height="200px"
       :fixed-header="true"
       :pagination-options="{

@@ -4,6 +4,7 @@
     vertical-align: middle;
     position: relative;
     &.sorting{
+    user-select: none;
       cursor: pointer;
     }
     &.sorting:after  {
@@ -35,6 +36,21 @@
   }
   & th.filter-th {
     padding: .75em .75em .75em .75em;
+
+  & th .vgt-handle {
+    background: transparent;
+    position: absolute;
+    right: -6px;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    z-index: 2;
+    overflow: hidden;
+    cursor: ew-resize;
+  }
+
+  & th:last-child .vgt-handle {
+    display: none;
   }
 
   th.vgt-row-header{

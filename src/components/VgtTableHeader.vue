@@ -18,6 +18,7 @@
       <slot name="table-column" :column="column">
         <span>{{column.label}}</span>
       </slot>
+      <div v-if="resizeable" class="vgt-handle" @mousedown="handleResizeStart">&nbsp;</div>
     </th>
   </tr>
   <tr
@@ -89,6 +90,11 @@ export default {
     tableRef: {},
 
     paginated: {},
+
+    resizeable: {
+      default: false,
+      type: Boolean
+    }
   },
   watch: {
     tableRef: {
@@ -108,6 +114,8 @@ export default {
   },
   data() {
     return {
+      resizingTh: null,
+      resizingThOffset: 0,
       checkBoxThStyle: {},
       lineNumberThStyle: {},
       columnStyles: [],
@@ -123,6 +131,7 @@ export default {
       this.$emit('on-toggle-select-all');
     },
     sort(index) {
+      if (this.resizingTh) return;
       this.$emit('on-sort-change', index);
     },
     getHeaderClasses(column, index) {
@@ -137,6 +146,26 @@ export default {
 
     filterRows(columnFilters) {
       this.$emit('filter-changed', columnFilters);
+    },
+
+    handleResizeStart(e) {
+      let th = e.target.closest('th');
+      this.resizingTh = th;
+      this.resizingThOffset = th.offsetWidth - e.pageX;
+    },
+
+    handleResizeMove(e) {
+      if (!this.resizingThOffset || !this.resizingTh) return;
+      this.resizingTh.style.width = this.resizingThOffset + e.pageX - 24 + 'px';
+    },
+
+    handleResizeStop(e) {
+      this.resizingThOffset = undefined;
+      // Leave this for 200ms to prevent accidental sort click
+      // after resizing
+      setTimeout(() => {
+        this.resizingTh = undefined;
+      }, 200);
     },
 
     getWidthStyle(dom) {
@@ -188,6 +217,9 @@ export default {
     },
   },
   mounted() {
+    // These are attached to body so user can move mouse anywhere on screen during drag
+    document.body.addEventListener('mousemove', this.handleResizeMove);
+    document.body.addEventListener('mouseup', this.handleResizeStop);
   },
   components: {
     'vgt-filter-row': VgtFilterRow,

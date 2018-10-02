@@ -74,6 +74,7 @@
             @filter-changed="filterRows"
             :columns="columns"
             :line-numbers="lineNumbers"
+            :resizeable="resizeable"
             :selectable="selectable"
             :all-selected="allSelected"
             :all-selected-indeterminate="allSelectedIndeterminate"
@@ -106,6 +107,7 @@
             @filter-changed="filterRows"
             :columns="columns"
             :line-numbers="lineNumbers"
+            :resizeable="resizeable"
             :selectable="selectable"
             :all-selected="allSelected"
             :all-selected-indeterminate="allSelectedIndeterminate"
@@ -287,6 +289,7 @@ export default {
     columns: { },
     rows: { },
     lineNumbers: { default: false },
+    resizeable: { default: false },
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
