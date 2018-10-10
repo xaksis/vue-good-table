@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.14.6
+ * vue-good-table v2.14.7
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -5519,7 +5519,7 @@
     compare: function compare(x, y) {
       function cook(d) {
         if (typeof d === 'undefined' || d === null) return '';
-        return d.toLowerCase();
+        return diacriticless(d.toLowerCase());
       }
 
       x = cook(x);
@@ -11764,7 +11764,9 @@
         }
       }, [_vm._t("emptystate", [_c('div', {
         staticClass: "vgt-center-align vgt-text-disabled"
-      }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", [_c('vgt-pagination', {
+      }, [_vm._v(" No data for table ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _c('div', {
+        staticClass: "vgt-wrap__actions-footer"
+      }, [_vm._t("table-actions-bottom")], 2), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", [_c('vgt-pagination', {
         ref: "paginationBottom",
         attrs: {
           "perPage": _vm.perPage,

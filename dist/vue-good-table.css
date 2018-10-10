@@ -232,6 +232,9 @@ table.vgt-table {
     display: inline-block;
     margin-left: 10px; }
 
+.vgt-wrap__actions-footer {
+  border: 1px solid #DCDFE6; }
+
 .vgt-wrap__footer {
   color: #606266;
   padding: 1em;
