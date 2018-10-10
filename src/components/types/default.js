@@ -25,7 +25,7 @@ export default {
   compare(x, y) {
     function cook(d) {
       if (typeof d === 'undefined' || d === null) return '';
-      return d.toLowerCase();
+      return diacriticless(d.toLowerCase());
     }
     x = cook(x);
     y = cook(y);

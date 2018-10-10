@@ -13,12 +13,11 @@
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
       @on-search="onSearch"
+      @on-row-click="onClick"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
       :line-numbers="true"
-      max-height="200px"
-      :fixed-header="true"
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
@@ -28,7 +27,6 @@
         enabled: false,
         selectOnCheckboxOnly: false,
       }"
-      :rowStyleClass="getRowStyle"
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
@@ -62,6 +60,7 @@ export default {
   name: 'test',
   data() {
     return {
+      rowStyleClass: 'red',
       searchTerm: '',
       columns: [
         {
@@ -119,7 +118,7 @@ export default {
         },
         {
           id: 3,
-          name: 'Susan',
+          name: 'Angel',
           age: 16,
           createdAt: '2011-10-30',
           score: 0.03343,
@@ -151,7 +150,7 @@ export default {
         },
         {
           id: 7,
-          name: 'Jane',
+          name: 'Ángel',
           age: 20,
           createdAt: '2013-09-21',
           score: null,
@@ -249,6 +248,7 @@ export default {
 
     onClick() {
       console.log('clicked');
+      this.rowStyleClass = 'green';
     },
     addRow() {
       this.rows.push({
