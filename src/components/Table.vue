@@ -253,8 +253,10 @@
 </template>
 
 <script>
+import each from 'lodash.foreach';
 import assign from 'lodash.assign';
 import cloneDeep from 'lodash.clonedeep';
+import filter from 'lodash.filter';
 import diacriticless from 'diacriticless';
 import defaultType from './types/default';
 import VgtPagination from './VgtPagination.vue';
@@ -267,7 +269,7 @@ import * as CoreDataTypes from './types/index';
 
 const dataTypes = {};
 const coreDataTypes = CoreDataTypes.default;
-Object.keys(coreDataTypes).forEach((key) => {
+each(Object.keys(coreDataTypes), (key) => {
   const compName = key.replace(/^\.\//, '').replace(/\.js/, '');
   dataTypes[compName] = coreDataTypes[key].default;
 });
@@ -504,8 +506,8 @@ export default {
 
     selectedPageRows() {
       const selectedRows = [];
-      this.paginated.forEach((headerRow) => {
-        headerRow.children.forEach((row) => {
+      each(this.paginated, (headerRow) => {
+        each(headerRow.children, (row) => {
           if (row.vgtSelected) {
             selectedRows.push(row);
           }
@@ -516,8 +518,8 @@ export default {
 
     selectedRows() {
       const selectedRows = [];
-      this.processedRows.forEach((headerRow) => {
-        headerRow.children.forEach((row) => {
+      each(this.processedRows, (headerRow) => {
+        each(headerRow.children, (row) => {
           if (row.vgtSelected) {
             selectedRows.push(row);
           }
@@ -560,14 +562,14 @@ export default {
     },
     totalRowCount() {
       let total = 0;
-      this.processedRows.forEach((headerRow) => {
+      each(this.processedRows, (headerRow) => {
         total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
     },
     totalPageRowCount() {
       let total = 0;
-      this.paginated.forEach((headerRow) => {
+      each(this.paginated, (headerRow) => {
         total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
@@ -618,12 +620,12 @@ export default {
         // here also we need to de-construct and then
         // re-construct the rows.
         const allRows = [];
-        this.filteredRows.forEach((headerRow) => {
+        each(this.filteredRows, (headerRow) => {
           allRows.push(...headerRow.children);
         });
         const filteredRows = [];
-        allRows.forEach((row) => {
-          this.columns.forEach((col) => {
+        each(allRows, (row) => {
+          each(this.columns, (col) => {
             // if col does not have search disabled,
             if (!col.globalSearchDisabled) {
               // if a search function is provided,
@@ -664,9 +666,9 @@ export default {
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
-        this.filteredRows.forEach((headerRow) => {
+        each(this.filteredRows, (headerRow) => {
           const i = headerRow.vgt_header_id;
-          const children = filteredRows.filter(row => row.vgt_id === i);
+          const children = filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
             const newHeaderRow = cloneDeep(headerRow);
             newHeaderRow.children = children;
@@ -683,7 +685,7 @@ export default {
         (this.searchTrigger !== 'enter' || this.sortChanged)) {
         this.sortChanged = false;
 
-        computedRows.forEach((cRows) => {
+        each(computedRows, (cRows) => {
           cRows.children.sort((x, y) => {
             if (!this.columns[this.sortColumn]) return 0;
 
@@ -724,7 +726,7 @@ export default {
       // for every group, extract the child rows
       // to cater to paging
       let paginatedRows = [];
-      this.processedRows.forEach((childRows) => {
+      each(this.processedRows, (childRows) => {
         paginatedRows.push(...childRows.children);
       });
 
@@ -752,9 +754,9 @@ export default {
       }
       // reconstruct paginated rows here
       const reconstructedRows = [];
-      this.processedRows.forEach((headerRow) => {
+      each(this.processedRows, (headerRow) => {
         const i = headerRow.vgt_header_id;
-        const children = paginatedRows.filter(row => row.vgt_id === i);
+        const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
           const newHeaderRow = cloneDeep(headerRow);
           newHeaderRow.children = children;
@@ -778,8 +780,8 @@ export default {
       // we need to preserve the original index of
       // rows so lets do that
       let index = 0;
-      nestedRows.forEach((headerRow, i) => {
-        headerRow.children.forEach((row, j) => {
+      each(nestedRows, (headerRow, i) => {
+        each(headerRow.children, (row, j) => {
           row.originalIndex = index++;
         });
       });
@@ -830,8 +832,8 @@ export default {
 
     unselectAllInternal(forceAll) {
       const rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-      rows.forEach((headerRow, i) => {
-        headerRow.children.forEach((row, j) => {
+      each(rows, (headerRow, i) => {
+        each(headerRow.children, (row, j) => {
           this.$set(row, 'vgtSelected', false);
         });
       });
@@ -844,8 +846,8 @@ export default {
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
-      rows.forEach((headerRow) => {
-        headerRow.children.forEach((row) => {
+      each(rows, (headerRow) => {
+        each(headerRow.children, (row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
@@ -1129,7 +1131,7 @@ export default {
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
           if (this.columnFilters[col.field]) {
-            computedRows = computedRows.forEach((headerRow) => {
+            computedRows = each(computedRows, (headerRow) => {
               const newChildren = headerRow.children.filter((row) => {
                 // If column has a custom filter, use that.
                 if (col.filterOptions
@@ -1175,9 +1177,9 @@ export default {
     },
 
     handleGrouped(originalRows) {
-      originalRows.forEach((headerRow, i) => {
+      each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
-        headerRow.children.forEach((childRow) => {
+        each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });
       });
