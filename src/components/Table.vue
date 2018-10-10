@@ -224,6 +224,10 @@
           </tbody>
         </table>
       </div>
+      <div class="vgt-wrap__actions-footer">
+        <slot name="table-actions-bottom">
+        </slot>
+      </div>
       <slot
         v-if="paginate && paginateOnBottom"
         name="pagination-bottom"

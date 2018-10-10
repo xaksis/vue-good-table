@@ -143,6 +143,20 @@ You don't have to have global search enabled to use this slot.
 <action-slot-table />
 
 
+## Table Actions Footer Slot
+
+If you want a space for your buttons between pagination and the table. This is the slot you use. 
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <div slot="table-actions-bottom">
+    This will show up on the bottom of the table. 
+  </div>
+</vue-good-table>
+```
+
 ## Empty state slot
 You can provide html for empty state slot as well. Example:
 
