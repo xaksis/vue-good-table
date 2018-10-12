@@ -60,11 +60,9 @@
           </slot>
         </div>
       </div>
-      <div
-        :class="{'vgt-responsive': responsive}">
+      <div class="vgt-fixed-header">
         <table
           v-if="fixedHeader"
-          class="vgt-fixed-header"
           :class="tableStyleClasses">
           <!-- Table header -->
           <thead is="vgt-table-header"
@@ -384,6 +382,7 @@ export default {
     externalSearchQuery: null,
     searchFn: null,
     searchPlaceholder: 'Search Table',
+    searchSkipDiacritics: false,
 
     // internal pagination options
     perPage: null,
@@ -653,7 +652,8 @@ export default {
                 // comparison
                 const matched = defaultType.filterPredicate(
                   this.collectFormatted(row, col),
-                  this.searchTerm
+                  this.searchTerm,
+                  this.searchSkipDiacritics
                 );
                 if (matched) {
                   filteredRows.push(row);
@@ -1300,6 +1300,7 @@ export default {
         externalQuery,
         searchFn,
         placeholder,
+        skipDiacritics,
       } = this.searchOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1320,6 +1321,10 @@ export default {
 
       if (typeof placeholder === 'string') {
         this.searchPlaceholder = placeholder;
+      }
+
+      if (typeof skipDiacritics === 'boolean') {
+        this.searchSkipDiacritics = skipDiacritics;
       }
     },
 

@@ -24,7 +24,7 @@
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
-        enabled: true,
+        enabled: false,
       }"
       :select-options="{
         enabled: false,
@@ -40,15 +40,8 @@
       }"
       :search-options="{
         enabled: true,
+        skipDiacritics: true,
       }">
-      <template slot="table-actions">
-        <button>Akshay</button>
-      </template>
-      <template slot="table-actions-bottom">
-        <div class="">
-          <button>Akshay</button>
-        </div>
-      </template>
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">
             hi {{props.column.label}}

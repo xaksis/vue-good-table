@@ -2,7 +2,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import isValid from 'date-fns/isValid';
 import compareAsc from 'date-fns/compareAsc';
-import clone from 'lodash.clone';
+import clone from 'lodash.clonedeep';
 import def from './default';
 
 const date = clone(def);

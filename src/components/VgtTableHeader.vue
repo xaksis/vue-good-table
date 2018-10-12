@@ -116,6 +116,7 @@ export default {
     return {
       resizingTh: null,
       resizingThOffset: 0,
+      timer: null,
       checkBoxThStyle: {},
       lineNumberThStyle: {},
       columnStyles: [],
@@ -182,7 +183,8 @@ export default {
 
     setColumnStyles() {
       const colStyles = [];
-      setTimeout(() => {
+      if (this.timer) clearTimeout(this.timer);
+      this.timeout = setTimeout(() => {
         for (let i = 0; i < this.columns.length; i++) {
           if (this.tableRef) {
             let skip = 0;
@@ -220,6 +222,11 @@ export default {
     // These are attached to body so user can move mouse anywhere on screen during drag
     document.body.addEventListener('mousemove', this.handleResizeMove);
     document.body.addEventListener('mouseup', this.handleResizeStop);
+    window.addEventListener('resize', this.setColumnStyles);
+  },
+  beforeDestroy() {
+    if (this.timer) clearTimeout(this.timer);
+    window.removeEventListener('resize', this.setColumnStyles);
   },
   components: {
     'vgt-filter-row': VgtFilterRow,

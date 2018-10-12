@@ -1,4 +1,4 @@
-import clone from 'lodash.clone';
+import clone from 'lodash.clonedeep';
 import def from './default';
 
 const boolean = clone(def);
