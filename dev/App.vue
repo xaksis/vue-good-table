@@ -13,6 +13,7 @@
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
       @on-search="onSearch"
+      @on-row-click="onClick"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
@@ -23,13 +24,12 @@
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
-        enabled: false,
+        enabled: true,
       }"
       :select-options="{
         enabled: false,
         selectOnCheckboxOnly: false,
       }"
-      :rowStyleClass="getRowStyle"
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
@@ -40,8 +40,15 @@
       }"
       :search-options="{
         enabled: true,
-        externalQuery: searchTerm,
       }">
+      <template slot="table-actions">
+        <button>Akshay</button>
+      </template>
+      <template slot="table-actions-bottom">
+        <div class="">
+          <button>Akshay</button>
+        </div>
+      </template>
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">
             hi {{props.column.label}}
@@ -63,6 +70,7 @@ export default {
   name: 'test',
   data() {
     return {
+      rowStyleClass: 'red',
       searchTerm: '',
       columns: [
         {
@@ -120,7 +128,7 @@ export default {
         },
         {
           id: 3,
-          name: 'Susan',
+          name: 'Angel',
           age: 16,
           createdAt: '2011-10-30',
           score: 0.03343,
@@ -152,7 +160,7 @@ export default {
         },
         {
           id: 7,
-          name: 'Jane',
+          name: 'Ángel',
           age: 20,
           createdAt: '2013-09-21',
           score: null,
@@ -250,6 +258,7 @@ export default {
 
     onClick() {
       console.log('clicked');
+      this.rowStyleClass = 'green';
     },
     addRow() {
       this.rows.push({
