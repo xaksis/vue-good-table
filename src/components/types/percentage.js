@@ -1,4 +1,4 @@
-import clone from 'lodash.clone';
+import clone from 'lodash.clonedeep';
 import number from './number';
 
 const percentage = clone(number);
