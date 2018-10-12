@@ -31,6 +31,12 @@
 .vgt-wrap {
   position: relative; }
 
+.vgt-fixed-header {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  overflow-x: auto; }
+
 table.vgt-table {
   font-size: 16px;
   border-collapse: collapse;
@@ -39,9 +45,6 @@ table.vgt-table {
   max-width: 100%;
   table-layout: auto;
   border: 1px solid #DCDFE6; }
-  table.vgt-table.vgt-fixed-header {
-    position: absolute;
-    z-index: 10; }
   table.vgt-table td {
     padding: .75em .75em .75em .75em;
     vertical-align: top;

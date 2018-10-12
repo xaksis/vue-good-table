@@ -1,5 +1,4 @@
 import diacriticless from 'diacriticless';
-import memoize from 'lodash.memoize';
 
 const escapeRegExp = str => str.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 

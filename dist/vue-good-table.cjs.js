@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.14.7
+ * vue-good-table v2.15.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -12,13 +12,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var diacriticless = _interopDefault(require('diacriticless'));
-var cloneDeep = _interopDefault(require('lodash.clonedeep'));
+var clone = _interopDefault(require('lodash.clonedeep'));
 var assign = _interopDefault(require('lodash.assign'));
 var format = _interopDefault(require('date-fns/format'));
 var parse = _interopDefault(require('date-fns/parse'));
 var isValid = _interopDefault(require('date-fns/isValid'));
 var compareAsc = _interopDefault(require('date-fns/compareAsc'));
-var clone = _interopDefault(require('lodash.clone'));
 var each = _interopDefault(require('lodash.foreach'));
 var filter = _interopDefault(require('lodash.filter'));
 
@@ -65,17 +64,19 @@ var def = {
     return x;
   },
   filterPredicate: function filterPredicate(rowval, filter$$1) {
+    var skipDiacritics = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
     // take care of nulls
     if (typeof rowval === 'undefined' || rowval === null) {
       return false;
     } // row value
 
 
-    var rowValue = diacriticless(String(rowval).toLowerCase()); // search term
+    var rowValue = skipDiacritics ? String(rowval).toLowerCase() : diacriticless(String(rowval).toLowerCase()); // search term
 
-    var searchTerm = diacriticless(escapeRegExp(filter$$1).toLowerCase()); // comparison
+    var searchTerm = skipDiacritics ? escapeRegExp(filter$$1).toLowerCase() : diacriticless(escapeRegExp(filter$$1).toLowerCase()); // comparison
 
-    return rowValue.search(searchTerm) > -1;
+    return rowValue.indexOf(searchTerm) > -1;
   },
   compare: function compare(x, y) {
     function cook(d) {
@@ -416,7 +417,7 @@ var VgtPagination = {
         this.rowsPerPageOptions = this.customRowsPerPageDropdown;
       } else {
         //* otherwise we use the default rows per page dropdown
-        this.rowsPerPageOptions = cloneDeep(DEFAULT_ROWS_PER_PAGE_DROPDOWN);
+        this.rowsPerPageOptions = clone(DEFAULT_ROWS_PER_PAGE_DROPDOWN);
       }
 
       if (this.perPage) {
@@ -815,6 +816,7 @@ var VgtTableHeader = {
   },
   data: function data() {
     return {
+      timer: null,
       checkBoxThStyle: {},
       lineNumberThStyle: {},
       columnStyles: []
@@ -859,7 +861,8 @@ var VgtTableHeader = {
       var _this = this;
 
       var colStyles = [];
-      setTimeout(function () {
+      if (this.timer) clearTimeout(this.timer);
+      this.timeout = setTimeout(function () {
         for (var i = 0; i < _this.columns.length; i++) {
           if (_this.tableRef) {
             var skip = 0;
@@ -893,7 +896,13 @@ var VgtTableHeader = {
       return styleObject;
     }
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    window.addEventListener('resize', this.setColumnStyles);
+  },
+  beforeDestroy: function beforeDestroy() {
+    if (this.timer) clearTimeout(this.timer);
+    window.removeEventListener('resize', this.setColumnStyles);
+  },
   components: {
     'vgt-filter-row': VgtFilterRow
   }
@@ -1182,11 +1191,8 @@ var VueGoodTable = {
     }, [_vm._v(" " + _vm._s(_vm.clearSelectionText) + " ")]), _vm._v(" "), _c('div', {
       staticClass: "vgt-selection-info-row__actions vgt-pull-right"
     }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
-      class: {
-        'vgt-responsive': _vm.responsive
-      }
+      staticClass: "vgt-fixed-header"
     }, [_vm.fixedHeader ? _c('table', {
-      staticClass: "vgt-fixed-header",
       class: _vm.tableStyleClasses
     }, [_c("vgt-table-header", {
       ref: "table-header-secondary",
@@ -1516,6 +1522,7 @@ var VueGoodTable = {
       externalSearchQuery: null,
       searchFn: null,
       searchPlaceholder: 'Search Table',
+      searchSkipDiacritics: false,
       // internal pagination options
       perPage: null,
       paginate: false,
@@ -1746,7 +1753,7 @@ var VueGoodTable = {
                 }
               } else {
                 // comparison
-                var matched = def.filterPredicate(_this.collectFormatted(row, col), _this.searchTerm);
+                var matched = def.filterPredicate(_this.collectFormatted(row, col), _this.searchTerm, _this.searchSkipDiacritics);
 
                 if (matched) {
                   filteredRows.push(row);
@@ -1769,7 +1776,7 @@ var VueGoodTable = {
           var children = filter(filteredRows, ['vgt_id', i]);
 
           if (children.length) {
-            var newHeaderRow = cloneDeep(headerRow);
+            var newHeaderRow = clone(headerRow);
             newHeaderRow.children = children;
             computedRows.push(newHeaderRow);
           }
@@ -1855,7 +1862,7 @@ var VueGoodTable = {
         var children = filter(paginatedRows, ['vgt_id', i]);
 
         if (children.length) {
-          var newHeaderRow = cloneDeep(headerRow);
+          var newHeaderRow = clone(headerRow);
           newHeaderRow.children = children;
           reconstructedRows.push(newHeaderRow);
         }
@@ -1863,7 +1870,7 @@ var VueGoodTable = {
       return reconstructedRows;
     },
     originalRows: function originalRows() {
-      var rows = cloneDeep(this.rows);
+      var rows = clone(this.rows);
       var nestedRows = [];
 
       if (!this.groupOptions.enabled) {
@@ -2073,7 +2080,7 @@ var VueGoodTable = {
         this.handleSearch(); // we reset the filteredRows here because
         // we want to search across everything.
 
-        this.filteredRows = cloneDeep(this.originalRows);
+        this.filteredRows = clone(this.originalRows);
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -2192,7 +2199,7 @@ var VueGoodTable = {
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
-      var computedRows = cloneDeep(this.originalRows); // do we have a filter to care about?
+      var computedRows = clone(this.originalRows); // do we have a filter to care about?
       // if not we don't need to do anything
 
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
@@ -2387,7 +2394,8 @@ var VueGoodTable = {
           trigger = _this$searchOptions.trigger,
           externalQuery = _this$searchOptions.externalQuery,
           searchFn = _this$searchOptions.searchFn,
-          placeholder = _this$searchOptions.placeholder;
+          placeholder = _this$searchOptions.placeholder,
+          skipDiacritics = _this$searchOptions.skipDiacritics;
 
       if (typeof enabled === 'boolean') {
         this.searchEnabled = enabled;
@@ -2407,6 +2415,10 @@ var VueGoodTable = {
 
       if (typeof placeholder === 'string') {
         this.searchPlaceholder = placeholder;
+      }
+
+      if (typeof skipDiacritics === 'boolean') {
+        this.searchSkipDiacritics = skipDiacritics;
       }
     },
     initializeSort: function initializeSort() {
