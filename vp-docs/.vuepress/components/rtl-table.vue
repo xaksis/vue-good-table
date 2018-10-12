@@ -60,6 +60,7 @@ export default {
 <style>
 table{
   display: table;
+  margin: 0;
 }
 tr {
   border-top: none;

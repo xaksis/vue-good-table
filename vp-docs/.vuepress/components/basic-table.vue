@@ -60,5 +60,6 @@ export default {
 <style>
 table{
   display: table;
+  margin: 0;
 }
 </style>
