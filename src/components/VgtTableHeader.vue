@@ -18,7 +18,7 @@
       <slot name="table-column" :column="column">
         <span>{{column.label}}</span>
       </slot>
-      <div v-if="resizeable" class="vgt-handle" @mousedown="handleResizeStart">&nbsp;</div>
+      <div v-if="resizeableColumns" class="vgt-handle" @mousedown="handleResizeStart">&nbsp;</div>
     </th>
   </tr>
   <tr
@@ -91,7 +91,7 @@ export default {
 
     paginated: {},
 
-    resizeable: {
+    resizeableColumns: {
       default: false,
       type: Boolean
     }
