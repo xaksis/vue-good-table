@@ -18,10 +18,12 @@
       :rows="rows"
       theme="black-rhino"
       :line-numbers="true"
+      max-height="300px"
+      :fixed-header="true"
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
-        enabled: true,
+        enabled: false,
       }"
       :select-options="{
         enabled: false,
@@ -36,16 +38,8 @@
         ],
       }"
       :search-options="{
-        enabled: true,
+        enabled: false,
       }">
-      <template slot="table-actions">
-        <button>Akshay</button>
-      </template>
-      <template slot="table-actions-bottom">
-        <div class="">
-          <button>Akshay</button>
-        </div>
-      </template>
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">
             hi {{props.column.label}}

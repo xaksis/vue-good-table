@@ -1,3 +1,9 @@
 .vgt-wrap{
   position: relative;
 }
+.vgt-fixed-header{
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  overflow-x: auto;
+}

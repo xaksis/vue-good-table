@@ -60,11 +60,9 @@
           </slot>
         </div>
       </div>
-      <div
-        :class="{'vgt-responsive': responsive}">
+      <div class="vgt-fixed-header">
         <table
           v-if="fixedHeader"
-          class="vgt-fixed-header"
           :class="tableStyleClasses">
           <!-- Table header -->
           <thead is="vgt-table-header"
