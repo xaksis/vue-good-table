@@ -53,8 +53,8 @@
     "poi": "^10.2.10",
     "rollup-plugin-vue": "^3.0.0",
     "sass-loader": "^6.0.6",
-    "vue": "^2.5.16",
-    "vue-template-compiler": "^2.5.16",
+    "vue": "^2.5.17",
+    "vue-template-compiler": "^2.5.17",
     "vuepress": "^0.14.4",
     "webpack": "^4.8.3"
   }

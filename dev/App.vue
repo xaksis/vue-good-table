@@ -38,7 +38,8 @@
         ],
       }"
       :search-options="{
-        enabled: false,
+        enabled: true,
+        skipDiacritics: true,
       }">
       <template slot="table-column" slot-scope="props">
         <span v-if="props.column.label =='Name'">

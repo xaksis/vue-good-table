@@ -13,6 +13,7 @@ This section talks about how to configure global search options.
   :search-options="{
     enabled: true,
     trigger: 'enter',
+    skipDiacritics: true,
     searchFn: mySearchFn,
     placeholder: 'Search this table',
     externalQuery: searchQuery
@@ -59,10 +60,26 @@ Allows you to specify if you want search to trigger on 'enter' event of the inpu
 ```
 <search-demo trigger="enter" />
 
+## skipDiacritics
+
+type: `boolean (default: false)`
+
+By default, search does a diacriticless comparison so you can search through accented characters. This however slows down the search to some extent. If your data doesn't have accented characters, you can skip this check and gain some performance. 
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :search-options="{
+    enabled: true,
+    skipDiacritics: true,
+  }">
+</vue-good-table>
+```
+
 ## searchFn
 
 type: `Function`
-
 
 Allows you to specify your own search function for the global search
 
