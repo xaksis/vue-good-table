@@ -44,17 +44,18 @@
     "diacriticless": "1.0.1",
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.filter": "^4.6.0",
     "lodash.foreach": "^4.5.0"
   },
   "devDependencies": {
     "bili": "^3.1.2",
-    "node-sass": "^4.9.0",
-    "poi": "^10.1.6",
+    "node-sass": "^4.9.3",
+    "poi": "^10.2.10",
     "rollup-plugin-vue": "^3.0.0",
     "sass-loader": "^6.0.6",
     "vue": "^2.5.16",
     "vue-template-compiler": "^2.5.16",
-    "vuepress": "^0.10.1",
+    "vuepress": "^0.14.4",
     "webpack": "^4.8.3"
   }
 }
