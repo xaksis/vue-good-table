@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.15.1
+ * vue-good-table v2.15.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -20,6 +20,7 @@ var isValid = _interopDefault(require('date-fns/isValid'));
 var compareAsc = _interopDefault(require('date-fns/compareAsc'));
 var each = _interopDefault(require('lodash.foreach'));
 var filter = _interopDefault(require('lodash.filter'));
+var isEqual = _interopDefault(require('lodash.isequal'));
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -862,7 +863,7 @@ var VgtTableHeader = {
 
       var colStyles = [];
       if (this.timer) clearTimeout(this.timer);
-      this.timeout = setTimeout(function () {
+      this.timer = setTimeout(function () {
         for (var i = 0; i < _this.columns.length; i++) {
           if (_this.tableRef) {
             var skip = 0;
@@ -1586,10 +1587,12 @@ var VueGoodTable = {
       deep: true,
       immediate: true
     },
-    selectedRows: function selectedRows() {
-      this.$emit('on-selected-rows-change', {
-        selectedRows: this.selectedRows
-      });
+    selectedRows: function selectedRows(newValue, oldValue) {
+      if (!isEqual(newValue, oldValue)) {
+        this.$emit('on-selected-rows-change', {
+          selectedRows: this.selectedRows
+        });
+      }
     }
   },
   computed: {
@@ -1645,7 +1648,9 @@ var VueGoodTable = {
           }
         });
       });
-      return selectedRows;
+      return selectedRows.sort(function (r1, r2) {
+        return r1.originalIndex - r2.originalIndex;
+      });
     },
     fullColspan: function fullColspan() {
       var fullColspan = 0;
