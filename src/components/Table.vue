@@ -259,6 +259,7 @@ import each from 'lodash.foreach';
 import assign from 'lodash.assign';
 import cloneDeep from 'lodash.clonedeep';
 import filter from 'lodash.filter';
+import isEqual from 'lodash.isequal';
 import diacriticless from 'diacriticless';
 import defaultType from './types/default';
 import VgtPagination from './VgtPagination.vue';
@@ -450,10 +451,12 @@ export default {
       immediate: true,
     },
 
-    selectedRows() {
-      this.$emit('on-selected-rows-change', {
-        selectedRows: this.selectedRows,
-      });
+    selectedRows(newValue, oldValue) {
+      if (!isEqual(newValue, oldValue)) {
+        this.$emit('on-selected-rows-change', {
+          selectedRows: this.selectedRows,
+        });
+      }
     },
   },
 
@@ -528,7 +531,7 @@ export default {
           }
         });
       });
-      return selectedRows;
+      return selectedRows.sort((r1, r2) => r1.originalIndex - r2.originalIndex);
     },
 
     fullColspan() {

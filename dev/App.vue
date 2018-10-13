@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ selectedIds }}
     <button @click="rows = [];">empty row</button>
     <button @click="resetTable">reset Table</button>
     <button @click="hideColumn">hide column</button>
@@ -13,11 +14,10 @@
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
       @on-search="onSearch"
-      @on-row-click="onClick"
+      @on-selected-rows-change="onSelectChanged"
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
-      :line-numbers="true"
       max-height="300px"
       :fixed-header="true"
       :pagination-options="{
@@ -26,29 +26,18 @@
         enabled: false,
       }"
       :select-options="{
-        enabled: false,
+        enabled: true,
         selectOnCheckboxOnly: false,
       }"
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
-        initialSortBy: [
-          {field: 'name', type: 'asc'},
-          {field: 'age', type: 'desc'}
-        ],
+        initialSortBy: {field: 'name', type: 'asc'},
       }"
       :search-options="{
         enabled: true,
         skipDiacritics: true,
       }">
-      <template slot="table-column" slot-scope="props">
-        <span v-if="props.column.label =='Name'">
-            hi {{props.column.label}}
-        </span>
-        <span v-else>
-            {{props.column.label}}
-        </span>
-      </template>
     </vue-good-table>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
@@ -62,13 +51,13 @@ export default {
   name: 'test',
   data() {
     return {
+      selectedIds: [],
       rowStyleClass: 'red',
       searchTerm: '',
       columns: [
         {
           label: 'Name',
           field: 'name',
-          tdClass: this.tdClassFunc,
           filterOptions: {
             enabled: true,
             placeholder: 'All',
@@ -311,6 +300,17 @@ export default {
     onRowClick(params) {
       console.log('on-row-click');
       console.log(params);
+    },
+
+    onSelectChanged(params) {
+      console.log(params);
+      const selectedIds = params.selectedRows.reduce((acc, row) => {
+        acc.push(row.id);
+        return acc;
+      }, []);
+      console.log(params.selectedRows);
+      console.log(selectedIds);
+      this.selectedIds = selectedIds;
     },
   },
   mounted() {
