@@ -1457,7 +1457,8 @@ var VueGoodTable = {
       default: function _default() {
         return {
           enabled: true,
-          initialSortBy: {}
+          initialSortBy: {},
+          defaultSortType: 'asc'
         };
       }
     },
@@ -1508,6 +1509,7 @@ var VueGoodTable = {
       // internal sort options
       sortable: true,
       defaultSortBy: null,
+      defaultSortType: 'asc',
       // internal search options
       searchEnabled: false,
       searchTrigger: null,
@@ -2002,7 +2004,7 @@ var VueGoodTable = {
       if (this.sortColumn === index$$1) {
         this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
       } else {
-        this.sortType = 'asc';
+        this.sortType = this.defaultSortType;
         this.sortColumn = index$$1;
       }
 
@@ -2301,7 +2303,7 @@ var VueGoodTable = {
 
         if (col.field === this.defaultSortBy.field) {
           this.sortColumn = index$$1;
-          this.sortType = this.defaultSortBy.type || 'asc';
+          this.sortType = this.defaultSortBy.type || this.defaultSortType;
           this.sortChanged = true;
           break;
         }
@@ -2420,10 +2422,17 @@ var VueGoodTable = {
     initializeSort: function initializeSort() {
       var _this$sortOptions = this.sortOptions,
           enabled = _this$sortOptions.enabled,
-          initialSortBy = _this$sortOptions.initialSortBy;
+          initialSortBy = _this$sortOptions.initialSortBy,
+          defaultSortType = _this$sortOptions.defaultSortType;
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
+      }
+
+      if (defaultSortType === 'desc') {
+        this.defaultSortType = 'desc';
+      } else {
+        this.defaultSortType = 'asc';
       }
 
       if (_typeof(initialSortBy) === 'object') {

@@ -319,6 +319,7 @@ export default {
         return {
           enabled: true,
           initialSortBy: {},
+          defaultSortType: 'asc'
         };
       },
     },
@@ -373,6 +374,7 @@ export default {
     // internal sort options
     sortable: true,
     defaultSortBy: null,
+    defaultSortType: 'asc',
 
     // internal search options
     searchEnabled: false,
@@ -909,7 +911,7 @@ export default {
       if (this.sortColumn === index) {
         this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
       } else {
-        this.sortType = 'asc';
+        this.sortType = this.defaultSortType;
         this.sortColumn = index;
       }
 
@@ -1209,7 +1211,7 @@ export default {
         const col = this.columns[index];
         if (col.field === this.defaultSortBy.field) {
           this.sortColumn = index;
-          this.sortType = this.defaultSortBy.type || 'asc';
+          this.sortType = this.defaultSortBy.type || this.defaultSortType;
           this.sortChanged = true;
           break;
         }
@@ -1329,10 +1331,16 @@ export default {
     },
 
     initializeSort() {
-      const { enabled, initialSortBy } = this.sortOptions;
+      const { enabled, initialSortBy, defaultSortType } = this.sortOptions;
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
+      }
+
+      if (defaultSortType === 'desc') {
+        this.defaultSortType = 'desc'
+      } else {
+        this.defaultSortType = 'asc'
       }
 
       if (typeof initialSortBy === 'object') {
