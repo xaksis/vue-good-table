@@ -1,7 +1,7 @@
 
 function getNextSort(currentSort) {
   if (currentSort === 'asc') return 'desc';
-  if (currentSort === 'desc') return null;
+  // if (currentSort === 'desc') return null;
   return 'asc';
 }
 

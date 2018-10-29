@@ -18,6 +18,8 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
+      :fixed-header="true"
+      max-height="200px"
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
@@ -35,7 +37,6 @@
       :search-options="{
         enabled: true,
         skipDiacritics: true,
-        trigger: 'enter',
       }">
     </vue-good-table>
     <h3>Grouped Table</h3>

@@ -439,8 +439,10 @@ export default {
     },
 
     sortOptions: {
-      handler() {
-        this.initializeSort();
+      handler(newValue, oldValue) {
+        if (!isEqual(newValue, oldValue)) {
+          this.initializeSort();
+        }
       },
       deep: true,
     },
@@ -1322,11 +1324,12 @@ export default {
 
       //* initialSortBy can be an array or an object
       if (typeof initialSortBy === 'object') {
+        const ref = this.fixedHeader ? this.$refs['table-header-secondary'] : this.$refs['table-header-primary'];
         if (Array.isArray(initialSortBy)) {
-          this.$refs['table-header-primary'].setInitialSort(initialSortBy);
+          ref.setInitialSort(initialSortBy);
         } else {
           const hasField = Object.prototype.hasOwnProperty.call(initialSortBy, 'field');
-          if (hasField) this.$refs['table-header-primary'].setInitialSort([initialSortBy]);
+          if (hasField) ref.setInitialSort([initialSortBy]);
         }
       }
     },
