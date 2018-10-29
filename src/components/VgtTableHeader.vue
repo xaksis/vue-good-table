@@ -152,7 +152,9 @@ export default {
 
     getColumnSort(column) {
       for (let i = 0; i < this.sorts.length; i += 1) {
-        if (this.sorts[i].field === column.field) return this.sorts[i].type;
+        if (this.sorts[i].field === column.field) {
+          return this.sorts[i].type || 'asc';
+        }
       }
       return null;
     },
