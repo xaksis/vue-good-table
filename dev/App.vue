@@ -9,7 +9,6 @@
     <vue-good-table
       ref="my-table"
       @on-column-filter="onColumnFilter"
-      @on-row-dblclick="onColumnFilter"
       @on-select-all="onSelectAll"
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
@@ -18,8 +17,6 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
-      :fixed-header="true"
-      max-height="200px"
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
@@ -62,6 +59,7 @@ export default {
             enabled: true,
             placeholder: 'All',
             filterDropdownItems: ['Chris', 'Dan', 'Susan'],
+            filterValue: 'Chris',
           },
         },
         {
@@ -70,6 +68,7 @@ export default {
           type: 'number',
           filterOptions: {
             enabled: true,
+            filterValue: 20,
           },
         },
         {

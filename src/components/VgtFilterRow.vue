@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import isEqual from 'lodash.isequal';
+
 export default {
   name: 'VgtFilterRow',
   props: [
@@ -59,10 +61,13 @@ export default {
   ],
   watch: {
     columns: {
-      handler() {
-        this.populateInitialFilters();
+      handler(newValue, oldValue) {
+        if (!isEqual(newValue, oldValue)) {
+          this.populateInitialFilters();
+        }
       },
       deep: true,
+      immediate: true,
     },
   },
   data() {
@@ -155,15 +160,16 @@ export default {
         if (this.isFilterable(col)
           && typeof col.filterOptions.filterValue !== 'undefined'
           && col.filterOptions.filterValue !== null) {
-          this.updateFiltersImmediately(col, col.filterOptions.filterValue);
+          this.$set(this.columnFilters, col.field, col.filterOptions.filterValue);
+          // this.updateFilters(col, col.filterOptions.filterValue);
           this.$set(col.filterOptions, 'filterValue', undefined);
         }
       }
+      //* lets emit event once all filters are set
+      this.$emit('filter-changed', this.columnFilters);
     },
   },
   mounted() {
-    // take care of initial filters
-    this.populateInitialFilters();
   },
 };
 </script>
