@@ -18,15 +18,13 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
-      max-height="300px"
-      :fixed-header="true"
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
         enabled: false,
       }"
       :select-options="{
-        enabled: true,
+        enabled: false,
         selectOnCheckboxOnly: false,
       }"
       styleClass="vgt-table bordered"
@@ -37,6 +35,7 @@
       :search-options="{
         enabled: true,
         skipDiacritics: true,
+        trigger: 'enter',
       }">
     </vue-good-table>
     <h3>Grouped Table</h3>
@@ -127,6 +126,22 @@ export default {
           id: 5,
           name: 'Dan',
           age: 40,
+          createdAt: null,
+          score: 0.03343,
+          bool: null,
+        },
+        {
+          id: 5,
+          name: 'Dan',
+          age: 20,
+          createdAt: null,
+          score: 0.03343,
+          bool: null,
+        },
+        {
+          id: 5,
+          name: 'Dan',
+          age: 34,
           createdAt: null,
           score: 0.03343,
           bool: null,
