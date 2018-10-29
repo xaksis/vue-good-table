@@ -11,7 +11,7 @@
     </th>
     <th v-for="(column, index) in columns"
       :key="index"
-      @click="sort(index)"
+      @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
       v-if="!column.hidden">
@@ -37,6 +37,7 @@
 <script>
 import assign from 'lodash.assign';
 import VgtFilterRow from './VgtFilterRow.vue';
+import * as SortUtils from './utils/sort.js';
 
 export default {
   name: 'VgtTableHeader',
@@ -66,17 +67,20 @@ export default {
     typedColumns: {},
 
     //* Sort related
-    sortColumn: {
-      type: Number,
+    sortable: {
+      type: Boolean,
     },
-    sortType: {
-      type: String,
-    },
+    // sortColumn: {
+    //   type: Number,
+    // },
+    // sortType: {
+    //   type: String,
+    // },
 
     // utility functions
-    isSortableColumn: {
-      type: Function,
-    },
+    // isSortableColumn: {
+    //   type: Function,
+    // },
     getClasses: {
       type: Function,
     },
@@ -112,6 +116,7 @@ export default {
       checkBoxThStyle: {},
       lineNumberThStyle: {},
       columnStyles: [],
+      sorts: [],
     };
   },
   computed: {
@@ -123,15 +128,39 @@ export default {
     toggleSelectAll() {
       this.$emit('on-toggle-select-all');
     },
-    sort(index) {
-      this.$emit('on-sort-change', index);
+    isSortableColumn(column) {
+      const { sortable } = column;
+      const isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
+      return isSortable;
     },
+    sort(e, column) {
+      //* if column is not sortable, return right here
+      if (!this.isSortableColumn(column)) return;
+
+      if (e.shiftKey) {
+        this.sorts = SortUtils.secondarySort(this.sorts, column);
+      } else {
+        this.sorts = SortUtils.primarySort(this.sorts, column);
+      }
+      this.$emit('on-sort-change', this.sorts);
+    },
+
+    setInitialSort(sorts) {
+      this.sorts = sorts;
+      this.$emit('on-sort-change', this.sorts);
+    },
+
+    getColumnSort(column) {
+      for (let i = 0; i < this.sorts.length; i += 1) {
+        if (this.sorts[i].field === column.field) return this.sorts[i].type;
+      }
+      return null;
+    },
+
     getHeaderClasses(column, index) {
-      const isSortable = this.isSortableColumn(index);
       const classes = assign({}, this.getClasses(index, 'th'), {
-        sorting: isSortable,
-        'sorting-desc': isSortable && this.sortColumn === index && this.sortType === 'desc',
-        'sorting-asc': isSortable && this.sortColumn === index && this.sortType === 'asc',
+        'sorting sorting-desc': this.getColumnSort(column) === 'desc',
+        'sorting sorting-asc': this.getColumnSort(column) === 'asc',
       });
       return classes;
     },
