@@ -12,6 +12,7 @@
       @on-select-all="onSelectAll"
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
+      @on-per-page-change="onPerPageChange"
       @on-search="onSearch"
       @on-selected-rows-change="onSelectChanged"
       :columns="columns"
@@ -20,7 +21,8 @@
       :pagination-options="{
         mode: 'pages',
         perPage: 3,
-        enabled: false,
+        enabled: true,
+        perPageDropdown: [50, 100, 200, 300, 500, 1000],
       }"
       :select-options="{
         enabled: false,
@@ -59,7 +61,7 @@ export default {
             enabled: true,
             placeholder: 'All',
             filterDropdownItems: ['Chris', 'Dan', 'Susan'],
-            filterValue: 'Chris',
+            // filterValue: 'Chris',
           },
         },
         {
@@ -68,7 +70,7 @@ export default {
           type: 'number',
           filterOptions: {
             enabled: true,
-            filterValue: 20,
+            // filterValue: 20,
           },
         },
         {

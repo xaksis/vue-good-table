@@ -10,7 +10,7 @@
         @change="perPageChanged">
         <option
           v-for="(option, idx) in rowsPerPageOptions"
-          v-bind:key="'rows-dropdown-option-' + idx"
+          :key="'rows-dropdown-option-' + idx"
           :value="option">
           {{ option }}
         </option>
@@ -80,17 +80,16 @@ export default {
   }),
 
   watch: {
-    perPage() {
-      this.handlePerPage();
-      this.perPageChanged();
+    perPage: {
+      handler(newValue, oldValue) {
+        this.handlePerPage();
+        this.perPageChanged();
+      },
+      immediate: true,
     },
 
     customRowsPerPageDropdown() {
-      if (this.customRowsPerPageDropdown !== null
-        && (Array.isArray(this.customRowsPerPageDropdown)
-        && this.customRowsPerPageDropdown.lenght !== 0)) {
-        this.rowsPerPageOptions = this.customRowsPerPageDropdown;
-      }
+      this.handlePerPage();
     },
   },
 
@@ -128,11 +127,11 @@ export default {
 
   methods: {
     // Change current page
-    changePage(pageNumber) {
+    changePage(pageNumber, emit = true) {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
         this.prevPage = this.currentPage;
         this.currentPage = pageNumber;
-        this.pageChanged();
+        if (emit) this.pageChanged();
       }
     },
 
@@ -166,7 +165,7 @@ export default {
     perPageChanged() {
       // go back to first page
       this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
-      this.changePage(1);
+      this.changePage(1, false);
     },
 
     // Handle per page changing
@@ -191,7 +190,7 @@ export default {
           }
         }
         if (!found && this.perPage !== -1) {
-          this.rowsPerPageOptions.push(this.perPage);
+          this.rowsPerPageOptions.unshift(this.perPage);
         }
       } else {
         // reset to default
@@ -201,7 +200,6 @@ export default {
   },
 
   mounted() {
-    this.handlePerPage();
   },
 
   components: {
