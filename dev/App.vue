@@ -86,6 +86,11 @@ export default {
           type: 'percentage',
         },
         {
+          label: 'func',
+          field: this.funcValue,
+          type: 'number',
+        },
+        {
           label: 'Valid',
           field: 'bool',
           type: 'boolean',
@@ -176,6 +181,9 @@ export default {
     };
   },
   methods: {
+    funcValue(row) {
+      return row.age + 5;
+    },
     tdClassFunc(row) {
       if (row.age > 50) {
         return 'red';
