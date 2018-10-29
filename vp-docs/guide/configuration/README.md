@@ -74,7 +74,7 @@ Fixed header should probably be used with max-height
 :::
 
 
-## lineNumbers
+## line-numbers
 
 type: `Boolean (default: false)`
 Show line number for each row
@@ -82,12 +82,12 @@ Show line number for each row
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :lineNumbers="true">
+  :line-numbers="true">
 </vue-good-table>
 ```
 <line-numbers-table />
 
-## rowStyleClass 
+## row-style-class 
 
 type: `String` or `Function`
 
@@ -97,7 +97,7 @@ property to assign a class to rows. This can either be a string representing a c
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :rowStyleClass="rowStyleClassFn">
+  :row-style-class="rowStyleClassFn">
 </vue-good-table>
 ```
 
@@ -193,4 +193,4 @@ type: `Number`
 totalRecords is only useful for remote mode. When server controls pagination the table needs to know how many total rows exist.
 :::
 
-total number of rows that exist given a table/filter. refer to [remote workflow]() for more details
+total number of rows that exist given a table/filter. refer to [remote workflow](/guide/advanced/remote-workflow.md) for more details
