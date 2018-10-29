@@ -145,6 +145,11 @@ export default {
       this.$emit('on-sort-change', this.sorts);
     },
 
+    setInitialSort(sorts) {
+      this.sorts = sorts;
+      this.$emit('on-sort-change', this.sorts);
+    },
+
     getColumnSort(column) {
       for (let i = 0; i < this.sorts.length; i += 1) {
         if (this.sorts[i].field === column.field) return this.sorts[i].type;

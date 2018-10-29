@@ -443,7 +443,6 @@ export default {
         this.initializeSort();
       },
       deep: true,
-      immediate: true,
     },
 
     selectedRows(newValue, oldValue) {
@@ -678,15 +677,12 @@ export default {
           }
         });
       }
-
-      // TODO: remove for sort
       if (this.sorts.length) {
         //* we need to sort
         computedRows.forEach((cRows) => {
           cRows.children.sort((xRow, yRow) => {
             //* we need to get column for each sort
             let sortValue;
-
             for (let i = 0; i < this.sorts.length; i += 1) {
               const column = this.getColumnForField(this.sorts[i].field);
               const xvalue = this.collect(xRow, this.sorts[i].field);
@@ -702,40 +698,10 @@ export default {
               //* else we use our own sort
               sortValue = sortValue || column.typeDef.compare(xvalue, yvalue, column) * (this.sorts[i].type === 'desc' ? -1 : 1);
             }
-
             return sortValue;
           });
         });
       }
-      // taking care of sort here only if sort has changed
-      // if (this.sortColumn !== -1
-      //   && this.isSortableColumn(this.sortColumn) &&
-      //   // if search trigger is enter then we only sort
-      //   // when enter is hit
-      //   (this.searchTrigger !== 'enter' || this.sortChanged)) {
-      //   this.sortChanged = false;
-
-      //   each(computedRows, (cRows) => {
-      //     cRows.children.sort((x, y) => {
-      //       if (!this.columns[this.sortColumn]) return 0;
-
-      //       const xvalue = this.collect(x, this.columns[this.sortColumn].field);
-      //       const yvalue = this.collect(y, this.columns[this.sortColumn].field);
-
-      //       // if user has provided a custom sort, use that instead of
-      //       // built-in sort
-      //       const { sortFn } = this.columns[this.sortColumn];
-      //       if (sortFn && typeof sortFn === 'function') {
-      //         return sortFn(xvalue, yvalue, this.columns[this.sortColumn], x, y) * (this.sortType === 'desc' ? -1 : 1);
-      //       }
-
-      //       // built in sort
-      //       const { typeDef } = this.typedColumns[this.sortColumn];
-      //       return typeDef.compare(xvalue, yvalue, this.columns[this.sortColumn])
-      //         * (this.sortType === 'desc' ? -1 : 1);
-      //     });
-      //   });
-      // }
 
       // if the filtering is event based, we need to maintain filter
       // rows
@@ -835,8 +801,8 @@ export default {
 
   methods: {
     getColumnForField(field) {
-      for (let i = 0; i < this.columns.length; i += 1) {
-        if (this.columns[i].field === field) return this.columns[i];
+      for (let i = 0; i < this.typedColumns.length; i += 1) {
+        if (this.typedColumns[i].field === field) return this.typedColumns[i];
       }
     },
 
@@ -931,34 +897,6 @@ export default {
         this.tableLoading = true;
       }
     },
-
-    // TODO: cleanup after new sort done.
-    // sort(index) {
-    //   if (!this.isSortableColumn(index)) return;
-
-    //   if (this.sortColumn === index) {
-    //     this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
-    //   } else {
-    //     this.sortType = 'asc';
-    //     this.sortColumn = index;
-    //   }
-
-    //   this.$emit('on-sort-change', {
-    //     sortType: this.sortType,
-    //     columnIndex: this.sortColumn,
-    //   });
-
-    //   // every time we change sort we need to reset to page 1
-    //   this.changePage(1);
-
-    //   // if the mode is remote, we don't need to do anything
-    //   // after this. just set table loading to true
-    //   if (this.mode === 'remote') {
-    //     this.tableLoading = true;
-    //     return;
-    //   }
-    //   this.sortChanged = true;
-    // },
 
     changeSort(sorts) {
       this.sorts = sorts;
@@ -1382,10 +1320,15 @@ export default {
         this.sortable = enabled;
       }
 
-      // if (typeof initialSortBy === 'object') {
-      //   this.defaultSortBy = initialSortBy;
-      //   this.handleDefaultSort();
-      // }
+      //* initialSortBy can be an array or an object
+      if (typeof initialSortBy === 'object') {
+        if (Array.isArray(initialSortBy)) {
+          this.$refs['table-header-primary'].setInitialSort(initialSortBy);
+        } else {
+          const hasField = Object.prototype.hasOwnProperty.call(initialSortBy, 'field');
+          if (hasField) this.$refs['table-header-primary'].setInitialSort([initialSortBy]);
+        }
+      }
     },
 
     initializeSelect() {
@@ -1423,7 +1366,6 @@ export default {
       }
     },
 
-    //TODO: commented this out for sort
     // initializeColumns() {
     //   // take care of default sort on mount
     //   if (this.defaultSortBy) {
@@ -1436,6 +1378,7 @@ export default {
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
+    this.initializeSort();
   },
 
   components: {
