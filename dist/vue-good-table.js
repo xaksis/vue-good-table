@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.15.3
+ * vue-good-table v2.16.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -7620,14 +7620,15 @@
       };
     },
     watch: {
-      perPage: function perPage() {
-        this.handlePerPage();
-        this.perPageChanged();
+      perPage: {
+        handler: function handler(newValue, oldValue) {
+          this.handlePerPage();
+          this.perPageChanged();
+        },
+        immediate: true
       },
       customRowsPerPageDropdown: function customRowsPerPageDropdown() {
-        if (this.customRowsPerPageDropdown !== null && Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.lenght !== 0) {
-          this.rowsPerPageOptions = this.customRowsPerPageDropdown;
-        }
+        this.handlePerPage();
       }
     },
     computed: {
@@ -7660,10 +7661,12 @@
     methods: {
       // Change current page
       changePage: function changePage(pageNumber) {
+        var emit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
         if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
           this.prevPage = this.currentPage;
           this.currentPage = pageNumber;
-          this.pageChanged();
+          if (emit) this.pageChanged();
         }
       },
       // Go to next page
@@ -7695,7 +7698,7 @@
         this.$emit('per-page-changed', {
           currentPerPage: this.currentPerPage
         });
-        this.changePage(1);
+        this.changePage(1, false);
       },
       // Handle per page changing
       handlePerPage: function handlePerPage() {
@@ -7719,7 +7722,7 @@
           }
 
           if (!found && this.perPage !== -1) {
-            this.rowsPerPageOptions.push(this.perPage);
+            this.rowsPerPageOptions.unshift(this.perPage);
           }
         } else {
           // reset to default
@@ -7727,9 +7730,7 @@
         }
       }
     },
-    mounted: function mounted() {
-      this.handlePerPage();
-    },
+    mounted: function mounted() {},
     components: {
       'pagination-page-info': VgtPaginationPageInfo
     }
@@ -7888,10 +7889,13 @@
     props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable', 'mode'],
     watch: {
       columns: {
-        handler: function handler() {
-          this.populateInitialFilters();
+        handler: function handler(newValue, oldValue) {
+          if (!lodash_isequal(newValue, oldValue)) {
+            this.populateInitialFilters();
+          }
         },
-        deep: true
+        deep: true,
+        immediate: true
       }
     },
     data: function data() {
@@ -7973,16 +7977,73 @@
           // filters supplied by user
 
           if (this.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
-            this.updateFiltersImmediately(col, col.filterOptions.filterValue);
+            this.$set(this.columnFilters, col.field, col.filterOptions.filterValue); // this.updateFilters(col, col.filterOptions.filterValue);
+
             this.$set(col.filterOptions, 'filterValue', undefined);
           }
-        }
+        } //* lets emit event once all filters are set
+
+
+        this.$emit('filter-changed', this.columnFilters);
       }
     },
-    mounted: function mounted() {
-      // take care of initial filters
-      this.populateInitialFilters();
+    mounted: function mounted() {}
+  };
+
+  function getNextSort(currentSort) {
+    if (currentSort === 'asc') return 'desc'; // if (currentSort === 'desc') return null;
+
+    return 'asc';
+  }
+
+  function getIndex(sortArray, column) {
+    for (var i = 0; i < sortArray.length; i++) {
+      if (column.field === sortArray[i].field) return i;
     }
+
+    return -1;
+  }
+
+  var primarySort = function (sortArray, column) {
+    if (sortArray.length && sortArray.length === 1 && sortArray[0].field === column.field) {
+      var type = getNextSort(sortArray[0].type);
+
+      if (type) {
+        sortArray[0].type = getNextSort(sortArray[0].type);
+      } else {
+        sortArray = [];
+      }
+    } else {
+      sortArray = [{
+        field: column.field,
+        type: 'asc'
+      }];
+    }
+
+    return sortArray;
+  };
+
+  var secondarySort = function (sortArray, column) {
+    //* this means that primary sort exists, we're
+    //* just adding a secondary sort
+    var index = getIndex(sortArray, column);
+
+    if (index === -1) {
+      sortArray.push({
+        field: column.field,
+        type: 'asc'
+      });
+    } else {
+      var type = getNextSort(sortArray[index].type);
+
+      if (type) {
+        sortArray[index].type = type;
+      } else {
+        sortArray.splice(index, 1);
+      }
+    }
+
+    return sortArray;
   };
 
   var VgtTableHeader = {
@@ -8015,7 +8076,7 @@
           style: _vm.columnStyles[index],
           on: {
             "click": function click($event) {
-              _vm.sort(index);
+              _vm.sort($event, column);
             }
           }
         }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], {
@@ -8065,16 +8126,19 @@
       },
       typedColumns: {},
       //* Sort related
-      sortColumn: {
-        type: Number
+      sortable: {
+        type: Boolean
       },
-      sortType: {
-        type: String
-      },
+      // sortColumn: {
+      //   type: Number,
+      // },
+      // sortType: {
+      //   type: String,
+      // },
       // utility functions
-      isSortableColumn: {
-        type: Function
-      },
+      // isSortableColumn: {
+      //   type: Function,
+      // },
       getClasses: {
         type: Function
       },
@@ -8106,7 +8170,8 @@
         timer: null,
         checkBoxThStyle: {},
         lineNumberThStyle: {},
-        columnStyles: []
+        columnStyles: [],
+        sorts: []
       };
     },
     computed: {},
@@ -8117,15 +8182,40 @@
       toggleSelectAll: function toggleSelectAll() {
         this.$emit('on-toggle-select-all');
       },
-      sort: function sort(index) {
-        this.$emit('on-sort-change', index);
+      isSortableColumn: function isSortableColumn(column) {
+        var sortable = column.sortable;
+        var isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
+        return isSortable;
+      },
+      sort: function sort$$1(e, column) {
+        //* if column is not sortable, return right here
+        if (!this.isSortableColumn(column)) return;
+
+        if (e.shiftKey) {
+          this.sorts = secondarySort(this.sorts, column);
+        } else {
+          this.sorts = primarySort(this.sorts, column);
+        }
+
+        this.$emit('on-sort-change', this.sorts);
+      },
+      setInitialSort: function setInitialSort(sorts) {
+        this.sorts = sorts;
+        this.$emit('on-sort-change', this.sorts);
+      },
+      getColumnSort: function getColumnSort(column) {
+        for (var i = 0; i < this.sorts.length; i += 1) {
+          if (this.sorts[i].field === column.field) {
+            return this.sorts[i].type || 'asc';
+          }
+        }
+
+        return null;
       },
       getHeaderClasses: function getHeaderClasses(column, index) {
-        var isSortable = this.isSortableColumn(index);
         var classes = lodash_assign({}, this.getClasses(index, 'th'), {
-          sorting: isSortable,
-          'sorting-desc': isSortable && this.sortColumn === index && this.sortType === 'desc',
-          'sorting-asc': isSortable && this.sortColumn === index && this.sortType === 'asc'
+          'sorting sorting-desc': this.getColumnSort(column) === 'desc',
+          'sorting sorting-asc': this.getColumnSort(column) === 'asc'
         });
         return classes;
       },
@@ -11070,10 +11160,8 @@
           "all-selected": _vm.allSelected,
           "all-selected-indeterminate": _vm.allSelectedIndeterminate,
           "mode": _vm.mode,
+          "sortable": _vm.sortable,
           "typed-columns": _vm.typedColumns,
-          "sort-column": _vm.sortColumn,
-          "sort-type": _vm.sortType,
-          "isSortableColumn": _vm.isSortableColumn,
           "getClasses": _vm.getClasses,
           "searchEnabled": _vm.searchEnabled,
           "paginated": _vm.paginated,
@@ -11081,7 +11169,7 @@
         },
         on: {
           "on-toggle-select-all": _vm.toggleSelectAll,
-          "on-sort-change": _vm.sort,
+          "on-sort-change": _vm.changeSort,
           "filter-changed": _vm.filterRows
         },
         scopedSlots: _vm._u([{
@@ -11110,16 +11198,14 @@
           "all-selected": _vm.allSelected,
           "all-selected-indeterminate": _vm.allSelectedIndeterminate,
           "mode": _vm.mode,
+          "sortable": _vm.sortable,
           "typed-columns": _vm.typedColumns,
-          "sort-column": _vm.sortColumn,
-          "sort-type": _vm.sortType,
-          "isSortableColumn": _vm.isSortableColumn,
           "getClasses": _vm.getClasses,
           "searchEnabled": _vm.searchEnabled
         },
         on: {
           "on-toggle-select-all": _vm.toggleSelectAll,
-          "on-sort-change": _vm.sort,
+          "on-sort-change": _vm.changeSort,
           "filter-changed": _vm.filterRows
         },
         scopedSlots: _vm._u([{
@@ -11399,8 +11485,7 @@
         paginationMode: 'records',
         currentPage: 1,
         currentPerPage: 10,
-        sortColumn: -1,
-        sortType: 'asc',
+        sorts: [],
         globalSearchTerm: '',
         filteredRows: [],
         columnFilters: {},
@@ -11446,11 +11531,12 @@
         immediate: true
       },
       sortOptions: {
-        handler: function handler() {
-          this.initializeSort();
+        handler: function handler(newValue, oldValue) {
+          if (!lodash_isequal(newValue, oldValue)) {
+            this.initializeSort();
+          }
         },
-        deep: true,
-        immediate: true
+        deep: true
       },
       selectedRows: function selectedRows(newValue, oldValue) {
         if (!lodash_isequal(newValue, oldValue)) {
@@ -11651,32 +11737,34 @@
               computedRows.push(newHeaderRow);
             }
           });
-        } // taking care of sort here only if sort has changed
+        }
+
+        if (this.sorts.length) {
+          //* we need to sort
+          computedRows.forEach(function (cRows) {
+            cRows.children.sort(function (xRow, yRow) {
+              //* we need to get column for each sort
+              var sortValue;
+
+              for (var i = 0; i < _this.sorts.length; i += 1) {
+                var column = _this.getColumnForField(_this.sorts[i].field);
+
+                var xvalue = _this.collect(xRow, _this.sorts[i].field);
+
+                var yvalue = _this.collect(yRow, _this.sorts[i].field); //* if a custom sort function has been provided we use that
 
 
-        if (this.sortColumn !== -1 && this.isSortableColumn(this.sortColumn) && ( // if search trigger is enter then we only sort
-        // when enter is hit
-        this.searchTrigger !== 'enter' || this.sortChanged)) {
-          this.sortChanged = false;
-          lodash_foreach(computedRows, function (cRows) {
-            cRows.children.sort(function (x, y) {
-              if (!_this.columns[_this.sortColumn]) return 0;
+                var sortFn = column.sortFn;
 
-              var xvalue = _this.collect(x, _this.columns[_this.sortColumn].field);
-
-              var yvalue = _this.collect(y, _this.columns[_this.sortColumn].field); // if user has provided a custom sort, use that instead of
-              // built-in sort
+                if (sortFn && typeof sortFn === 'function') {
+                  sortValue = sortValue || sortFn(xvalue, yvalue, column, xRow, yRow) * (_this.sorts[i].type === 'desc' ? -1 : 1);
+                } //* else we use our own sort
 
 
-              var sortFn = _this.columns[_this.sortColumn].sortFn;
+                sortValue = sortValue || column.typeDef.compare(xvalue, yvalue, column) * (_this.sorts[i].type === 'desc' ? -1 : 1);
+              }
 
-              if (sortFn && typeof sortFn === 'function') {
-                return sortFn(xvalue, yvalue, _this.columns[_this.sortColumn], x, y) * (_this.sortType === 'desc' ? -1 : 1);
-              } // built in sort
-
-
-              var typeDef = _this.typedColumns[_this.sortColumn].typeDef;
-              return typeDef.compare(xvalue, yvalue, _this.columns[_this.sortColumn]) * (_this.sortType === 'desc' ? -1 : 1);
+              return sortValue;
             });
           });
         } // if the filtering is event based, we need to maintain filter
@@ -11777,6 +11865,11 @@
       }
     },
     methods: {
+      getColumnForField: function getColumnForField(field) {
+        for (var i = 0; i < this.typedColumns.length; i += 1) {
+          if (this.typedColumns[i].field === field) return this.typedColumns[i];
+        }
+      },
       handleSearch: function handleSearch() {
         this.resetTable(); // for remote mode, we need to emit on-search
 
@@ -11870,20 +11963,9 @@
           this.tableLoading = true;
         }
       },
-      sort: function sort(index$$1) {
-        if (!this.isSortableColumn(index$$1)) return;
-
-        if (this.sortColumn === index$$1) {
-          this.sortType = this.sortType === 'asc' ? 'desc' : 'asc';
-        } else {
-          this.sortType = 'asc';
-          this.sortColumn = index$$1;
-        }
-
-        this.$emit('on-sort-change', {
-          sortType: this.sortType,
-          columnIndex: this.sortColumn
-        }); // every time we change sort we need to reset to page 1
+      changeSort: function changeSort(sorts) {
+        this.sorts = sorts;
+        this.$emit('on-sort-change', sorts); // every time we change sort we need to reset to page 1
 
         this.changePage(1); // if the mode is remote, we don't need to do anything
         // after this. just set table loading to true
@@ -12169,18 +12251,18 @@
       //     this.filteredRows = this.handleGrouped(this.originalRows);
       //   }
       // },
-      handleDefaultSort: function handleDefaultSort() {
-        for (var index$$1 = 0; index$$1 < this.columns.length; index$$1++) {
-          var col = this.columns[index$$1];
-
-          if (col.field === this.defaultSortBy.field) {
-            this.sortColumn = index$$1;
-            this.sortType = this.defaultSortBy.type || 'asc';
-            this.sortChanged = true;
-            break;
-          }
-        }
-      },
+      // TODO: remove for sort
+      // handleDefaultSort() {
+      //   for (let index = 0; index < this.columns.length; index++) {
+      //     const col = this.columns[index];
+      //     if (col.field === this.defaultSortBy.field) {
+      //       this.sortColumn = index;
+      //       this.sortType = this.defaultSortBy.type || 'asc';
+      //       this.sortChanged = true;
+      //       break;
+      //     }
+      //   }
+      // },
       initializePagination: function initializePagination() {
         var _this5 = this;
 
@@ -12298,11 +12380,18 @@
 
         if (typeof enabled === 'boolean') {
           this.sortable = enabled;
-        }
+        } //* initialSortBy can be an array or an object
+
 
         if (_typeof(initialSortBy) === 'object') {
-          this.defaultSortBy = initialSortBy;
-          this.handleDefaultSort();
+          var ref = this.fixedHeader ? this.$refs['table-header-secondary'] : this.$refs['table-header-primary'];
+
+          if (Array.isArray(initialSortBy)) {
+            ref.setInitialSort(initialSortBy);
+          } else {
+            var hasField = Object.prototype.hasOwnProperty.call(initialSortBy, 'field');
+            if (hasField) ref.setInitialSort([initialSortBy]);
+          }
         }
       },
       initializeSelect: function initializeSelect() {
@@ -12337,18 +12426,14 @@
         if (typeof clearSelectionText === 'string') {
           this.clearSelectionText = clearSelectionText;
         }
-      },
-      initializeColumns: function initializeColumns() {
-        // take care of default sort on mount
-        if (this.defaultSortBy) {
-          this.handleDefaultSort();
-        }
       }
     },
     mounted: function mounted() {
       if (this.perPage) {
         this.currentPerPage = this.perPage;
       }
+
+      this.initializeSort();
     },
     components: {
       'vgt-pagination': VgtPagination,
