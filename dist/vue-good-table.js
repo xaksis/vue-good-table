@@ -7410,7 +7410,7 @@
       }), _vm._v(" " + _vm._s(_vm.pageInfo) + " ")]);
     },
     staticRenderFns: [],
-    _scopeId: 'data-v-731a4dda',
+    _scopeId: 'data-v-3ace17fa',
     name: 'VgtPaginationPageInfo',
     props: {
       currentPage: {
@@ -7884,7 +7884,7 @@
       })], 2) : _vm._e();
     },
     staticRenderFns: [],
-    _scopeId: 'data-v-2949d74f',
+    _scopeId: 'data-v-a837ada2',
     name: 'VgtFilterRow',
     props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable', 'mode'],
     watch: {
@@ -8058,7 +8058,11 @@
         staticClass: "line-numbers"
       }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
         staticClass: "vgt-checkbox-col"
-      }, [_c('input', {
+      }, [_vm.hasCheckboxTemplate ? _vm._t("table-checkbox-column", null, {
+        checked: _vm.allSelected,
+        indeterminate: _vm.allSelectedIndeterminate,
+        toggle: _vm.toggleSelectAll
+      }) : _c('input', {
         attrs: {
           "type": "checkbox"
         },
@@ -8069,7 +8073,7 @@
         on: {
           "change": _vm.toggleSelectAll
         }
-      })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+      })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
         return !column.hidden ? _c('th', {
           key: index,
           class: _vm.getHeaderClasses(column, index),
@@ -8099,7 +8103,7 @@
       })]);
     },
     staticRenderFns: [],
-    _scopeId: 'data-v-0c8b4370',
+    _scopeId: 'data-v-3f07b828',
     name: 'VgtTableHeader',
     props: {
       lineNumbers: {
@@ -8174,7 +8178,11 @@
         sorts: []
       };
     },
-    computed: {},
+    computed: {
+      hasCheckboxTemplate: function hasCheckboxTemplate() {
+        return !!this.$slots['table-checkbox-column'] || !!this.$scopedSlots['table-checkbox-column'];
+      }
+    },
     methods: {
       reset: function reset() {
         this.$refs['filter-row'].reset(true);
@@ -11209,6 +11217,15 @@
           "filter-changed": _vm.filterRows
         },
         scopedSlots: _vm._u([{
+          key: "table-checkbox-column",
+          fn: function fn(props) {
+            return _vm.selectable ? [_vm._t("table-checkbox-column", null, {
+              checked: props.checked,
+              indeterminate: props.indeterminate,
+              toggle: props.toggle
+            })] : undefined;
+          }
+        }, {
           key: "table-column",
           fn: function fn(props) {
             return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
@@ -11270,14 +11287,18 @@
                 _vm.onCheckboxClicked(row, index$$1, $event);
               }
             }
-          }, [_c('input', {
+          }, [_vm.hasCheckboxRowTemplate ? _vm._t("table-checkbox-row", null, {
+            column: row.column,
+            formattedRow: row.formattedRow,
+            row: row
+          }) : _c('input', {
             attrs: {
               "type": "checkbox"
             },
             domProps: {
               "checked": row.vgtSelected
             }
-          })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+          })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
             return !column.hidden && column.field ? _c('td', {
               key: i,
               class: _vm.getClasses(i, 'td', row),
@@ -11555,6 +11576,9 @@
       },
       hasHeaderRowTemplate: function hasHeaderRowTemplate() {
         return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
+      },
+      hasCheckboxRowTemplate: function hasCheckboxRowTemplate() {
+        return !!this.$slots['table-checkbox-row'] || !!this.$scopedSlots['table-checkbox-row'];
       },
       isTableLoading: function isTableLoading() {
         return this.isLoading || this.tableLoading;

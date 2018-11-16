@@ -3,7 +3,14 @@
   <tr>
     <th v-if="lineNumbers" class="line-numbers"></th>
     <th v-if="selectable" class="vgt-checkbox-col">
+      <slot v-if="hasCheckboxTemplate" name="table-checkbox-column" 
+        :checked="allSelected"
+        :indeterminate="allSelectedIndeterminate"
+        :toggle="toggleSelectAll"
+      >
+      </slot>
       <input
+        v-else
         type="checkbox"
         :checked="allSelected"
         :indeterminate.prop="allSelectedIndeterminate"
@@ -120,6 +127,10 @@ export default {
     };
   },
   computed: {
+    hasCheckboxTemplate() {
+      return !!this.$slots['table-checkbox-column']
+        || !!this.$scopedSlots['table-checkbox-column'];
+    },
   },
   methods: {
     reset() {
