@@ -107,6 +107,10 @@ export default {
       let first = ((this.currentPage - 1) * this.currentPerPage) + 1;
       const last = Math.min(this.total, this.currentPage * this.currentPerPage);
 
+      if(first > last) {
+         first = 1;
+      }
+
       if (last === 0) {
         first = 0;
       }
