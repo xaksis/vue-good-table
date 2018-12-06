@@ -1205,14 +1205,14 @@ var VueGoodTable = {
         'nocturnal': _vm.theme === 'nocturnal',
         'black-rhino': _vm.theme === 'black-rhino'
       }
-    }, [_vm.isTableLoading ? _c('div', {
+    }, [_vm.isLoading ? _c('div', {
       staticClass: "vgt-loading vgt-center-align"
     }, [_vm._t("loadingContent", [_c('span', {
       staticClass: "vgt-loading__content"
     }, [_vm._v(" Loading... ")])])], 2) : _vm._e(), _vm._v(" "), _c('div', {
       staticClass: "vgt-inner-wrap",
       class: {
-        'is-loading': _vm.isTableLoading
+        'is-loading': _vm.isLoading
       }
     }, [_vm.paginate && _vm.paginateOnTop ? _vm._t("pagination-top", [_c('vgt-pagination', {
       ref: "paginationTop",
@@ -1483,7 +1483,7 @@ var VueGoodTable = {
   name: 'vue-good-table',
   props: {
     isLoading: {
-      default: false,
+      default: null,
       type: Boolean
     },
     maxHeight: {
@@ -1623,7 +1623,7 @@ var VueGoodTable = {
   watch: {
     rows: {
       handler: function handler() {
-        this.tableLoading = false;
+        this.$emit('update:isLoading', false);
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
@@ -1681,9 +1681,6 @@ var VueGoodTable = {
     },
     hasHeaderRowTemplate: function hasHeaderRowTemplate() {
       return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
-    },
-    isTableLoading: function isTableLoading() {
-      return this.isLoading || this.tableLoading;
     },
     showEmptySlot: function showEmptySlot() {
       if (!this.paginated.length) return true;
@@ -2077,7 +2074,7 @@ var VueGoodTable = {
       this.$emit('on-page-change', pageChangedEvent);
 
       if (this.mode === 'remote') {
-        this.tableLoading = true;
+        this.$emit('update:isLoading', true);
       }
     },
     perPageChanged: function perPageChanged(pagination) {
@@ -2086,7 +2083,7 @@ var VueGoodTable = {
       this.$emit('on-per-page-change', perPageChangedEvent);
 
       if (this.mode === 'remote') {
-        this.tableLoading = true;
+        this.$emit('update:isLoading', true);
       }
     },
     changeSort: function changeSort(sorts) {
@@ -2097,7 +2094,7 @@ var VueGoodTable = {
       // after this. just set table loading to true
 
       if (this.mode === 'remote') {
-        this.tableLoading = true;
+        this.$emit('update:isLoading', true);
         return;
       }
 
@@ -2301,7 +2298,7 @@ var VueGoodTable = {
 
         if (this.mode === 'remote') {
           if (fromFilter) {
-            this.tableLoading = true;
+            this.$emit('update:isLoading', true);
           } else {
             // if remote filtering has already been taken care of.
             this.filteredRows = computedRows;
