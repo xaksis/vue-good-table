@@ -149,7 +149,8 @@
               @mouseenter="onMouseenter(row, index)"
               @mouseleave="onMouseleave(row, index)"
               @dblclick="onRowDoubleClicked(row, index, $event)"
-              @click="onRowClicked(row, index, $event)">
+              @click="onRowClicked(row, index, $event)"
+              @auxclick="onRowAuxClicked(row, index, $event)">
               <th v-if="lineNumbers" class="line-numbers">
                 {{ getCurrentIndex(index) }}
               </th>
@@ -941,6 +942,15 @@ export default {
         this.$set(row, 'vgtSelected', !row.vgtSelected);
       }
       this.$emit('on-row-click', {
+        row,
+        pageIndex: index,
+        selected: !!row.vgtSelected,
+        event,
+      });
+    },
+
+    onRowAuxClicked(row, index, event) {
+      this.$emit('on-row-aux-click', {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
