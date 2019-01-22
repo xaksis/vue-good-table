@@ -29,7 +29,7 @@
 <span class="token punctuation">}</span>
 </code></pre></div><p>With the above information, server should be able to generate the relevant rows to send back.</p> <h3 id="what-does-the-server-send-back"><a href="#what-does-the-server-send-back" aria-hidden="true" class="header-anchor">#</a> What does the server send back?</h3> <p>Two things are required for the server to send back</p> <ol><li><strong>relevant rows</strong> - set of rows for the current page, matching the current filter and sort.</li> <li><strong>totalRecords</strong> - number of total records matching the params we sent (not just the current page). This is required for the pagination to work correctly.</li></ol> <h2 id="set-mode-to-remote"><a href="#set-mode-to-remote" aria-hidden="true" class="header-anchor">#</a> Set mode to remote</h2> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
   <span class="token attr-name">mode</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>remote<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+  <span class="token attr-name">:paginationOptions</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
   }<span class="token punctuation">&quot;</span></span>
   <span class="token attr-name">:totalRows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>totalRecords<span class="token punctuation">&quot;</span></span>
@@ -42,7 +42,7 @@
   <span class="token attr-name">@on-column-filter</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>onColumnFilter<span class="token punctuation">&quot;</span></span>
   <span class="token attr-name">@on-per-page-change</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>onPerPageChange<span class="token punctuation">&quot;</span></span>
   <span class="token attr-name">:totalRows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>totalRecords<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+  <span class="token attr-name">:paginationOptions</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
   }<span class="token punctuation">&quot;</span></span>
   <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
