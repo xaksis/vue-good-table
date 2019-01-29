@@ -38,7 +38,7 @@ rows: [
 ```javascript
 rows: [
   {
-    name: "Mammal Total", // this is the label that'll be used for the header
+    name: "Mammals Total", // this is the label that'll be used for the header
     diet: undefined,
     count: "", // total count will be displayed here
     children: [
