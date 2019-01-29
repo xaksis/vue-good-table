@@ -15,7 +15,7 @@ To create grouped rows, you need two things.
 </vue-good-table>
 ```
 
-#### 2. Make sure the rows are formatted correctly. Grouped rows need to be nested with headers rows containing rows in their children property. For example:
+#### 2. Make sure the rows are formatted correctly. Grouped rows need to be nested within header rows containing data rows in their children property. For example:
 
 ```js
 rows: [
