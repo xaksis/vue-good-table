@@ -7,20 +7,12 @@
     'black-rhino': theme==='black-rhino',
   }"
   >
-    <div
-      v-if="isTableLoading"
-      class="vgt-loading vgt-center-align"
-    >
+    <div v-if="isTableLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
-        <span class="vgt-loading__content">
-          Loading...
-        </span>
+        <span class="vgt-loading__content">Loading...</span>
       </slot>
     </div>
-    <div
-      class="vgt-inner-wrap"
-      :class="{'is-loading': isTableLoading}"
-    >
+    <div class="vgt-inner-wrap" :class="{'is-loading': isTableLoading}">
       <slot
         v-if="paginate && paginateOnTop"
         name="pagination-top"
@@ -54,8 +46,7 @@
         :global-search-placeholder="searchPlaceholder"
       >
         <template slot="internal-table-actions">
-          <slot name="table-actions">
-          </slot>
+          <slot name="table-actions"></slot>
         </template>
       </vgt-global-search>
       <div
@@ -64,22 +55,13 @@
         :class="selectionInfoClass"
       >
         {{selectionInfo}}
-        <a
-          href=""
-          @click.prevent="unselectAllInternal(true)"
-        >
-          {{clearSelectionText}}
-        </a>
+        <a href @click.prevent="unselectAllInternal(true)">{{clearSelectionText}}</a>
         <div class="vgt-selection-info-row__actions vgt-pull-right">
-          <slot name="selected-row-actions">
-          </slot>
+          <slot name="selected-row-actions"></slot>
         </div>
       </div>
       <div class="vgt-fixed-header">
-        <table
-          v-if="fixedHeader"
-          :class="tableStyleClasses"
-        >
+        <table v-if="fixedHeader" :class="tableStyleClasses">
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -100,28 +82,16 @@
             :paginated="paginated"
             :table-ref="$refs.table"
           >
-            <template
-              slot="table-column"
-              slot-scope="props"
-            >
-              <slot
-                name="table-column"
-                :column="props.column"
-              >
+            <template slot="table-column" slot-scope="props">
+              <slot name="table-column" :column="props.column">
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
           </thead>
         </table>
       </div>
-      <div
-        :class="{'vgt-responsive': responsive}"
-        :style="wrapperStyles"
-      >
-        <table
-          ref="table"
-          :class="tableStyleClasses"
-        >
+      <div :class="{'vgt-responsive': responsive}" :style="wrapperStyles">
+        <table ref="table" :class="tableStyleClasses">
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -140,24 +110,15 @@
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
           >
-            <template
-              slot="table-column"
-              slot-scope="props"
-            >
-              <slot
-                name="table-column"
-                :column="props.column"
-              >
+            <template slot="table-column" slot-scope="props">
+              <slot name="table-column" :column="props.column">
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
           </thead>
 
           <!-- Table body starts here -->
-          <tbody
-            v-for="(headerRow, index) in paginated"
-            :key="index"
-          >
+          <tbody v-for="(headerRow, index) in paginated" :key="index">
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
@@ -170,18 +131,13 @@
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
-              <template
-                v-if="hasHeaderRowTemplate"
-                slot="table-header-row"
-                slot-scope="props"
-              >
+              <template v-if="hasHeaderRowTemplate" slot="table-header-row" slot-scope="props">
                 <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                >
-                </slot>
+                ></slot>
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
@@ -194,21 +150,13 @@
               @dblclick="onRowDoubleClicked(row, index, $event)"
               @click="onRowClicked(row, index, $event)"
             >
-              <th
-                v-if="lineNumbers"
-                class="line-numbers"
-              >
-                {{ getCurrentIndex(index) }}
-              </th>
+              <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
               <th
                 v-if="selectable"
                 @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
               >
-                <input
-                  type="checkbox"
-                  :checked="row.vgtSelected"
-                />
+                <input type="checkbox" :checked="row.vgtSelected">
               </th>
               <td
                 @click="onCellClicked(row, column, index, $event)"
@@ -224,14 +172,8 @@
                   :formattedRow="formattedRow(row)"
                   :index="index"
                 >
-                  <span v-if="!column.html">
-                    {{ collectFormatted(row, column) }}
-                  </span>
-                  <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
-                  >
-                  </span>
+                  <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+                  <span v-if="column.html" v-html="collect(row, column.field)"></span>
                 </slot>
               </td>
             </tr>
@@ -247,18 +189,13 @@
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
-              <template
-                v-if="hasHeaderRowTemplate"
-                slot="table-header-row"
-                slot-scope="props"
-              >
+              <template v-if="hasHeaderRowTemplate" slot="table-header-row" slot-scope="props">
                 <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                >
-                </slot>
+                ></slot>
               </template>
             </vgt-header-row>
           </tbody>
@@ -267,9 +204,7 @@
             <tr>
               <td :colspan="fullColspan">
                 <slot name="emptystate">
-                  <div class="vgt-center-align vgt-text-disabled">
-                    No data for table
-                  </div>
+                  <div class="vgt-center-align vgt-text-disabled">No data for table</div>
                 </slot>
               </td>
             </tr>
@@ -277,8 +212,7 @@
         </table>
       </div>
       <div class="vgt-wrap__actions-footer">
-        <slot name="table-actions-bottom">
-        </slot>
+        <slot name="table-actions-bottom"></slot>
       </div>
       <slot
         v-if="paginate && paginateOnBottom"
@@ -362,6 +296,7 @@ export default {
         return {
           enabled: false,
           selectionInfoClass: "",
+
           selectionText: "rows selected",
           clearSelectionText: "clear"
         };
@@ -542,8 +477,9 @@ export default {
       if (
         this.paginated[0].label === "no groups" &&
         !this.paginated[0].children.length
-      )
+      ) {
         return true;
+      }
 
       return false;
     },
