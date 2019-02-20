@@ -52,7 +52,7 @@
     "bili": "^3.1.2",
     "node-sass": "^4.9.3",
     "poi": "^10.2.10",
-    "rollup-plugin-vue": "^3.0.0",
+    "rollup-plugin-vue": "^4.7.1",
     "sass-loader": "^6.0.6",
     "vue": "^2.6.6",
     "vue-template-compiler": "^2.6.6",
