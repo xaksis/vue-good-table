@@ -4,6 +4,7 @@
 [![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/releases)
 [![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
 [![](https://data.jsdelivr.com/v1/package/npm/vue-good-table/badge)](https://www.jsdelivr.com/package/npm/vue-good-table)
+[![](https://img.shields.io/twitter/follow/crayonbytes.svg?style=social)](https://twitter.com/CrayonBytes)
 
 An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
 
