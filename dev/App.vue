@@ -142,7 +142,7 @@ export default {
         },
         {
           id: 5,
-          name: 'Dan',
+          name: '193.23',
           age: 20,
           createdAt: null,
           score: 0.03343,

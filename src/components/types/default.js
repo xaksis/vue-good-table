@@ -15,11 +15,11 @@ export default {
     // row value
     const rowValue = skipDiacritics
       ? String(rowval).toLowerCase()
-      : diacriticless(String(rowval).toLowerCase());
+      : diacriticless(escapeRegExp(String(rowval)).toLowerCase());
 
     // search term
     const searchTerm = skipDiacritics
-      ? escapeRegExp(filter).toLowerCase()
+      ? filter.toLowerCase()
       : diacriticless(escapeRegExp(filter).toLowerCase());
 
     // comparison
