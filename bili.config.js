@@ -11,6 +11,7 @@ const banner = `/**
 module.exports = {
   name: 'vue-good-table',
   banner,
+  extractCSS: true,
   format: [
     'cjs',
     'es',
@@ -20,7 +21,7 @@ module.exports = {
   compress: 'umd',
   plugins: ['vue'],
   vue: {
-    css: 'dist/vue-good-table.css',
+    css: false,
     cssSourceMap: false,
   },
   buble: {

@@ -1332,6 +1332,9 @@ export default {
 
       if (Array.isArray(perPageDropdown) && perPageDropdown.length) {
         this.customRowsPerPageDropdown = perPageDropdown;
+        if (!this.perPage) {
+          [this.perPage] = perPageDropdown;
+        }
       }
 
       if (typeof dropdownAllowAll === 'boolean') {

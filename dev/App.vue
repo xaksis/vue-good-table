@@ -21,6 +21,7 @@
       :pagination-options="{
         mode: 'pages',
         enabled: true,
+        perPage: 5,
         perPageDropdown: [50, 100, 200, 300, 500, 1000],
       }"
       :select-options="{
