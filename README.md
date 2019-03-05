@@ -5,13 +5,9 @@
 [![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
 [![](https://data.jsdelivr.com/v1/package/npm/vue-good-table/badge)](https://www.jsdelivr.com/package/npm/vue-good-table)
 
-An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
+An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering,draggable row, pagination and much more - [vue-good-table](https://github.com/Jay04Makwana/vue-good-table)
 
 Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
-
-<a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-**Follow the project progress live** - [Vue-good-table Project on TimerBit](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
 
 <!-- 
 ### Basic Table
@@ -115,10 +111,24 @@ components: {
 * [Grouped Rows Table](https://xaksis.github.io/vue-good-table/guide/advanced/grouped-table.html)
 * [Server Powered Table](https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#why-remote-mode)
 * [Customizable Style and Themes](https://xaksis.github.io/vue-good-table/guide/style-configuration/)
+* [Draggable Row](#)
 
 ## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
+## Draggable Row
+Hey guys if you want to draggable row for table so it is easy just follow bellow steps
+
+1. simply add one props
+```bash
+:isDraggable="true"
+```
+2. and if you like to get details about dragging then just bind below event
+```bash
+@on-dragged
+```
+
+it is simple guys :smile:
 <!-- 
 ### Example Usage
 ```html
