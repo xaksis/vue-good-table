@@ -18,6 +18,8 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
+      :isDraggable="true"
+      @on-dragged="dragRow"
       :pagination-options="{
         mode: 'pages',
         enabled: true,
@@ -339,6 +341,9 @@ export default {
       console.log(selectedIds);
       this.selectedIds = selectedIds;
     },
+    dragRow (e) {
+      console.log(e)
+    }
   },
   mounted() {
     // axios.get('https://jsonplaceholder.typicode.com/posts')

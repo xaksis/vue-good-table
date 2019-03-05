@@ -155,6 +155,7 @@
 
           <!-- Table body starts here -->
           <tbody
+            ref="tbody"
             v-for="(headerRow, index) in paginated"
             :key="index"
           >
@@ -321,6 +322,8 @@ import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
+import Draggable from '@shopify/draggable/lib/draggable';
+import { Sortable } from '@shopify/draggable'
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -348,7 +351,10 @@ export default {
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
-
+    isDraggable: {
+      type: Boolean,
+      default: false
+    },
     groupOptions: {
       default() {
         return {
@@ -1479,7 +1485,23 @@ export default {
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
-    this.initializeSort();
+    this.initializeSort()
+    if (!this.isDraggable) {
+      return false
+    }
+    this.$nextTick(() => {
+      const sortable = new Sortable(this.$refs.tbody, {
+        draggable: 'tr',
+        mirror: {
+          constrainDimensions: true
+        },
+        delay: 200
+      })
+      sortable.on('sortable:stop', (e) => {
+        this.$emit('on-dragged', e)
+        this.arrayMove(this.rows, e.oldIndex, e.newIndex)
+      })
+    })
   },
 
   components: {
@@ -1487,10 +1509,14 @@ export default {
     'vgt-global-search': VgtGlobalSearch,
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
+    Sortable
   },
 };
 </script>
 
 <style lang="scss">
+table, .draggable-source--is-dragging, .draggable-container--is-dragging {
+  width: 100% !important;
+}
 @import "../styles/style";
 </style>
