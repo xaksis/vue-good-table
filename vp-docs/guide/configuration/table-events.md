@@ -148,7 +148,12 @@ methods: {
 ```
 
 ## @on-sort-change
-event emitted on sort change
+event emitted on sort change.
+::: tip
+vue-good-table now supports sorting by multiple columns, so the params
+is an array.
+:::
+
 ```html
 <vue-good-table
   :columns="columns"
@@ -158,8 +163,8 @@ event emitted on sort change
 ```javascript
 methods: {
   onSortChange(params) {
-    // params.sortType - ascending or descending
-    // params.columnIndex - index of column being sorted
+    // params[0].sortType - ascending or descending
+    // params[0].columnIndex - index of column being sorted
   }
 }
 ```

@@ -18,10 +18,12 @@ serverParams: {
   // a map of column filters example: {name: 'john', age: '20'}
   columnFilters: {
   },
-  sort: {
-    field: '', // example: 'name'
-    type: '' // 'asc' or 'desc'
-  },
+  sort: [
+    {
+      field: '', // example: 'name'
+      type: '' // 'asc' or 'desc'
+    }
+  ],
 
   page: 1, // what page I want to show
   perPage: 10 // how many items I'm showing per page
