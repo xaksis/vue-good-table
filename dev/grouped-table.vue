@@ -17,7 +17,8 @@
     :group-options="{
       enabled: true,
       headerPosition: 'top',
-      collapsable: 2
+      collapsable: 2,
+      customChildObject: 'episodes'
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
