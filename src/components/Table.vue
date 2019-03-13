@@ -773,7 +773,7 @@ export default {
       if (this.sorts.length) {
         //* we need to sort
         computedRows.forEach((cRows) => {
-          cRows[groupChildObject].sort((xRow, yRow) => {
+          cRows[this.groupChildObject].sort((xRow, yRow) => {
             //* we need to get column for each sort
             let sortValue;
             for (let i = 0; i < this.sorts.length; i += 1) {
@@ -1245,6 +1245,7 @@ export default {
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
       let computedRows = cloneDeep(this.originalRows);
+      const { groupChildObject } = this;
 
       // do we have a filter to care about?
       // if not we don't need to do anything
