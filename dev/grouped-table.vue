@@ -17,6 +17,15 @@
       headerPosition: 'top',
     }"
     styleClass="vgt-table condensed bordered">
+    <template slot="table-footer-row" slot-scope="props">
+      <tr>
+        <td colspan="100%">
+          <span>
+            The {{props.rows.filter(x => x.count === Math.max.apply(Math, props.rows.map(row => { return row.count;})))[0].name}} is the animal with the highest count: {{props.rows.filter(x => x.count === Math.max.apply(Math, props.rows.map(row => { return row.count;})))[0].count}}
+          </span>
+        </td>
+      </tr>     
+    </template>
     <!-- <template slot="table-header-row" slot-scope="props">
       <span v-if="props.row.mode === 'span'">
         My header label is - <strong>{{ props.row.label }}</strong>
