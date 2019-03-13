@@ -186,7 +186,7 @@
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <tr
-              v-for="(row, index) in headerRow.children"
+              v-for="(row, index) in headerRow[groupChildObject]"
               :key="row.originalIndex"
               :class="getRowStyleClass(row)"
               @mouseenter="onMouseenter(row, index)"
@@ -539,9 +539,11 @@ export default {
     showEmptySlot() {
       if (!this.paginated.length) return true;
 
+      const { groupChildObject } = this;
+
       if (
         this.paginated[0].label === 'no groups' &&
-        !this.paginated[0].children.length
+        !this.paginated[0][groupChildObject].length
       ) {
         return true;
       }
@@ -581,8 +583,9 @@ export default {
 
     selectedPageRows() {
       const selectedRows = [];
+      const { groupChildObject } = this;
       each(this.paginated, (headerRow) => {
-        each(headerRow.children, (row) => {
+        each(headerRow[groupChildObject], (row) => {
           if (row.vgtSelected) {
             selectedRows.push(row);
           }
@@ -593,8 +596,9 @@ export default {
 
     selectedRows() {
       const selectedRows = [];
+      const { groupChildObject } = this;
       each(this.processedRows, (headerRow) => {
-        each(headerRow.children, (row) => {
+        each(headerRow[groupChildObject], (row) => {
           if (row.vgtSelected) {
             selectedRows.push(row);
           }
@@ -639,17 +643,22 @@ export default {
       }
       return false;
     },
+    groupChildObject() {
+      return this.groupOptions.customChildObject || 'children'
+    },
     totalRowCount() {
+      const { groupChildObject } = this;
       let total = 0;
       each(this.processedRows, (headerRow) => {
-        total += headerRow.children ? headerRow.children.length : 0;
+        total += headerRow[groupChildObject] ? headerRow[groupChildObject].length : 0;
       });
       return total;
     },
     totalPageRowCount() {
       let total = 0;
+      const { groupChildObject } = this;
       each(this.paginated, (headerRow) => {
-        total += headerRow.children ? headerRow.children.length : 0;
+        total += headerRow[groupChildObject] ? headerRow[groupChildObject].length : 0;
       });
       return total;
     },
@@ -702,8 +711,9 @@ export default {
         // here also we need to de-construct and then
         // re-construct the rows.
         const allRows = [];
+        const { groupChildObject } = this;
         each(this.filteredRows, (headerRow) => {
-          allRows.push(...headerRow.children);
+          allRows.push(...headerRow[groupChildObject]);
         });
         const filteredRows = [];
         each(allRows, (row) => {
@@ -754,7 +764,7 @@ export default {
           const children = filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
             const newHeaderRow = cloneDeep(headerRow);
-            newHeaderRow.children = children;
+            newHeaderRow[groupChildObject] = children;
             computedRows.push(newHeaderRow);
           }
         });
@@ -762,7 +772,7 @@ export default {
       if (this.sorts.length) {
         //* we need to sort
         computedRows.forEach((cRows) => {
-          cRows.children.sort((xRow, yRow) => {
+          cRows[groupChildObject].sort((xRow, yRow) => {
             //* we need to get column for each sort
             let sortValue;
             for (let i = 0; i < this.sorts.length; i += 1) {
@@ -784,7 +794,7 @@ export default {
                 sortValue ||
                 column.typeDef.compare(xvalue, yvalue, column) *
                   (this.sorts[i].type === 'desc' ? -1 : 1);
-            }
+          }
             return sortValue;
           });
         });
@@ -800,6 +810,7 @@ export default {
     },
 
     paginated() {
+      const { groupChildObject } = this;
       if (!this.processedRows.length) return [];
 
       if (this.mode === 'remote') {
@@ -810,7 +821,7 @@ export default {
       // to cater to paging
       let paginatedRows = [];
       each(this.processedRows, (childRows) => {
-        paginatedRows.push(...childRows.children);
+        paginatedRows.push(...childRows[groupChildObject]);
       });
 
       if (this.paginate) {
@@ -841,7 +852,7 @@ export default {
         const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
           const newHeaderRow = cloneDeep(headerRow);
-          newHeaderRow.children = children;
+          newHeaderRow[groupChildObject] = children;
           reconstructedRows.push(newHeaderRow);
         }
       });
@@ -850,6 +861,7 @@ export default {
 
     originalRows() {
       const rows = cloneDeep(this.rows);
+      const { groupChildObject } = this;
       let nestedRows = [];
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([
@@ -865,7 +877,7 @@ export default {
       // rows so lets do that
       let index = 0;
       each(nestedRows, (headerRow, i) => {
-        each(headerRow.children, (row, j) => {
+        each(headerRow[groupChildObject], (row, j) => {
           row.originalIndex = index++;
         });
       });
@@ -923,8 +935,9 @@ export default {
     unselectAllInternal(forceAll) {
       const rows =
         this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
+      const { groupChildObject } = this;
       each(rows, (headerRow, i) => {
-        each(headerRow.children, (row, j) => {
+        each(headerRow[groupChildObject], (row, j) => {
           this.$set(row, 'vgtSelected', false);
         });
       });
@@ -937,8 +950,9 @@ export default {
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
+      const { groupChildObject } = this;
       each(rows, (headerRow) => {
-        each(headerRow.children, (row) => {
+        each(headerRow[groupChildObject], (row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
@@ -1217,7 +1231,7 @@ export default {
           const col = this.typedColumns[i];
           if (this.columnFilters[col.field]) {
             computedRows = each(computedRows, (headerRow) => {
-              const newChildren = headerRow.children.filter((row) => {
+              const newChildren = headerRow[groupChildObject].filter((row) => {
                 // If column has a custom filter, use that.
                 if (
                   col.filterOptions &&
@@ -1236,7 +1250,7 @@ export default {
                 );
               });
               // should we remove the header?
-              headerRow.children = newChildren;
+              headerRow[groupChildObject] = newChildren;
             });
           }
         }
@@ -1264,9 +1278,10 @@ export default {
     },
 
     handleGrouped(originalRows) {
+      const { groupChildObject } = this;
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
-        each(headerRow.children, (childRow) => {
+        each(headerRow[groupChildObject], (childRow) => {
           childRow.vgt_id = i;
         });
       });
