@@ -151,11 +151,13 @@
             <vgt-header-row
               v-if="groupHeaderOnTop"
               @vgtExpand="toggleExpand(index)"
+              :mode="mode"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collapsable="groupOptions.collapsable"
+              :select-all-by-group="selectAllByGroup"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"

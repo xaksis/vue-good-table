@@ -16,8 +16,9 @@
     }"
     :group-options="{
       enabled: true,
-      headerPosition: 'top',
+      headerPosition: 'bottom',
       collapsable: 2,
+      mode: 'span',
       customChildObject: 'episodes'
     }"
     styleClass="vgt-table condensed bordered"
