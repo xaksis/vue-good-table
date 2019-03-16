@@ -161,26 +161,40 @@
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
+              :mode="mode"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :select-all-by-group="selectAllByGroup"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
+              :groupIndex="index"
+              :groupChildObject="groupChildObject"
+              :groupOptions="groupOptions"
+              @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
+              <slot name="table-header-group-select"
+                  :columns="columns"
+                  :formatted-row="formattedRow"
+                  :row="headerRow"
+              >
+              </slot>
+              
               <template
                 v-if="hasHeaderRowTemplate"
                 slot="table-header-row"
                 slot-scope="props"
               >
+                
                 <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                >
+                >  
                 </slot>
               </template>
             </vgt-header-row>
@@ -205,7 +219,7 @@
                 @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
               >
-                <input
+                <input :ref="`checkbox-group-${index}`"
                   type="checkbox"
                   :checked="row.vgtSelected"
                 />
@@ -237,15 +251,21 @@
             </tr>
             <!-- if group row header is at the bottom -->
             <vgt-header-row
-              v-if="groupHeaderOnBottom"
+              v-if="!groupHeaderOnTop"
+              :mode="mode"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :select-all-by-group="selectAllByGroup"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
+              :groupIndex="index"
+              :groupChildObject="groupChildObject"
+              :groupOptions="groupOptions"
+              @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
                 v-if="hasHeaderRowTemplate"
@@ -353,6 +373,7 @@ export default {
       default() {
         return {
           enabled: false,
+          mode: ''
         };
       },
     },
@@ -421,6 +442,7 @@ export default {
     selectable: false,
     selectOnCheckboxOnly: false,
     selectAllByPage: true,
+    selectByGroup: false,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -951,12 +973,20 @@ export default {
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       const { groupChildObject } = this;
+      
       each(rows, (headerRow) => {
         each(headerRow[groupChildObject], (row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
       this.emitSelectedRows();
+    },
+
+    toggleSelectGroup(event, headerRow) {
+      const { groupChildObject } = this;
+      each(headerRow[groupChildObject], (row) => {
+        this.$set(row, 'vgtSelected', event.checked);
+      });
     },
 
     changePage(value) {
@@ -1459,6 +1489,7 @@ export default {
         clearSelectionText,
         selectOnCheckboxOnly,
         selectAllByPage,
+        selectAllByGroup,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1472,6 +1503,8 @@ export default {
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
       }
+      
+      this.selectAllByGroup = Boolean(selectAllByGroup);
 
       if (typeof selectionInfoClass === 'string') {
         this.selectionInfoClass = selectionInfoClass;

@@ -4,7 +4,10 @@
     :columns="columns"
     :rows="rows"
     :line-numbers="true"
-    :select-options="{enabled: true}"
+    :select-options="{
+      enabled: true,
+      selectAllByGroup: true
+    }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
     @on-row-mouseenter="onMouseover"
@@ -14,8 +17,8 @@
     }"
     :group-options="{
       enabled: true,
-      headerPosition: 'top',
-      customChildObject: 'episodes'
+      headerPosition: 'bottom',
+      mode: 'span'
     }"
     styleClass="vgt-table condensed bordered">
     <!-- <template slot="table-header-row" slot-scope="props">
@@ -71,6 +74,7 @@ export default {
           ],
         },
         {
+          label: 'Reptile Total',
           name: 'Reptile Total',
           diet: '',
           count: '',
