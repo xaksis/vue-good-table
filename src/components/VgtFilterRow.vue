@@ -34,7 +34,7 @@
       <select v-if="isDropdownObjects(column)"
         class="vgt-select"
         :value="columnFilters[column.field]"
-        v-on:input="updateFilters(column, $event.target.value, true)">
+        @change="updateFilters(column, $event.target.value, true)">
         <option value="" key="-1">{{ getPlaceholder(column) }}</option>
         <option
           v-for="(option, i) in column.filterOptions.filterDropdownItems"
