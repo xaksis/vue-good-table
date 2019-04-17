@@ -7,10 +7,12 @@ const banner = `/**
  * Released under the MIT License.
  */
 `;
-
+const vue = require('rollup-plugin-vue');
 module.exports = {
   name: 'vue-good-table',
   banner,
+  extractCSS: true,
+  exports: 'named',
   format: [
     'cjs',
     'es',
@@ -18,9 +20,9 @@ module.exports = {
     'umd-min',
   ],
   compress: 'umd',
-  plugins: ['vue'],
+  plugins: [vue(),'vue'],
   vue: {
-    css: 'dist/vue-good-table.css',
+    css: false,
     cssSourceMap: false,
   },
   buble: {

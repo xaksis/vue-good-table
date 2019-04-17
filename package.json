@@ -1,6 +1,6 @@
 {
   "name": "vue-good-table",
-  "version": "2.16.0",
+  "version": "2.16.3",
   "sideEffects": [
     "*.vue",
     "*.css"
@@ -50,13 +50,13 @@
   },
   "devDependencies": {
     "bili": "^3.1.2",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.11.0",
     "poi": "^10.2.10",
-    "rollup-plugin-vue": "^3.0.0",
+    "rollup-plugin-vue": "^4.7.1",
     "sass-loader": "^6.0.6",
-    "vue": "^2.5.17",
-    "vue-template-compiler": "^2.5.17",
-    "vuepress": "^0.14.4",
-    "webpack": "^4.8.3"
+    "vue": "^2.5.22",
+    "vue-template-compiler": "^2.5.22",
+    "vuepress": "^0.14.10",
+    "webpack": "^4.28.4"
   }
 }

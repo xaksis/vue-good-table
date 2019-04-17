@@ -13,7 +13,6 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      console.log('in-route');
       if (
         to.path !== from.path &&
         this.$el.querySelector('#carbonads')

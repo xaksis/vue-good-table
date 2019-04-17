@@ -20,13 +20,13 @@
       theme="black-rhino"
       :pagination-options="{
         mode: 'pages',
-        perPage: 3,
         enabled: true,
+        perPage: 5,
         perPageDropdown: [50, 100, 200, 300, 500, 1000],
       }"
       :select-options="{
-        enabled: false,
-        selectOnCheckboxOnly: false,
+        enabled: true,
+        selectOnCheckboxOnly: true,
       }"
       styleClass="vgt-table bordered"
       :sort-options="{
@@ -38,6 +38,8 @@
         skipDiacritics: true,
       }">
     </vue-good-table>
+    <h3>Remote Table</h3>
+    <remote-table/>
     <h3>Grouped Table</h3>
     <grouped-table></grouped-table>
   </div>
@@ -45,6 +47,7 @@
 
 <script>
 import GroupedTable from './grouped-table';
+import RemoteTable from './remote-table';
 
 export default {
   name: 'test',
@@ -139,7 +142,7 @@ export default {
         },
         {
           id: 5,
-          name: 'Dan',
+          name: '193.23',
           age: 20,
           createdAt: null,
           score: 0.03343,
@@ -347,6 +350,7 @@ export default {
   },
   components: {
     'grouped-table': GroupedTable,
+    RemoteTable,
   },
 };
 </script>
