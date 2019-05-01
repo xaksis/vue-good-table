@@ -101,6 +101,14 @@ components: {
 }
 ```
 
+Import into your component using Typescript
+```typescript
+// add to component
+components: {
+  'vue-good-table': require('vue-good-table').VueGoodTable,
+}
+```
+
 
 ##### Example table with grouped rows and column filters
 ![Advanced Screenshot](README/images/vgt-table.advanced.png)
