@@ -41,7 +41,7 @@ Two things are required for the server to send back
 ```html
 <vue-good-table
   mode="remote"
-  pagination-options="{
+  :pagination-options="{
     enabled: true,
   }"
   :totalRows="totalRecords"
@@ -61,7 +61,8 @@ Now instead of doing the above client side, each user interaction will generate 
   @on-column-filter="onColumnFilter"
   @on-per-page-change="onPerPageChange"
   :totalRows="totalRecords"
-  pagination-options="{
+  :isLoading.sync="isLoading"
+  :pagination-options="{
     enabled: true,
   }"
   :rows="rows"
@@ -72,6 +73,7 @@ Now instead of doing the above client side, each user interaction will generate 
 ```javascript
 data() {
   return {
+    isLoading: false,
     columns: [
       //...
     ],
@@ -142,7 +144,7 @@ methods: {
 1. Row object's update signifies to VGT that the loading event is now done, and VGT shows the new rows on the table. 
 
 ::: tip
-If you want to show loading notification manually, you can do so using table's `:isLoading=true` property.
+If you want to show loading notification manually, you can do so using table's `:isLoading.sync="isLoading"` property.
 :::
 
 ::: tip

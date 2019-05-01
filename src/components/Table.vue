@@ -270,7 +270,7 @@
           </tbody>
         </table>
       </div>
-      <div class="vgt-wrap__actions-footer">
+      <div v-if="hasFooterSlot" class="vgt-wrap__actions-footer">
         <slot name="table-actions-bottom">
         </slot>
       </div>
@@ -470,8 +470,10 @@ export default {
     },
 
     paginationOptions: {
-      handler() {
-        this.initializePagination();
+      handler(newValue, oldValue) {
+        if (!isEqual(newValue, oldValue)) {
+          this.initializePagination();
+        }
       },
       deep: true,
       immediate: true,
@@ -512,6 +514,9 @@ export default {
   },
 
   computed: {
+    hasFooterSlot() {
+      return !!this.$slots['table-actions-bottom'];
+    },
     wrapperStyles() {
       return {
         overflow: 'scroll-y',
@@ -970,6 +975,7 @@ export default {
 
     perPageChanged(pagination) {
       this.currentPerPage = pagination.currentPerPage;
+      //* update perPage also
       const perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
       if (this.mode === 'remote') {
@@ -1271,30 +1277,6 @@ export default {
       });
       return originalRows;
     },
-
-    // handleRows() {
-    //   if (!this.groupOptions.enabled) {
-    //     this.filteredRows = this.handleGrouped([{
-    //       label: 'no groups',
-    //       children: this.originalRows,
-    //     }]);
-    //   } else {
-    //     this.filteredRows = this.handleGrouped(this.originalRows);
-    //   }
-    // },
-
-    // TODO: remove for sort
-    // handleDefaultSort() {
-    //   for (let index = 0; index < this.columns.length; index++) {
-    //     const col = this.columns[index];
-    //     if (col.field === this.defaultSortBy.field) {
-    //       this.sortColumn = index;
-    //       this.sortType = this.defaultSortBy.type || 'asc';
-    //       this.sortChanged = true;
-    //       break;
-    //     }
-    //   }
-    // },
 
     initializePagination() {
       const {
