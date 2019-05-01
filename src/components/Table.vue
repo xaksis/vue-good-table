@@ -5,22 +5,16 @@
     'rtl': rtl,
     'nocturnal': theme==='nocturnal',
     'black-rhino': theme==='black-rhino',
-  }"
-  >
-    <div
-      v-if="isTableLoading"
-      class="vgt-loading vgt-center-align"
-    >
+  }">
+    <div v-if="isLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
         <span class="vgt-loading__content">
           Loading...
         </span>
       </slot>
     </div>
-    <div
-      class="vgt-inner-wrap"
-      :class="{'is-loading': isTableLoading}"
-    >
+    <div class="vgt-inner-wrap"
+      :class="{'is-loading': isLoading}">
       <slot
         v-if="paginate && paginateOnTop"
         name="pagination-top"
@@ -335,7 +329,7 @@ each(Object.keys(coreDataTypes), (key) => {
 export default {
   name: 'vue-good-table',
   props: {
-    isLoading: { default: false, type: Boolean },
+    isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
     fixedHeader: { default: false, type: Boolean },
     theme: { default: '' },
@@ -460,7 +454,7 @@ export default {
   watch: {
     rows: {
       handler() {
-        this.tableLoading = false;
+        this.$emit('update:isLoading', false);
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
@@ -530,10 +524,6 @@ export default {
         !!this.$slots['table-header-row'] ||
         !!this.$scopedSlots['table-header-row']
       );
-    },
-
-    isTableLoading() {
-      return this.isLoading || this.tableLoading;
     },
 
     showEmptySlot() {
@@ -974,7 +964,7 @@ export default {
       pageChangedEvent.prevPage = pagination.prevPage;
       this.$emit('on-page-change', pageChangedEvent);
       if (this.mode === 'remote') {
-        this.tableLoading = true;
+        this.$emit('update:isLoading', true);
       }
     },
 
@@ -983,7 +973,7 @@ export default {
       const perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
       if (this.mode === 'remote') {
-        this.tableLoading = true;
+        this.$emit('update:isLoading', true);
       }
     },
 
@@ -997,7 +987,7 @@ export default {
       // if the mode is remote, we don't need to do anything
       // after this. just set table loading to true
       if (this.mode === 'remote') {
-        this.tableLoading = true;
+        this.$emit('update:isLoading', true);
         return;
       }
       this.sortChanged = true;
@@ -1214,7 +1204,7 @@ export default {
         // if mode is remote, we don't do any filtering here.
         if (this.mode === 'remote') {
           if (fromFilter) {
-            this.tableLoading = true;
+            this.$emit('update:isLoading', true);
           } else {
             // if remote filtering has already been taken care of.
             this.filteredRows = computedRows;
