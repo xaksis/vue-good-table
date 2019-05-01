@@ -47,7 +47,7 @@ export default {
       if (Number.isNaN(value)
         || value > this.lastPage
         || value < 1) {
-        event.target.value = this.currentPage;
+        event.target.value = this.currentPage > this.lastPage ? 1 : this.currentPage;
         return false;
       }
 

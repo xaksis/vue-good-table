@@ -138,16 +138,17 @@
             :sortable="sortable"
             :typed-columns="typedColumns"
             :getClasses="getClasses"
-            :searchEnabled="searchEnabled"
-          >
-            <template
-              slot="table-column"
-              slot-scope="props"
-            >
-              <slot
-                name="table-column"
-                :column="props.column"
+            :searchEnabled="searchEnabled">
+            <template v-if="selectable" slot="table-checkbox-column" slot-scope="props">
+              <slot name="table-checkbox-column" 
+               :checked="props.checked"
+               :indeterminate="props.indeterminate"
+               :toggle="props.toggle"
               >
+              </slot>
+            </template>
+            <template slot="table-column" slot-scope="props">
+              <slot name="table-column" :column="props.column">
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
@@ -202,10 +203,18 @@
               </th>
               <th
                 v-if="selectable"
-                @click.stop="onCheckboxClicked(row, index, $event)"
-                class="vgt-checkbox-col"
-              >
+                @click.prevent.stop="onCheckboxClicked(row, index, $event)"
+                class="vgt-checkbox-col">
+
+                <slot 
+                  v-if="hasCheckboxRowTemplate" name="table-checkbox-row"
+                  :column="row.column"
+                  :formattedRow="row.formattedRow"
+                  :row="row">
+                </slot>
+ 
                 <input
+                  v-else
                   type="checkbox"
                   :checked="row.vgtSelected"
                 />
@@ -530,6 +539,10 @@ export default {
         !!this.$slots['table-header-row'] ||
         !!this.$scopedSlots['table-header-row']
       );
+    },
+    hasCheckboxRowTemplate() {
+      return !!this.$slots['table-checkbox-row']
+        || !!this.$scopedSlots['table-checkbox-row'];
     },
 
     isTableLoading() {
