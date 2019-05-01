@@ -22,6 +22,8 @@ Vue.use(VueGoodTablePlugin);
 
 **or** you can import into your component:
 ```js
+// import the styles 
+import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 
 // add to component

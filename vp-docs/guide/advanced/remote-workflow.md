@@ -111,10 +111,10 @@ methods: {
 
     onSortChange(params) {
       this.updateParams({
-        sort: {
+        sort: [{
           type: params.sortType,
           field: this.columns[params.columnIndex].field,
-        },
+        }],
       });
       this.loadItems();
     },
