@@ -52,7 +52,7 @@
         class="vgt-selection-info-row clearfix"
         :class="selectionInfoClass"
       >
-        {{selectionInfo}}
+        <span>{{selectionInfo}}</span>
         <a
           href=""
           @click.prevent="unselectAllInternal(true)"
@@ -173,7 +173,7 @@
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                >
+                >  
                 </slot>
               </template>
             </vgt-header-row>
@@ -183,6 +183,7 @@
               v-for="(row, index) in headerRow[groupChildObject]"
               :key="row.originalIndex"
               :class="getRowStyleClass(row)"
+              :ref="`row-${row.originalIndex}`"
               @mouseenter="onMouseenter(row, index)"
               @mouseleave="onMouseleave(row, index)"
               @dblclick="onRowDoubleClicked(row, index, $event)"
@@ -194,7 +195,7 @@
               >
                 {{ getCurrentIndex(index) }}
               </th>
-              <th
+              <td
                 v-if="selectable"
                 @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
@@ -203,7 +204,7 @@
                   type="checkbox"
                   :checked="row.vgtSelected"
                 />
-              </th>
+              </td>
               <td
                 @click="onCellClicked(row, column, index, $event)"
                 v-for="(column, i) in columns"
@@ -255,6 +256,13 @@
                 </slot>
               </template>
             </vgt-header-row>
+
+            <slot
+              name="table-footer-row"
+              :columns="columns"
+              :headerRow="headerRow"
+            >
+            </slot>
           </tbody>
 
           <tbody v-if="showEmptySlot">
@@ -791,12 +799,12 @@ export default {
                   sortFn(xvalue, yvalue, column, xRow, yRow) *
                     (this.sorts[i].type === 'desc' ? -1 : 1);
               } else {
-                //* else we use our own sort
-                sortValue =
-                  sortValue ||
-                  column.typeDef.compare(xvalue, yvalue, column) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
-              }
+              //* else we use our own sort
+              sortValue =
+                sortValue ||
+                column.typeDef.compare(xvalue, yvalue, column) *
+                  (this.sorts[i].type === 'desc' ? -1 : 1);
+          }
             }
             return sortValue;
           });
@@ -1509,7 +1517,7 @@ export default {
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
       }
-
+      
       if (typeof disableSelectInfo === 'boolean') {
         this.disableSelectInfo = disableSelectInfo;
       }

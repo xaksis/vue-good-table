@@ -6,25 +6,23 @@
     :colspan="fullColspan"
     @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
     <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+    <template v-if="selectAllByGroup">
+      <slot name="table-header-group-select"
+        :columns="columns"
+        :row="headerRow"
+      >
+        <input
+          type="checkbox"
+          :checked="allSelected"
+          @change="toggleSelectGroup($event)" />
+      </slot>
+    </template>
     <slot
       :row="headerRow"
-      :column="column"
       name="table-header-row">
       <span v-if="headerRow.html" v-html="headerRow.label">
       </span>
       <span v-else>
-        <template v-if="selectAllByGroup"
-        >
-          <slot name="table-header-group-select"
-            :columns="columns"
-            :row="headerRow"
-          >
-            <input
-              type="checkbox"
-              :checked="allSelected"
-              @change="toggleSelectGroup($event)" />
-          </slot>
-        </template>
         {{ headerRow.label }}
       </span>
     </slot>
@@ -35,6 +33,7 @@
     v-if="!spanColumns && lineNumbers"></th>
   <th
     class="vgt-row-header"
+    :class="{ 'vgt-checkbox-col': selectAllByGroup }"
     v-if="!spanColumns && selectable">
     <template v-if="selectAllByGroup"
     >

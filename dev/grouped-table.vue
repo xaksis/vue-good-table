@@ -16,7 +16,7 @@
     }"
     :group-options="{
       enabled: true,
-      headerPosition: 'bottom',
+      headerPosition: 'top',
       collapsable: 2,
       mode: 'span',
       customChildObject: 'episodes'
@@ -24,14 +24,11 @@
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
   >
-    <!-- <template slot="table-header-row" slot-scope="props">
-      <span v-if="props.row.mode === 'span'">
-        My header label is - <strong>{{ props.row.label }}</strong>
-      </span>
-      <span v-else>
-        {{props.formattedRow[props.column.field]}}
-      </span>
-    </template> -->
+    <template slot="table-footer-row" slot-scope="{headerRow}">
+      <tr slot="table-footer-row">
+        <td colspan="9999">total: {{ sumCount(headerRow) }}</td>
+      </tr>
+    </template>
   </vue-good-table>
 </div>
 </template>
@@ -116,12 +113,8 @@ export default {
       console.log(params);
     },
     sumCount(rowObj) {
-      let sum = 0;
-      for (let i = 0; i < rowObj.children.length; i++) {
-        sum += rowObj.children[i].count;
-      }
-      return sum;
-    },
+      return rowObj.children.reduce((a, b) => a + (b.count || 0), 0);
+    }
   },
   mounted() {
   },
