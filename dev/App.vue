@@ -60,6 +60,7 @@ export default {
         {
           label: 'Name',
           field: 'name',
+          width: '200px',
           filterOptions: {
             enabled: true,
             placeholder: 'All',

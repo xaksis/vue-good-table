@@ -196,6 +196,8 @@ export default {
             colStyles.push(this.getWidthStyle(cell));
           } else {
             colStyles.push({
+              minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
+              maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
               width: this.columns[i].width ? this.columns[i].width : 'auto',
             });
           }
@@ -206,6 +208,8 @@ export default {
 
     getColumnStyle(column, index) {
       const styleObject = {
+        minWidth: column.width ? column.width : 'auto',
+        maxWidth: column.width ? column.width : 'auto',
         width: column.width ? column.width : 'auto',
       };
       //* if fixed header we need to get width from original table
