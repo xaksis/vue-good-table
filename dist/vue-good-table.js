@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.16.4
+ * vue-good-table v2.16.5
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8214,6 +8214,8 @@
               colStyles.push(_this.getWidthStyle(cell));
             } else {
               colStyles.push({
+                minWidth: _this.columns[i].width ? _this.columns[i].width : 'auto',
+                maxWidth: _this.columns[i].width ? _this.columns[i].width : 'auto',
                 width: _this.columns[i].width ? _this.columns[i].width : 'auto'
               });
             }
@@ -8224,6 +8226,8 @@
       },
       getColumnStyle: function getColumnStyle(column, index) {
         var styleObject = {
+          minWidth: column.width ? column.width : 'auto',
+          maxWidth: column.width ? column.width : 'auto',
           width: column.width ? column.width : 'auto'
         }; //* if fixed header we need to get width from original table
 
@@ -8259,7 +8263,7 @@
     /* style */
     const __vue_inject_styles__$4 = undefined;
     /* scoped */
-    const __vue_scope_id__$4 = "data-v-1a3bd028";
+    const __vue_scope_id__$4 = "data-v-7068df50";
     /* module identifier */
     const __vue_module_identifier__$4 = undefined;
     /* functional template */
