@@ -17,6 +17,7 @@ This section talks about how to configure global search options.
     searchFn: mySearchFn,
     placeholder: 'Search this table',
     externalQuery: searchQuery
+    @on-search="onSearch"
   }">
 </vue-good-table>
 ```
