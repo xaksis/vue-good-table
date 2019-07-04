@@ -51,12 +51,14 @@
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
+    "@vuepress/plugin-google-analytics": "^1.0.0-rc.1",
     "bili": "^4.8.0",
     "node-sass": "^4.12.0",
     "poi": "^12.6.10",
     "rollup-plugin-vue": "^5.0.0",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vuepress": "^1.0.0-rc.1"
   }
 }

@@ -37,6 +37,7 @@ Array containing row objects. Each row object contains data that will be display
     //...
 ]
 ```
+
 ::: tip
 for **grouped rows**, you need a nested format. Refer to [Grouped Table](/guide/advanced/grouped-table.md) for examples.
 :::

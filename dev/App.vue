@@ -78,6 +78,9 @@ export default {
           },
         },
         {
+          filterOptions: {
+            enabled: true,
+          },
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
