@@ -1,7 +1,7 @@
 <template>
   <ParentLayout>
     <carbon-ads slot="sidebar-top"/>
-    <userbit-ad slot="page-top"/>
+    <user-bit-ad slot="page-top"/>
   </ParentLayout>
 </template>
 

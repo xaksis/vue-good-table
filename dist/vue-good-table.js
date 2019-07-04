@@ -1383,7 +1383,7 @@
   var root = freeGlobal || freeSelf || Function('return this')();
 
   /** Detect free variable `exports`. */
-  var freeExports = exports && !exports.nodeType && exports;
+  var freeExports =  exports && !exports.nodeType && exports;
 
   /** Detect free variable `module`. */
   var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -3148,7 +3148,7 @@
   var root = freeGlobal || freeSelf || Function('return this')();
 
   /** Detect free variable `exports`. */
-  var freeExports = exports && !exports.nodeType && exports;
+  var freeExports =  exports && !exports.nodeType && exports;
 
   /** Detect free variable `module`. */
   var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -4880,7 +4880,7 @@
    */
   function filter(collection, predicate) {
     var func = isArray(collection) ? arrayFilter : baseFilter;
-    return func(collection, baseIteratee(predicate, 3));
+    return func(collection, baseIteratee(predicate));
   }
 
   /**
@@ -5508,7 +5508,7 @@
   var root = freeGlobal || freeSelf || Function('return this')();
 
   /** Detect free variable `exports`. */
-  var freeExports = exports && !exports.nodeType && exports;
+  var freeExports =  exports && !exports.nodeType && exports;
 
   /** Detect free variable `module`. */
   var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -11295,8 +11295,6 @@
     }
     return input.replace(/\\/g, '')
   }
-
-  // This file is generated automatically by `scripts/build/indices.js`. Please, don't change it.
 
   var date = lodash_clonedeep(defaultType);
   date.isRight = true;
