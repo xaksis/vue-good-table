@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.16.5
+ * vue-good-table v2.17.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -11,13 +11,14 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var diacriticless = _interopDefault(require('diacriticless'));
-var cloneDeep = _interopDefault(require('lodash.clonedeep'));
-var isEqual = _interopDefault(require('lodash.isequal'));
-var assign = _interopDefault(require('lodash.assign'));
-var dateFns = require('date-fns');
 var each = _interopDefault(require('lodash.foreach'));
+var assign = _interopDefault(require('lodash.assign'));
+var cloneDeep = _interopDefault(require('lodash.clonedeep'));
 var filter = _interopDefault(require('lodash.filter'));
+var isEqual = _interopDefault(require('lodash.isequal'));
+var diacriticless = _interopDefault(require('diacriticless'));
+var __vue_normalize__ = _interopDefault(require('vue-runtime-helpers/dist/normalize-component.js'));
+var dateFns = require('date-fns');
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -95,11 +96,11 @@ var escapeRegExp = function escapeRegExp(str) {
   return str.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 };
 
-var def = {
+var defaultType = {
   format: function format(x) {
     return x;
   },
-  filterPredicate: function filterPredicate(rowval, filter$$1) {
+  filterPredicate: function filterPredicate(rowval, filter) {
     var skipDiacritics = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
     // take care of nulls
@@ -110,7 +111,7 @@ var def = {
 
     var rowValue = skipDiacritics ? String(rowval).toLowerCase() : diacriticless(escapeRegExp(String(rowval)).toLowerCase()); // search term
 
-    var searchTerm = skipDiacritics ? filter$$1.toLowerCase() : diacriticless(escapeRegExp(filter$$1).toLowerCase()); // comparison
+    var searchTerm = skipDiacritics ? filter.toLowerCase() : diacriticless(escapeRegExp(filter).toLowerCase()); // comparison
 
     return rowValue.indexOf(searchTerm) > -1;
   },
@@ -142,20 +143,20 @@ var script = {
   name: 'VgtPaginationPageInfo',
   props: {
     currentPage: {
-      default: 1
+      "default": 1
     },
     lastPage: {
-      default: 1
+      "default": 1
     },
     totalRecords: {
-      default: 0
+      "default": 0
     },
     ofText: {
-      default: 'of',
+      "default": 'of',
       type: String
     },
     pageText: {
-      default: 'page',
+      "default": 'page',
       type: String
     }
   },
@@ -185,121 +186,61 @@ var script = {
   components: {}
 };
 
-function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
-/* server only */
-, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
-  if (typeof shadowMode !== 'boolean') {
-    createInjectorSSR = createInjector;
-    createInjector = shadowMode;
-    shadowMode = false;
-  } // Vue.extend constructor export interop.
-
-
-  var options = typeof script === 'function' ? script.options : script; // render functions
-
-  if (template && template.render) {
-    options.render = template.render;
-    options.staticRenderFns = template.staticRenderFns;
-    options._compiled = true; // functional template
-
-    if (isFunctionalTemplate) {
-      options.functional = true;
-    }
-  } // scopedId
-
-
-  if (scopeId) {
-    options._scopeId = scopeId;
-  }
-
-  var hook;
-
-  if (moduleIdentifier) {
-    // server build
-    hook = function hook(context) {
-      // 2.3 injection
-      context = context || // cached call
-      this.$vnode && this.$vnode.ssrContext || // stateful
-      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
-      // 2.2 with runInNewContext: true
-
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__;
-      } // inject component styles
-
-
-      if (style) {
-        style.call(this, createInjectorSSR(context));
-      } // register component module identifier for async chunk inference
-
-
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier);
-      }
-    }; // used by ssr in case component is cached and beforeCreate
-    // never gets called
-
-
-    options._ssrRegister = hook;
-  } else if (style) {
-    hook = shadowMode ? function () {
-      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
-    } : function (context) {
-      style.call(this, createInjector(context));
-    };
-  }
-
-  if (hook) {
-    if (options.functional) {
-      // register for functional component in vue file
-      var originalRender = options.render;
-
-      options.render = function renderWithStyleInjection(h, context) {
-        hook.call(context);
-        return originalRender(h, context);
-      };
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate;
-      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-    }
-  }
-
-  return script;
-}
-
-var normalizeComponent_1 = normalizeComponent;
-
 /* script */
-const __vue_script__ = script;
+var __vue_script__ = script;
 /* template */
-var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"footer__navigation__page-info"},[_vm._v("\n  "+_vm._s(_vm.pageText)+" "),_c('input',{staticClass:"footer__navigation__page-info__current-entry",attrs:{"type":"text"},domProps:{"value":_vm.currentPage},on:{"keyup":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }$event.stopPropagation();return _vm.changePage($event)}}}),_vm._v(" "+_vm._s(_vm.pageInfo)+"\n")])};
+
+var __vue_render__ = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c('div', {
+    staticClass: "footer__navigation__page-info"
+  }, [_vm._v("\n  " + _vm._s(_vm.pageText) + " "), _c('input', {
+    staticClass: "footer__navigation__page-info__current-entry",
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": _vm.currentPage
+    },
+    on: {
+      "keyup": function keyup($event) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+          return null;
+        }
+
+        $event.stopPropagation();
+        return _vm.changePage($event);
+      }
+    }
+  }), _vm._v(" " + _vm._s(_vm.pageInfo) + "\n")]);
+};
+
 var __vue_staticRenderFns__ = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__ = undefined;
-  /* scoped */
-  const __vue_scope_id__ = "data-v-9a8cd1f4";
-  /* module identifier */
-  const __vue_module_identifier__ = undefined;
-  /* functional template */
-  const __vue_is_functional_template__ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__ = undefined;
+/* scoped */
 
-  
-  var VgtPaginationPageInfo = normalizeComponent_1(
-    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
-    __vue_inject_styles__,
-    __vue_script__,
-    __vue_scope_id__,
-    __vue_is_functional_template__,
-    __vue_module_identifier__,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__ = "data-v-9a8cd1f4";
+/* module identifier */
+
+var __vue_module_identifier__ = undefined;
+/* functional template */
+
+var __vue_is_functional_template__ = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VgtPaginationPageInfo = __vue_normalize__({
+  render: __vue_render__,
+  staticRenderFns: __vue_staticRenderFns__
+}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, undefined, undefined);
 
 //
 var DEFAULT_ROWS_PER_PAGE_DROPDOWN = [10, 20, 30, 40, 50];
@@ -307,44 +248,44 @@ var script$1 = {
   name: 'VgtPagination',
   props: {
     styleClass: {
-      default: 'table table-bordered'
+      "default": 'table table-bordered'
     },
     total: {
-      default: null
+      "default": null
     },
     perPage: {},
     rtl: {
-      default: false
+      "default": false
     },
     customRowsPerPageDropdown: {
-      default: function _default() {
+      "default": function _default() {
         return [];
       }
     },
     paginateDropdownAllowAll: {
-      default: true
+      "default": true
     },
     mode: {
-      default: 'records'
+      "default": 'records'
     },
     // text options
     nextText: {
-      default: 'Next'
+      "default": 'Next'
     },
     prevText: {
-      default: 'Prev'
+      "default": 'Prev'
     },
     rowsPerPageText: {
-      default: 'Rows per page:'
+      "default": 'Rows per page:'
     },
     ofText: {
-      default: 'of'
+      "default": 'of'
     },
     pageText: {
-      default: 'page'
+      "default": 'page'
     },
     allText: {
-      default: 'All'
+      "default": 'All'
     }
   },
   data: function data() {
@@ -473,35 +414,139 @@ var script$1 = {
 };
 
 /* script */
-const __vue_script__$1 = script$1;
+var __vue_script__$1 = script$1;
 /* template */
-var __vue_render__$1 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vgt-wrap__footer vgt-clearfix"},[_c('div',{staticClass:"footer__row-count vgt-pull-left"},[_c('span',{staticClass:"footer__row-count__label"},[_vm._v(_vm._s(_vm.rowsPerPageText))]),_vm._v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.currentPerPage),expression:"currentPerPage"}],staticClass:"footer__row-count__select",attrs:{"autocomplete":"off","name":"perPageSelect"},on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.currentPerPage=$event.target.multiple ? $$selectedVal : $$selectedVal[0];},_vm.perPageChanged]}},[_vm._l((_vm.rowsPerPageOptions),function(option,idx){return _c('option',{key:'rows-dropdown-option-' + idx,domProps:{"value":option}},[_vm._v("\n        "+_vm._s(option)+"\n      ")])}),_vm._v(" "),(_vm.paginateDropdownAllowAll)?_c('option',{domProps:{"value":_vm.total}},[_vm._v(_vm._s(_vm.allText))]):_vm._e()],2)]),_vm._v(" "),_c('div',{staticClass:"footer__navigation vgt-pull-right"},[_c('a',{staticClass:"footer__navigation__page-btn",class:{ disabled: !_vm.prevIsPossible },attrs:{"href":"javascript:undefined","tabindex":"0"},on:{"click":function($event){$event.preventDefault();$event.stopPropagation();return _vm.previousPage($event)}}},[_c('span',{staticClass:"chevron",class:{ 'left': !_vm.rtl, 'right': _vm.rtl }}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.prevText))])]),_vm._v(" "),(_vm.mode === 'pages')?_c('pagination-page-info',{attrs:{"totalRecords":_vm.total,"lastPage":_vm.pagesCount,"currentPage":_vm.currentPage,"ofText":_vm.ofText,"pageText":_vm.pageText},on:{"page-changed":_vm.changePage}}):_c('div',{staticClass:"footer__navigation__info"},[_vm._v(_vm._s(_vm.paginatedInfo))]),_vm._v(" "),_c('a',{staticClass:"footer__navigation__page-btn",class:{ disabled: !_vm.nextIsPossible },attrs:{"href":"javascript:undefined","tabindex":"0"},on:{"click":function($event){$event.preventDefault();$event.stopPropagation();return _vm.nextPage($event)}}},[_c('span',[_vm._v(_vm._s(_vm.nextText))]),_vm._v(" "),_c('span',{staticClass:"chevron",class:{ 'right': !_vm.rtl, 'left': _vm.rtl }})])],1)])};
+
+var __vue_render__$1 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c('div', {
+    staticClass: "vgt-wrap__footer vgt-clearfix"
+  }, [_c('div', {
+    staticClass: "footer__row-count vgt-pull-left"
+  }, [_c('span', {
+    staticClass: "footer__row-count__label"
+  }, [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.currentPerPage,
+      expression: "currentPerPage"
+    }],
+    staticClass: "footer__row-count__select",
+    attrs: {
+      "autocomplete": "off",
+      "name": "perPageSelect"
+    },
+    on: {
+      "change": [function ($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.currentPerPage = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+      }, _vm.perPageChanged]
+    }
+  }, [_vm._l(_vm.rowsPerPageOptions, function (option, idx) {
+    return _c('option', {
+      key: 'rows-dropdown-option-' + idx,
+      domProps: {
+        "value": option
+      }
+    }, [_vm._v("\n        " + _vm._s(option) + "\n      ")]);
+  }), _vm._v(" "), _vm.paginateDropdownAllowAll ? _c('option', {
+    domProps: {
+      "value": _vm.total
+    }
+  }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "footer__navigation vgt-pull-right"
+  }, [_c('a', {
+    staticClass: "footer__navigation__page-btn",
+    "class": {
+      disabled: !_vm.prevIsPossible
+    },
+    attrs: {
+      "href": "javascript:undefined",
+      "tabindex": "0"
+    },
+    on: {
+      "click": function click($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return _vm.previousPage($event);
+      }
+    }
+  }, [_c('span', {
+    staticClass: "chevron",
+    "class": {
+      'left': !_vm.rtl,
+      'right': _vm.rtl
+    }
+  }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _vm.mode === 'pages' ? _c('pagination-page-info', {
+    attrs: {
+      "totalRecords": _vm.total,
+      "lastPage": _vm.pagesCount,
+      "currentPage": _vm.currentPage,
+      "ofText": _vm.ofText,
+      "pageText": _vm.pageText
+    },
+    on: {
+      "page-changed": _vm.changePage
+    }
+  }) : _c('div', {
+    staticClass: "footer__navigation__info"
+  }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('a', {
+    staticClass: "footer__navigation__page-btn",
+    "class": {
+      disabled: !_vm.nextIsPossible
+    },
+    attrs: {
+      "href": "javascript:undefined",
+      "tabindex": "0"
+    },
+    on: {
+      "click": function click($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return _vm.nextPage($event);
+      }
+    }
+  }, [_c('span', [_vm._v(_vm._s(_vm.nextText))]), _vm._v(" "), _c('span', {
+    staticClass: "chevron",
+    "class": {
+      'right': !_vm.rtl,
+      'left': _vm.rtl
+    }
+  })])], 1)]);
+};
+
 var __vue_staticRenderFns__$1 = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__$1 = undefined;
-  /* scoped */
-  const __vue_scope_id__$1 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$1 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$1 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__$1 = undefined;
+/* scoped */
 
-  
-  var VgtPagination = normalizeComponent_1(
-    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
-    __vue_inject_styles__$1,
-    __vue_script__$1,
-    __vue_scope_id__$1,
-    __vue_is_functional_template__$1,
-    __vue_module_identifier__$1,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__$1 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$1 = undefined;
+/* functional template */
+
+var __vue_is_functional_template__$1 = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VgtPagination = __vue_normalize__({
+  render: __vue_render__$1,
+  staticRenderFns: __vue_staticRenderFns__$1
+}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, undefined, undefined);
 
 //
 //
@@ -552,35 +597,71 @@ var script$2 = {
 };
 
 /* script */
-const __vue_script__$2 = script$2;
+var __vue_script__$2 = script$2;
 /* template */
-var __vue_render__$2 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.showControlBar)?_c('div',{staticClass:"vgt-global-search vgt-clearfix"},[_c('div',{staticClass:"vgt-global-search__input vgt-pull-left"},[(_vm.searchEnabled)?_c('span',{staticClass:"input__icon"},[_c('div',{staticClass:"magnifying-glass"})]):_vm._e(),_vm._v(" "),(_vm.searchEnabled)?_c('input',{staticClass:"vgt-input vgt-pull-left",attrs:{"type":"text","placeholder":_vm.globalSearchPlaceholder},domProps:{"value":_vm.value},on:{"input":function($event){return _vm.updateValue($event.target.value)},"keyup":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.entered($event.target.value)}}}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"vgt-global-search__actions vgt-pull-right"},[_vm._t("internal-table-actions")],2)]):_vm._e()};
+
+var __vue_render__$2 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _vm.showControlBar ? _c('div', {
+    staticClass: "vgt-global-search vgt-clearfix"
+  }, [_c('div', {
+    staticClass: "vgt-global-search__input vgt-pull-left"
+  }, [_vm.searchEnabled ? _c('span', {
+    staticClass: "input__icon"
+  }, [_c('div', {
+    staticClass: "magnifying-glass"
+  })]) : _vm._e(), _vm._v(" "), _vm.searchEnabled ? _c('input', {
+    staticClass: "vgt-input vgt-pull-left",
+    attrs: {
+      "type": "text",
+      "placeholder": _vm.globalSearchPlaceholder
+    },
+    domProps: {
+      "value": _vm.value
+    },
+    on: {
+      "input": function input($event) {
+        return _vm.updateValue($event.target.value);
+      },
+      "keyup": function keyup($event) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+          return null;
+        }
+
+        return _vm.entered($event.target.value);
+      }
+    }
+  }) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "vgt-global-search__actions vgt-pull-right"
+  }, [_vm._t("internal-table-actions")], 2)]) : _vm._e();
+};
+
 var __vue_staticRenderFns__$2 = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__$2 = undefined;
-  /* scoped */
-  const __vue_scope_id__$2 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$2 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$2 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__$2 = undefined;
+/* scoped */
 
-  
-  var VgtGlobalSearch = normalizeComponent_1(
-    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
-    __vue_inject_styles__$2,
-    __vue_script__$2,
-    __vue_scope_id__$2,
-    __vue_is_functional_template__$2,
-    __vue_module_identifier__$2,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__$2 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$2 = undefined;
+/* functional template */
+
+var __vue_is_functional_template__$2 = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VgtGlobalSearch = __vue_normalize__({
+  render: __vue_render__$2,
+  staticRenderFns: __vue_staticRenderFns__$2
+}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, undefined, undefined);
 
 var script$3 = {
   name: 'VgtFilterRow',
@@ -689,35 +770,110 @@ var script$3 = {
 };
 
 /* script */
-const __vue_script__$3 = script$3;
+var __vue_script__$3 = script$3;
 /* template */
-var __vue_render__$3 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.hasFilterRow)?_c('tr',[(_vm.lineNumbers)?_c('th'):_vm._e(),_vm._v(" "),(_vm.selectable)?_c('th'):_vm._e(),_vm._v(" "),_vm._l((_vm.columns),function(column,index){return (!column.hidden)?_c('th',{key:index,staticClass:"filter-th"},[(_vm.isFilterable(column))?_c('div',[(!_vm.isDropdown(column))?_c('input',{staticClass:"vgt-input",attrs:{"type":"text","placeholder":_vm.getPlaceholder(column)},domProps:{"value":_vm.columnFilters[column.field]},on:{"keyup":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.updateFiltersOnEnter(column, $event.target.value)},"input":function($event){return _vm.updateFiltersOnKeyup(column, $event.target.value)}}}):_vm._e(),_vm._v(" "),(_vm.isDropdownArray(column))?_c('select',{staticClass:"vgt-select",domProps:{"value":_vm.columnFilters[column.field]},on:{"change":function($event){return _vm.updateFilters(column, $event.target.value)}}},[_c('option',{key:"-1",attrs:{"value":""}},[_vm._v(_vm._s(_vm.getPlaceholder(column)))]),_vm._v(" "),_vm._l((column.filterOptions.filterDropdownItems),function(option,i){return _c('option',{key:i,domProps:{"value":option}},[_vm._v("\n            "+_vm._s(option)+"\n          ")])})],2):_vm._e(),_vm._v(" "),(_vm.isDropdownObjects(column))?_c('select',{staticClass:"vgt-select",domProps:{"value":_vm.columnFilters[column.field]},on:{"change":function($event){return _vm.updateFilters(column, $event.target.value, true)}}},[_c('option',{key:"-1",attrs:{"value":""}},[_vm._v(_vm._s(_vm.getPlaceholder(column)))]),_vm._v(" "),_vm._l((column.filterOptions.filterDropdownItems),function(option,i){return _c('option',{key:i,domProps:{"value":option.value}},[_vm._v(_vm._s(option.text))])})],2):_vm._e()]):_vm._e()]):_vm._e()})],2):_vm._e()};
+
+var __vue_render__$3 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+    return !column.hidden ? _c('th', {
+      key: index,
+      staticClass: "filter-th"
+    }, [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', {
+      staticClass: "vgt-input",
+      attrs: {
+        "type": "text",
+        "placeholder": _vm.getPlaceholder(column)
+      },
+      domProps: {
+        "value": _vm.columnFilters[column.field]
+      },
+      on: {
+        "keyup": function keyup($event) {
+          if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+            return null;
+          }
+
+          return _vm.updateFiltersOnEnter(column, $event.target.value);
+        },
+        "input": function input($event) {
+          return _vm.updateFiltersOnKeyup(column, $event.target.value);
+        }
+      }
+    }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c('select', {
+      staticClass: "vgt-select",
+      domProps: {
+        "value": _vm.columnFilters[column.field]
+      },
+      on: {
+        "change": function change($event) {
+          return _vm.updateFilters(column, $event.target.value);
+        }
+      }
+    }, [_c('option', {
+      key: "-1",
+      attrs: {
+        "value": ""
+      }
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
+      return _c('option', {
+        key: i,
+        domProps: {
+          "value": option
+        }
+      }, [_vm._v("\n            " + _vm._s(option) + "\n          ")]);
+    })], 2) : _vm._e(), _vm._v(" "), _vm.isDropdownObjects(column) ? _c('select', {
+      staticClass: "vgt-select",
+      domProps: {
+        "value": _vm.columnFilters[column.field]
+      },
+      on: {
+        "change": function change($event) {
+          return _vm.updateFilters(column, $event.target.value, true);
+        }
+      }
+    }, [_c('option', {
+      key: "-1",
+      attrs: {
+        "value": ""
+      }
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
+      return _c('option', {
+        key: i,
+        domProps: {
+          "value": option.value
+        }
+      }, [_vm._v(_vm._s(option.text))]);
+    })], 2) : _vm._e()]) : _vm._e()]) : _vm._e();
+  })], 2) : _vm._e();
+};
+
 var __vue_staticRenderFns__$3 = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__$3 = undefined;
-  /* scoped */
-  const __vue_scope_id__$3 = "data-v-892cc66c";
-  /* module identifier */
-  const __vue_module_identifier__$3 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$3 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__$3 = undefined;
+/* scoped */
 
-  
-  var VgtFilterRow = normalizeComponent_1(
-    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-    __vue_inject_styles__$3,
-    __vue_script__$3,
-    __vue_scope_id__$3,
-    __vue_is_functional_template__$3,
-    __vue_module_identifier__$3,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__$3 = "data-v-892cc66c";
+/* module identifier */
+
+var __vue_module_identifier__$3 = undefined;
+/* functional template */
+
+var __vue_is_functional_template__$3 = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VgtFilterRow = __vue_normalize__({
+  render: __vue_render__$3,
+  staticRenderFns: __vue_staticRenderFns__$3
+}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, undefined, undefined);
 
 function getNextSort(currentSort) {
   if (currentSort === 'asc') return 'desc'; // if (currentSort === 'desc') return null;
@@ -780,19 +936,19 @@ var script$4 = {
   name: 'VgtTableHeader',
   props: {
     lineNumbers: {
-      default: false,
+      "default": false,
       type: Boolean
     },
     selectable: {
-      default: false,
+      "default": false,
       type: Boolean
     },
     allSelected: {
-      default: false,
+      "default": false,
       type: Boolean
     },
     allSelectedIndeterminate: {
-      default: false,
+      "default": false,
       type: Boolean
     },
     columns: {
@@ -864,7 +1020,7 @@ var script$4 = {
       var isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
       return isSortable;
     },
-    sort: function sort$$1(e, column) {
+    sort: function sort(e, column) {
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) return;
 
@@ -967,35 +1123,82 @@ var script$4 = {
 };
 
 /* script */
-const __vue_script__$4 = script$4;
+var __vue_script__$4 = script$4;
 /* template */
-var __vue_render__$4 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('thead',[_c('tr',[(_vm.lineNumbers)?_c('th',{staticClass:"line-numbers"}):_vm._e(),_vm._v(" "),(_vm.selectable)?_c('th',{staticClass:"vgt-checkbox-col"},[_c('input',{attrs:{"type":"checkbox"},domProps:{"checked":_vm.allSelected,"indeterminate":_vm.allSelectedIndeterminate},on:{"change":_vm.toggleSelectAll}})]):_vm._e(),_vm._v(" "),_vm._l((_vm.columns),function(column,index){return (!column.hidden)?_c('th',{key:index,class:_vm.getHeaderClasses(column, index),style:(_vm.columnStyles[index]),on:{"click":function($event){return _vm.sort($event, column)}}},[_vm._t("table-column",[_c('span',[_vm._v(_vm._s(column.label))])],{"column":column})],2):_vm._e()})],2),_vm._v(" "),_c("vgt-filter-row",{ref:"filter-row",tag:"tr",attrs:{"global-search-enabled":_vm.searchEnabled,"line-numbers":_vm.lineNumbers,"selectable":_vm.selectable,"columns":_vm.columns,"mode":_vm.mode,"typed-columns":_vm.typedColumns},on:{"filter-changed":_vm.filterRows}})],1)};
+
+var __vue_render__$4 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', {
+    staticClass: "line-numbers"
+  }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+    staticClass: "vgt-checkbox-col"
+  }, [_c('input', {
+    attrs: {
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": _vm.allSelected,
+      "indeterminate": _vm.allSelectedIndeterminate
+    },
+    on: {
+      "change": _vm.toggleSelectAll
+    }
+  })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+    return !column.hidden ? _c('th', {
+      key: index,
+      "class": _vm.getHeaderClasses(column, index),
+      style: _vm.columnStyles[index],
+      on: {
+        "click": function click($event) {
+          return _vm.sort($event, column);
+        }
+      }
+    }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], {
+      "column": column
+    })], 2) : _vm._e();
+  })], 2), _vm._v(" "), _c("vgt-filter-row", {
+    ref: "filter-row",
+    tag: "tr",
+    attrs: {
+      "global-search-enabled": _vm.searchEnabled,
+      "line-numbers": _vm.lineNumbers,
+      "selectable": _vm.selectable,
+      "columns": _vm.columns,
+      "mode": _vm.mode,
+      "typed-columns": _vm.typedColumns
+    },
+    on: {
+      "filter-changed": _vm.filterRows
+    }
+  })], 1);
+};
+
 var __vue_staticRenderFns__$4 = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__$4 = undefined;
-  /* scoped */
-  const __vue_scope_id__$4 = "data-v-7068df50";
-  /* module identifier */
-  const __vue_module_identifier__$4 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$4 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__$4 = undefined;
+/* scoped */
 
-  
-  var VgtTableHeader = normalizeComponent_1(
-    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
-    __vue_inject_styles__$4,
-    __vue_script__$4,
-    __vue_scope_id__$4,
-    __vue_is_functional_template__$4,
-    __vue_module_identifier__$4,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__$4 = "data-v-7068df50";
+/* module identifier */
+
+var __vue_module_identifier__$4 = undefined;
+/* functional template */
+
+var __vue_is_functional_template__$4 = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VgtTableHeader = __vue_normalize__({
+  render: __vue_render__$4,
+  staticRenderFns: __vue_staticRenderFns__$4
+}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, undefined, undefined);
 
 //
 //
@@ -1079,37 +1282,71 @@ var script$5 = {
 };
 
 /* script */
-const __vue_script__$5 = script$5;
+var __vue_script__$5 = script$5;
 /* template */
-var __vue_render__$5 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[(_vm.headerRow.mode === 'span')?_c('th',{staticClass:"vgt-left-align vgt-row-header",attrs:{"colspan":_vm.fullColspan}},[_vm._t("table-header-row",[(_vm.headerRow.html)?_c('span',{domProps:{"innerHTML":_vm._s(_vm.headerRow.label)}}):_c('span',[_vm._v("\n        "+_vm._s(_vm.headerRow.label)+"\n      ")])],{"row":_vm.headerRow})],2):_vm._e(),_vm._v(" "),(_vm.headerRow.mode !== 'span' && _vm.lineNumbers)?_c('th',{staticClass:"vgt-row-header"}):_vm._e(),_vm._v(" "),(_vm.headerRow.mode !== 'span' && _vm.selectable)?_c('th',{staticClass:"vgt-row-header"}):_vm._e(),_vm._v(" "),_vm._l((_vm.columns),function(column,i){return (_vm.headerRow.mode !== 'span' && !column.hidden)?_c('th',{key:i,staticClass:"vgt-row-header",class:_vm.getClasses(i, 'td')},[_vm._t("table-header-row",[(!column.html)?_c('span',[_vm._v("\n        "+_vm._s(_vm.collectFormatted(_vm.headerRow, column, true))+"\n      ")]):_vm._e(),_vm._v(" "),(column.html)?_c('span',{domProps:{"innerHTML":_vm._s(_vm.collectFormatted(_vm.headerRow, column, true))}}):_vm._e()],{"row":_vm.headerRow,"column":column,"formattedRow":_vm.formattedRow(_vm.headerRow, true)})],2):_vm._e()})],2)};
+
+var __vue_render__$5 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c('tr', [_vm.headerRow.mode === 'span' ? _c('th', {
+    staticClass: "vgt-left-align vgt-row-header",
+    attrs: {
+      "colspan": _vm.fullColspan
+    }
+  }, [_vm._t("table-header-row", [_vm.headerRow.html ? _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.headerRow.label)
+    }
+  }) : _c('span', [_vm._v("\n        " + _vm._s(_vm.headerRow.label) + "\n      ")])], {
+    "row": _vm.headerRow
+  })], 2) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
+    staticClass: "vgt-row-header"
+  }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
+    staticClass: "vgt-row-header"
+  }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+    return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('th', {
+      key: i,
+      staticClass: "vgt-row-header",
+      "class": _vm.getClasses(i, 'td')
+    }, [_vm._t("table-header-row", [!column.html ? _c('span', [_vm._v("\n        " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + "\n      ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(_vm.collectFormatted(_vm.headerRow, column, true))
+      }
+    }) : _vm._e()], {
+      "row": _vm.headerRow,
+      "column": column,
+      "formattedRow": _vm.formattedRow(_vm.headerRow, true)
+    })], 2) : _vm._e();
+  })], 2);
+};
+
 var __vue_staticRenderFns__$5 = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__$5 = undefined;
-  /* scoped */
-  const __vue_scope_id__$5 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$5 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$5 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__$5 = undefined;
+/* scoped */
 
-  
-  var VgtHeaderRow = normalizeComponent_1(
-    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
-    __vue_inject_styles__$5,
-    __vue_script__$5,
-    __vue_scope_id__$5,
-    __vue_is_functional_template__$5,
-    __vue_module_identifier__$5,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__$5 = undefined;
+/* module identifier */
 
-var date = cloneDeep(def);
+var __vue_module_identifier__$5 = undefined;
+/* functional template */
+
+var __vue_is_functional_template__$5 = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VgtHeaderRow = __vue_normalize__({
+  render: __vue_render__$5,
+  staticRenderFns: __vue_staticRenderFns__$5
+}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, undefined, undefined);
+
+var date = cloneDeep(defaultType);
 date.isRight = true;
 
 date.compare = function (x, y, column) {
@@ -1143,14 +1380,14 @@ date.format = function (v, column) {
 };
 
 var date$1 = /*#__PURE__*/Object.freeze({
-  default: date
+  'default': date
 });
 
-var number = cloneDeep(def);
+var number = cloneDeep(defaultType);
 number.isRight = true;
 
-number.filterPredicate = function (rowval, filter$$1) {
-  return number.compare(rowval, filter$$1) === 0;
+number.filterPredicate = function (rowval, filter) {
+  return number.compare(rowval, filter) === 0;
 };
 
 number.compare = function (x, y) {
@@ -1169,7 +1406,7 @@ number.compare = function (x, y) {
 };
 
 var number$1 = /*#__PURE__*/Object.freeze({
-  default: number
+  'default': number
 });
 
 var decimal = cloneDeep(number);
@@ -1180,7 +1417,7 @@ decimal.format = function (v) {
 };
 
 var decimal$1 = /*#__PURE__*/Object.freeze({
-  default: decimal
+  'default': decimal
 });
 
 var percentage = cloneDeep(number);
@@ -1191,17 +1428,18 @@ percentage.format = function (v) {
 };
 
 var percentage$1 = /*#__PURE__*/Object.freeze({
-  default: percentage
+  'default': percentage
 });
 
-var boolean = cloneDeep(def);
-boolean.isRight = true;
+var _boolean = cloneDeep(defaultType);
 
-boolean.filterPredicate = function (rowval, filter$$1) {
-  return boolean.compare(rowval, filter$$1) === 0;
+_boolean.isRight = true;
+
+_boolean.filterPredicate = function (rowval, filter) {
+  return _boolean.compare(rowval, filter) === 0;
 };
 
-boolean.compare = function (x, y) {
+_boolean.compare = function (x, y) {
   function cook(d) {
     if (typeof d === 'boolean') return d ? 1 : 0;
     if (typeof d === 'string') return d === 'true' ? 1 : 0;
@@ -1215,8 +1453,8 @@ boolean.compare = function (x, y) {
   return 0;
 };
 
-var boolean$1 = /*#__PURE__*/Object.freeze({
-  default: boolean
+var _boolean$1 = /*#__PURE__*/Object.freeze({
+  'default': _boolean
 });
 
 var index = {
@@ -1224,66 +1462,66 @@ var index = {
   decimal: decimal$1,
   number: number$1,
   percentage: percentage$1,
-  boolean: boolean$1
+  "boolean": _boolean$1
 };
 
 var dataTypes = {};
 var coreDataTypes = index;
 each(Object.keys(coreDataTypes), function (key) {
   var compName = key.replace(/^\.\//, '').replace(/\.js/, '');
-  dataTypes[compName] = coreDataTypes[key].default;
+  dataTypes[compName] = coreDataTypes[key]["default"];
 });
 var script$6 = {
   name: 'vue-good-table',
   props: {
     isLoading: {
-      default: null,
+      "default": null,
       type: Boolean
     },
     maxHeight: {
-      default: null,
+      "default": null,
       type: String
     },
     fixedHeader: {
-      default: false,
+      "default": false,
       type: Boolean
     },
     theme: {
-      default: ''
+      "default": ''
     },
     mode: {
-      default: 'local'
+      "default": 'local'
     },
     // could be remote
     totalRows: {},
     // required if mode = 'remote'
     styleClass: {
-      default: 'vgt-table bordered'
+      "default": 'vgt-table bordered'
     },
     columns: {},
     rows: {},
     lineNumbers: {
-      default: false
+      "default": false
     },
     responsive: {
-      default: true
+      "default": true
     },
     rtl: {
-      default: false
+      "default": false
     },
     rowStyleClass: {
-      default: null,
+      "default": null,
       type: [Function, String]
     },
     groupOptions: {
-      default: function _default() {
+      "default": function _default() {
         return {
           enabled: false
         };
       }
     },
     selectOptions: {
-      default: function _default() {
+      "default": function _default() {
         return {
           enabled: false,
           selectionInfoClass: '',
@@ -1294,7 +1532,7 @@ var script$6 = {
     },
     // sort
     sortOptions: {
-      default: function _default() {
+      "default": function _default() {
         return {
           enabled: true,
           initialSortBy: {}
@@ -1303,7 +1541,7 @@ var script$6 = {
     },
     // pagination
     paginationOptions: {
-      default: function _default() {
+      "default": function _default() {
         return {
           enabled: false,
           perPage: 10,
@@ -1316,7 +1554,7 @@ var script$6 = {
       }
     },
     searchOptions: {
-      default: function _default() {
+      "default": function _default() {
         return {
           enabled: false,
           trigger: null,
@@ -1595,7 +1833,7 @@ var script$6 = {
                 }
               } else {
                 // comparison
-                var matched = def.filterPredicate(_this.collectFormatted(row, col), _this.searchTerm, _this.searchSkipDiacritics);
+                var matched = defaultType.filterPredicate(_this.collectFormatted(row, col), _this.searchTerm, _this.searchSkipDiacritics);
 
                 if (matched) {
                   filteredRows.push(row);
@@ -1728,10 +1966,10 @@ var script$6 = {
       // rows so lets do that
 
 
-      var index$$1 = 0;
+      var index = 0;
       each(nestedRows, function (headerRow, i) {
         each(headerRow.children, function (row, j) {
-          row.originalIndex = index$$1++;
+          row.originalIndex = index++;
         });
       });
       return nestedRows;
@@ -1741,7 +1979,7 @@ var script$6 = {
 
       for (var i = 0; i < this.columns.length; i++) {
         var column = columns[i];
-        column.typeDef = this.dataTypes[column.type] || def;
+        column.typeDef = this.dataTypes[column.type] || defaultType;
       }
 
       return columns;
@@ -1865,39 +2103,39 @@ var script$6 = {
       this.sortChanged = true;
     },
     // checkbox click should always do the following
-    onCheckboxClicked: function onCheckboxClicked(row, index$$1, event) {
+    onCheckboxClicked: function onCheckboxClicked(row, index, event) {
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row: row,
-        pageIndex: index$$1,
+        pageIndex: index,
         selected: !!row.vgtSelected,
         event: event
       });
     },
-    onRowDoubleClicked: function onRowDoubleClicked(row, index$$1, event) {
+    onRowDoubleClicked: function onRowDoubleClicked(row, index, event) {
       this.$emit('on-row-dblclick', {
         row: row,
-        pageIndex: index$$1,
+        pageIndex: index,
         selected: !!row.vgtSelected,
         event: event
       });
     },
-    onRowClicked: function onRowClicked(row, index$$1, event) {
+    onRowClicked: function onRowClicked(row, index, event) {
       if (this.selectable && !this.selectOnCheckboxOnly) {
         this.$set(row, 'vgtSelected', !row.vgtSelected);
       }
 
       this.$emit('on-row-click', {
         row: row,
-        pageIndex: index$$1,
+        pageIndex: index,
         selected: !!row.vgtSelected,
         event: event
       });
     },
-    onRowAuxClicked: function onRowAuxClicked(row, index$$1, event) {
+    onRowAuxClicked: function onRowAuxClicked(row, index, event) {
       this.$emit('on-row-aux-click', {
         row: row,
-        pageIndex: index$$1,
+        pageIndex: index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -1910,16 +2148,16 @@ var script$6 = {
         event: event
       });
     },
-    onMouseenter: function onMouseenter(row, index$$1) {
+    onMouseenter: function onMouseenter(row, index) {
       this.$emit('on-row-mouseenter', {
         row: row,
-        pageIndex: index$$1
+        pageIndex: index
       });
     },
-    onMouseleave: function onMouseleave(row, index$$1) {
+    onMouseleave: function onMouseleave(row, index) {
       this.$emit('on-row-mouseleave', {
         row: row,
-        pageIndex: index$$1
+        pageIndex: index
       });
     },
     searchTableOnEnter: function searchTableOnEnter() {
@@ -1990,7 +2228,7 @@ var script$6 = {
       // load when external query is specified.
 
       if (!type) {
-        type = this.dataTypes[column.type] || def;
+        type = this.dataTypes[column.type] || defaultType;
       }
 
       return type.format(value, column);
@@ -2010,14 +2248,14 @@ var script$6 = {
       return formattedRow;
     },
     // Check if a column is sortable.
-    isSortableColumn: function isSortableColumn(index$$1) {
-      var sortable = this.columns[index$$1].sortable;
+    isSortableColumn: function isSortableColumn(index) {
+      var sortable = this.columns[index].sortable;
       var isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
       return isSortable;
     },
     // Get classes for the given column index & element.
-    getClasses: function getClasses(index$$1, element, row) {
-      var _this$typedColumns$in = this.typedColumns[index$$1],
+    getClasses: function getClasses(index, element, row) {
+      var _this$typedColumns$in = this.typedColumns[index],
           typeDef = _this$typedColumns$in.typeDef,
           custom = _this$typedColumns$in["".concat(element, "Class")];
 
@@ -2107,8 +2345,8 @@ var script$6 = {
 
       this.filteredRows = computedRows;
     },
-    getCurrentIndex: function getCurrentIndex(index$$1) {
-      return (this.currentPage - 1) * this.currentPerPage + index$$1 + 1;
+    getCurrentIndex: function getCurrentIndex(index) {
+      return (this.currentPage - 1) * this.currentPerPage + index + 1;
     },
     getRowStyleClass: function getRowStyleClass(row) {
       var classes = '';
@@ -2323,39 +2561,319 @@ var script$6 = {
 };
 
 /* script */
-const __vue_script__$6 = script$6;
+var __vue_script__$6 = script$6;
 /* template */
-var __vue_render__$6 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vgt-wrap",class:{
-  'rtl': _vm.rtl,
-  'nocturnal': _vm.theme==='nocturnal',
-  'black-rhino': _vm.theme==='black-rhino',
-}},[(_vm.isLoading)?_c('div',{staticClass:"vgt-loading vgt-center-align"},[_vm._t("loadingContent",[_c('span',{staticClass:"vgt-loading__content"},[_vm._v("\n        Loading...\n      ")])])],2):_vm._e(),_vm._v(" "),_c('div',{staticClass:"vgt-inner-wrap",class:{'is-loading': _vm.isLoading}},[(_vm.paginate && _vm.paginateOnTop)?_vm._t("pagination-top",[_c('vgt-pagination',{ref:"paginationTop",attrs:{"perPage":_vm.perPage,"rtl":_vm.rtl,"total":_vm.totalRows || _vm.totalRowCount,"mode":_vm.paginationMode,"nextText":_vm.nextText,"prevText":_vm.prevText,"rowsPerPageText":_vm.rowsPerPageText,"customRowsPerPageDropdown":_vm.customRowsPerPageDropdown,"paginateDropdownAllowAll":_vm.paginateDropdownAllowAll,"ofText":_vm.ofText,"pageText":_vm.pageText,"allText":_vm.allText},on:{"page-changed":_vm.pageChanged,"per-page-changed":_vm.perPageChanged}})],{"pageChanged":_vm.pageChanged,"perPageChanged":_vm.perPageChanged,"total":_vm.totalRows || _vm.totalRowCount}):_vm._e(),_vm._v(" "),_c('vgt-global-search',{attrs:{"search-enabled":_vm.searchEnabled && _vm.externalSearchQuery == null,"global-search-placeholder":_vm.searchPlaceholder},on:{"on-keyup":_vm.searchTableOnKeyUp,"on-enter":_vm.searchTableOnEnter},model:{value:(_vm.globalSearchTerm),callback:function ($$v) {_vm.globalSearchTerm=$$v;},expression:"globalSearchTerm"}},[_c('template',{slot:"internal-table-actions"},[_vm._t("table-actions")],2)],2),_vm._v(" "),(_vm.selectedRowCount)?_c('div',{staticClass:"vgt-selection-info-row clearfix",class:_vm.selectionInfoClass},[_vm._v("\n      "+_vm._s(_vm.selectionInfo)+"\n      "),_c('a',{attrs:{"href":""},on:{"click":function($event){$event.preventDefault();return _vm.unselectAllInternal(true)}}},[_vm._v("\n        "+_vm._s(_vm.clearSelectionText)+"\n      ")]),_vm._v(" "),_c('div',{staticClass:"vgt-selection-info-row__actions vgt-pull-right"},[_vm._t("selected-row-actions")],2)]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"vgt-fixed-header"},[(_vm.fixedHeader)?_c('table',{class:_vm.tableStyleClasses},[_c("vgt-table-header",{ref:"table-header-secondary",tag:"thead",attrs:{"columns":_vm.columns,"line-numbers":_vm.lineNumbers,"selectable":_vm.selectable,"all-selected":_vm.allSelected,"all-selected-indeterminate":_vm.allSelectedIndeterminate,"mode":_vm.mode,"sortable":_vm.sortable,"typed-columns":_vm.typedColumns,"getClasses":_vm.getClasses,"searchEnabled":_vm.searchEnabled,"paginated":_vm.paginated,"table-ref":_vm.$refs.table},on:{"on-toggle-select-all":_vm.toggleSelectAll,"on-sort-change":_vm.changeSort,"filter-changed":_vm.filterRows},scopedSlots:_vm._u([{key:"table-column",fn:function(props){return [_vm._t("table-column",[_c('span',[_vm._v(_vm._s(props.column.label))])],{"column":props.column})]}}],null,true)})],1):_vm._e()]),_vm._v(" "),_c('div',{class:{'vgt-responsive': _vm.responsive},style:(_vm.wrapperStyles)},[_c('table',{ref:"table",class:_vm.tableStyleClasses},[_c("vgt-table-header",{ref:"table-header-primary",tag:"thead",attrs:{"columns":_vm.columns,"line-numbers":_vm.lineNumbers,"selectable":_vm.selectable,"all-selected":_vm.allSelected,"all-selected-indeterminate":_vm.allSelectedIndeterminate,"mode":_vm.mode,"sortable":_vm.sortable,"typed-columns":_vm.typedColumns,"getClasses":_vm.getClasses,"searchEnabled":_vm.searchEnabled},on:{"on-toggle-select-all":_vm.toggleSelectAll,"on-sort-change":_vm.changeSort,"filter-changed":_vm.filterRows},scopedSlots:_vm._u([{key:"table-column",fn:function(props){return [_vm._t("table-column",[_c('span',[_vm._v(_vm._s(props.column.label))])],{"column":props.column})]}}],null,true)}),_vm._v(" "),_vm._l((_vm.paginated),function(headerRow,index){return _c('tbody',{key:index},[(_vm.groupHeaderOnTop)?_c('vgt-header-row',{attrs:{"header-row":headerRow,"columns":_vm.columns,"line-numbers":_vm.lineNumbers,"selectable":_vm.selectable,"collect-formatted":_vm.collectFormatted,"formatted-row":_vm.formattedRow,"get-classes":_vm.getClasses,"full-colspan":_vm.fullColspan},scopedSlots:_vm._u([{key:"table-header-row",fn:function(props){return (_vm.hasHeaderRowTemplate)?[_vm._t("table-header-row",null,{"column":props.column,"formattedRow":props.formattedRow,"row":props.row})]:undefined}}],null,true)}):_vm._e(),_vm._v(" "),_vm._l((headerRow.children),function(row,index){return _c('tr',{key:row.originalIndex,class:_vm.getRowStyleClass(row),on:{"mouseenter":function($event){return _vm.onMouseenter(row, index)},"mouseleave":function($event){return _vm.onMouseleave(row, index)},"dblclick":function($event){return _vm.onRowDoubleClicked(row, index, $event)},"click":function($event){return _vm.onRowClicked(row, index, $event)},"auxclick":function($event){return _vm.onRowAuxClicked(row, index, $event)}}},[(_vm.lineNumbers)?_c('th',{staticClass:"line-numbers"},[_vm._v("\n              "+_vm._s(_vm.getCurrentIndex(index))+"\n            ")]):_vm._e(),_vm._v(" "),(_vm.selectable)?_c('th',{staticClass:"vgt-checkbox-col",on:{"click":function($event){$event.stopPropagation();return _vm.onCheckboxClicked(row, index, $event)}}},[_c('input',{attrs:{"type":"checkbox"},domProps:{"checked":row.vgtSelected}})]):_vm._e(),_vm._v(" "),_vm._l((_vm.columns),function(column,i){return (!column.hidden && column.field)?_c('td',{key:i,class:_vm.getClasses(i, 'td', row),on:{"click":function($event){return _vm.onCellClicked(row, column, index, $event)}}},[_vm._t("table-row",[(!column.html)?_c('span',[_vm._v("\n                  "+_vm._s(_vm.collectFormatted(row, column))+"\n                ")]):_vm._e(),_vm._v(" "),(column.html)?_c('span',{domProps:{"innerHTML":_vm._s(_vm.collect(row, column.field))}}):_vm._e()],{"row":row,"column":column,"formattedRow":_vm.formattedRow(row),"index":index})],2):_vm._e()})],2)}),_vm._v(" "),(_vm.groupHeaderOnBottom)?_c('vgt-header-row',{attrs:{"header-row":headerRow,"columns":_vm.columns,"line-numbers":_vm.lineNumbers,"selectable":_vm.selectable,"collect-formatted":_vm.collectFormatted,"formatted-row":_vm.formattedRow,"get-classes":_vm.getClasses,"full-colspan":_vm.fullColspan},scopedSlots:_vm._u([{key:"table-header-row",fn:function(props){return (_vm.hasHeaderRowTemplate)?[_vm._t("table-header-row",null,{"column":props.column,"formattedRow":props.formattedRow,"row":props.row})]:undefined}}],null,true)}):_vm._e()],2)}),_vm._v(" "),(_vm.showEmptySlot)?_c('tbody',[_c('tr',[_c('td',{attrs:{"colspan":_vm.fullColspan}},[_vm._t("emptystate",[_c('div',{staticClass:"vgt-center-align vgt-text-disabled"},[_vm._v("\n                  No data for table\n                ")])])],2)])]):_vm._e()],2)]),_vm._v(" "),(_vm.hasFooterSlot)?_c('div',{staticClass:"vgt-wrap__actions-footer"},[_vm._t("table-actions-bottom")],2):_vm._e(),_vm._v(" "),(_vm.paginate && _vm.paginateOnBottom)?_vm._t("pagination-bottom",[_c('vgt-pagination',{ref:"paginationBottom",attrs:{"perPage":_vm.perPage,"rtl":_vm.rtl,"total":_vm.totalRows || _vm.totalRowCount,"mode":_vm.paginationMode,"nextText":_vm.nextText,"prevText":_vm.prevText,"rowsPerPageText":_vm.rowsPerPageText,"customRowsPerPageDropdown":_vm.customRowsPerPageDropdown,"paginateDropdownAllowAll":_vm.paginateDropdownAllowAll,"ofText":_vm.ofText,"pageText":_vm.pageText,"allText":_vm.allText},on:{"page-changed":_vm.pageChanged,"per-page-changed":_vm.perPageChanged}})],{"pageChanged":_vm.pageChanged,"perPageChanged":_vm.perPageChanged,"total":_vm.totalRows || _vm.totalRowCount}):_vm._e()],2)])};
+
+var __vue_render__$6 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c('div', {
+    staticClass: "vgt-wrap",
+    "class": {
+      'rtl': _vm.rtl,
+      'nocturnal': _vm.theme === 'nocturnal',
+      'black-rhino': _vm.theme === 'black-rhino'
+    }
+  }, [_vm.isLoading ? _c('div', {
+    staticClass: "vgt-loading vgt-center-align"
+  }, [_vm._t("loadingContent", [_c('span', {
+    staticClass: "vgt-loading__content"
+  }, [_vm._v("\n        Loading...\n      ")])])], 2) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "vgt-inner-wrap",
+    "class": {
+      'is-loading': _vm.isLoading
+    }
+  }, [_vm.paginate && _vm.paginateOnTop ? _vm._t("pagination-top", [_c('vgt-pagination', {
+    ref: "paginationTop",
+    attrs: {
+      "perPage": _vm.perPage,
+      "rtl": _vm.rtl,
+      "total": _vm.totalRows || _vm.totalRowCount,
+      "mode": _vm.paginationMode,
+      "nextText": _vm.nextText,
+      "prevText": _vm.prevText,
+      "rowsPerPageText": _vm.rowsPerPageText,
+      "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
+      "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
+      "ofText": _vm.ofText,
+      "pageText": _vm.pageText,
+      "allText": _vm.allText
+    },
+    on: {
+      "page-changed": _vm.pageChanged,
+      "per-page-changed": _vm.perPageChanged
+    }
+  })], {
+    "pageChanged": _vm.pageChanged,
+    "perPageChanged": _vm.perPageChanged,
+    "total": _vm.totalRows || _vm.totalRowCount
+  }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', {
+    attrs: {
+      "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null,
+      "global-search-placeholder": _vm.searchPlaceholder
+    },
+    on: {
+      "on-keyup": _vm.searchTableOnKeyUp,
+      "on-enter": _vm.searchTableOnEnter
+    },
+    model: {
+      value: _vm.globalSearchTerm,
+      callback: function callback($$v) {
+        _vm.globalSearchTerm = $$v;
+      },
+      expression: "globalSearchTerm"
+    }
+  }, [_c('template', {
+    slot: "internal-table-actions"
+  }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount ? _c('div', {
+    staticClass: "vgt-selection-info-row clearfix",
+    "class": _vm.selectionInfoClass
+  }, [_vm._v("\n      " + _vm._s(_vm.selectionInfo) + "\n      "), _c('a', {
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function click($event) {
+        $event.preventDefault();
+        return _vm.unselectAllInternal(true);
+      }
+    }
+  }, [_vm._v("\n        " + _vm._s(_vm.clearSelectionText) + "\n      ")]), _vm._v(" "), _c('div', {
+    staticClass: "vgt-selection-info-row__actions vgt-pull-right"
+  }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "vgt-fixed-header"
+  }, [_vm.fixedHeader ? _c('table', {
+    "class": _vm.tableStyleClasses
+  }, [_c("vgt-table-header", {
+    ref: "table-header-secondary",
+    tag: "thead",
+    attrs: {
+      "columns": _vm.columns,
+      "line-numbers": _vm.lineNumbers,
+      "selectable": _vm.selectable,
+      "all-selected": _vm.allSelected,
+      "all-selected-indeterminate": _vm.allSelectedIndeterminate,
+      "mode": _vm.mode,
+      "sortable": _vm.sortable,
+      "typed-columns": _vm.typedColumns,
+      "getClasses": _vm.getClasses,
+      "searchEnabled": _vm.searchEnabled,
+      "paginated": _vm.paginated,
+      "table-ref": _vm.$refs.table
+    },
+    on: {
+      "on-toggle-select-all": _vm.toggleSelectAll,
+      "on-sort-change": _vm.changeSort,
+      "filter-changed": _vm.filterRows
+    },
+    scopedSlots: _vm._u([{
+      key: "table-column",
+      fn: function fn(props) {
+        return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
+          "column": props.column
+        })];
+      }
+    }], null, true)
+  })], 1) : _vm._e()]), _vm._v(" "), _c('div', {
+    "class": {
+      'vgt-responsive': _vm.responsive
+    },
+    style: _vm.wrapperStyles
+  }, [_c('table', {
+    ref: "table",
+    "class": _vm.tableStyleClasses
+  }, [_c("vgt-table-header", {
+    ref: "table-header-primary",
+    tag: "thead",
+    attrs: {
+      "columns": _vm.columns,
+      "line-numbers": _vm.lineNumbers,
+      "selectable": _vm.selectable,
+      "all-selected": _vm.allSelected,
+      "all-selected-indeterminate": _vm.allSelectedIndeterminate,
+      "mode": _vm.mode,
+      "sortable": _vm.sortable,
+      "typed-columns": _vm.typedColumns,
+      "getClasses": _vm.getClasses,
+      "searchEnabled": _vm.searchEnabled
+    },
+    on: {
+      "on-toggle-select-all": _vm.toggleSelectAll,
+      "on-sort-change": _vm.changeSort,
+      "filter-changed": _vm.filterRows
+    },
+    scopedSlots: _vm._u([{
+      key: "table-column",
+      fn: function fn(props) {
+        return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
+          "column": props.column
+        })];
+      }
+    }], null, true)
+  }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index) {
+    return _c('tbody', {
+      key: index
+    }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
+      attrs: {
+        "header-row": headerRow,
+        "columns": _vm.columns,
+        "line-numbers": _vm.lineNumbers,
+        "selectable": _vm.selectable,
+        "collect-formatted": _vm.collectFormatted,
+        "formatted-row": _vm.formattedRow,
+        "get-classes": _vm.getClasses,
+        "full-colspan": _vm.fullColspan
+      },
+      scopedSlots: _vm._u([{
+        key: "table-header-row",
+        fn: function fn(props) {
+          return _vm.hasHeaderRowTemplate ? [_vm._t("table-header-row", null, {
+            "column": props.column,
+            "formattedRow": props.formattedRow,
+            "row": props.row
+          })] : undefined;
+        }
+      }], null, true)
+    }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
+      return _c('tr', {
+        key: row.originalIndex,
+        "class": _vm.getRowStyleClass(row),
+        on: {
+          "mouseenter": function mouseenter($event) {
+            return _vm.onMouseenter(row, index);
+          },
+          "mouseleave": function mouseleave($event) {
+            return _vm.onMouseleave(row, index);
+          },
+          "dblclick": function dblclick($event) {
+            return _vm.onRowDoubleClicked(row, index, $event);
+          },
+          "click": function click($event) {
+            return _vm.onRowClicked(row, index, $event);
+          },
+          "auxclick": function auxclick($event) {
+            return _vm.onRowAuxClicked(row, index, $event);
+          }
+        }
+      }, [_vm.lineNumbers ? _c('th', {
+        staticClass: "line-numbers"
+      }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(index)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+        staticClass: "vgt-checkbox-col",
+        on: {
+          "click": function click($event) {
+            $event.stopPropagation();
+            return _vm.onCheckboxClicked(row, index, $event);
+          }
+        }
+      }, [_c('input', {
+        attrs: {
+          "type": "checkbox"
+        },
+        domProps: {
+          "checked": row.vgtSelected
+        }
+      })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+        return !column.hidden && column.field ? _c('td', {
+          key: i,
+          "class": _vm.getClasses(i, 'td', row),
+          on: {
+            "click": function click($event) {
+              return _vm.onCellClicked(row, column, index, $event);
+            }
+          }
+        }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+          domProps: {
+            "innerHTML": _vm._s(_vm.collect(row, column.field))
+          }
+        }) : _vm._e()], {
+          "row": row,
+          "column": column,
+          "formattedRow": _vm.formattedRow(row),
+          "index": index
+        })], 2) : _vm._e();
+      })], 2);
+    }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('vgt-header-row', {
+      attrs: {
+        "header-row": headerRow,
+        "columns": _vm.columns,
+        "line-numbers": _vm.lineNumbers,
+        "selectable": _vm.selectable,
+        "collect-formatted": _vm.collectFormatted,
+        "formatted-row": _vm.formattedRow,
+        "get-classes": _vm.getClasses,
+        "full-colspan": _vm.fullColspan
+      },
+      scopedSlots: _vm._u([{
+        key: "table-header-row",
+        fn: function fn(props) {
+          return _vm.hasHeaderRowTemplate ? [_vm._t("table-header-row", null, {
+            "column": props.column,
+            "formattedRow": props.formattedRow,
+            "row": props.row
+          })] : undefined;
+        }
+      }], null, true)
+    }) : _vm._e()], 2);
+  }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', [_c('tr', [_c('td', {
+    attrs: {
+      "colspan": _vm.fullColspan
+    }
+  }, [_vm._t("emptystate", [_c('div', {
+    staticClass: "vgt-center-align vgt-text-disabled"
+  }, [_vm._v("\n                  No data for table\n                ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
+    staticClass: "vgt-wrap__actions-footer"
+  }, [_vm._t("table-actions-bottom")], 2) : _vm._e(), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", [_c('vgt-pagination', {
+    ref: "paginationBottom",
+    attrs: {
+      "perPage": _vm.perPage,
+      "rtl": _vm.rtl,
+      "total": _vm.totalRows || _vm.totalRowCount,
+      "mode": _vm.paginationMode,
+      "nextText": _vm.nextText,
+      "prevText": _vm.prevText,
+      "rowsPerPageText": _vm.rowsPerPageText,
+      "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
+      "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
+      "ofText": _vm.ofText,
+      "pageText": _vm.pageText,
+      "allText": _vm.allText
+    },
+    on: {
+      "page-changed": _vm.pageChanged,
+      "per-page-changed": _vm.perPageChanged
+    }
+  })], {
+    "pageChanged": _vm.pageChanged,
+    "perPageChanged": _vm.perPageChanged,
+    "total": _vm.totalRows || _vm.totalRowCount
+  }) : _vm._e()], 2)]);
+};
+
 var __vue_staticRenderFns__$6 = [];
+/* style */
 
-  /* style */
-  const __vue_inject_styles__$6 = undefined;
-  /* scoped */
-  const __vue_scope_id__$6 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$6 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$6 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
+var __vue_inject_styles__$6 = undefined;
+/* scoped */
 
-  
-  var VueGoodTable = normalizeComponent_1(
-    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
-    __vue_inject_styles__$6,
-    __vue_script__$6,
-    __vue_scope_id__$6,
-    __vue_is_functional_template__$6,
-    __vue_module_identifier__$6,
-    undefined,
-    undefined
-  );
+var __vue_scope_id__$6 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$6 = undefined;
+/* functional template */
+
+var __vue_is_functional_template__$6 = false;
+/* style inject */
+
+/* style inject SSR */
+
+var VueGoodTable = __vue_normalize__({
+  render: __vue_render__$6,
+  staticRenderFns: __vue_staticRenderFns__$6
+}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, undefined, undefined);
 
 var VueGoodTablePlugin = {
   install: function install(Vue, options) {
@@ -2367,5 +2885,5 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueGoodTablePlugin);
 }
 
-exports.default = VueGoodTablePlugin;
 exports.VueGoodTable = VueGoodTable;
+exports.default = VueGoodTablePlugin;

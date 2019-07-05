@@ -45,7 +45,7 @@ type: `String (default: 'records')`
 
 You can render pagination controls in two modes - 'records' and 'pages'. Below, you'll find examples of both. 
 
-:::tip TIP
+::: tip 
 For tables that may have many pages, 'pages' mode offers the ability to jump to any valid page. 
 :::
 

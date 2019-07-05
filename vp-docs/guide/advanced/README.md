@@ -110,7 +110,7 @@ methods: {
 }
 ```
 
-::: tip NOTE
+::: warning
 You will have to implement your own pagination system:
 
 * The total number of rows can be accessed via `props.total`

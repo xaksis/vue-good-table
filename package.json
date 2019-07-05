@@ -1,20 +1,20 @@
 {
   "name": "vue-good-table",
-  "version": "2.16.5",
+  "version": "2.17.0",
   "sideEffects": [
     "*.vue",
     "*.css"
   ],
   "description": "A simple, clean data table for VueJS (2.x) with essential features like sorting, column filtering, pagination etc",
   "main": "dist/vue-good-table.cjs.js",
-  "module": "dist/vue-good-table.es.js",
+  "module": "dist/vue-good-table.esm.js",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
     "bundle": "bili",
-    "dev": "poi",
+    "dev": "poi --serve",
     "docs:dev": "vuepress dev vp-docs",
     "docs:build": "vuepress build vp-docs",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,10 +33,12 @@
   "license": "MIT",
   "poi": {
     "entry": "dev/main.js",
-    "dist": "dev/dist",
-    "homepage": "./",
-    "html": {
-      "template": "dev/index.html"
+    "output": {
+      "dir": "dev/dist",
+      "publicUrl": "./",
+      "html": {
+        "template": "dev/index.html"
+      }
     }
   },
   "dependencies": {
@@ -49,15 +51,14 @@
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
-    "bili": "^3.1.2",
+    "@vuepress/plugin-google-analytics": "^1.0.0-rc.1",
+    "bili": "^4.8.0",
     "node-sass": "^4.12.0",
-    "poi": "^10.2.10",
-    "rollup-plugin-vue": "^4.7.1",
-    "sass-loader": "^6.0.6",
-    "vue": "^2.5.22",
-    "vue-template-compiler": "^2.5.22",
-    "vuepress": "^0.14.11",
-    "webpack": "^4.28.4",
-    "webpack-dev-middleware": "^3.6.2"
+    "poi": "^12.6.10",
+    "rollup-plugin-vue": "^5.0.0",
+    "sass-loader": "^7.1.0",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10",
+    "vuepress": "^1.0.0-rc.1"
   }
 }
