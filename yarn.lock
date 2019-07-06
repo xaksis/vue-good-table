@@ -7721,7 +7721,7 @@ rollup-plugin-terser@^4.0.2:
     serialize-javascript "^1.6.1"
     terser "^3.14.1"
 
-rollup-plugin-vue@^5.0.0:
+rollup-plugin-vue@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/rollup-plugin-vue/-/rollup-plugin-vue-5.0.1.tgz#1d634db033b7c628886c7a84a7d1cd444aafe983"
   integrity sha512-1fOKOXbQicev1/GV0WtM9cOu7Bi582pgucrXeapc5eHgh45NnLRg4Qyl7I2LsazrT2yiuZGzDYOg3DCjoOqYOQ==
