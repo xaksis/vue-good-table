@@ -26,6 +26,7 @@ module.exports = {
     ],
   },
   plugins: {
+    commonjs: true,
     vue: {
       css: false,
     },
