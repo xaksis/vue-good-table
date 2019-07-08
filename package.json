@@ -31,9 +31,6 @@
     "email": "shay@crayonbits.com"
   },
   "license": "MIT",
-  "np": {
-		"yarn": false
-	},
   "poi": {
     "entry": "dev/main.js",
     "output": {
