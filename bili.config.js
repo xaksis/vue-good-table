@@ -31,4 +31,5 @@ module.exports = {
       css: false,
     },
   },
+  bundleNodeModules: true,
 };
