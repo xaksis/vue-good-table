@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import GroupedTable from './grouped-table';
-import RemoteTable from './remote-table';
+import GroupedTable from './grouped-table.vue';
+import RemoteTable from './remote-table.vue';
 
 export default {
   name: 'test',
@@ -78,6 +78,9 @@ export default {
           },
         },
         {
+          filterOptions: {
+            enabled: true,
+          },
           label: 'Created On',
           field: 'createdAt',
           type: 'date',

@@ -9,25 +9,27 @@ const banner = `/**
 `;
 
 module.exports = {
-  name: 'vue-good-table',
   banner,
-  extractCSS: true,
-  format: [
-    'cjs',
-    'es',
-    'umd',
-    'umd-min',
-  ],
-  compress: 'umd',
-  plugins: ['vue'],
-  vue: {
-    css: false,
-    cssSourceMap: false,
+  output: {
+    fileName: (context, defaultFileName) => {
+      if (context.format === 'umd' || context.format === 'umd-min') {
+        return 'vue-good-table[min].js';
+      }
+      return 'vue-good-table.[format].js';
+    },
+    moduleName: 'vue-good-table',
+    format: [
+      'cjs',
+      'es',
+      'umd',
+      'umd-min',
+    ],
   },
-  buble: {
-    transforms: {
-      generator: true,
-      dangerousForOf: true,
+  plugins: {
+    commonjs: true,
+    vue: {
+      css: false,
     },
   },
+  bundleNodeModules: true,
 };

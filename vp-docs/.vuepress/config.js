@@ -7,6 +7,7 @@ module.exports = {
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }]
   ],
+  theme: '@vuepress/vue',
   themeConfig: {
     repo: 'xaksis/vue-good-table',
     logo: '/vgt-logo.png',

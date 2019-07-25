@@ -145,7 +145,7 @@ In this case header row expects a value for each column
 
 <grouped-custom :options="{enabled: true, headerPosition: 'top'}"/>
 
-::: tip NOTE
+::: tip
 
 - The original row object can be accessed via `props.row`
 - The column object can be accessed via `props.column`
