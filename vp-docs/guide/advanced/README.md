@@ -51,6 +51,18 @@ Sometimes you might want to add columns to the table that are not part of your r
 </vue-good-table>
 ```
 
+keep in mind that you'll need to add the custom columns to your column definition.
+```js
+{
+  label: 'Before',
+  field: 'before'
+},
+{
+  label: 'After',
+  field: 'after'
+},
+```
+
 ### Result
 <before-after-columns />
 
