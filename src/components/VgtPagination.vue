@@ -83,7 +83,7 @@ export default {
     perPage: {
       handler(newValue, oldValue) {
         this.handlePerPage();
-        this.perPageChanged();
+        this.perPageChanged(oldValue);
       },
       immediate: true,
     },
@@ -162,9 +162,12 @@ export default {
     },
 
     // Indicate per page changing
-    perPageChanged() {
+    perPageChanged(oldValue) {
       // go back to first page
-      this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
+      if (oldValue) {
+        //* only emit if this isn't first initialization
+        this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
+      }
       this.changePage(1, false);
     },
 

@@ -180,12 +180,14 @@ export default {
     },
 
     onPageChange(params) {
+      console.log('page change called');
       console.log(params);
       this.updateParams({page: params.currentPage});
       this.loadItems();
     },
 
     onPerPageChange(params) {
+      console.log('per page change called');
       console.log(params);
       this.updateParams({perPage: params.currentPerPage});
       this.loadItems();
@@ -200,6 +202,7 @@ export default {
     },
 
     onColumnFilter(params) {
+      console.log('on column filter change');
       console.log(params);
       this.updateParams(params);
       this.loadItems();
