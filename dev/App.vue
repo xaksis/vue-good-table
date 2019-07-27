@@ -240,12 +240,13 @@ export default {
     },
     setFilter() {
       // this.columns[0].filterOptions.filterValue = 'John';
-      const column1 = JSON.parse(JSON.stringify(this.columns[0]));
-      column1.filterOptions.filterValue = 'John';
-      this.$set(this.columns, 0, column1);
-      const column2 = JSON.parse(JSON.stringify(this.columns[1]));
-      column2.filterOptions.filterValue = 20;
-      this.$set(this.columns, 1, column2);
+      this.$set(this.columns[0].filterOptions, 'filterValue', this.searchTerm);
+      // const column1 = JSON.parse(JSON.stringify(this.columns[0]));
+      // column1.filterOptions.filterValue = 'John';
+      // this.$set(this.columns, 0, column1);
+      // const column2 = JSON.parse(JSON.stringify(this.columns[1]));
+      // column2.filterOptions.filterValue = 20;
+      // this.$set(this.columns, 1, column2);
       // this.$set(this.columns[1], 'filterOptions', { enabled: true, filterValue: 20 });
       // this.$set(this.columns[0], 'filterOptions', {
       //   enabled: true,

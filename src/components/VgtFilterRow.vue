@@ -62,9 +62,7 @@ export default {
   watch: {
     columns: {
       handler(newValue, oldValue) {
-        if (!isEqual(newValue, oldValue)) {
-          this.populateInitialFilters();
-        }
+        this.populateInitialFilters();
       },
       deep: true,
       immediate: true,
@@ -162,7 +160,7 @@ export default {
           && col.filterOptions.filterValue !== null) {
           this.$set(this.columnFilters, col.field, col.filterOptions.filterValue);
           // this.updateFilters(col, col.filterOptions.filterValue);
-          this.$set(col.filterOptions, 'filterValue', undefined);
+          // this.$set(col.filterOptions, 'filterValue', undefined);
         }
       }
       //* lets emit event once all filters are set
@@ -170,6 +168,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.columns);
   },
 };
 </script>
