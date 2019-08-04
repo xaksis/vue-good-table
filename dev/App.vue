@@ -5,6 +5,7 @@
     <button @click="resetTable">reset Table</button>
     <button @click="hideColumn">hide column</button>
     <button @click="setFilter">SetFilter</button>
+    <button @click="changePage">Change Page</button>
     <input type="text" v-model="searchTerm">
     <vue-good-table
       ref="my-table"
@@ -18,12 +19,7 @@
       :columns="columns"
       :rows="rows"
       theme="black-rhino"
-      :pagination-options="{
-        mode: 'pages',
-        enabled: true,
-        perPage: 5,
-        perPageDropdown: [50, 100, 200, 300, 500, 1000],
-      }"
+      :pagination-options="paginationOptions"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: true,
@@ -31,11 +27,12 @@
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
-        initialSortBy: [{field: 'name', type: 'asc'}, {field: 'age', type: 'desc'}],
+        initialSortBy: [{field: 'name', type: 'asc'}],
       }"
       :search-options="{
         enabled: true,
         skipDiacritics: true,
+        externalQuery: searchTerm,
       }">
     </vue-good-table>
     <h3>Remote Table</h3>
@@ -53,9 +50,16 @@ export default {
   name: 'test',
   data() {
     return {
+      currentPage: 1,
       selectedIds: [],
       rowStyleClass: 'red',
       searchTerm: '',
+      paginationOptions: {
+        mode: 'pages',
+        enabled: true,
+        perPage: 5,
+        perPageDropdown: [50, 100, 200, 300, 500, 1000],
+      },
       columns: [
         {
           label: 'Name',
@@ -64,13 +68,13 @@ export default {
           filterOptions: {
             enabled: true,
             placeholder: 'All',
-            filterDropdownItems: ['Chris', 'Dan', 'Susan'],
+            // filterDropdownItems: ['Chris', 'Dan', 'Susan'],
             // filterValue: 'Chris',
           },
         },
         {
           label: 'Age',
-          field: 'age',
+          field: obj => obj.age,
           type: 'number',
           filterOptions: {
             enabled: true,
@@ -188,6 +192,10 @@ export default {
     };
   },
   methods: {
+    changePage() {
+      this.currentPage += 1;
+      this.$set(this.paginationOptions, 'setCurrentPage', this.currentPage);
+    },
     funcValue(row) {
       return row.age + 5;
     },
@@ -240,7 +248,7 @@ export default {
     },
     setFilter() {
       // this.columns[0].filterOptions.filterValue = 'John';
-      this.$set(this.columns[0].filterOptions, 'filterValue', this.searchTerm);
+      this.$set(this.columns[0].filterOptions, 'filterValue', 'Chris');
       // const column1 = JSON.parse(JSON.stringify(this.columns[0]));
       // column1.filterOptions.filterValue = 'John';
       // this.$set(this.columns, 0, column1);
@@ -337,6 +345,8 @@ export default {
     onSortChange(params) {
       console.log('on-sort-change:');
       console.log(params);
+      const [nameFilter] = params;
+      console.log(typeof nameFilter.field === 'function');
     },
 
     onRowClick(params) {

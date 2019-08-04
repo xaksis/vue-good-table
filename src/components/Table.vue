@@ -471,9 +471,7 @@ export default {
 
     paginationOptions: {
       handler(newValue, oldValue) {
-        if (!isEqual(newValue, oldValue)) {
-          this.initializePagination();
-        }
+        this.initializePagination();
       },
       deep: true,
       immediate: true,
@@ -497,9 +495,9 @@ export default {
 
     sortOptions: {
       handler(newValue, oldValue) {
-        if (!isEqual(newValue, oldValue)) {
-          this.initializeSort();
-        }
+        // if (!isEqual(newValue, oldValue)) {
+        this.initializeSort();
+        // }
       },
       deep: true,
     },

@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.17.2
+ * vue-good-table v2.17.4
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -7671,7 +7671,7 @@ var script$1 = {
     perPage: {
       handler: function handler(newValue, oldValue) {
         this.handlePerPage();
-        this.perPageChanged();
+        this.perPageChanged(oldValue);
       },
       immediate: true
     },
@@ -7741,11 +7741,15 @@ var script$1 = {
       });
     },
     // Indicate per page changing
-    perPageChanged: function perPageChanged() {
+    perPageChanged: function perPageChanged(oldValue) {
       // go back to first page
-      this.$emit('per-page-changed', {
-        currentPerPage: this.currentPerPage
-      });
+      if (oldValue) {
+        //* only emit if this isn't first initialization
+        this.$emit('per-page-changed', {
+          currentPerPage: this.currentPerPage
+        });
+      }
+
       this.changePage(1, false);
     },
     // Handle per page changing
@@ -8040,9 +8044,7 @@ var script$3 = {
   watch: {
     columns: {
       handler: function handler(newValue, oldValue) {
-        if (!lodash_isequal(newValue, oldValue)) {
-          this.populateInitialFilters();
-        }
+        this.populateInitialFilters();
       },
       deep: true,
       immediate: true
@@ -8128,8 +8130,7 @@ var script$3 = {
 
         if (this.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
           this.$set(this.columnFilters, col.field, col.filterOptions.filterValue); // this.updateFilters(col, col.filterOptions.filterValue);
-
-          this.$set(col.filterOptions, 'filterValue', undefined);
+          // this.$set(col.filterOptions, 'filterValue', undefined);
         }
       } //* lets emit event once all filters are set
 
@@ -8137,7 +8138,9 @@ var script$3 = {
       this.$emit('filter-changed', this.columnFilters);
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    console.log(this.columns);
+  }
 };
 
 /* script */
@@ -8230,7 +8233,7 @@ var __vue_staticRenderFns__$3 = [];
 var __vue_inject_styles__$3 = undefined;
 /* scoped */
 
-var __vue_scope_id__$3 = "data-v-892cc66c";
+var __vue_scope_id__$3 = "data-v-74c08ac1";
 /* module identifier */
 
 var __vue_module_identifier__$3 = undefined;
@@ -11578,9 +11581,7 @@ var script$6 = {
     },
     paginationOptions: {
       handler: function handler(newValue, oldValue) {
-        if (!lodash_isequal(newValue, oldValue)) {
-          this.initializePagination();
-        }
+        this.initializePagination();
       },
       deep: true,
       immediate: true
@@ -11600,9 +11601,8 @@ var script$6 = {
     },
     sortOptions: {
       handler: function handler(newValue, oldValue) {
-        if (!lodash_isequal(newValue, oldValue)) {
-          this.initializeSort();
-        }
+        // if (!isEqual(newValue, oldValue)) {
+        this.initializeSort(); // }
       },
       deep: true
     },
