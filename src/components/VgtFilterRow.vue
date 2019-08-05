@@ -46,6 +46,7 @@
       <v-select v-if="isMultiselectDropdown(column)"
         :options="column.filterOptions.filterMultiselectDropdownItems"
         :loading="column.filterOptions.loading"
+        :placeholder="getPlaceholder(column)"
         multiple
         @input="(selectedItems) => updateFiltersOnKeyup(column, selectedItems)"
         :ref="'vgt-multiselect' + column.label + index"

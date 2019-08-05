@@ -46,6 +46,16 @@
       opacity: 0.3; /* Firefox */
     }
   }
+
+  .v-select {
+    background-color: darken($thead-bg-color-2, 5%);
+    input {
+      color: $text-color;
+    }
+    .vs__open-indicator {
+      fill: $text-color
+    }
+  }
 }
 
 .vgt-wrap.nocturnal{
