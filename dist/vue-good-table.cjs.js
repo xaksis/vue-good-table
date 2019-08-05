@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.17.5
+ * vue-good-table v2.17.6
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8137,9 +8137,6 @@ var script$3 = {
 
       this.$emit('filter-changed', this.columnFilters);
     }
-  },
-  mounted: function mounted() {
-    console.log(this.columns);
   }
 };
 
@@ -8233,7 +8230,7 @@ var __vue_staticRenderFns__$3 = [];
 var __vue_inject_styles__$3 = undefined;
 /* scoped */
 
-var __vue_scope_id__$3 = "data-v-74c08ac1";
+var __vue_scope_id__$3 = "data-v-836b007c";
 /* module identifier */
 
 var __vue_module_identifier__$3 = undefined;
