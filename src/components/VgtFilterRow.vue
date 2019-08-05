@@ -48,6 +48,7 @@
         :loading="column.filterOptions.loading"
         multiple
         @input="(selectedItems) => updateFiltersOnKeyup(column, selectedItems)"
+        :ref="'vgt-multiselect' + column.label + index"
       />
 
     </div>
@@ -102,6 +103,17 @@ export default {
   methods: {
     reset(emitEvent = false) {
       this.columnFilters = {};
+
+      // Clear the selection in the multiselect
+      let multiselectRefs = this.columns
+        .map((column, index) => {
+          column.ref = 'vgt-multiselect' + column.label + index;
+          return column;
+        })
+        .filter(this.isMultiselectDropdown)
+        .map(column => column.ref);
+      multiselectRefs.forEach((ref) => this.$refs[ref][0].clearSelection());
+
       if (emitEvent) {
         this.$emit('filter-changed', this.columnFilters);
       }

@@ -1231,6 +1231,25 @@ export default {
                     this.columnFilters[col.field]
                   );
                 }
+
+                // If the column has an array of filter values match any
+                if (col.filterOptions && col.filterOptions.filterMultiselectDropdownItems) {
+                  if(this.columnFilters[col.field].length === 0) {
+                    return true;
+                  }
+                  // Otherwise Use default filters
+                  const { typeDef } = col;
+                  for(let filter of this.columnFilters[col.field]) {
+                    if(typeDef.filterPredicate(
+                        this.collect(row, col.field),
+                        filter
+                      )){
+                      return true;
+                    }
+                  }
+                  return false;
+                }
+
                 // Otherwise Use default filters
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
