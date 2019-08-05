@@ -8,7 +8,7 @@
 
     <div
       v-if="isFilterable(column)">
-      <input v-if="!isDropdown(column)"
+      <input v-if="!isDropdown(column) && !isMultiselectDropdown(column)"
         type="text"
         class="vgt-input"
         :placeholder="getPlaceholder(column)"
@@ -41,6 +41,15 @@
           :key="i"
           :value="option.value">{{ option.text }}</option>
       </select>
+
+      <!---->
+      <v-select v-if="isMultiselectDropdown(column)"
+        :options="column.filterOptions.filterMultiselectDropdownItems"
+        :loading="column.filterOptions.loading"
+        multiple
+        @input="(selectedItems) => updateFiltersOnKeyup(column, selectedItems)"
+      />
+
     </div>
   </th>
 </tr>
@@ -117,6 +126,11 @@ export default {
     isDropdownArray(column) {
       return this.isDropdown(column)
         && typeof column.filterOptions.filterDropdownItems[0] !== 'object';
+    },
+
+    isMultiselectDropdown(column) {
+      return this.isFilterable(column)
+        && column.filterOptions.filterMultiselectDropdownItems;
     },
 
     // get column's defined placeholder or default one
