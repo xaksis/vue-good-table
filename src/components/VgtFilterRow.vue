@@ -167,9 +167,6 @@ export default {
       this.$emit('filter-changed', this.columnFilters);
     },
   },
-  mounted() {
-    console.log(this.columns);
-  },
 };
 </script>
 
