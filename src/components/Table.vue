@@ -1487,7 +1487,7 @@ export default {
       this.currentPerPage = this.perPage;
     }
     this.initializeSort();
-    if (!this.draggabeColumns && this.fixedHeader) {
+    if (!this.draggabeColumns) {
       return false;
     }
     this.$nextTick(() => {
