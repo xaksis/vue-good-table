@@ -773,13 +773,13 @@ export default {
                   sortValue ||
                   sortFn(xvalue, yvalue, column, xRow, yRow) *
                     (this.sorts[i].type === 'desc' ? -1 : 1);
+              } else {
+                //* else we use our own sort
+                sortValue =
+                  sortValue ||
+                  column.typeDef.compare(xvalue, yvalue, column) *
+                    (this.sorts[i].type === 'desc' ? -1 : 1);
               }
-
-              //* else we use our own sort
-              sortValue =
-                sortValue ||
-                column.typeDef.compare(xvalue, yvalue, column) *
-                  (this.sorts[i].type === 'desc' ? -1 : 1);
             }
             return sortValue;
           });
