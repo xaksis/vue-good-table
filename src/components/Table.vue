@@ -344,7 +344,7 @@ export default {
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
-    draggabeColumns: { default : false, type: Boolean },
+    draggableColumns: { default : false, type: Boolean },
     groupOptions: {
       default() {
         return {
@@ -1487,7 +1487,7 @@ export default {
       this.currentPerPage = this.perPage;
     }
     this.initializeSort();
-    if (!this.draggabeColumns) {
+    if (!this.draggableColumns) {
       return false;
     }
     this.$nextTick(() => {
@@ -1504,9 +1504,7 @@ export default {
       sortColumns.on('sortable:stop', (e) => {
         this.$emit('on-column-dragged', e);
         this.columns = this.array_move(this.columns, e.oldIndex, e.newIndex);
-       
-        // console.log(this.columns)
-        // console.log(columns)
+        // this.$refs['table-header-primary'].reset(true);
       });
     })
   },

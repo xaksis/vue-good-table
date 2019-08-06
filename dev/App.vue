@@ -19,7 +19,7 @@
       @on-column-dragged="dragColumn"
       :columns="columns"
       :rows="rows"
-      :draggabeColumns="true"
+      :draggableColumns="true"
       theme="black-rhino"
       :pagination-options="paginationOptions"
       :select-options="{
