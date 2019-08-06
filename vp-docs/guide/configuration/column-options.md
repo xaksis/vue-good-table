@@ -57,8 +57,8 @@ columns: [
     label: 'joined On',
     field: 'createdAt',
     type: 'date',
-    dateInputFormat: 'YYYY-MM-DD', // expects 2018-03-16
-    dateOutputFormat: 'MMM Do YYYY', // outputs Mar 16th 2018
+    dateInputFormat: 'yyyy-MM-dd', // expects 2018-03-16
+    dateOutputFormat: 'MMM Do yyyy', // outputs Mar 16th 2018
   },
   // ...
 ]
@@ -71,7 +71,7 @@ type `String`
 provide the format to parse date string. 
 
 ::: tip
-Vue-good-table uses date-fns for date parsing. [Check out their formats here](https://date-fns.org/v2.0.0-alpha.7/docs/parse).
+Vue-good-table uses date-fns for date parsing. [Check out their formats here](https://date-fns.org/v2.0.0-beta.4/docs/parse).
 :::
 
 ## dateOutputFormat
