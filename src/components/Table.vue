@@ -1,11 +1,6 @@
 <template>
   <div
-    class="vgt-wrap"
-    :class="{
-    'rtl': rtl,
-    'nocturnal': theme==='nocturnal',
-    'black-rhino': theme==='black-rhino',
-  }">
+    :class="wrapStyleClasses">
     <div v-if="isLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
         <span class="vgt-loading__content">
@@ -53,7 +48,7 @@
         </template>
       </vgt-global-search>
       <div
-        v-if="selectedRowCount"
+        v-if="selectedRowCount && !disableSelectInfo"
         class="vgt-selection-info-row clearfix"
         :class="selectionInfoClass"
       >
@@ -358,6 +353,7 @@ export default {
           selectionInfoClass: '',
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
+          disableSelectInfo: false,
         };
       },
     },
@@ -415,6 +411,7 @@ export default {
     selectable: false,
     selectOnCheckboxOnly: false,
     selectAllByPage: true,
+    disableSelectInfo: false,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -645,6 +642,12 @@ export default {
         total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
+    },
+    wrapStyleClasses() {
+      let classes = 'vgt-wrap';
+      if (this.rtl) classes += ' rtl';
+      classes += ` ${this.theme}`;
+      return classes;
     },
     tableStyleClasses() {
       let classes = this.styleClass;
@@ -1422,6 +1425,7 @@ export default {
         clearSelectionText,
         selectOnCheckboxOnly,
         selectAllByPage,
+        disableSelectInfo,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1434,6 +1438,10 @@ export default {
 
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
+      }
+      
+      if (typeof disableSelectInfo === 'boolean') {
+        this.disableSelectInfo = disableSelectInfo;
       }
 
       if (typeof selectionInfoClass === 'string') {

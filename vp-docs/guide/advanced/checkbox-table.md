@@ -19,6 +19,7 @@ Object containing select options
     selectionInfoClass: 'custom-class',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
+    disableSelectInfo: true, // disable the select info panel on top
   }">
 ```
 

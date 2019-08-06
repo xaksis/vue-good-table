@@ -18,12 +18,13 @@
       @on-selected-rows-change="onSelectChanged"
       :columns="columns"
       :rows="rows"
-      theme="black-rhino"
       :pagination-options="paginationOptions"
       :select-options="{
         enabled: true,
-        selectOnCheckboxOnly: true,
+        selectOnCheckboxOnly: false,
+        disableSelectInfo: true,
       }"
+      theme="black-rhino"
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
