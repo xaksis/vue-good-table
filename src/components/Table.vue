@@ -1491,8 +1491,9 @@ export default {
       return false;
     }
     this.$nextTick(() => {
+      const ref = this.$refs['table-header-primary'];
       const sortColumns = new Sortable(
-        this.$refs['table-header-primary'].$el.firstElementChild, {
+        ref.$el.firstElementChild, {
           draggable: 'th',
           mirror: {
             constrainDimensions: true
@@ -1504,7 +1505,7 @@ export default {
       sortColumns.on('sortable:stop', (e) => {
         this.$emit('on-column-dragged', e);
         this.columns = this.array_move(this.columns, e.oldIndex, e.newIndex);
-        this.$refs['table-header-primary'].reset(true);
+        ref.reset(true);
       });
     })
   },
