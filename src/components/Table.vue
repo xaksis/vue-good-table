@@ -315,6 +315,8 @@ import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
+import Draggable from '@shopify/draggable/lib/draggable';
+import { Sortable } from '@shopify/draggable';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -342,7 +344,7 @@ export default {
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
-
+    draggabeColumns: { default : false, type: Boolean },
     groupOptions: {
       default() {
         return {
@@ -496,7 +498,7 @@ export default {
     sortOptions: {
       handler(newValue, oldValue) {
         // if (!isEqual(newValue, oldValue)) {
-        this.initializeSort();
+          this.initializeSort();
         // }
       },
       deep: true,
@@ -881,6 +883,29 @@ export default {
   },
 
   methods: {
+    //just for now.
+    array_move(arr, old_index, new_index) {
+      if(this.selectOptions.enabled){
+        new_index--;
+        old_index--;
+      }
+
+      const tmpColumn = arr[old_index];
+      if(new_index >= old_index){
+        for (let i = old_index; i < new_index; i++) {
+          arr[i] = arr[i + 1];
+        }
+        arr[new_index] = tmpColumn
+      } else {
+        for (let i = old_index; i > new_index; i--) {
+          arr[i] = arr[i - 1];
+        }
+        arr[new_index] = tmpColumn
+      }
+
+      return arr;
+    },
+
     getColumnForField(field) {
       for (let i = 0; i < this.typedColumns.length; i += 1) {
         if (this.typedColumns[i].field === field) return this.typedColumns[i];
@@ -1462,6 +1487,28 @@ export default {
       this.currentPerPage = this.perPage;
     }
     this.initializeSort();
+    if (!this.draggabeColumns && this.fixedHeader) {
+      return false;
+    }
+    this.$nextTick(() => {
+      const sortColumns = new Sortable(
+        this.$refs['table-header-primary'].$el.firstElementChild, {
+          draggable: 'th',
+          mirror: {
+            constrainDimensions: true
+          },
+          delay: 100
+        }
+      );
+
+      sortColumns.on('sortable:stop', (e) => {
+        this.$emit('on-column-dragged', e);
+        this.columns = this.array_move(this.columns, e.oldIndex, e.newIndex);
+       
+        // console.log(this.columns)
+        // console.log(columns)
+      });
+    })
   },
 
   components: {
@@ -1469,6 +1516,7 @@ export default {
     'vgt-global-search': VgtGlobalSearch,
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
+    Sortable
   },
 };
 </script>
