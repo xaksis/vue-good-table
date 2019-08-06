@@ -1504,7 +1504,7 @@ export default {
       sortColumns.on('sortable:stop', (e) => {
         this.$emit('on-column-dragged', e);
         this.columns = this.array_move(this.columns, e.oldIndex, e.newIndex);
-        // this.$refs['table-header-primary'].reset(true);
+        this.$refs['table-header-primary'].reset(true);
       });
     })
   },
