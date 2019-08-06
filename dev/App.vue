@@ -16,8 +16,10 @@
       @on-per-page-change="onPerPageChange"
       @on-search="onSearch"
       @on-selected-rows-change="onSelectChanged"
+      @on-column-dragged="dragColumn"
       :columns="columns"
       :rows="rows"
+      :draggabeColumns="true"
       theme="black-rhino"
       :pagination-options="paginationOptions"
       :select-options="{
@@ -288,7 +290,7 @@ export default {
     },
 
     onClick() {
-      console.log('clicked');
+      // console.log('clicked');
       this.rowStyleClass = 'green';
     },
     addRow() {
@@ -314,56 +316,60 @@ export default {
     },
     addFilter() {
       this.$set(this.columns[2], 'filterValue', 'Jane');
-      console.log(this.columns);
+      // console.log(this.columns);
     },
 
     // events
     // ===================================================
     onPerPageChange(evt) {
       // { currentPage: 1, currentPerPage: 10, total: 5 }
-      console.log('per-page-changed:');
-      console.log(evt);
+      // console.log('per-page-changed:');
+      // console.log(evt);
     },
 
     onPageChange(evt) {
       // { currentPage: 1, currentPerPage: 10, total: 5 }
-      console.log('page-changed:');
-      console.log(evt);
+      // console.log('page-changed:');
+      // console.log(evt);
     },
 
     onColumnFilter(params) {
       // { currentPage: 1, currentPerPage: 10, total: 5 }
-      console.log('on-column-filters:');
-      console.log(params);
+      // console.log('on-column-filters:');
+      // console.log(params);
     },
 
     onSearch(params) {
-      console.log('on-search:');
-      console.log(params);
+      // console.log('on-search:');
+      // console.log(params);
     },
 
     onSortChange(params) {
-      console.log('on-sort-change:');
-      console.log(params);
+      // console.log('on-sort-change:');
+      // console.log(params);
       const [nameFilter] = params;
-      console.log(typeof nameFilter.field === 'function');
+      // console.log(typeof nameFilter.field === 'function');
     },
 
     onRowClick(params) {
-      console.log('on-row-click');
-      console.log(params);
+      // console.log('on-row-click');
+      // console.log(params);
     },
 
     onSelectChanged(params) {
-      console.log(params);
+      // console.log(params);
       const selectedIds = params.selectedRows.reduce((acc, row) => {
         acc.push(row.id);
         return acc;
       }, []);
-      console.log(params.selectedRows);
-      console.log(selectedIds);
+      // console.log(params.selectedRows);
+      // console.log(selectedIds);
       this.selectedIds = selectedIds;
     },
+
+    dragColumn(e) {
+      console.log(e);
+    }
   },
   mounted() {
     // axios.get('https://jsonplaceholder.typicode.com/posts')
