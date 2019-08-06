@@ -145,7 +145,7 @@ export default {
           id: 5,
           name: 'Dan',
           age: 40,
-          createdAt: null,
+          createdAt: '',
           score: 0.03343,
           bool: null,
         },
