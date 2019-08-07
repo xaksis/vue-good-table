@@ -883,8 +883,7 @@ export default {
   },
 
   methods: {
-    //just for now.
-    array_move(arr, old_index, new_index) {
+    reorderColumns(arr, old_index, new_index) {
       if(this.selectOptions.enabled){
         new_index--;
         old_index--;
@@ -1493,7 +1492,7 @@ export default {
       );
 
       sortColumns.on('sortable:stop', (e) => {
-        this.columns = this.array_move(this.columns, e.oldIndex, e.newIndex);
+        this.columns = this.reorderColumns(this.columns, e.oldIndex, e.newIndex);
         this.$emit('on-column-dragged', this.columns);
       });
     })
