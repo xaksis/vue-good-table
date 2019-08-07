@@ -1499,9 +1499,8 @@ export default {
       );
 
       sortColumns.on('sortable:stop', (e) => {
-        this.$emit('on-column-dragged', e);
         this.columns = this.array_move(this.columns, e.oldIndex, e.newIndex);
-        ref.reset(true);
+        this.$emit('on-column-dragged', this.columns);
       });
     })
   },
