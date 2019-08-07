@@ -10,7 +10,7 @@
         @change="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
-      :key="index"
+      :key="column.label"
       @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
