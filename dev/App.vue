@@ -21,7 +21,7 @@
       :rows="rows"
       :draggableColumns="true"
       theme="black-rhino"
-      :pagination-options="paginationOptions" 
+      :pagination-options="paginationOptions"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: true,
