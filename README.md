@@ -124,6 +124,7 @@ components: {
 * [Grouped Rows Table](https://xaksis.github.io/vue-good-table/guide/advanced/grouped-table.html)
 * [Server Powered Table](https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#why-remote-mode)
 * [Customizable Style and Themes](https://xaksis.github.io/vue-good-table/guide/style-configuration/)
+* [Draggable columns](https://)
 
 ## Upgrade Guide
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
