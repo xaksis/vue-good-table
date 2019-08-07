@@ -115,7 +115,7 @@
         <table
           ref="table"
           :class="tableStyleClasses"
-        > 
+        >
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -790,7 +790,7 @@ export default {
       if (this.searchTrigger === 'enter') {
         this.filteredRows = computedRows;
       }
-      
+
       return computedRows;
     },
 
