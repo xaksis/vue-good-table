@@ -115,7 +115,7 @@
         <table
           ref="table"
           :class="tableStyleClasses"
-        >
+        > 
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -796,7 +796,7 @@ export default {
       if (this.searchTrigger === 'enter') {
         this.filteredRows = computedRows;
       }
-
+      
       return computedRows;
     },
 
@@ -895,19 +895,9 @@ export default {
         new_index--;
         old_index--;
       }
-
       const tmpColumn = arr[old_index];
-      if(new_index >= old_index){
-        for (let i = old_index; i < new_index; i++) {
-          arr[i] = arr[i + 1];
-        }
-        arr[new_index] = tmpColumn
-      } else {
-        for (let i = old_index; i > new_index; i--) {
-          arr[i] = arr[i - 1];
-        }
-        arr[new_index] = tmpColumn
-      }
+      arr.splice(old_index, 1);
+      arr.splice(new_index, 0, tmpColumn);
 
       return arr;
     },
