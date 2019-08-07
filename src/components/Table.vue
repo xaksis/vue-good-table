@@ -1475,7 +1475,9 @@ export default {
       return false;
     }
     this.$nextTick(() => {
-      const ref = this.$refs['table-header-primary'];
+      const ref = this.fixedHeader
+          ? this.$refs['table-header-secondary']
+          : this.$refs['table-header-primary'];
       const sortColumns = new Sortable(
         ref.$el.firstElementChild, {
           draggable: '.isDraggable',
