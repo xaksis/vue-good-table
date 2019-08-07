@@ -10,7 +10,7 @@
         @change="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
-      :key="column.label"
+      :key="fieldToString(column)"
       @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
@@ -122,6 +122,10 @@ export default {
   computed: {
   },
   methods: {
+    fieldToString(column){
+      if (typeof column.field === 'function') return column.field.toString();
+      return column.field
+    },
     reset() {
       this.$refs['filter-row'].reset(true);
     },
