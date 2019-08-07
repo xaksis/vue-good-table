@@ -497,7 +497,7 @@ export default {
     sortOptions: {
       handler(newValue, oldValue) {
         // if (!isEqual(newValue, oldValue)) {
-          this.initializeSort();
+        this.initializeSort();
         // }
       },
       deep: true,
@@ -882,10 +882,10 @@ export default {
   },
 
   methods: {
-    reorderColumns(arr, old_index, new_index) {
-      const tmpColumn = arr[old_index];
-      arr.splice(old_index, 1);
-      arr.splice(new_index, 0, tmpColumn);
+    reorderColumns(arr, oldIndex, newIndex) {
+      const tmpColumn = arr[oldIndex];
+      arr.splice(oldIndex, 1);
+      arr.splice(newIndex, 0, tmpColumn);
 
       return arr;
     },
