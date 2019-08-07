@@ -367,8 +367,9 @@ export default {
       this.selectedIds = selectedIds;
     },
 
-    dragColumn(e) {
-      console.log("NEW ARRAY ORDER",e);
+    dragColumn(params) {
+      console.log('on-column-dragged');
+      console.log(params);
     }
   },
   mounted() {
