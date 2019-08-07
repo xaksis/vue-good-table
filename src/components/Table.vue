@@ -884,10 +884,6 @@ export default {
 
   methods: {
     reorderColumns(arr, old_index, new_index) {
-      if(this.selectOptions.enabled){
-        new_index--;
-        old_index--;
-      }
       const tmpColumn = arr[old_index];
       arr.splice(old_index, 1);
       arr.splice(new_index, 0, tmpColumn);
@@ -1483,7 +1479,7 @@ export default {
       const ref = this.$refs['table-header-primary'];
       const sortColumns = new Sortable(
         ref.$el.firstElementChild, {
-          draggable: 'th',
+          draggable: '.isDraggable',
           mirror: {
             constrainDimensions: true
           },
