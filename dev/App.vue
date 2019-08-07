@@ -16,7 +16,7 @@
       @on-per-page-change="onPerPageChange"
       @on-search="onSearch"
       @on-selected-rows-change="onSelectChanged"
-      @on-column-dragged="dragColumn"
+      @on-column-dragged="onDraggedColumn"
       :columns="columns"
       :rows="rows"
       :draggableColumns="true"
@@ -367,7 +367,7 @@ export default {
       this.selectedIds = selectedIds;
     },
 
-    dragColumn(params) {
+    onDraggedColumn(params) {
       console.log('on-column-dragged');
       console.log(params);
     }
