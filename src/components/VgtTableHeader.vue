@@ -163,7 +163,7 @@ export default {
       const classes = assign({}, this.getClasses(index, 'th'), {
         'sorting sorting-desc': this.getColumnSort(column) === 'desc',
         'sorting sorting-asc': this.getColumnSort(column) === 'asc',
-        'isDraggable': true
+        'isDraggable': true,
       });
       return classes;
     },
