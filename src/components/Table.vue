@@ -134,13 +134,7 @@
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
           >
-            <!-- TODO
-              * when template below is comment out. everything works.
-              * with a v-if for hiding the template it doesnt work.
-
-              Look to hide template only when using draggeableColumns-->
-
-            <!-- <template
+            <template
               slot="table-column"
               slot-scope="props"
             >
@@ -150,7 +144,7 @@
               >
                 <span>{{props.column.label}}</span>
               </slot>
-            </template> -->
+            </template>
           </thead>
 
           <!-- Table body starts here -->
