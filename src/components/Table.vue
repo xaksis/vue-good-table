@@ -1172,10 +1172,16 @@ export default {
       let { isRight } = typeDef;
       if (this.rtl) isRight = true;
 
-      const classes = {
+      let classes = {
         'vgt-right-align': isRight,
         'vgt-left-align': !isRight,
       };
+      
+      if(this.draggableColumns){
+        classes = assign(classes, {
+          'isDraggable': true,
+        });
+      }
 
       // for td we need to check if value is
       // a function.
