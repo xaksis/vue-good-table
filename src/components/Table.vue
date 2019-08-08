@@ -1490,7 +1490,7 @@ export default {
 
       sortColumns.on('sortable:stop', (e) => {
         this.columns = this.reorderColumns(this.columns, e.oldIndex, e.newIndex);
-        this.$emit('on-column-dragged', this.columns);
+        this.$emit('on-column-dragged', e);
       });
     })
   },
