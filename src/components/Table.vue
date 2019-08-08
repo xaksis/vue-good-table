@@ -315,7 +315,8 @@ import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
-import { Sortable, Draggable } from '@shopify/draggable';
+import Draggable from '@shopify/draggable/lib/es5/draggable.js'
+import Sortable from '@shopify/draggable/lib/es5/sortable.js';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
