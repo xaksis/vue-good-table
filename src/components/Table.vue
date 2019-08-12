@@ -762,6 +762,7 @@ export default {
             let sortValue;
             for (let i = 0; i < this.sorts.length; i += 1) {
               const column = this.getColumnForField(this.sorts[i].field);
+              if (typeof column == 'undefined'){continue}
               const xvalue = this.collect(xRow, this.sorts[i].field);
               const yvalue = this.collect(yRow, this.sorts[i].field);
 
