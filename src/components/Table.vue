@@ -1356,6 +1356,9 @@ export default {
       });
       return originalRows;
     },
+    toggleFilteredColumn(event, column) {
+      this.columns[column].hidden = !event.target.checked;
+    },
 
     initializePagination() {
       const {
