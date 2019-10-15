@@ -43,7 +43,10 @@
         :global-search-placeholder="searchPlaceholder"
       >
         <template slot="internal-table-actions">
-          <slot name="table-actions">
+          <slot
+            v-if="columnFilterEnabled" 
+            name="table-actions">
+              <vgt-column-dropdown :columns="columns" @input="toggleFilteredColumn"/>
           </slot>
         </template>
       </vgt-global-search>
@@ -323,6 +326,7 @@ import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
+import VgtColumnDropdown from './vgtColumnDropdown.vue';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -406,7 +410,7 @@ export default {
         };
       },
     },
-  },
+      },
 
   data: () => ({
     // loading state for remote mode
@@ -521,7 +525,7 @@ export default {
         });
       }
     },
-  },
+      },
 
   computed: {
     hasFooterSlot() {
@@ -922,7 +926,7 @@ export default {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
       });
-    },
+  },
 
     collapseAll() {
       this.filteredRows.forEach((row) => {
@@ -1356,8 +1360,8 @@ export default {
       });
       return originalRows;
     },
-    toggleFilteredColumn(event, column) {
-      this.columns[column].hidden = !event.target.checked;
+    toggleFilteredColumn(value) {
+      this.columns.find(column => column.label === value.label).hidden = !value.checked;
     },
 
     initializePagination() {
@@ -1558,6 +1562,7 @@ export default {
     'vgt-global-search': VgtGlobalSearch,
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
+    'vgt-column-dropdown': VgtColumnDropdown,
   },
 };
 </script>
