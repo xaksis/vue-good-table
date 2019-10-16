@@ -463,6 +463,9 @@ export default {
     forceSearch: false,
     sortChanged: false,
     dataTypes: dataTypes || {},
+
+    // internal column filter options
+    columnFilterEnabled: false
   }),
 
   watch: {
