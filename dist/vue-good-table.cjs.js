@@ -48,6 +48,10 @@ function _iterableToArray(iter) {
 }
 
 function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
   var _arr = [];
   var _n = true;
   var _d = false;
@@ -7388,6 +7392,7 @@ var defaultType = {
   },
   filterPredicate: function filterPredicate(rowval, filter) {
     var skipDiacritics = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+    var fromDropdown = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
     // take care of nulls
     if (typeof rowval === 'undefined' || rowval === null) {
@@ -7399,7 +7404,7 @@ var defaultType = {
 
     var searchTerm = skipDiacritics ? filter.toLowerCase() : diacriticless(escapeRegExp(filter).toLowerCase()); // comparison
 
-    return rowValue.indexOf(searchTerm) > -1;
+    return fromDropdown ? rowValue === searchTerm : rowValue.indexOf(searchTerm) > -1;
   },
   compare: function compare(x, y) {
     function cook(d) {
@@ -8923,7 +8928,7 @@ function compareAsc(dirtyDateLeft, dirtyDateRight) {
  *   | `new Date('')`            | `false`       | `false`       |
  *   | `new Date(1488370835081)` | `true`        | `true`        |
  *   | `new Date(NaN)`           | `false`       | `false`       |
- *   | `'2016-01-01'`            | `TypeError`   | `true`        |
+ *   | `'2016-01-01'`            | `TypeError`   | `false`       |
  *   | `''`                      | `TypeError`   | `false`       |
  *   | `1488370835081`           | `TypeError`   | `true`        |
  *   | `NaN`                     | `TypeError`   | `false`       |
@@ -9307,7 +9312,7 @@ function buildMatchFn(args) {
     var value;
 
     if (Object.prototype.toString.call(parsePatterns) === '[object Array]') {
-      value = parsePatterns.findIndex(function (pattern) {
+      value = findIndex(parsePatterns, function (pattern) {
         return pattern.test(string);
       });
     } else {
@@ -9328,6 +9333,14 @@ function buildMatchFn(args) {
 function findKey(object, predicate) {
   for (var key in object) {
     if (object.hasOwnProperty(key) && predicate(object[key])) {
+      return key;
+    }
+  }
+}
+
+function findIndex(array, predicate) {
+  for (var key = 0; key < array.length; key++) {
+    if (predicate(array[key])) {
       return key;
     }
   }
@@ -9440,6 +9453,7 @@ var match = {
  */
 
 var locale = {
+  code: 'en-US',
   formatDistance: formatDistance,
   formatLong: formatLong,
   formatRelative: formatRelative,
@@ -10745,7 +10759,7 @@ var formattingTokensRegExp = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)
 // sequences of symbols P, p, and the combinations like `PPPPPPPppppp`
 
 var longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
-var escapedStringRegExp = /^'(.*?)'?$/;
+var escapedStringRegExp = /^'([^]*?)'?$/;
 var doubleQuoteRegExp = /''/g;
 var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
 /**
@@ -12758,7 +12772,7 @@ var formattingTokensRegExp$1 = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|
 // sequences of symbols P, p, and the combinations like `PPPPPPPppppp`
 
 var longFormattingTokensRegExp$1 = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
-var escapedStringRegExp$1 = /^'(.*?)'?$/;
+var escapedStringRegExp$1 = /^'([^]*?)'?$/;
 var doubleQuoteRegExp$1 = /''/g;
 var notWhitespaceRegExp = /\S/;
 var unescapedLatinCharacterRegExp$1 = /[a-zA-Z]/;
@@ -13322,6 +13336,7 @@ date.format = function (v, column) {
 };
 
 var date$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': date
 });
 
@@ -13348,6 +13363,7 @@ number.compare = function (x, y) {
 };
 
 var number$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': number
 });
 
@@ -13359,6 +13375,7 @@ decimal.format = function (v) {
 };
 
 var decimal$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': decimal
 });
 
@@ -13370,6 +13387,7 @@ percentage.format = function (v) {
 };
 
 var percentage$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': percentage
 });
 
@@ -13396,6 +13414,7 @@ _boolean.compare = function (x, y) {
 };
 
 var _boolean$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': _boolean
 });
 
@@ -14277,7 +14296,7 @@ var script$6 = {
 
 
                 var typeDef = col.typeDef;
-                return typeDef.filterPredicate(_this4.collect(row, col.field), _this4.columnFilters[col.field]);
+                return typeDef.filterPredicate(_this4.collect(row, col.field), _this4.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
               }); // should we remove the header?
 
               headerRow.children = newChildren;
@@ -14495,7 +14514,13 @@ var script$6 = {
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
-    }
+    } // initializeColumns() {
+    //   // take care of default sort on mount
+    //   if (this.defaultSortBy) {
+    //     this.handleDefaultSort();
+    //   }
+    // },
+
   },
   mounted: function mounted() {
     if (this.perPage) {
