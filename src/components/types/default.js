@@ -6,7 +6,7 @@ export default {
   format(x) {
     return x;
   },
-  filterPredicate(rowval, filter, skipDiacritics = false, fromDropdown = false) {
+  filterPredicate(rowval, filter, skipDiacritics = false) {
     // take care of nulls
     if (typeof rowval === 'undefined' || rowval === null) {
       return false;
@@ -23,7 +23,7 @@ export default {
       : diacriticless(escapeRegExp(filter).toLowerCase());
 
     // comparison
-    return fromDropdown ? rowValue === searchTerm : (rowValue.indexOf(searchTerm) > -1);
+    return (rowValue.indexOf(searchTerm) > -1);
   },
 
   compare(x, y) {
