@@ -114,6 +114,17 @@ export default {
             ],
           },
         },
+        {
+          label: 'Exact',
+          field: 'exact',
+          filterOptions: {
+            enabled: true,
+            filterDropdownItems: [
+              'match',
+              'rematch',
+            ],
+          },
+        },
       ],
       rows: [
         // { id:1, name:"John", age: 20, createdAt: '2018-02-18T00:00:43-05:00',score: 0.03343 },
@@ -124,6 +135,7 @@ export default {
           createdAt: '2011-10-31',
           score: 0.03343,
           bool: true,
+          exact: 'match',
         },
         {
           id: 3,
@@ -132,6 +144,7 @@ export default {
           createdAt: '2011-10-30',
           score: 0.03343,
           bool: true,
+          exact: 'match',
         },
         {
           id: 4,
@@ -140,6 +153,7 @@ export default {
           createdAt: '2011-10-11',
           score: 0.03343,
           bool: false,
+          exact: 'match',
         },
         {
           id: 5,
@@ -148,6 +162,7 @@ export default {
           createdAt: '',
           score: 0.03343,
           bool: null,
+          exact: null,
         },
         {
           id: 5,
@@ -156,6 +171,7 @@ export default {
           createdAt: null,
           score: 0.03343,
           bool: null,
+          exact: 'rematch',
         },
         {
           id: 5,
@@ -164,6 +180,7 @@ export default {
           createdAt: null,
           score: 0.03343,
           bool: null,
+          exact: 'match',
         },
         {
           id: 6,
@@ -172,6 +189,7 @@ export default {
           createdAt: '2011-10-31',
           score: 0.03343,
           bool: true,
+          exact: null,
         },
         {
           id: 7,
@@ -180,6 +198,7 @@ export default {
           createdAt: '2013-09-21',
           score: null,
           bool: 'false',
+          exact: 'match',
         },
         {
           id: 8,
@@ -188,6 +207,7 @@ export default {
           createdAt: '2013-10-31',
           score: 0.03343,
           bool: true,
+          exact: 'rematch',
         },
       ],
     };
@@ -397,4 +417,3 @@ export default {
     background: red;
   } */
 </style>
-
