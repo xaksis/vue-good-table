@@ -172,7 +172,7 @@ export default {
     },
 
     getWidthStyle(dom) {
-      if (window && window.getComputedStyle) {
+      if (window && window.getComputedStyle && dom) {
         const cellStyle = window.getComputedStyle(dom, null);
         return {
           width: cellStyle.width,
