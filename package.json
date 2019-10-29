@@ -1,5 +1,5 @@
 {
-  "name": "vue-good-table",
+  "name": "@technologyadvice/vue-good-table",
   "version": "2.18.0",
   "sideEffects": [
     "*.vue",

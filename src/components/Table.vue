@@ -1199,14 +1199,6 @@ export default {
         if (this.mode !== 'remote' || fromFilter) {
           this.changePage(1);
         }
-        // we need to emit an event and that's that.
-        // but this only needs to be invoked if filter is changing
-        // not when row object is modified.
-        if (fromFilter) {
-          this.$emit('on-column-filter', {
-            columnFilters: this.columnFilters,
-          });
-        }
 
         // if mode is remote, we don't do any filtering here.
         if (this.mode === 'remote') {
@@ -1248,6 +1240,17 @@ export default {
         }
       }
       this.filteredRows = computedRows;
+
+      // we need to emit an event and that's that.
+      // but this only needs to be invoked if filter is changing
+      // not when row object is modified.
+      if (fromFilter) {
+        this.$emit('on-column-filter', {
+          columnFilters: this.columnFilters,
+          filteredRowCount: this.filteredRows[0].children.length,
+          totalRowCount: this.rows.length,
+        });
+      }
     },
 
     getCurrentIndex(index) {
