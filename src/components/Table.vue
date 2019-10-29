@@ -1122,7 +1122,7 @@ export default {
       // if user has supplied custom formatter,
       // use that here
       if (column.formatFn && typeof column.formatFn === 'function') {
-        return column.formatFn(value);
+        return column.formatFn(value, obj);
       }
 
       // lets format the resultant data
@@ -1439,7 +1439,7 @@ export default {
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
       }
-      
+
       if (typeof disableSelectInfo === 'boolean') {
         this.disableSelectInfo = disableSelectInfo;
       }
