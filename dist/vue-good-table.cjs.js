@@ -48,6 +48,10 @@ function _iterableToArray(iter) {
 }
 
 function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
   var _arr = [];
   var _n = true;
   var _d = false;
@@ -7472,90 +7476,83 @@ var script = {
   components: {}
 };
 
-function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
-/* server only */
-, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
-  if (typeof shadowMode !== 'boolean') {
-    createInjectorSSR = createInjector;
-    createInjector = shadowMode;
-    shadowMode = false;
-  } // Vue.extend constructor export interop.
-
-
-  var options = typeof script === 'function' ? script.options : script; // render functions
-
-  if (template && template.render) {
-    options.render = template.render;
-    options.staticRenderFns = template.staticRenderFns;
-    options._compiled = true; // functional template
-
-    if (isFunctionalTemplate) {
-      options.functional = true;
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+    if (typeof shadowMode !== 'boolean') {
+        createInjectorSSR = createInjector;
+        createInjector = shadowMode;
+        shadowMode = false;
     }
-  } // scopedId
-
-
-  if (scopeId) {
-    options._scopeId = scopeId;
-  }
-
-  var hook;
-
-  if (moduleIdentifier) {
-    // server build
-    hook = function hook(context) {
-      // 2.3 injection
-      context = context || // cached call
-      this.$vnode && this.$vnode.ssrContext || // stateful
-      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
-      // 2.2 with runInNewContext: true
-
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__;
-      } // inject component styles
-
-
-      if (style) {
-        style.call(this, createInjectorSSR(context));
-      } // register component module identifier for async chunk inference
-
-
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier);
-      }
-    }; // used by ssr in case component is cached and beforeCreate
-    // never gets called
-
-
-    options._ssrRegister = hook;
-  } else if (style) {
-    hook = shadowMode ? function () {
-      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
-    } : function (context) {
-      style.call(this, createInjector(context));
-    };
-  }
-
-  if (hook) {
-    if (options.functional) {
-      // register for functional component in vue file
-      var originalRender = options.render;
-
-      options.render = function renderWithStyleInjection(h, context) {
-        hook.call(context);
-        return originalRender(h, context);
-      };
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate;
-      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+    // Vue.extend constructor export interop.
+    const options = typeof script === 'function' ? script.options : script;
+    // render functions
+    if (template && template.render) {
+        options.render = template.render;
+        options.staticRenderFns = template.staticRenderFns;
+        options._compiled = true;
+        // functional template
+        if (isFunctionalTemplate) {
+            options.functional = true;
+        }
     }
-  }
-
-  return script;
+    // scopedId
+    if (scopeId) {
+        options._scopeId = scopeId;
+    }
+    let hook;
+    if (moduleIdentifier) {
+        // server build
+        hook = function (context) {
+            // 2.3 injection
+            context =
+                context || // cached call
+                    (this.$vnode && this.$vnode.ssrContext) || // stateful
+                    (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
+            // 2.2 with runInNewContext: true
+            if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+                context = __VUE_SSR_CONTEXT__;
+            }
+            // inject component styles
+            if (style) {
+                style.call(this, createInjectorSSR(context));
+            }
+            // register component module identifier for async chunk inference
+            if (context && context._registeredComponents) {
+                context._registeredComponents.add(moduleIdentifier);
+            }
+        };
+        // used by ssr in case component is cached and beforeCreate
+        // never gets called
+        options._ssrRegister = hook;
+    }
+    else if (style) {
+        hook = shadowMode
+            ? function (context) {
+                style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+            }
+            : function (context) {
+                style.call(this, createInjector(context));
+            };
+    }
+    if (hook) {
+        if (options.functional) {
+            // register for functional component in vue file
+            const originalRender = options.render;
+            options.render = function renderWithStyleInjection(h, context) {
+                hook.call(context);
+                return originalRender(h, context);
+            };
+        }
+        else {
+            // inject component registration as beforeCreate hook
+            const existing = options.beforeCreate;
+            options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+        }
+    }
+    return script;
 }
 
-var normalizeComponent_1 = normalizeComponent;
+const isOldIE = typeof navigator !== 'undefined' &&
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
 
 /* script */
 var __vue_script__ = script;
@@ -7608,10 +7605,12 @@ var __vue_is_functional_template__ = false;
 
 /* style inject SSR */
 
-var VgtPaginationPageInfo = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VgtPaginationPageInfo = normalizeComponent({
   render: __vue_render__,
   staticRenderFns: __vue_staticRenderFns__
-}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, undefined, undefined);
+}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, undefined, undefined, undefined);
 
 //
 var DEFAULT_ROWS_PER_PAGE_DROPDOWN = [10, 20, 30, 40, 50];
@@ -7918,10 +7917,12 @@ var __vue_is_functional_template__$1 = false;
 
 /* style inject SSR */
 
-var VgtPagination = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VgtPagination = normalizeComponent({
   render: __vue_render__$1,
   staticRenderFns: __vue_staticRenderFns__$1
-}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, undefined, undefined);
+}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);
 
 //
 //
@@ -8033,10 +8034,12 @@ var __vue_is_functional_template__$2 = false;
 
 /* style inject SSR */
 
-var VgtGlobalSearch = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VgtGlobalSearch = normalizeComponent({
   render: __vue_render__$2,
   staticRenderFns: __vue_staticRenderFns__$2
-}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, undefined, undefined);
+}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, undefined, undefined, undefined);
 
 var script$3 = {
   name: 'VgtFilterRow',
@@ -8241,10 +8244,12 @@ var __vue_is_functional_template__$3 = false;
 
 /* style inject SSR */
 
-var VgtFilterRow = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VgtFilterRow = normalizeComponent({
   render: __vue_render__$3,
   staticRenderFns: __vue_staticRenderFns__$3
-}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, undefined, undefined);
+}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);
 
 function getNextSort(currentSort) {
   if (currentSort === 'asc') return 'desc'; // if (currentSort === 'desc') return null;
@@ -8566,10 +8571,12 @@ var __vue_is_functional_template__$4 = false;
 
 /* style inject SSR */
 
-var VgtTableHeader = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VgtTableHeader = normalizeComponent({
   render: __vue_render__$4,
   staticRenderFns: __vue_staticRenderFns__$4
-}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, undefined, undefined);
+}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);
 
 //
 //
@@ -8712,10 +8719,12 @@ var __vue_is_functional_template__$5 = false;
 
 /* style inject SSR */
 
-var VgtHeaderRow = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VgtHeaderRow = normalizeComponent({
   render: __vue_render__$5,
   staticRenderFns: __vue_staticRenderFns__$5
-}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, undefined, undefined);
+}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);
 
 /**
  * @name toDate
@@ -8923,7 +8932,7 @@ function compareAsc(dirtyDateLeft, dirtyDateRight) {
  *   | `new Date('')`            | `false`       | `false`       |
  *   | `new Date(1488370835081)` | `true`        | `true`        |
  *   | `new Date(NaN)`           | `false`       | `false`       |
- *   | `'2016-01-01'`            | `TypeError`   | `true`        |
+ *   | `'2016-01-01'`            | `TypeError`   | `false`       |
  *   | `''`                      | `TypeError`   | `false`       |
  *   | `1488370835081`           | `TypeError`   | `true`        |
  *   | `NaN`                     | `TypeError`   | `false`       |
@@ -9307,7 +9316,7 @@ function buildMatchFn(args) {
     var value;
 
     if (Object.prototype.toString.call(parsePatterns) === '[object Array]') {
-      value = parsePatterns.findIndex(function (pattern) {
+      value = findIndex(parsePatterns, function (pattern) {
         return pattern.test(string);
       });
     } else {
@@ -9328,6 +9337,14 @@ function buildMatchFn(args) {
 function findKey(object, predicate) {
   for (var key in object) {
     if (object.hasOwnProperty(key) && predicate(object[key])) {
+      return key;
+    }
+  }
+}
+
+function findIndex(array, predicate) {
+  for (var key = 0; key < array.length; key++) {
+    if (predicate(array[key])) {
       return key;
     }
   }
@@ -9440,6 +9457,7 @@ var match = {
  */
 
 var locale = {
+  code: 'en-US',
   formatDistance: formatDistance,
   formatLong: formatLong,
   formatRelative: formatRelative,
@@ -10745,7 +10763,7 @@ var formattingTokensRegExp = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)
 // sequences of symbols P, p, and the combinations like `PPPPPPPppppp`
 
 var longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
-var escapedStringRegExp = /^'(.*?)'?$/;
+var escapedStringRegExp = /^'([^]*?)'?$/;
 var doubleQuoteRegExp = /''/g;
 var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
 /**
@@ -12758,7 +12776,7 @@ var formattingTokensRegExp$1 = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|
 // sequences of symbols P, p, and the combinations like `PPPPPPPppppp`
 
 var longFormattingTokensRegExp$1 = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
-var escapedStringRegExp$1 = /^'(.*?)'?$/;
+var escapedStringRegExp$1 = /^'([^]*?)'?$/;
 var doubleQuoteRegExp$1 = /''/g;
 var notWhitespaceRegExp = /\S/;
 var unescapedLatinCharacterRegExp$1 = /[a-zA-Z]/;
@@ -13322,6 +13340,7 @@ date.format = function (v, column) {
 };
 
 var date$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': date
 });
 
@@ -13348,6 +13367,7 @@ number.compare = function (x, y) {
 };
 
 var number$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': number
 });
 
@@ -13359,6 +13379,7 @@ decimal.format = function (v) {
 };
 
 var decimal$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': decimal
 });
 
@@ -13370,6 +13391,7 @@ percentage.format = function (v) {
 };
 
 var percentage$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': percentage
 });
 
@@ -13396,6 +13418,7 @@ _boolean.compare = function (x, y) {
 };
 
 var _boolean$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
   'default': _boolean
 });
 
@@ -13594,8 +13617,9 @@ var script$6 = {
     },
     sortOptions: {
       handler: function handler(newValue, oldValue) {
-        // if (!isEqual(newValue, oldValue)) {
-        this.initializeSort(); // }
+        if (!lodash_isequal(newValue, oldValue)) {
+          this.initializeSort();
+        }
       },
       deep: true
     },
@@ -14495,7 +14519,13 @@ var script$6 = {
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
-    }
+    } // initializeColumns() {
+    //   // take care of default sort on mount
+    //   if (this.defaultSortBy) {
+    //     this.handleDefaultSort();
+    //   }
+    // },
+
   },
   mounted: function mounted() {
     if (this.perPage) {
@@ -14817,10 +14847,12 @@ var __vue_is_functional_template__$6 = false;
 
 /* style inject SSR */
 
-var VueGoodTable = normalizeComponent_1({
+/* style inject shadow dom */
+
+var VueGoodTable = normalizeComponent({
   render: __vue_render__$6,
   staticRenderFns: __vue_staticRenderFns__$6
-}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, undefined, undefined);
+}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);
 
 var VueGoodTablePlugin = {
   install: function install(Vue, options) {
