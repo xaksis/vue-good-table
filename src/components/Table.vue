@@ -492,9 +492,9 @@ export default {
 
     sortOptions: {
       handler(newValue, oldValue) {
-        // if (!isEqual(newValue, oldValue)) {
-        this.initializeSort();
-        // }
+        if (!isEqual(newValue, oldValue)) {
+          this.initializeSort();
+        }
       },
       deep: true,
     },
