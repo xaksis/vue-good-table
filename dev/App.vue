@@ -24,7 +24,7 @@
         selectOnCheckboxOnly: false,
         disableSelectInfo: true,
       }"
-      theme="black-rhino"
+      theme="nocturnal"
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
@@ -95,6 +95,7 @@ export default {
           filterOptions: {
             enabled: true,
           },
+          sortable: false,
           label: 'Created On',
           field: 'createdAt',
           type: 'date',

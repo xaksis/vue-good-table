@@ -161,6 +161,7 @@ export default {
 
     getHeaderClasses(column, index) {
       const classes = assign({}, this.getClasses(index, 'th'), {
+        sortable: this.isSortableColumn(column),
         'sorting sorting-desc': this.getColumnSort(column) === 'desc',
         'sorting sorting-asc': this.getColumnSort(column) === 'asc',
       });

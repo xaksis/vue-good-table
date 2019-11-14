@@ -1154,14 +1154,6 @@ export default {
       return formattedRow;
     },
 
-    // Check if a column is sortable.
-    isSortableColumn(index) {
-      const { sortable } = this.columns[index];
-      const isSortable =
-        typeof sortable === 'boolean' ? sortable : this.sortable;
-      return isSortable;
-    },
-
     // Get classes for the given column index & element.
     getClasses(index, element, row) {
       const { typeDef, [`${element}Class`]: custom } = this.typedColumns[index];
