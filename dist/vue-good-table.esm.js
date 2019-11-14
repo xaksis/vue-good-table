@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.18.0
+ * vue-good-table v2.18.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -7384,6 +7384,7 @@ var defaultType = {
   },
   filterPredicate: function filterPredicate(rowval, filter) {
     var skipDiacritics = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+    var fromDropdown = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
     // take care of nulls
     if (typeof rowval === 'undefined' || rowval === null) {
@@ -7395,7 +7396,7 @@ var defaultType = {
 
     var searchTerm = skipDiacritics ? filter.toLowerCase() : diacriticless(escapeRegExp(filter).toLowerCase()); // comparison
 
-    return rowValue.indexOf(searchTerm) > -1;
+    return fromDropdown ? rowValue === searchTerm : rowValue.indexOf(searchTerm) > -1;
   },
   compare: function compare(x, y) {
     function cook(d) {
@@ -7752,7 +7753,7 @@ var script$1 = {
     handlePerPage: function handlePerPage() {
       //* if there's a custom dropdown then we use that
       if (this.customRowsPerPageDropdown !== null && Array.isArray(this.customRowsPerPageDropdown) && this.customRowsPerPageDropdown.length !== 0) {
-        this.rowsPerPageOptions = this.customRowsPerPageDropdown;
+        this.rowsPerPageOptions = lodash_clonedeep(this.customRowsPerPageDropdown);
       } else {
         //* otherwise we use the default rows per page dropdown
         this.rowsPerPageOptions = lodash_clonedeep(DEFAULT_ROWS_PER_PAGE_DROPDOWN);
@@ -8414,6 +8415,7 @@ var script$4 = {
     },
     getHeaderClasses: function getHeaderClasses(column, index) {
       var classes = lodash_assign({}, this.getClasses(index, 'th'), {
+        sortable: this.isSortableColumn(column),
         'sorting sorting-desc': this.getColumnSort(column) === 'desc',
         'sorting sorting-asc': this.getColumnSort(column) === 'asc'
       });
@@ -8423,7 +8425,7 @@ var script$4 = {
       this.$emit('filter-changed', columnFilters);
     },
     getWidthStyle: function getWidthStyle(dom) {
-      if (window && window.getComputedStyle) {
+      if (window && window.getComputedStyle && dom) {
         var cellStyle = window.getComputedStyle(dom, null);
         return {
           width: cellStyle.width
@@ -8551,7 +8553,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-7068df50";
+var __vue_scope_id__$4 = "data-v-13ae5fa3";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
@@ -13570,7 +13572,9 @@ var script$6 = {
     },
     paginationOptions: {
       handler: function handler(newValue, oldValue) {
-        this.initializePagination();
+        if (!lodash_isequal(newValue, oldValue)) {
+          this.initializePagination();
+        }
       },
       deep: true,
       immediate: true
@@ -13590,8 +13594,9 @@ var script$6 = {
     },
     sortOptions: {
       handler: function handler(newValue, oldValue) {
-        // if (!isEqual(newValue, oldValue)) {
-        this.initializeSort(); // }
+        if (!lodash_isequal(newValue, oldValue)) {
+          this.initializeSort();
+        }
       },
       deep: true
     },
@@ -14162,7 +14167,7 @@ var script$6 = {
       // use that here
 
       if (column.formatFn && typeof column.formatFn === 'function') {
-        return column.formatFn(value);
+        return column.formatFn(value, obj);
       } // lets format the resultant data
 
 
@@ -14189,12 +14194,6 @@ var script$6 = {
       }
 
       return formattedRow;
-    },
-    // Check if a column is sortable.
-    isSortableColumn: function isSortableColumn(index) {
-      var sortable = this.columns[index].sortable;
-      var isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
-      return isSortable;
     },
     // Get classes for the given column index & element.
     getClasses: function getClasses(index, element, row) {
@@ -14273,7 +14272,7 @@ var script$6 = {
 
 
                 var typeDef = col.typeDef;
-                return typeDef.filterPredicate(_this4.collect(row, col.field), _this4.columnFilters[col.field]);
+                return typeDef.filterPredicate(_this4.collect(row, col.field), _this4.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
               }); // should we remove the header?
 
               headerRow.children = newChildren;
