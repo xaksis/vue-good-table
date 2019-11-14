@@ -1238,7 +1238,10 @@ export default {
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
                   this.collect(row, col.field),
-                  this.columnFilters[col.field]
+                  this.columnFilters[col.field],
+                  false,
+                  col.filterOptions &&
+                    typeof col.filterOptions.filterDropdownItems === 'object'
                 );
               });
               // should we remove the header?
