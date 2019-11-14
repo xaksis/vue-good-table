@@ -468,7 +468,9 @@ export default {
 
     paginationOptions: {
       handler(newValue, oldValue) {
-        this.initializePagination();
+        if (!isEqual(newValue, oldValue)) {
+          this.initializePagination();
+        }
       },
       deep: true,
       immediate: true,

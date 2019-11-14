@@ -37,7 +37,7 @@
       }">
     </vue-good-table>
     <h3>Remote Table</h3>
-    <!-- <remote-table/> -->
+    <remote-table/>
     <h3>Grouped Table</h3>
     <!-- <grouped-table></grouped-table> -->
   </div>
@@ -75,11 +75,20 @@ export default {
         },
         {
           label: 'Age',
-          field: obj => obj.age,
+          field: 'age',
           type: 'number',
           filterOptions: {
             enabled: true,
-            // filterValue: 20,
+            filterDropdownItems: [
+              {
+                value: 24,
+                text: '24',
+              },
+              {
+                value: 16,
+                text: '16',
+              },
+            ],
           },
         },
         {
