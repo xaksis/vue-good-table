@@ -30,7 +30,7 @@
     class="vgt-row-header"
     :class="getClasses(i, 'td')"
     @click="$emit('vgtExpand')">
-    <span v-if="collapsable" class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
+    <span v-if="collapsable && i === 0" class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
