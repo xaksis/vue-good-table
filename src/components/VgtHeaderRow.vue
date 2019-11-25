@@ -3,7 +3,9 @@
   <th
     v-if="headerRow.mode === 'span'"
     class="vgt-left-align vgt-row-header"
-    :colspan="fullColspan">
+    :colspan="fullColspan"
+    @click="$emit('vgtExpand')">
+    <span class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       name="table-header-row">
@@ -26,7 +28,9 @@
     v-for="(column, i) in columns"
     :key="i"
     class="vgt-row-header"
-    :class="getClasses(i, 'td')">
+    :class="getClasses(i, 'td')"
+    @click="$emit('vgtExpand')">
+    <span class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
@@ -87,5 +91,34 @@ export default {
 </script>
 
 <style lang="scss">
+  .chevron{
+    width:  24px;
+    height:  24px;
+    border-radius: 15%;
+    position:  relative;
+    margin:  0px 8px;
+    &:after{
+      content:  '';
+      position:  absolute;
+      display:  block;
+      left:  50%;
+      top:  50%;
+      margin-top:  -6px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+    }
+    &.down::after{
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid black;
+      border-bottom: 0px solid transparent;
+      margin-left:  -6px;
+    }
+
+    &.right::after{
+      border-left:  6px solid black;
+      margin-left:  -3px;
+    }
+  }
 
 </style>
