@@ -5,7 +5,7 @@
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
     @click="$emit('vgtExpand')">
-    <span class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
+    <span v-if="collapsable" class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       name="table-header-row">
@@ -30,7 +30,7 @@
     class="vgt-row-header"
     :class="getClasses(i, 'td')"
     @click="$emit('vgtExpand')">
-    <span class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
+    <span v-if="collapsable" class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
@@ -61,6 +61,9 @@ export default {
     },
     selectable: {
       type: Boolean,
+    },
+    collapsable: {
+      type: Boolean
     },
     collectFormatted: {
       type: Function,

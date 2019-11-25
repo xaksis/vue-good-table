@@ -155,6 +155,7 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -176,7 +177,7 @@
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <tr
-              v-if="headerRow.vgtIsExpanded"
+              v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
               v-for="(row, index) in headerRow.children"
               :key="row.originalIndex"
               :class="getRowStyleClass(row)"

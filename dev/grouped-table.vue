@@ -15,6 +15,7 @@
     :group-options="{
       enabled: true,
       headerPosition: 'top',
+      collapsable: true
     }"
     styleClass="vgt-table condensed bordered">
     <!-- <template slot="table-header-row" slot-scope="props">
