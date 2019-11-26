@@ -5,7 +5,7 @@
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
     @click="$emit('vgtExpand')">
-    <span v-if="collapsable" class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
+    <span v-if="collapsable" class="chevron" v-bind:class="{ 'expand': headerRow.vgtIsExpanded, '': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       name="table-header-row">
@@ -30,7 +30,7 @@
     class="vgt-row-header"
     :class="getClasses(i, 'td')"
     @click="$emit('vgtExpand')">
-    <span v-if="collapsable && i === 0" class="chevron" v-bind:class="{ 'down': headerRow.vgtIsExpanded, 'right': !headerRow.vgtIsExpanded }"></span>
+    <span v-if="collapsable && i === 0" class="chevron" v-bind:class="{ 'expand': headerRow.vgtIsExpanded, '': !headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
@@ -109,18 +109,12 @@ export default {
       margin-top:  -6px;
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
-    }
-    &.down::after{
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid black;
-      border-bottom: 0px solid transparent;
-      margin-left:  -6px;
-    }
-
-    &.right::after{
       border-left:  6px solid black;
       margin-left:  -3px;
+      transition: 0.3s ease transform;
+    }
+    &.expand::after{
+      transform: rotate(90deg);
     }
   }
 
