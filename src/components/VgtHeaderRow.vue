@@ -4,8 +4,8 @@
     v-if="headerRow.mode === 'span'"
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
-    @click="$emit('vgtExpand')">
-    <span v-if="collapsable" class="chevron" v-bind:class="{ 'expand': headerRow.vgtIsExpanded, '': !headerRow.vgtIsExpanded }"></span>
+    @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+    <span v-if="collapsable" class="chevron" v-bind:class="{ 'expand': headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       name="table-header-row">
@@ -29,8 +29,8 @@
     :key="i"
     class="vgt-row-header"
     :class="getClasses(i, 'td')"
-    @click="$emit('vgtExpand')">
-    <span v-if="collapsable && i === 0" class="chevron" v-bind:class="{ 'expand': headerRow.vgtIsExpanded, '': !headerRow.vgtIsExpanded }"></span>
+    @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+    <span v-if="collapsable && i === 0" class="chevron" v-bind:class="{ 'expand': headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
