@@ -250,6 +250,12 @@
                 </slot>
               </template>
             </vgt-header-row>
+              <slot 
+                name="table-footer-row"
+                :rows="headerRow.children"
+                :column="columns"
+              >
+              </slot>
           </tbody>
 
           <tbody v-if="showEmptySlot">
