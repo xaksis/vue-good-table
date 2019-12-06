@@ -1,0 +1,81 @@
+$pagination-element-height: 2.75rem;
+
+@mixin pagination-item() {
+    display: inline-block;
+    display: flex;
+    min-width: 3rem;
+    height: $pagination-element-height;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid $card-border-color;
+    border-right: 1px solid $card-border-color;
+    border-bottom: 1px solid $card-border-color;
+}
+
+.pagination {
+    &__container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+    }
+
+    .go-to {
+        &-input {
+            width: 4rem;
+            height: $pagination-element-height;
+            border: 1px solid $card-border-color;
+        }
+
+        &-button {
+            width: auto;
+            height: $pagination-element-height;
+        }
+    }
+
+    &__ellipsis-item {
+        @include pagination-item();
+    }$card-border-color: #dedede;$card-border-color: #dedede;$card-border-color: #dedede;
+
+    &__item {
+        @include pagination-item();
+
+        color: $brand-primary;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $brand-primary-light;
+        }
+
+        &-highlight {
+            background-color: $brand-primary;
+
+            div {
+                color: white;
+            }
+        }
+
+        &-container {
+            &:first-of-type {
+                border-bottom-left-radius: $card-border-radius;
+                border-top-left-radius: $card-border-radius;
+
+                div {
+                    border-left: 1px solid $card-border-color;
+                    border-bottom-left-radius: $card-border-radius;
+                    border-top-left-radius: $card-border-radius;
+                }
+            }
+
+            &:last-of-type {
+                border-bottom-right-radius: $card-border-radius;
+                border-top-right-radius: $card-border-radius;
+
+                div {
+                    border-left: none;
+                    border-bottom-right-radius: $card-border-radius;
+                    border-top-right-radius: $card-border-radius;
+                }
+            }
+        }
+    }
+}

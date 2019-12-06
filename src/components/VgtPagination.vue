@@ -1,52 +1,33 @@
 <template>
-  <div class="vgt-wrap__footer vgt-clearfix">
-    <div class="footer__row-count vgt-pull-left">
-      <span class="footer__row-count__label">{{rowsPerPageText}}</span>
-      <select
-        autocomplete="off"
-        name="perPageSelect"
-        class="footer__row-count__select"
-        v-model="currentPerPage"
-        @change="perPageChanged">
-        <option
-          v-for="(option, idx) in rowsPerPageOptions"
-          :key="'rows-dropdown-option-' + idx"
-          :value="option">
-          {{ option }}
-        </option>
-        <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
-      </select>
-    </div>
-    <div class="footer__navigation vgt-pull-right">
-      <a
-        href="javascript:undefined"
-        class="footer__navigation__page-btn"
-        :class="{ disabled: !prevIsPossible }"
-        @click.prevent.stop="previousPage"
-        tabindex="0">
-        <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
-        <span>{{prevText}}</span>
-      </a>
-      <pagination-page-info
-        @page-changed="changePage"
-        :totalRecords="total"
-        :lastPage="pagesCount"
-        :currentPage="currentPage"
-        :ofText="ofText"
-        :pageText="pageText"
-        v-if="mode === 'pages'">
-      </pagination-page-info>
-      <div v-else class="footer__navigation__info">{{paginatedInfo}}</div>
-      <a href="javascript:undefined" class="footer__navigation__page-btn"
-         :class="{ disabled: !nextIsPossible }" @click.prevent.stop="nextPage" tabindex="0">
-        <span>{{nextText}}</span>
-        <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
-      </a>
-    </div>
-  </div>
+	<div class="d-flex justify-content-between mt-3">
+		<div>
+			<select
+				autocomplete="off"
+				name="perPageSelect"
+				class="form-control"
+				v-model="currentPerPage"
+				@change="perPageChanged">
+				<option
+					v-for="(option, idx) in rowsPerPageOptions"
+					:key="'rows-dropdown-option-' + idx"
+					:value="option">
+					{{ option + ' per page'}}
+				</option>
+				<option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
+			</select>
+		</div>
+
+		<TaPagination
+			@change="changePage"
+			:current-page="currentPage"
+			:records-per-page="currentPerPage"
+			:count="total">
+		</TaPagination>
+	</div>
 </template>
 
 <script>
+import TaPagination from './TaPagination.vue';
 import cloneDeep from 'lodash.clonedeep';
 import VgtPaginationPageInfo from './VgtPaginationPageInfo.vue';
 
@@ -206,6 +187,7 @@ export default {
   },
 
   components: {
+    TaPagination,
     'pagination-page-info': VgtPaginationPageInfo,
   },
 };
