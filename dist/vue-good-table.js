@@ -13418,7 +13418,7 @@
     dataTypes[compName] = coreDataTypes[key]["default"];
   });
   var script$6 = {
-    name: 'vue-good-table',
+    name: 'vue-good-table-budget-items',
     props: {
       isLoading: {
         "default": null,
@@ -14580,7 +14580,7 @@
     }, [_vm._t("table-actions")], 2)], 2), _vm._v(" "), _vm.selectedRowCount && !_vm.disableSelectInfo ? _c('div', {
       staticClass: "vgt-selection-info-row clearfix",
       "class": _vm.selectionInfoClass
-    }, [_vm._v("\n      " + _vm._s(_vm.selectionInfo) + "\n      "), _c('a', {
+    }, [_vm._t("count-rows", [_vm._v("\n        " + _vm._s(_vm.selectionInfo) + "\n      ")]), _vm._v(" "), _c('a', {
       attrs: {
         "href": ""
       },
@@ -14592,7 +14592,7 @@
       }
     }, [_vm._v("\n        " + _vm._s(_vm.clearSelectionText) + "\n      ")]), _vm._v(" "), _c('div', {
       staticClass: "vgt-selection-info-row__actions vgt-pull-right"
-    }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
+    }, [_vm._t("selected-row-actions")], 2)], 2) : _vm._e(), _vm._v(" "), _c('div', {
       staticClass: "vgt-fixed-header"
     }, [_vm.fixedHeader ? _c('table', {
       "class": _vm.tableStyleClasses
@@ -14710,19 +14710,19 @@
         }, [_vm.lineNumbers ? _c('th', {
           staticClass: "line-numbers"
         }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(index)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
-          staticClass: "vgt-checkbox-col",
-          on: {
-            "click": function click($event) {
-              $event.stopPropagation();
-              return _vm.onCheckboxClicked(row, index, $event);
-            }
-          }
+          staticClass: "vgt-checkbox-col"
         }, [_c('input', {
           attrs: {
             "type": "checkbox"
           },
           domProps: {
             "checked": row.vgtSelected
+          },
+          on: {
+            "click": function click($event) {
+              $event.stopPropagation();
+              return _vm.onCheckboxClicked(row, index, $event);
+            }
           }
         })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
           return !column.hidden && column.field ? _c('td', {

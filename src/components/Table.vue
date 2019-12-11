@@ -52,7 +52,9 @@
         class="vgt-selection-info-row clearfix"
         :class="selectionInfoClass"
       >
-        {{selectionInfo}}
+        <slot name="count-rows">
+          {{selectionInfo}}
+        </slot>
         <a
           href=""
           @click.prevent="unselectAllInternal(true)"
@@ -191,12 +193,12 @@
               </th>
               <th
                 v-if="selectable"
-                @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
               >
                 <input
                   type="checkbox"
                   :checked="row.vgtSelected"
+                  @click.stop="onCheckboxClicked(row, index, $event)"
                 />
               </th>
               <td
@@ -322,7 +324,7 @@ each(Object.keys(coreDataTypes), (key) => {
 });
 
 export default {
-  name: 'vue-good-table',
+  name: 'vue-good-table-budget-items',
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
