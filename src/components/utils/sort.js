@@ -1,8 +1,16 @@
 
+const DEFAULT_SORT_TYPE = 'asc';
+
+function getCurrentPrimarySort(sortArray, column) {
+  return ( sortArray.length === 1 && sortArray[0].field === column.field )
+  ? sortArray[0].type
+  : undefined;
+}
+
 function getNextSort(currentSort) {
-  if (currentSort === 'asc') return 'desc';
-  // if (currentSort === 'desc') return null;
-  return 'asc';
+  return (currentSort === 'asc')
+    ? 'desc'
+    : DEFAULT_SORT_TYPE;
 }
 
 function getIndex(sortArray, column) {
@@ -13,40 +21,21 @@ function getIndex(sortArray, column) {
 }
 
 exports.primarySort = (sortArray, column) => {
-  if (sortArray.length
-    && sortArray.length === 1
-    && sortArray[0].field === column.field) {
-    const type = getNextSort(sortArray[0].type);
-    if (type) {
-      sortArray[0].type = getNextSort(sortArray[0].type);
-    } else {
-      sortArray = [];
-    }
-  } else {
-    sortArray = [{
-      field: column.field,
-      type: 'asc',
-    }];
-  }
-  return sortArray;
+  return [{
+    field: column.field,
+    type: getNextSort(getCurrentPrimarySort(sortArray, column)),
+  }];
 };
 
 exports.secondarySort = (sortArray, column) => {
-  //* this means that primary sort exists, we're
-  //* just adding a secondary sort
   const index = getIndex(sortArray, column);
   if (index === -1) {
     sortArray.push({
       field: column.field,
-      type: 'asc',
+      type: DEFAULT_SORT_TYPE,
     });
   } else {
-    const type = getNextSort(sortArray[index].type);
-    if (type) {
-      sortArray[index].type = type;
-    } else {
-      sortArray.splice(index, 1);
-    }
+    sortArray[index].type = getNextSort(sortArray[index].type);
   }
   return sortArray;
 };
