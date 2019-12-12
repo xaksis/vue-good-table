@@ -96,6 +96,27 @@ columns: [
 ]
 ```
 
+## firstSortType
+
+type `String (default: 'asc')`
+
+controls the first sort type when sorting by the column. If you want the first sort type for this column to be descending, set this property to 'desc'. Possible values:
+* _asc_ - the initial sort will be ascending
+* _desc_ - the initial sort will be descending 
+
+
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    sortable: true,
+    firstSortType: 'desc'
+  },
+  // ...
+]
+```
+
 ## sortFn
 
 type `Function`

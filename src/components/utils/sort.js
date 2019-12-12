@@ -1,5 +1,8 @@
-
 const DEFAULT_SORT_TYPE = 'asc';
+
+function getColumnFirstSortType(column) {
+  return column.firstSortType || DEFAULT_SORT_TYPE;
+}
 
 function getCurrentPrimarySort(sortArray, column) {
   return ( sortArray.length === 1 && sortArray[0].field === column.field )
@@ -21,9 +24,10 @@ function getIndex(sortArray, column) {
 }
 
 exports.primarySort = (sortArray, column) => {
+  const currentPrimarySort = getCurrentPrimarySort(sortArray, column);
   return [{
     field: column.field,
-    type: getNextSort(getCurrentPrimarySort(sortArray, column)),
+    type: currentPrimarySort ? getNextSort(currentPrimarySort) : getColumnFirstSortType(column),
   }];
 };
 
@@ -32,7 +36,7 @@ exports.secondarySort = (sortArray, column) => {
   if (index === -1) {
     sortArray.push({
       field: column.field,
-      type: DEFAULT_SORT_TYPE,
+      type: getColumnFirstSortType(column),
     });
   } else {
     sortArray[index].type = getNextSort(sortArray[index].type);

@@ -77,6 +77,7 @@ export default {
           label: 'Age',
           field: 'age',
           type: 'number',
+          firstSortType: 'desc',
           filterOptions: {
             enabled: true,
             filterDropdownItems: [
