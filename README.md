@@ -10,10 +10,6 @@ An easy to use, clean and powerful data table for VueJS with essential features 
 
 Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
 
-<a href="https://www.buymeacoffee.com/68BUXR1d9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-**Follow the project progress live** - [Vue-good-table Project on TimerBit](https://timerbit.com/#/public/YN3UZqeorFGRKI1h03d5)
-
 <!-- 
 ### Basic Table
 ![Basic Screenshot](README/images/vgt-table.regular.png) -->
