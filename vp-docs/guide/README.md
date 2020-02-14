@@ -14,7 +14,7 @@ Import globally in app:
 ```javascript
 import VueGoodTablePlugin from 'vue-good-table';
 
-// import the styles 
+// import the styles
 import 'vue-good-table/dist/vue-good-table.css'
 
 Vue.use(VueGoodTablePlugin);
@@ -22,7 +22,7 @@ Vue.use(VueGoodTablePlugin);
 
 **or** you can import into your component:
 ```js
-// import the styles 
+// import the styles
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 
@@ -65,8 +65,8 @@ export default {
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'MMM Do YY',
+          dateInputFormat: 'yyyy-MM-dd',
+          dateOutputFormat: 'MMM Do yy',
         },
         {
           label: 'Percent',
@@ -75,7 +75,7 @@ export default {
         },
       ],
       rows: [
-        { id:1, name:"John", age: 20, createdAt: '201-10-31:9: 35 am',score: 0.03343 },
+        { id:1, name:"John", age: 20, createdAt: '',score: 0.03343 },
         { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
         { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
         { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
@@ -87,3 +87,29 @@ export default {
 };
 </script>
 ```
+
+## Usage with Nuxt.js
+
+Create your own plugin by creating a file called `vue-good-table.js` inside your Nuxt `plugins` folder. Shoud look something like this:
+
+```
+import Vue from 'vue'
+import VueGoodTablePlugin from 'vue-good-table';
+
+// import the styles
+import 'vue-good-table/dist/vue-good-table.css'
+
+Vue.use(VueGoodTablePlugin);
+```
+
+As you can see, the only difference from the normal installation is that we need to reference Vue using `import Vue from 'vue'`.
+
+Next we need to declare the plugin inside your `nuxt.config.js` like so:
+
+```
+plugins: [
+  { src: '~/plugins/vue-good-table', ssr: false }
+],
+```
+
+This should now work as expected.

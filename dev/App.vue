@@ -18,12 +18,13 @@
       @on-selected-rows-change="onSelectChanged"
       :columns="columns"
       :rows="rows"
-      theme="black-rhino"
       :pagination-options="paginationOptions"
       :select-options="{
         enabled: true,
-        selectOnCheckboxOnly: true,
+        selectOnCheckboxOnly: false,
+        disableSelectInfo: true,
       }"
+      theme="nocturnal"
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
@@ -36,7 +37,7 @@
       }">
     </vue-good-table>
     <h3>Remote Table</h3>
-    <!-- <remote-table/> -->
+    <remote-table/>
     <h3>Grouped Table</h3>
     <!-- <grouped-table></grouped-table> -->
   </div>
@@ -74,22 +75,32 @@ export default {
         },
         {
           label: 'Age',
-          field: obj => obj.age,
+          field: 'age',
           type: 'number',
           filterOptions: {
             enabled: true,
-            // filterValue: 20,
+            filterDropdownItems: [
+              {
+                value: 24,
+                text: '24',
+              },
+              {
+                value: 16,
+                text: '16',
+              },
+            ],
           },
         },
         {
           filterOptions: {
             enabled: true,
           },
+          sortable: false,
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'LLL',
+          dateInputFormat: 'yyyy-MM-dd',
+          dateOutputFormat: 'PPPP',
         },
         {
           label: 'Percent',
@@ -110,6 +121,17 @@ export default {
             filterDropdownItems: [
               true,
               false,
+            ],
+          },
+        },
+        {
+          label: 'Exact',
+          field: 'exact',
+          filterOptions: {
+            enabled: true,
+            filterDropdownItems: [
+              'match',
+              'rematch',
             ],
           },
         },
@@ -147,6 +169,7 @@ export default {
           createdAt: '2011-10-31',
           score: 0.03343,
           bool: true,
+          exact: 'match',
           multiselect: 'hello',
           average: 1
         },
@@ -157,6 +180,7 @@ export default {
           createdAt: '2011-10-30',
           score: 0.03343,
           bool: true,
+          exact: 'match',
           multiselect: 'oh no',
           average: null
         },
@@ -167,15 +191,17 @@ export default {
           createdAt: '2011-10-11',
           score: 0.03343,
           bool: false,
+          exact: null,
           multiselect: null
         },
         {
           id: 5,
           name: 'Dan',
           age: 40,
-          createdAt: null,
+          createdAt: '',
           score: 0.03343,
           bool: null,
+          exact: 'rematch',
           multiselect: 'hello world',
           average: 2
         },
@@ -186,6 +212,7 @@ export default {
           createdAt: null,
           score: 0.03343,
           bool: null,
+          exact: 'rematch',
           multiselect: 'hello',
           average: 3
         },
@@ -196,6 +223,7 @@ export default {
           createdAt: null,
           score: 0.03343,
           bool: null,
+          exact: null,
           multiselect: 'hello',
           average: 2
         },
@@ -206,6 +234,7 @@ export default {
           createdAt: '2011-10-31',
           score: 0.03343,
           bool: true,
+          exact: 'match',
           multiselect: 'hello',
           average: 1.5
         },
@@ -216,6 +245,7 @@ export default {
           createdAt: '2013-09-21',
           score: null,
           bool: 'false',
+          exact: null,
           multiselect: 'hello',
           average: 1
         },
@@ -226,6 +256,7 @@ export default {
           createdAt: '2013-10-31',
           score: 0.03343,
           bool: true,
+          exact: 'rematch',
           multiselect: 'hello',
           average: 1
         },
@@ -437,4 +468,3 @@ export default {
     background: red;
   } */
 </style>
-

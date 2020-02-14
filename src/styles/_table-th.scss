@@ -1,27 +1,36 @@
+$sort-chevron-width: 5px;
+
 .vgt-table{
   & th{
     padding: .75em 1.5em .75em .75em;
     vertical-align: middle;
     position: relative;
-    &.sorting{
+    &.sortable{
       cursor: pointer;
-    }
-    &.sorting:after  {
-      content: '';
-      display: none;
-      position: absolute;
-      height: 0px;
-      width: 0px;
-      right: 6px;
-      top: 50%;
-      margin-top: -3px;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 6px solid $link-color;
-    }
-    &.sorting:hover:after{
-      display: inline-block;
-      border-bottom-color: lighten($link-color, 10%);
+      &:after{
+        content: '';
+        position: absolute;
+        height: 0px;
+        width: 0px;
+        right: 6px;
+        top: 50%;
+        margin-top: -7px;
+        border-left: $sort-chevron-width solid transparent;
+        border-right: $sort-chevron-width solid transparent;
+        border-bottom: $sort-chevron-width solid $chevron-color;
+      }
+      &:before{
+        content: '';
+        position: absolute;
+        height: 0px;
+        width: 0px;
+        right: 6px;
+        top: 50%;
+        margin-bottom: -7px;
+        border-left: $sort-chevron-width solid transparent;
+        border-right: $sort-chevron-width solid transparent;
+        border-top: $sort-chevron-width solid $chevron-color;
+      }
     }
   }
   & th.line-numbers, & th.vgt-checkbox-col {
@@ -52,18 +61,15 @@
     &.vgt-checkbox-col{
       vertical-align: middle;
     }
-    &.sorting-asc, &.sorting-desc {
-      color: darken($text-color, 15%);
-      &:after  {
-        content: '';
-        display: block;
+    &.sorting-asc{
+      &:after{
+        border-bottom: $sort-chevron-width solid $link-color;
       }
     }
-    &.sorting-desc:after {
-      border-top:  6px solid $link-color;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: none;
+    &.sorting-desc {
+      &:before{
+        border-top: $sort-chevron-width solid $link-color;
+      }
     }
   }
 }

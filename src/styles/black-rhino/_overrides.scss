@@ -1,6 +1,8 @@
 $thead-bg-color-1: #4c5c79;
 $thead-bg-color-2: #4e5d7c;
 
+$chevron-color: lighten($thead-bg-color-1, 10%);
+
 $text-color: #dae2f0;
 $text-color-td: rgb(73, 81, 94);
 $text-shadow-color: lighten(#2C394F, 10%);

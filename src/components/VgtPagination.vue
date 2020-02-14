@@ -177,7 +177,7 @@ export default {
       if (this.customRowsPerPageDropdown !== null
         && (Array.isArray(this.customRowsPerPageDropdown)
         && this.customRowsPerPageDropdown.length !== 0)) {
-        this.rowsPerPageOptions = this.customRowsPerPageDropdown;
+        this.rowsPerPageOptions = cloneDeep(this.customRowsPerPageDropdown);
       } else {
         //* otherwise we use the default rows per page dropdown
         this.rowsPerPageOptions = cloneDeep(DEFAULT_ROWS_PER_PAGE_DROPDOWN);

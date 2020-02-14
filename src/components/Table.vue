@@ -1,11 +1,6 @@
 <template>
   <div
-    class="vgt-wrap"
-    :class="{
-    'rtl': rtl,
-    'nocturnal': theme==='nocturnal',
-    'black-rhino': theme==='black-rhino',
-  }">
+    :class="wrapStyleClasses">
     <div v-if="isLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
         <span class="vgt-loading__content">
@@ -53,7 +48,7 @@
         </template>
       </vgt-global-search>
       <div
-        v-if="selectedRowCount"
+        v-if="selectedRowCount && !disableSelectInfo"
         class="vgt-selection-info-row clearfix"
         :class="selectionInfoClass"
       >
@@ -358,6 +353,7 @@ export default {
           selectionInfoClass: '',
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
+          disableSelectInfo: false,
         };
       },
     },
@@ -415,6 +411,7 @@ export default {
     selectable: false,
     selectOnCheckboxOnly: false,
     selectAllByPage: true,
+    disableSelectInfo: false,
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
@@ -471,7 +468,9 @@ export default {
 
     paginationOptions: {
       handler(newValue, oldValue) {
-        this.initializePagination();
+        if (!isEqual(newValue, oldValue)) {
+          this.initializePagination();
+        }
       },
       deep: true,
       immediate: true,
@@ -495,9 +494,9 @@ export default {
 
     sortOptions: {
       handler(newValue, oldValue) {
-        // if (!isEqual(newValue, oldValue)) {
-        this.initializeSort();
-        // }
+        if (!isEqual(newValue, oldValue)) {
+          this.initializeSort();
+        }
       },
       deep: true,
     },
@@ -646,6 +645,12 @@ export default {
       });
       return total;
     },
+    wrapStyleClasses() {
+      let classes = 'vgt-wrap';
+      if (this.rtl) classes += ' rtl';
+      classes += ` ${this.theme}`;
+      return classes;
+    },
     tableStyleClasses() {
       let classes = this.styleClass;
       classes += ` ${this.theme}`;
@@ -770,13 +775,13 @@ export default {
                   sortValue ||
                   sortFn(xvalue, yvalue, column, xRow, yRow) *
                     (this.sorts[i].type === 'desc' ? -1 : 1);
+              } else {
+                //* else we use our own sort
+                sortValue =
+                  sortValue ||
+                  column.typeDef.compare(xvalue, yvalue, column) *
+                    (this.sorts[i].type === 'desc' ? -1 : 1);
               }
-
-              //* else we use our own sort
-              sortValue =
-                sortValue ||
-                column.typeDef.compare(xvalue, yvalue, column) *
-                  (this.sorts[i].type === 'desc' ? -1 : 1);
             }
             return sortValue;
           });
@@ -1119,7 +1124,7 @@ export default {
       // if user has supplied custom formatter,
       // use that here
       if (column.formatFn && typeof column.formatFn === 'function') {
-        return column.formatFn(value);
+        return column.formatFn(value, obj);
       }
 
       // lets format the resultant data
@@ -1147,14 +1152,6 @@ export default {
         }
       }
       return formattedRow;
-    },
-
-    // Check if a column is sortable.
-    isSortableColumn(index) {
-      const { sortable } = this.columns[index];
-      const isSortable =
-        typeof sortable === 'boolean' ? sortable : this.sortable;
-      return isSortable;
     },
 
     // Get classes for the given column index & element.
@@ -1254,7 +1251,10 @@ export default {
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
                   this.collect(row, col.field),
-                  this.columnFilters[col.field]
+                  this.columnFilters[col.field],
+                  false,
+                  col.filterOptions &&
+                    typeof col.filterOptions.filterDropdownItems === 'object'
                 );
               });
               // should we remove the header?
@@ -1441,6 +1441,7 @@ export default {
         clearSelectionText,
         selectOnCheckboxOnly,
         selectAllByPage,
+        disableSelectInfo,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1453,6 +1454,10 @@ export default {
 
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
+      }
+
+      if (typeof disableSelectInfo === 'boolean') {
+        this.disableSelectInfo = disableSelectInfo;
       }
 
       if (typeof selectionInfoClass === 'string') {

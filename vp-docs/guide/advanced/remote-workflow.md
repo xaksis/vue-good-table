@@ -6,7 +6,7 @@ Vue-good-table's in-built features like sorting, paging, filtering etc. are all 
 
 When remote mode is on, vue-good-table does not perform sorting, paging, filtering etc. on the client side but instead emits events that we can use to then send proper parameters to the back-end. The server then is expected to send the correct rows to display on the UI. 
 
-Following is a workflow you can use to get a server powered vue-good-table instace: 
+Following is a workflow you can use to get a server powered vue-good-table instance: 
 
 ## Prep Work
 ### What do we send to server?

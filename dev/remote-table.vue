@@ -47,6 +47,16 @@ export default {
           type: 'number',
           filterOptions: {
             enabled: true,
+            filterDropdownItems: [
+              {
+                value: 24,
+                text: '24',
+              },
+              {
+                value: 16,
+                text: '16',
+              },
+            ],
             // filterValue: 20,
           },
         },
@@ -54,19 +64,19 @@ export default {
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'LLL',
+          dateInputFormat: 'yyyy-MM-dd',
+          dateOutputFormat: 'PPPP',
         },
         {
           label: 'Percent',
           field: 'score',
           type: 'percentage',
         },
-        {
-          label: 'func',
-          field: this.funcValue,
-          type: 'number',
-        },
+        // {
+        //   label: 'func',
+        //   field: this.funcValue,
+        //   type: 'number',
+        // },
         {
           label: 'Valid',
           field: 'bool',
@@ -189,7 +199,7 @@ export default {
     onPerPageChange(params) {
       console.log('per page change called');
       console.log(params);
-      this.updateParams({perPage: params.currentPerPage});
+      this.updateParams({ perPage: params.currentPerPage });
       this.loadItems();
     },
 

@@ -27,8 +27,25 @@
     text-shadow: 1px 1px $text-shadow-color;
     border-bottom:  1px solid $border-color;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
-    &.sorting-asc, &.sorting-desc {
-      color: lighten($text-color, 15%);
+    &.sortable {
+      // color: lighten($text-color, 15%);
+      &:before{
+        border-top-color: $chevron-color;
+      }
+      &:after{
+        border-bottom-color: $chevron-color;
+      }
+      &.sorting-asc{
+        color: white;
+        &:after{
+          border-bottom-color: $link-color;
+        }
+      }
+      &.sorting-desc {
+        &:before{
+          border-top-color: $link-color;
+        }
+      }
     }
   }
   

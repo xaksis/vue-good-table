@@ -161,6 +161,7 @@ export default {
 
     getHeaderClasses(column, index) {
       const classes = assign({}, this.getClasses(index, 'th'), {
+        sortable: this.isSortableColumn(column),
         'sorting sorting-desc': this.getColumnSort(column) === 'desc',
         'sorting sorting-asc': this.getColumnSort(column) === 'asc',
       });
@@ -172,7 +173,7 @@ export default {
     },
 
     getWidthStyle(dom) {
-      if (window && window.getComputedStyle) {
+      if (window && window.getComputedStyle && dom) {
         const cellStyle = window.getComputedStyle(dom, null);
         return {
           width: cellStyle.width,
