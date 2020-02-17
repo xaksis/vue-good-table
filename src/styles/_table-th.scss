@@ -50,13 +50,13 @@ $sort-chevron-width: 5px;
     border-bottom: 2px solid $border-color;
     border-top: 2px solid $border-color;
     background-color: lighten($border-color, 10%);
-    .triangle{
+    .triangle {
       width:  24px;
       height:  24px;
       border-radius: 15%;
       position:  relative;
       margin:  0px 8px;
-      &:after{
+      &:after {
         content:  '';
         position:  absolute;
         display:  block;
@@ -69,7 +69,7 @@ $sort-chevron-width: 5px;
         margin-left:  -3px;
         transition: 0.3s ease transform;
       }
-      &.expand::after{
+      &.expand:after {
         transform: rotate(90deg);
       }
     }

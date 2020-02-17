@@ -891,7 +891,7 @@ export default {
   methods: {
     toggleExpand(index) {
       let headerRow = this.filteredRows[index];
-      if(headerRow) {
+      if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
     },
