@@ -1231,13 +1231,13 @@ export default {
 
                 // If the column has an array of filter values match any
                 if (col.filterOptions && col.filterOptions.filterMultiselectDropdownItems) {
-                  if(this.columnFilters[col.field].length === 0) {
+                  if (this.columnFilters[col.field].length === 0) {
                     return true;
                   }
                   // Otherwise Use default filters
                   const { typeDef } = col;
-                  for(let filter of this.columnFilters[col.field]) {
-                    if(typeDef.filterPredicate(
+                  for (let filter of this.columnFilters[col.field]) {
+                    if (typeDef.filterPredicate(
                         this.collect(row, col.field),
                         filter
                       )){

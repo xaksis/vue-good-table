@@ -42,7 +42,6 @@
           :value="option.value">{{ option.text }}</option>
       </select>
 
-      <!---->
       <v-select v-if="isMultiselectDropdown(column)"
         :options="column.filterOptions.filterMultiselectDropdownItems"
         :loading="column.filterOptions.loading"
@@ -142,8 +141,8 @@ export default {
     },
 
     isMultiselectDropdown(column) {
-      return this.isFilterable(column)
-        && column.filterOptions.filterMultiselectDropdownItems;
+      return this.isFilterable(column) &&
+        column.filterOptions.filterMultiselectDropdownItems;
     },
 
     // get column's defined placeholder or default one
