@@ -151,3 +151,19 @@ In this case header row expects a value for each column
 - The column object can be accessed via `props.column`
 - You can access the formatted row data (for example - formatted date) via `props.formattedRow`
   :::
+
+## Collapsable Rows
+To allow the row to collapse and expand you can use the groupOption "collapsable". You can either pass in a boolean or a number. 
+If "collapsable" is set to "true" then it will default to making the first column collapsable. Otherwise, you can specify the column index number.
+To expand/collapse all you can use the method called "expandAll" or "collapseAll".
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :groupOptions="{
+  	enabled: true,
+    collapsable: true // or column index
+  }"
+>
+</vue-good-table>
+```

@@ -896,6 +896,18 @@ export default {
       }
     },
 
+    expandAll() {
+      this.filteredRows.forEach((row) => {
+        this.$set(row, 'vgtIsExpanded', true);
+      });
+    },
+
+    collapseAll() {
+      this.filteredRows.forEach((row) => {
+        this.$set(row, 'vgtIsExpanded', false);
+      });
+    },
+
     getColumnForField(field) {
       for (let i = 0; i < this.typedColumns.length; i += 1) {
         if (this.typedColumns[i].field === field) return this.typedColumns[i];
