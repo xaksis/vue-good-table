@@ -1257,7 +1257,7 @@ export default {
                 }
 
                 const filterMultiselect = this.filterMultiselectItems(col, row);
-                if(filterMultiselect !== undefined) {
+                if (filterMultiselect !== undefined) {
                   return filterMultiselect;
                 }
 
