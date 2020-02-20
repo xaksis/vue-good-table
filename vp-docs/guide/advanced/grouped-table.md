@@ -169,3 +169,8 @@ To expand/collapse all you can use the method called "expandAll" or "collapseAll
 >
 </vue-good-table>
 ```
+To expand/collapse all you can use the method called `expandAll` or `collapseAll`.
+```js
+this.$refs.myCustomTable.expandAll();
+this.$refs.myCustomTable.collapseAll();
+```
