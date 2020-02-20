@@ -1187,7 +1187,7 @@ export default {
         const typeDef = column.typeDef;
         for (let filter of columnFilters) {
           let filterLabel = filter;
-          if(typeof filter === 'object'){
+          if (typeof filter === 'object') {
             filterLabel = filter.label;
           }
           if (typeDef.filterPredicate(
