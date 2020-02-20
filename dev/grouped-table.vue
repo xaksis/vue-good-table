@@ -1,5 +1,7 @@
 <template>
 <div>
+  <button @click="expandAll">Expand All</button>
+  <button @click="collapseAll">Collapse All</button>
   <vue-good-table
     :columns="columns"
     :rows="rows"
@@ -15,8 +17,11 @@
     :group-options="{
       enabled: true,
       headerPosition: 'top',
+      collapsable: 2
     }"
-    styleClass="vgt-table condensed bordered">
+    styleClass="vgt-table condensed bordered"
+    ref="groupedTable"
+  >
     <!-- <template slot="table-header-row" slot-scope="props">
       <span v-if="props.row.mode === 'span'">
         My header label is - <strong>{{ props.row.label }}</strong>
@@ -96,6 +101,12 @@ export default {
   computed: {
   },
   methods: {
+    expandAll() {
+      this.$refs.groupedTable.expandAll();
+    },
+    collapseAll() {
+      this.$refs.groupedTable.collapseAll();
+    },
     onSelectAll(params) {
       console.log(params);
     },

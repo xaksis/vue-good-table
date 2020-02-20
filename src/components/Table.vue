@@ -150,10 +150,12 @@
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
+              @vgtExpand="toggleExpand(index)"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -175,6 +177,7 @@
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <tr
+              v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
               v-for="(row, index) in headerRow.children"
               :key="row.originalIndex"
               :class="getRowStyleClass(row)"
@@ -886,6 +889,25 @@ export default {
   },
 
   methods: {
+    toggleExpand(index) {
+      let headerRow = this.filteredRows[index];
+      if (headerRow) {
+        this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
+      }
+    },
+
+    expandAll() {
+      this.filteredRows.forEach((row) => {
+        this.$set(row, 'vgtIsExpanded', true);
+      });
+    },
+
+    collapseAll() {
+      this.filteredRows.forEach((row) => {
+        this.$set(row, 'vgtIsExpanded', false);
+      });
+    },
+
     getColumnForField(field) {
       for (let i = 0; i < this.typedColumns.length; i += 1) {
         if (this.typedColumns[i].field === field) return this.typedColumns[i];

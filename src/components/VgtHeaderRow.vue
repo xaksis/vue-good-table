@@ -3,7 +3,9 @@
   <th
     v-if="headerRow.mode === 'span'"
     class="vgt-left-align vgt-row-header"
-    :colspan="fullColspan">
+    :colspan="fullColspan"
+    @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+    <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       name="table-header-row">
@@ -26,7 +28,9 @@
     v-for="(column, i) in columns"
     :key="i"
     class="vgt-row-header"
-    :class="getClasses(i, 'td')">
+    :class="getClasses(i, 'td')"
+    @click="columnCollapsable(i) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+    <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
@@ -58,6 +62,10 @@ export default {
     selectable: {
       type: Boolean,
     },
+    collapsable: {
+      type: [Boolean, Number],
+      default: false
+    },
     collectFormatted: {
       type: Function,
     },
@@ -78,6 +86,12 @@ export default {
   computed: {
   },
   methods: {
+    columnCollapsable: function (currentIndex) {
+      if (this.collapsable === true) {
+        return currentIndex === 0;
+      }
+      return currentIndex === this.collapsable;
+    }
   },
   mounted() {
   },
