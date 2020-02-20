@@ -64,13 +64,21 @@ filterDropdownItems: [
 
 ## filterMultiselectDropdownItems
 
-type `Array of strings`
+type `Array of strings` or `Array of objects` with labels
 
 allows creating a dropdown for filtering multiple items as opposed to an input
 
 ```javascript
-//array
+//array of strings
 filterMultiselectDropdownItems: ['Blue', 'Red', 'Yellow']
+```
+```javascript
+//array of objects
+filterMultiselectDropdownItems: [
+  { id: 1, label: 'Blue' },
+  { id: 2, label: 'Red' },
+  { id: 3, label: 'Yellow' }
+]
 ```
 
 ## filterFn

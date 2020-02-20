@@ -141,8 +141,8 @@ export default {
           filterOptions: {
             enabled: true,
             filterMultiselectDropdownItems: [
-              'hello',
-              'oh no',
+              { id: 1, label: 'hello'},
+              'oh no'
             ],
           },
         },
