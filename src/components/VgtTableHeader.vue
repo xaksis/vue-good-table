@@ -95,6 +95,12 @@ export default {
     paginated: {},
   },
   watch: {
+    columns: {
+      handler() {
+        this.setColumnStyles();
+      },
+      immediate: true,
+    },
     tableRef: {
       handler() {
         this.setColumnStyles();
@@ -112,7 +118,6 @@ export default {
   },
   data() {
     return {
-      timer: null,
       checkBoxThStyle: {},
       lineNumberThStyle: {},
       columnStyles: [],
@@ -186,25 +191,22 @@ export default {
 
     setColumnStyles() {
       const colStyles = [];
-      if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        for (let i = 0; i < this.columns.length; i++) {
-          if (this.tableRef) {
-            let skip = 0;
-            if (this.selectable) skip++;
-            if (this.lineNumbers) skip++;
-            const cell = this.tableRef.rows[0].cells[i + skip];
-            colStyles.push(this.getWidthStyle(cell));
-          } else {
-            colStyles.push({
-              minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
-              maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
-              width: this.columns[i].width ? this.columns[i].width : 'auto',
-            });
-          }
+      for (let i = 0; i < this.columns.length; i++) {
+        if (this.tableRef) {
+          let skip = 0;
+          if (this.selectable) skip++;
+          if (this.lineNumbers) skip++;
+          const cell = this.tableRef.rows[0].cells[i + skip];
+          colStyles.push(this.getWidthStyle(cell));
+        } else {
+          colStyles.push({
+            minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
+            maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
+            width: this.columns[i].width ? this.columns[i].width : 'auto',
+          });
         }
-        this.columnStyles = colStyles;
-      }, 200);
+      }
+      this.columnStyles = colStyles;
     },
 
     getColumnStyle(column, index) {
@@ -229,7 +231,6 @@ export default {
     window.addEventListener('resize', this.setColumnStyles);
   },
   beforeDestroy() {
-    if (this.timer) clearTimeout(this.timer);
     window.removeEventListener('resize', this.setColumnStyles);
   },
   components: {
