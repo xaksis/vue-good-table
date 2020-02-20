@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     columnCollapsable: function (currentIndex) {
-      if(this.collapsable === true) {
+      if (this.collapsable === true) {
         return currentIndex === 0;
       }
       return currentIndex === this.collapsable;
