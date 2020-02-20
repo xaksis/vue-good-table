@@ -136,7 +136,8 @@ export default {
     },
 
     isMultiselectDropdown(column) {
-      return this.isFilterable(column) &&
+      return (
+        this.isFilterable(column) &&
         column.filterOptions &&
         column.filterOptions.filterMultiselectDropdownItems
       );
