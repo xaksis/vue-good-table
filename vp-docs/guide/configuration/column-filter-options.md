@@ -16,6 +16,7 @@ columns: [
       placeholder: 'Filter This Thing', // placeholder for filter input
       filterValue: 'Jane', // initial populated value for this filter
       filterDropdownItems: [], // dropdown (with selected values) instead of text input
+      filterMultiselectDropdownItems: [], // dropdown (with multiple selected values) instead of text input
       filterFn: this.columnFilterFn, //custom filter function that
       trigger: 'enter', //only trigger on enter not on keyup 
     },
@@ -59,6 +60,25 @@ filterDropdownItems: [
   { value: 'y', text: 'Active' },  
   { value: 'c', text: 'Check' }  
 ],
+```
+
+## filterMultiselectDropdownItems
+
+type `Array of strings` or `Array of objects` with labels
+
+allows creating a dropdown for filtering multiple items as opposed to an input
+
+```javascript
+//array of strings
+filterMultiselectDropdownItems: ['Blue', 'Red', 'Yellow']
+```
+```javascript
+//array of objects
+filterMultiselectDropdownItems: [
+  { id: 1, label: 'Blue' },
+  { id: 2, label: 'Red' },
+  { id: 3, label: 'Yellow' }
+]
 ```
 
 ## filterFn

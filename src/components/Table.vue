@@ -1175,6 +1175,33 @@ export default {
       return classes;
     },
 
+    filterMultiselectItems(column, row) {
+      const columnFieldName = column.field;
+      const columnFilters = this.columnFilters[columnFieldName];
+      if (column.filterOptions && column.filterOptions.filterMultiselectDropdownItems) {
+        if (columnFilters.length === 0) {
+          return true;
+        }
+
+        // Otherwise Use default filters
+        const typeDef = column.typeDef;
+        for (let filter of columnFilters) {
+          let filterLabel = filter;
+          if (typeof filter === 'object') {
+            filterLabel = filter.label;
+          }
+          if (typeDef.filterPredicate(
+            this.collect(row, columnFieldName),
+            filterLabel
+          )) {
+            return true;
+          }
+        }
+        return false;
+      }
+      return undefined;
+    },
+
     // method to filter rows
     filterRows(columnFilters, fromFilter = true) {
       // if (!this.rows.length) return;
@@ -1228,6 +1255,12 @@ export default {
                     this.columnFilters[col.field]
                   );
                 }
+
+                const filterMultiselect = this.filterMultiselectItems(col, row);
+                if (filterMultiselect !== undefined) {
+                  return filterMultiselect;
+                }
+
                 // Otherwise Use default filters
                 const { typeDef } = col;
                 return typeDef.filterPredicate(

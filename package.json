@@ -48,7 +48,8 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.filter": "^4.6.0",
     "lodash.foreach": "^4.5.0",
-    "lodash.isequal": "^4.5.0"
+    "lodash.isequal": "^4.5.0",
+    "vue-select": "^3.1.0"
   },
   "devDependencies": {
     "@vuepress/plugin-google-analytics": "^1.0.0-rc.1",
