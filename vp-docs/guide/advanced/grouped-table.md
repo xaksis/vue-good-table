@@ -162,7 +162,7 @@ To expand/collapse all you can use the method called "expandAll" or "collapseAll
   :columns="columns"
   :rows="rows"
   :groupOptions="{
-  	enabled: true,
+    enabled: true,
     collapsable: true // or column index
   }"
 >
