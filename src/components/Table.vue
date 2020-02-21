@@ -137,7 +137,9 @@
                 name="table-column"
                 :column="props.column"
               >
-                <span>{{props.column.label}}</span>
+                <slot :name="resolveColumnHeaderSlotName(props.column)" :column="props.column">
+                  <span>{{props.column.label}}</span>
+                </slot>
               </slot>
             </template>
           </thead>
@@ -216,14 +218,24 @@
                   :formattedRow="formattedRow(row)"
                   :index="index"
                 >
-                  <span v-if="!column.html">
-                    {{ collectFormatted(row, column) }}
-                  </span>
-                  <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
+                  <slot
+                    :name="resolveColumnValueSlotName(row, column)"
+                    :row="row"
+                    :column="column"
+                    :formattedRow="formattedRow(row)"
+                    :index="index"
                   >
-                  </span>
+                    <slot
+                      :name="resolveColumnSlotName(column)"
+                      :row="row"
+                      :column="column"
+                      :formattedRow="formattedRow(row)"
+                      :index="index"
+                    >
+                      <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+                      <span v-if="column.html" v-html="collect(row, column.field)"></span>
+                    </slot>
+                  </slot>
                 </slot>
               </td>
             </tr>
@@ -1174,6 +1186,15 @@ export default {
         }
       }
       return formattedRow;
+    },
+    resolveColumnHeaderSlotName(column){
+      return "table-column-"+column.field;
+    },
+    resolveColumnSlotName(column) {
+      return "table-row-" + column.field;
+    },
+    resolveColumnValueSlotName(row, column) {
+      return this.resolveColumnSlotName(column) + "-" + row[column.field];
     },
 
     // Get classes for the given column index & element.

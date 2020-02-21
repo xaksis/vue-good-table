@@ -35,6 +35,15 @@
         skipDiacritics: true,
         externalQuery: searchTerm,
       }">
+      <template slot="table-column-name" slot-scope="props">
+        <div style="background-color:#8cd5ff">{{props.column.label}} Header !!!</div>
+      </template>
+      <template slot="table-row-age-20" slot-scope="props">
+        <div style="background-color:#8cd5ff">{{props.row.age}} Years !!!</div>
+      </template>
+      <template slot="table-row-age" slot-scope="props">
+        <div style="background-color:#9ea832">{{props.row.age}} Years</div>
+      </template>
     </vue-good-table>
     <h3>Remote Table</h3>
     <remote-table/>

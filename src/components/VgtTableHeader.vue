@@ -16,7 +16,9 @@
       :style="columnStyles[index]"
       v-if="!column.hidden">
       <slot name="table-column" :column="column">
-        <span>{{column.label}}</span>
+        <slot :name="resolveColumnHeaderSlotName(column)" :column="column">
+          <span>{{column.label}}</span>
+        </slot>
       </slot>
     </th>
   </tr>
@@ -127,6 +129,9 @@ export default {
   computed: {
   },
   methods: {
+    resolveColumnHeaderSlotName(column){
+      return "table-column-"+column.field;
+    },
     reset() {
       this.$refs['filter-row'].reset(true);
     },
