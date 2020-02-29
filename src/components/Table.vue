@@ -1534,5 +1534,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "node_modules/vue-select/dist/vue-select";
+
 @import "../styles/style";
 </style>
