@@ -2,9 +2,6 @@
   direction: rtl;
 
   .vgt-table{
-    td, th:not(.line-numbers) {
-      padding: .75em .75em .75em 1.5em;
-    }
     thead th, &.condensed thead th {
       padding-left:  1.5em;
       padding-right:  .75em;
