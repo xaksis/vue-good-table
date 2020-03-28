@@ -34,7 +34,7 @@
                             v-if="!column.hidden && column.field"
                             @click="columnCollapsable(i) ? toggleExpand(): onCellClicked(row, column, index, $event)"
                         >
-                            <span v-if="columnCollapsable(i) && row.children && row.children.length" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"></span>
+                            <span v-if="columnCollapsable(i) && hasChildren" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"></span>
                             <slot
                             name="table-row"
                             :row="row"
@@ -54,7 +54,7 @@
                         </td>
                     </tr>
                     <vgt-rows 
-                        v-if="row.children && row.children.length"
+                        v-if="hasChildren"
                         v-for="(childRow, childIndex) in row.children"
                         :key="childIndex + childRow.name"
                         :index="childIndex"
@@ -121,6 +121,11 @@ export default {
         toggleExpand() {
             this.$set(this.row, "vgtIsExpanded", !this.row.vgtIsExpanded)
         },
-    }
+    },
+    computed: {
+        hasChildren() {
+            return this.row.children && this.row.children.length;
+        }
+    },
 }
 </script>
