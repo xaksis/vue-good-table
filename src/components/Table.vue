@@ -176,57 +176,33 @@
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
-            <tr
-              v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
+            <vgt-rows 
+              v-if="headerRow.children && headerRow.children.length"
               v-for="(row, index) in headerRow.children"
-              :key="row.originalIndex"
-              :class="getRowStyleClass(row)"
-              @mouseenter="onMouseenter(row, index)"
-              @mouseleave="onMouseleave(row, index)"
-              @dblclick="onRowDoubleClicked(row, index, $event)"
-              @click="onRowClicked(row, index, $event)"
-              @auxclick="onRowAuxClicked(row, index, $event)">
-              <th
-                v-if="lineNumbers"
-                class="line-numbers"
+              :key="index"
+              :index="index"
+              :headerRow="headerRow"
+              :row="row"
+              :groupOptions="groupOptions"
+              :getRowStyleClass="getRowStyleClass"
+              :getClasses="getClasses"
+              :tableStyleClasses="tableStyleClasses"
+              :lineNumbers="lineNumbers"
+              :selectable="selectable"
+              :columns="columns"
+              :collectFormatted="collectFormatted"
+              :fullColspan="fullColspan"
+              :formattedRow="formattedRow"
+              :getCurrentIndex="getCurrentIndex"
+              :onMouseenter="onMouseenter"
+              :onMouseleave="onMouseleave"
+              :onRowDoubleClicked="onRowDoubleClicked"
+              :onRowClicked="onRowClicked"
+              :onRowAuxClicked="onRowAuxClicked"
+              :onCheckboxClicked="onCheckboxClicked"
+              :onCellClicked="onCellClicked"
               >
-                {{ getCurrentIndex(index) }}
-              </th>
-              <th
-                v-if="selectable"
-                @click.stop="onCheckboxClicked(row, index, $event)"
-                class="vgt-checkbox-col"
-              >
-                <input
-                  type="checkbox"
-                  :checked="row.vgtSelected"
-                />
-              </th>
-              <td
-                @click="onCellClicked(row, column, index, $event)"
-                v-for="(column, i) in columns"
-                :key="i"
-                :class="getClasses(i, 'td', row)"
-                v-if="!column.hidden && column.field"
-              >
-                <slot
-                  name="table-row"
-                  :row="row"
-                  :column="column"
-                  :formattedRow="formattedRow(row)"
-                  :index="index"
-                >
-                  <span v-if="!column.html">
-                    {{ collectFormatted(row, column) }}
-                  </span>
-                  <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
-                  >
-                  </span>
-                </slot>
-              </td>
-            </tr>
+            </vgt-rows>
             <!-- if group row header is at the bottom -->
             <vgt-header-row
               v-if="groupHeaderOnBottom"
@@ -313,6 +289,7 @@ import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
+import VgtRows from './VgtRows.vue';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -1135,11 +1112,17 @@ export default {
     },
 
     collectFormatted(obj, column, headerRow = false) {
+      if (obj.name === "Animals") {
+        console.log(column.field);
+      }
       let value;
       if (headerRow && column.headerField) {
         value = this.collect(obj, column.headerField);
       } else {
         value = this.collect(obj, column.field);
+      }
+      if (obj.name === "Animals") {
+        console.log(value);
       }
       if (value === undefined) return '';
 
@@ -1529,6 +1512,7 @@ export default {
     'vgt-global-search': VgtGlobalSearch,
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
+    'vgt-rows': VgtRows,
   },
 };
 </script>

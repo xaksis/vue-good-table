@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h3>Nested Expanded Table</h3>
+    <nested-expanded-table></nested-expanded-table>
     {{ selectedIds }}
     <button @click="rows = [];">empty row</button>
     <button @click="resetTable">reset Table</button>
@@ -46,6 +48,7 @@
 <script>
 import GroupedTable from './grouped-table.vue';
 import RemoteTable from './remote-table.vue';
+import NestedExpandedTable from './nested-expanded-table.vue';
 
 export default {
   name: 'test',
@@ -447,6 +450,7 @@ export default {
   components: {
     'grouped-table': GroupedTable,
     RemoteTable,
+    'nested-expanded-table': NestedExpandedTable
   },
 };
 </script>
