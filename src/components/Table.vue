@@ -1112,17 +1112,11 @@ export default {
     },
 
     collectFormatted(obj, column, headerRow = false) {
-      if (obj.name === "Animals") {
-        console.log(column.field);
-      }
       let value;
       if (headerRow && column.headerField) {
         value = this.collect(obj, column.headerField);
       } else {
         value = this.collect(obj, column.field);
-      }
-      if (obj.name === "Animals") {
-        console.log(value);
       }
       if (value === undefined) return '';
 

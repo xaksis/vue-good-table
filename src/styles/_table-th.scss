@@ -50,28 +50,28 @@ $sort-chevron-width: 5px;
     border-bottom: 2px solid $border-color;
     border-top: 2px solid $border-color;
     background-color: lighten($border-color, 10%);
-    .triangle {
-      width: 24px;
-      height: 24px;
-      border-radius: 15%;
-      position: relative;
-      margin: 0px 8px;
-      &:after {
-        content: '';
-        position: absolute;
-        display: block;
-        left: 50%;
-        top: 50%;
-        margin-top: -6px;
-        border-top: 6px solid transparent;
-        border-bottom: 6px solid transparent;
-        border-left: 6px solid $text-color;
-        margin-left: -3px;
-        transition: 0.3s ease transform;
-      }
-      &.expand:after {
-        transform: rotate(90deg);
-      }
+  }
+  .triangle {
+    width: 24px;
+    height: 24px;
+    border-radius: 15%;
+    position: relative;
+    margin: 0px 8px;
+    &:after {
+      content: '';
+      position: absolute;
+      display: block;
+      left: 50%;
+      top: 50%;
+      margin-top: -6px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid $text-color;
+      margin-left: -3px;
+      transition: 0.3s ease transform;
+    }
+    &.expand:after {
+      transform: rotate(90deg);
     }
   }
 

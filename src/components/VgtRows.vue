@@ -28,13 +28,13 @@
                             />
                         </th>
                         <td
-                            @click="onCellClicked(row, column, index, $event)"
                             v-for="(column, i) in columns"
                             :key="i"
                             :class="getClasses(i, 'td', row)"
                             v-if="!column.hidden && column.field"
+                            @click="columnCollapsable(i) ? toggleExpand(): onCellClicked(row, column, index, $event)"
                         >
-                            <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+                            <span v-if="columnCollapsable(i) && row.children && row.children.length" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"></span>
                             <slot
                             name="table-row"
                             :row="row"
@@ -111,6 +111,16 @@ export default {
         onCellClicked: {},
     },
     methods: {
+        columnCollapsable: function (currentIndex) {
+        if (this.groupOptions.collapsable === true) {
+            return currentIndex === 0;
+        }
+        return currentIndex === this.groupOptions.collapsable;
+        },
+
+        toggleExpand() {
+            this.$set(this.row, "vgtIsExpanded", !this.row.vgtIsExpanded)
+        },
     }
 }
 </script>
