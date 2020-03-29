@@ -22,6 +22,8 @@
                             @click.stop="onCheckboxClicked(row, index, $event)"
                             class="vgt-checkbox-col"
                         >
+                            <span v-if="columnCollapsable(-1) && hasChildren" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"
+                                @click="columnCollapsable(-1) ? toggleExpand(): onCellClicked(row, column, index, $event)"></span>
                             <input
                             type="checkbox"
                             :checked="row.vgtSelected"
@@ -34,6 +36,7 @@
                             v-if="!column.hidden && column.field"
                             @click="columnCollapsable(i) ? toggleExpand(): onCellClicked(row, column, index, $event)"
                         >
+                            {{ groupOptions.collapsable }}
                             <span v-if="columnCollapsable(i) && hasChildren" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"></span>
                             <slot
                             name="table-row"

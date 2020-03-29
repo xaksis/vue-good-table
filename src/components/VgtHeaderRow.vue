@@ -24,6 +24,8 @@
     class="vgt-row-header"
     @click.stop="onCheckboxClicked(headerRow, 0, $event)"
     v-if="headerRow.mode !== 'span' && selectable">
+    <span v-if="columnCollapsable(-1)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"
+      @click="columnCollapsable(-1) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}"></span>
     <input
     type="checkbox"
     :checked="headerRow.vgtSelected"
