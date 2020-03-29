@@ -22,7 +22,13 @@
     v-if="headerRow.mode !== 'span' && lineNumbers"></th>
   <th
     class="vgt-row-header"
-    v-if="headerRow.mode !== 'span' && selectable"></th>
+    @click.stop="onCheckboxClicked(headerRow, 0, $event)"
+    v-if="headerRow.mode !== 'span' && selectable">
+    <input
+    type="checkbox"
+    :checked="headerRow.vgtSelected"
+    />
+  </th>
   <th
     v-if="headerRow.mode !== 'span' && !column.hidden"
     v-for="(column, i) in columns"
@@ -77,6 +83,9 @@ export default {
     },
     fullColspan: {
       type: Number,
+    },
+    onCheckboxClicked: {
+      type: Function,
     },
   },
   data() {
