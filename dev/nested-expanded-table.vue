@@ -15,6 +15,9 @@
       headerPosition: 'top',
       collapsable: -1
     }"
+    :sort-options="{
+      depthLevel: 0
+    }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
   ></vue-good-table>

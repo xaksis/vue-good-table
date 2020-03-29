@@ -346,6 +346,7 @@ export default {
         return {
           enabled: true,
           initialSortBy: {},
+          depthLevel: 1
         };
       },
     },
@@ -741,33 +742,7 @@ export default {
       }
       if (this.sorts.length) {
         //* we need to sort
-        computedRows.forEach((cRows) => {
-          cRows.children.sort((xRow, yRow) => {
-            //* we need to get column for each sort
-            let sortValue;
-            for (let i = 0; i < this.sorts.length; i += 1) {
-              const column = this.getColumnForField(this.sorts[i].field);
-              const xvalue = this.collect(xRow, this.sorts[i].field);
-              const yvalue = this.collect(yRow, this.sorts[i].field);
-
-              //* if a custom sort function has been provided we use that
-              const { sortFn } = column;
-              if (sortFn && typeof sortFn === 'function') {
-                sortValue =
-                  sortValue ||
-                  sortFn(xvalue, yvalue, column, xRow, yRow) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
-              } else {
-                //* else we use our own sort
-                sortValue =
-                  sortValue ||
-                  column.typeDef.compare(xvalue, yvalue, column) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
-              }
-            }
-            return sortValue;
-          });
-        });
+        this.recursiveSort(computedRows, this.sortOptions.depthLevel === undefined ? 1 : this.sortOptions.depthLevel  );
       }
 
       // if the filtering is event based, we need to maintain filter
@@ -778,7 +753,7 @@ export default {
 
       return computedRows;
     },
-
+    
     paginated() {
       if (!this.processedRows.length) return [];
 
@@ -1485,6 +1460,40 @@ export default {
 
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
+      }
+    },
+
+    sorting(xRow, yRow)  {
+      //* we need to get column for each sort
+      let sortValue;
+      for (let i = 0; i < this.sorts.length; i += 1) {
+        const column = this.getColumnForField(this.sorts[i].field);
+        const xvalue = this.collect(xRow, this.sorts[i].field);
+        const yvalue = this.collect(yRow, this.sorts[i].field);
+
+        //* if a custom sort function has been provided we use that
+        const { sortFn } = column;
+        if (sortFn && typeof sortFn === 'function') {
+          sortValue =
+            sortValue ||
+            sortFn(xvalue, yvalue, column, xRow, yRow) *
+              (this.sorts[i].type === 'desc' ? -1 : 1);
+        } else {
+          //* else we use our own sort
+          sortValue =
+            sortValue ||
+            column.typeDef.compare(xvalue, yvalue, column) *
+              (this.sorts[i].type === 'desc' ? -1 : 1);
+        }
+      }
+      return sortValue;
+    },
+
+    recursiveSort(rows, depthLevelRemaining) {
+      if (depthLevelRemaining && rows[0].children) {
+        rows.forEach((row) => this.recursiveSort(row.children, --depthLevelRemaining));
+      } else {
+        rows.sort(this.sorting);
       }
     },
 
