@@ -36,7 +36,6 @@
                             v-if="!column.hidden && column.field"
                             @click="columnCollapsable(i) ? toggleExpand(): onCellClicked(row, column, index, $event)"
                         >
-                            {{ groupOptions.collapsable }}
                             <span v-if="columnCollapsable(i) && hasChildren" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"></span>
                             <slot
                             name="table-row"
