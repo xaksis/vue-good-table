@@ -814,7 +814,7 @@ export default {
         const i = headerRow.vgt_header_id;
         const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
-          const newHeaderRow = cloneDeep(headerRow);
+          const newHeaderRow = headerRow;
           newHeaderRow.children = children;
           reconstructedRows.push(newHeaderRow);
         }
@@ -912,15 +912,18 @@ export default {
         selectedRows: this.selectedRows,
       });
     },
+    
+    recursiveSelect(rows, newValue) {
+      each(rows, (row) => {
+        this.$set(row, 'vgtSelected', newValue);
+        row.children && this.recursiveSelect(row.children, newValue);
+      });
+    },
 
     unselectAllInternal(forceAll) {
       const rows =
         this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-      each(rows, (headerRow, i) => {
-        each(headerRow.children, (row, j) => {
-          this.$set(row, 'vgtSelected', false);
-        });
-      });
+      this.recursiveSelect(rows, false)
       this.emitSelectedRows();
     },
 
@@ -930,11 +933,7 @@ export default {
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
-      each(rows, (headerRow) => {
-        each(headerRow.children, (row) => {
-          this.$set(row, 'vgtSelected', true);
-        });
-      });
+      this.recursiveSelect(rows, true)
       this.emitSelectedRows();
     },
 
