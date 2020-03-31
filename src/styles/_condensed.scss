@@ -1,5 +1,8 @@
 .vgt-table{
-  &.condensed td, &.condensed th.vgt-row-header{
+  &.condensed td:not(.table-container), &.condensed th.vgt-row-header{
     padding: .4em .4em .4em .4em;
+  }
+  .table-container {
+    padding: 0px;
   }
 }

@@ -1,8 +1,11 @@
 .vgt-table{
-  &.bordered td, &.bordered th {
+  &.bordered td:not(.table-container), &.bordered th {
       border: 1px solid $border-color;
   }
   &.bordered th.vgt-row-header{
     border-bottom: 3px solid $border-color;
+  }
+  .table-container {
+    border: 0px;
   }
 }

@@ -1,6 +1,6 @@
 <template>
     <tr v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true">
-        <td :colspan="fullColspan">
+        <td :colspan="fullColspan" class="table-container">
             <table :class="tableStyleClasses">
                 <tbody>
                     <tr
@@ -65,6 +65,7 @@
                         :groupOptions="groupOptions"
                         :getRowStyleClass="getRowStyleClass"
                         :getClasses="getClasses"
+                        :tableStyleClasses="tableStyleClasses"
                         :lineNumbers="lineNumbers"
                         :selectable="selectable"
                         :columns="columns"
