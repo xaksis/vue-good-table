@@ -2,7 +2,10 @@
   <vue-good-table
     :columns="columns"
     :rows="rows"
-    :select-options="{enabled: true}"
+    :select-options="{
+      enabled: true,
+      selectOnCheckboxOnly: true
+    }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
     @on-row-mouseenter="onMouseover"

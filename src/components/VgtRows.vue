@@ -19,14 +19,14 @@
                         </th>
                         <th
                             v-if="selectable"
-                            @click.stop="onCheckboxClicked(row, index, $event)"
                             class="vgt-checkbox-col"
                         >
                             <span v-if="columnCollapsable(-1) && hasChildren" class="triangle" :class="{ 'expand': row.vgtIsExpanded }"
                                 @click="columnCollapsable(-1) ? toggleExpand(): onCellClicked(row, column, index, $event)"></span>
                             <input
-                            type="checkbox"
-                            :checked="row.vgtSelected"
+                                type="checkbox"
+                                @click="onCheckboxClicked(row, index, $event)"
+                                :checked="row.vgtSelected"
                             />
                         </th>
                         <td
