@@ -14,5 +14,11 @@
       margin-right:  5px;
       margin-left:  0px;
     }
+
+    th.sortable:after, 
+    th.sortable:before {
+      right: inherit;
+      left: 6px;
+    }
   }
 }
