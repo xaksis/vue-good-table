@@ -173,3 +173,6 @@ To expand/collapse all you can use the method called `expandAll` or `collapseAll
 this.$refs.myCustomTable.expandAll();
 this.$refs.myCustomTable.collapseAll();
 ```
+
+* **Live Demo:** https://jsfiddle.net/nb6fcqs7
+
