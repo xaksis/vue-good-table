@@ -104,10 +104,12 @@ export default {
     reset(emitEvent = false) {
       this.columnFilters = {};
 
-      // Clear the selection in the multiselect
-      this.$refs['vgt-multiselect'].forEach((ref) => {
-        ref.clearSelection();
-      });
+      let vSelect = this.$refs && this.$refs['vgt-multiselect'];
+      if (vSelect) {
+        vSelect.forEach((ref) => {
+          ref.clearSelection();
+        });
+      }
 
       if (emitEvent) {
         this.$emit('filter-changed', this.columnFilters);
