@@ -15,7 +15,7 @@ table.vgt-table{
   & tr.clickable {
     cursor: pointer;
     &:hover{
-      background-color: $highlight-color !important;
+      background-color: $highlight-color;
     }
   }
 }
