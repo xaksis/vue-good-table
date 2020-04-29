@@ -66,7 +66,7 @@ export default {
           mode: 'span',
           diet: '',
           count: '',
-          children: [
+          episodes: [
             { name: 'Elephant', diet: 'herbivore', count: 5 },
             { name: 'Cat', diet: 'carnivore', count: 28 },
             { name: 'Dog', diet: 'omnivore', count: 12 },
@@ -77,7 +77,7 @@ export default {
           name: 'Reptile Total',
           diet: '',
           count: '',
-          children: [
+          episodes: [
             { name: 'Snake', diet: 'carnivore', count: 40 },
             { name: 'lizard', diet: 'insectivore', count: 34 },
             { name: 'crocodile', diet: 'carnivore', count: 22 },
@@ -88,7 +88,7 @@ export default {
           name: 'Fish Total',
           diet: '',
           count: '',
-          children: [
+          episodes: [
             { name: 'Shark', diet: 'carnivore', count: 2 },
             { name: 'koi', diet: 'omnivore', count: 14 },
             { name: 'guppy', diet: 'omnivore', count: 35 },
