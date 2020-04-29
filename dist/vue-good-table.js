@@ -13803,7 +13803,8 @@
       groupOptions: {
         "default": function _default() {
           return {
-            enabled: false
+            enabled: false,
+            mode: ''
           };
         }
       },
@@ -14896,7 +14897,8 @@
             clearSelectionText = _this$selectOptions.clearSelectionText,
             selectOnCheckboxOnly = _this$selectOptions.selectOnCheckboxOnly,
             selectAllByPage = _this$selectOptions.selectAllByPage,
-            disableSelectInfo = _this$selectOptions.disableSelectInfo;
+            disableSelectInfo = _this$selectOptions.disableSelectInfo,
+            selectAllByGroup = _this$selectOptions.selectAllByGroup;
 
         if (typeof enabled === 'boolean') {
           this.selectable = enabled;
@@ -14909,6 +14911,8 @@
         if (typeof selectAllByPage === 'boolean') {
           this.selectAllByPage = selectAllByPage;
         }
+
+        this.selectAllByGroup = Boolean(selectAllByGroup);
 
         if (typeof disableSelectInfo === 'boolean') {
           this.disableSelectInfo = disableSelectInfo;
@@ -15203,10 +15207,17 @@
           "columns": _vm.columns,
           "line-numbers": _vm.lineNumbers,
           "selectable": _vm.selectable,
+          "select-all-by-group": _vm.selectAllByGroup,
           "collect-formatted": _vm.collectFormatted,
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
-          "full-colspan": _vm.fullColspan
+          "full-colspan": _vm.fullColspan,
+          "groupIndex": index
+        },
+        on: {
+          "on-select-group-change": function onSelectGroupChange($event) {
+            return _vm.toggleSelectGroup($event, headerRow);
+          }
         },
         scopedSlots: _vm._u([{
           key: "table-header-row",

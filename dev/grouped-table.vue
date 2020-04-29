@@ -6,7 +6,10 @@
     :columns="columns"
     :rows="rows"
     :line-numbers="true"
-    :select-options="{enabled: true}"
+    :select-options="{
+      enabled: true,
+      selectAllByGroup: true
+    }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
     @on-row-mouseenter="onMouseover"
@@ -113,7 +116,7 @@ export default {
       console.log(params);
     },
     sumCount(rowObj) {
-      return rowObj.children.reduce((a, b) => a + (b.count || 0), 0);
+      return rowObj.episodes.reduce((a, b) => a + (b.count || 0), 0);
     }
   },
   mounted() {

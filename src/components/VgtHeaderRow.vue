@@ -144,7 +144,9 @@ export default {
       return currentIndex === this.collapsable;
     },
     toggleSelectGroup(event) {
-      this.$emit('on-select-group-change', {groupIndex: this.groupIndex, checked: event.target.checked});
+      this.$emit('on-select-group-change', {
+        groupIndex: this.groupIndex, checked: event.target.checked
+      });
     }
   },
   mounted() {
