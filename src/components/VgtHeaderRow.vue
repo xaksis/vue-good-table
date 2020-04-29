@@ -5,6 +5,17 @@
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
     @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+    <template v-if="selectAllByGroup">
+      <slot name="table-header-group-select"
+        :columns="columns"
+        :row="headerRow"
+      >
+        <input
+          type="checkbox"
+          :checked="allSelected"
+          @change="toggleSelectGroup($event)" />
+      </slot>
+    </template>
     <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
@@ -22,7 +33,20 @@
     v-if="headerRow.mode !== 'span' && lineNumbers"></th>
   <th
     class="vgt-row-header"
-    v-if="headerRow.mode !== 'span' && selectable"></th>
+    v-if="headerRow.mode !== 'span' && selectable">
+    <template v-if="selectAllByGroup"
+    >
+      <slot name="table-header-group-select"
+        :columns="columns"
+        :row="headerRow"
+      >
+        <input
+          type="checkbox"
+          :checked="allSelected"
+          @change="toggleSelectGroup($event)" />
+      </slot>
+    </template>
+  </th>
   <th
     v-if="headerRow.mode !== 'span' && !column.hidden"
     v-for="(column, i) in columns"
@@ -62,6 +86,9 @@ export default {
     selectable: {
       type: Boolean,
     },
+    selectAllByGroup: {
+      type: Boolean
+    },
     collapsable: {
       type: [Boolean, Number],
       default: false,
@@ -78,12 +105,22 @@ export default {
     fullColspan: {
       type: Number,
     },
+    groupIndex: {
+      type: Number
+    },
+    groupOptions: {
+      type: Object
+    }
   },
   data() {
     return {
     };
   },
   computed: {
+    allSelected() {
+      const { headerRow, groupChildObject } = this;
+      return headerRow.children.filter((row) => row.vgtSelected).length === headerRow.children.length;
+    }
   },
   methods: {
     columnCollapsable(currentIndex) {
@@ -92,7 +129,13 @@ export default {
       }
       return currentIndex === this.collapsable;
     },
+    toggleSelectGroup(event) {
+      this.$emit('on-select-group-change', {
+        groupIndex: this.groupIndex, checked: event.target.checked
+      });
+    }
   },
+  
   mounted() {
   },
   components: {
