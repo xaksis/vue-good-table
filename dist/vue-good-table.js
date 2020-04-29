@@ -14377,6 +14377,14 @@
         });
         this.emitSelectedRows();
       },
+      toggleSelectGroup: function toggleSelectGroup(event, headerRow) {
+        var _this6 = this;
+
+        var groupChildObject = this.groupChildObject;
+        lodash_foreach(headerRow[groupChildObject], function (row) {
+          _this6.$set(row, 'vgtSelected', event.checked);
+        });
+      },
       changePage: function changePage(value) {
         if (this.paginationOptions.enabled) {
           var paginationWidget = this.$refs.paginationBottom;
@@ -14642,7 +14650,7 @@
       },
       // method to filter rows
       filterRows: function filterRows(columnFilters) {
-        var _this6 = this;
+        var _this7 = this;
 
         var fromFilter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
         // if (!this.rows.length) return;
@@ -14684,17 +14692,17 @@
           }
 
           var _loop = function _loop(i) {
-            var col = _this6.typedColumns[i];
+            var col = _this7.typedColumns[i];
 
-            if (_this6.columnFilters[col.field]) {
+            if (_this7.columnFilters[col.field]) {
               computedRows = lodash_foreach(computedRows, function (headerRow) {
                 var newChildren = headerRow[groupChildObject].filter(function (row) {
                   // If column has a custom filter, use that.
                   if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
-                    return col.filterOptions.filterFn(_this6.collect(row, col.field), _this6.columnFilters[col.field]);
+                    return col.filterOptions.filterFn(_this7.collect(row, col.field), _this7.columnFilters[col.field]);
                   }
 
-                  var filterMultiselect = _this6.filterMultiselectItems(col, row);
+                  var filterMultiselect = _this7.filterMultiselectItems(col, row);
 
                   if (filterMultiselect !== undefined) {
                     return filterMultiselect;
@@ -14702,7 +14710,7 @@
 
 
                   var typeDef = col.typeDef;
-                  return typeDef.filterPredicate(_this6.collect(row, col.field), _this6.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
+                  return typeDef.filterPredicate(_this7.collect(row, col.field), _this7.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
                 }); // should we remove the header?
 
                 headerRow[groupChildObject] = newChildren;
@@ -14753,7 +14761,7 @@
         }).hidden = !value.checked;
       },
       initializePagination: function initializePagination() {
-        var _this7 = this;
+        var _this8 = this;
 
         var _this$paginationOptio = this.paginationOptions,
             enabled = _this$paginationOptio.enabled,
@@ -14831,7 +14839,7 @@
 
         if (typeof setCurrentPage === 'number') {
           setTimeout(function () {
-            _this7.changePage(setCurrentPage);
+            _this8.changePage(setCurrentPage);
           }, 500);
         }
       },
@@ -15124,11 +15132,17 @@
           "collect-formatted": _vm.collectFormatted,
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
-          "full-colspan": _vm.fullColspan
+          "full-colspan": _vm.fullColspan,
+          "groupIndex": index,
+          "groupOptions": _vm.groupOptions,
+          "groupChildObject": _vm.groupChildObject
         },
         on: {
           "vgtExpand": function vgtExpand($event) {
             return _vm.toggleExpand(index);
+          },
+          "on-select-group-change": function onSelectGroupChange($event) {
+            return _vm.toggleSelectGroup($event, headerRow);
           }
         },
         scopedSlots: _vm._u([{
@@ -15212,7 +15226,9 @@
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
           "full-colspan": _vm.fullColspan,
-          "groupIndex": index
+          "groupIndex": index,
+          "groupOptions": _vm.groupOptions,
+          "groupChildObject": _vm.groupChildObject
         },
         on: {
           "on-select-group-change": function onSelectGroupChange($event) {
