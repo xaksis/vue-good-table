@@ -142,7 +142,7 @@ export default {
         return currentIndex === 0;
       }
       return currentIndex === this.collapsable;
-    }
+    },
     toggleSelectGroup(event) {
       this.$emit('on-select-group-change', {groupIndex: this.groupIndex, checked: event.target.checked});
     }
