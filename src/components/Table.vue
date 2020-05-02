@@ -420,7 +420,15 @@ export default {
         };
       },
     },
+
+    columnFilterOptions: {
+      default() {
+        return {
+          enabled: false,
+        };
       },
+    },
+  },
 
   data: () => ({
     // loading state for remote mode
@@ -538,7 +546,15 @@ export default {
         });
       }
     },
+
+    columnFilterOptions: {
+      handler() {
+        this.initializeColumnFilter();
       },
+      deep: true,
+      immediate: true,
+    },
+  },
 
   computed: {
     hasFooterSlot() {
@@ -1563,14 +1579,17 @@ export default {
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
+
+      initializeColumnFilter
     },
 
-    // initializeColumns() {
-    //   // take care of default sort on mount
-    //   if (this.defaultSortBy) {
-    //     this.handleDefaultSort();
-    //   }
-    // },
+    initializeColumnFilter() {
+      const { enabled } = this.columnFilterOptions;
+
+      if (typeof enabled === 'boolean') {
+        this.columnFilterEnabled = enabled;
+      }
+    }
   },
 
   mounted() {

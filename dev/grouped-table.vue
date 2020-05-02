@@ -24,6 +24,9 @@
       mode: 'span',
       customChildObject: 'episodes'
     }"
+    :column-filter-options="{
+        enabled: true
+    }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
   >
@@ -62,6 +65,13 @@ export default {
           headerField: this.sumCount,
           type: 'number',
         },
+        {
+          label: 'Date',
+          field: 'date',
+          type: 'date',
+          dateInputFormat: 'yyyy-MM-dd\'T\'HH:mm:ssXXX',
+          dateOutputFormat: 'yyyy-MM-dd\'T\'HH:mm:ssXXX',
+        }
       ],
       rows: [
         {
@@ -70,10 +80,10 @@ export default {
           diet: '',
           count: '',
           episodes: [
-            { name: 'Elephant', diet: 'herbivore', count: 5 },
-            { name: 'Cat', diet: 'carnivore', count: 28 },
-            { name: 'Dog', diet: 'omnivore', count: 12 },
-            { name: 'Dolphin', diet: 'carnivore', count: 9 },
+            { name: 'Elephant', diet: 'herbivore', count: 5, date: '2020-02-29T03:00:00+01:00' },
+            { name: 'Cat', diet: 'carnivore', count: 28, date: null },
+            { name: 'Dog', diet: 'omnivore', count: 12, date: '2020-01-02T03:00:00+01:00' },
+            { name: 'Dolphin', diet: 'carnivore', count: 9, date: '2020-01-29T03:00:00+01:00' },
           ],
         },
         {
@@ -81,10 +91,10 @@ export default {
           diet: '',
           count: '',
           episodes: [
-            { name: 'Snake', diet: 'carnivore', count: 40 },
-            { name: 'lizard', diet: 'insectivore', count: 34 },
-            { name: 'crocodile', diet: 'carnivore', count: 22 },
-            { name: 'turtles', diet: 'herbivore', count: 29 },
+            { name: 'Snake', diet: 'carnivore', count: 40, date: '2019-01-29T03:00:00+01:00' },
+            { name: 'lizard', diet: 'insectivore', count: 34, date: '2018-01-29T03:00:00+01:00' },
+            { name: 'crocodile', diet: 'carnivore', count: 22, date: '2016-01-29T03:00:00+01:00' },
+            { name: 'turtles', diet: 'herbivore', count: 29, date: '2016-01-28T03:00:00+01:00' },
           ],
         },
         {
@@ -92,9 +102,9 @@ export default {
           diet: '',
           count: '',
           episodes: [
-            { name: 'Shark', diet: 'carnivore', count: 2 },
-            { name: 'koi', diet: 'omnivore', count: 14 },
-            { name: 'guppy', diet: 'omnivore', count: 35 },
+            { name: 'Shark', diet: 'carnivore', count: 2, date: '2020-04-29T03:00:00+01:00' },
+            { name: 'koi', diet: 'omnivore', count: 14, date: '2020-03-29T03:00:00+01:00' },
+            { name: 'guppy', diet: 'omnivore', count: 35, date: '2020-02-29T03:00:00+01:00' },
           ],
         },
       ],
