@@ -14945,8 +14945,6 @@ var script$7 = {
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
-
-      initializeColumnFilter;
     },
     initializeColumnFilter: function initializeColumnFilter() {
       var enabled = this.columnFilterOptions.enabled;

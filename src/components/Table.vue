@@ -1579,8 +1579,6 @@ export default {
       if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
-
-      initializeColumnFilter
     },
 
     initializeColumnFilter() {
