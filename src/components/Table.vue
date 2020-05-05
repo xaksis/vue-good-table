@@ -126,6 +126,7 @@
             :mode="mode"
             :sortable="sortable"
             :typed-columns="typedColumns"
+            :class="getRowStyleClass(headerRow)"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
           >
