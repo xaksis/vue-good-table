@@ -158,6 +158,7 @@
               :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
+              :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
@@ -345,6 +346,9 @@ export default {
       default() {
         return {
           enabled: false,
+          collapsable: false,
+          maintainExpanded: false,
+          rowKey: null
         };
       },
     },
@@ -418,6 +422,9 @@ export default {
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
+
+    // keys for rows that are currently expanded
+    expandedRowKeys: new Set(),
 
     // internal sort options
     sortable: true,
@@ -894,17 +901,26 @@ export default {
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
+      if (this.groupOptions.maintainExpanded && headerRow.vgtIsExpanded) {
+        this.expandedRowKeys.add(headerRow[this.groupOptions.rowKey]);
+      } else {
+        this.expandedRowKeys.delete(headerRow[this.groupOptions.rowKey]);
+      }
     },
 
     expandAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
+        if (this.groupOptions.maintainExpanded) {
+          this.expandedRowKeys.add(row[this.groupOptions.rowKey]);
+        }
       });
     },
 
     collapseAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', false);
+        this.expandedRowKeys.clear();
       });
     },
 
@@ -1324,6 +1340,12 @@ export default {
     handleGrouped(originalRows) {
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
+        if (
+          this.groupOptions.maintainExpanded &&
+          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
+        ) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        }
         each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });

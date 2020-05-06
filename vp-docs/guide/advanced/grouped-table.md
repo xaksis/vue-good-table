@@ -174,5 +174,24 @@ this.$refs.myCustomTable.expandAll();
 this.$refs.myCustomTable.collapseAll();
 ```
 
+### Maintaining Expanded Rows
+
+If you make alterations to the data being passed into the rows on the table, such as adding or removing a row, all of your groupings will be collapsed by default. 
+Inside of `groupOptions`, add an attribute of `maintainExpanded: true` so that the expanded rows will stay expanded after 
+changes to the row data. Additionally you must provide the `rowKey` attribute as a string. The `rowKey` shoud be a field on the row
+that can be used for a unique identifier, such as 'id'.  
+
+```vue
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :groupOptions="{
+    enabled: true,
+    collapsable: true,
+    maintainExpanded: true,
+    rowKey: 'id'
+  }"
+/>
+```
 * **Live Demo:** https://jsfiddle.net/nb6fcqs7
 
