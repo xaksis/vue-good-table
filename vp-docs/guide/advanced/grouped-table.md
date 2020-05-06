@@ -9,7 +9,7 @@ To create grouped rows, you need two things.
   :columns="columns"
   :rows="rows"
   :group-options="{
-  	enabled: true
+    enabled: true
   }"
 >
 </vue-good-table>
@@ -56,7 +56,7 @@ rows: [
   :columns="columns"
   :rows="rows"
   :group-options="{
-  	enabled: true,
+    enabled: true,
     headerPosition: 'bottom'
   }"
 >
@@ -194,3 +194,4 @@ that can be used for a unique identifier, such as 'id'.
 />
 ```
 * **Live Demo:** https://jsfiddle.net/nb6fcqs7
+
