@@ -346,16 +346,11 @@ export default {
       default() {
         return {
           enabled: false,
+          collapsable: false,
+          maintainExpanded: false,
+          rowKey: null
         };
       },
-    },
-
-    maintainExpanded: {
-      default() {
-        return {
-          enabled: false,
-        }
-      }
     },
 
     selectOptions: {
@@ -906,18 +901,18 @@ export default {
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
-      if (this.maintainExpanded.enabled && headerRow.vgtIsExpanded) {
-        this.expandedRowKeys.add(headerRow[this.maintainExpanded.rowKey]);
+      if (this.groupOptions.maintainExpanded && headerRow.vgtIsExpanded) {
+        this.expandedRowKeys.add(headerRow[this.groupOptions.rowKey]);
       } else {
-        this.expandedRowKeys.delete(headerRow[this.maintainExpanded.rowKey]);
+        this.expandedRowKeys.delete(headerRow[this.groupOptions.rowKey]);
       }
     },
 
     expandAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
-        if (this.maintainExpanded.enabled) {
-          this.expandedRowKeys.add(row[this.maintainExpanded.rowKey]);
+        if (this.groupOptions.maintainExpanded) {
+          this.expandedRowKeys.add(row[this.groupOptions.rowKey]);
         }
       });
     },
@@ -1346,8 +1341,8 @@ export default {
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
         if (
-          this.maintainExpanded.enabled &&
-          this.expandedRowKeys.has(headerRow[this.maintainExpanded.rowKey])
+          this.groupOptions.maintainExpanded &&
+          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
         ) {
           this.$set(headerRow, 'vgtIsExpanded', true);
         }
