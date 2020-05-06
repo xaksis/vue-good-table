@@ -126,7 +126,6 @@
             :mode="mode"
             :sortable="sortable"
             :typed-columns="typedColumns"
-            :class="getRowStyleClass(headerRow)"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
           >
@@ -159,6 +158,7 @@
               :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
+              :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
@@ -350,6 +350,14 @@ export default {
       },
     },
 
+    maintainExpanded: {
+      default() {
+        return {
+          enabled: false,
+        }
+      }
+    },
+
     selectOptions: {
       default() {
         return {
@@ -419,6 +427,9 @@ export default {
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
+
+    // keys for rows that are currently expanded
+    expandedRowKeys: new Set(),
 
     // internal sort options
     sortable: true,
@@ -895,17 +906,26 @@ export default {
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
+      if (this.maintainExpanded.enabled && headerRow.vgtIsExpanded) {
+        this.expandedRowKeys.add(headerRow[this.maintainExpanded.rowKey]);
+      } else {
+        this.expandedRowKeys.delete(headerRow[this.maintainExpanded.rowKey]);
+      }
     },
 
     expandAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
+        if (this.maintainExpanded.enabled) {
+          this.expandedRowKeys.add(row[this.maintainExpanded.rowKey]);
+        }
       });
     },
 
     collapseAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', false);
+        this.expandedRowKeys.clear();
       });
     },
 
@@ -1325,6 +1345,12 @@ export default {
     handleGrouped(originalRows) {
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
+        if (
+          this.maintainExpanded.enabled &&
+          this.expandedRowKeys.has(headerRow[this.maintainExpanded.rowKey])
+        ) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        }
         each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });
