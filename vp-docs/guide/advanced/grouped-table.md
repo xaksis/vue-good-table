@@ -177,8 +177,9 @@ this.$refs.myCustomTable.collapseAll();
 ### Maintaining Expanded Rows
 
 If you make alterations to the data being passed into the rows on the table, such as adding or removing a row, all of your groupings will be collapsed by default. 
-You can use the `maintainExpanded` option to keep the expanded state of your rows when data is changed. You must provide a field that is unique on every row as an
-identifier to the `rowKey` property in this option. 
+Inside of groupOptions, add an attribute of `maintainExpanded: true` so that the expanded rows will stay that way after 
+changes to the row data. Additionally you must provide the `rowKey` attribute as a string. The `rowKey` is an identifier that is
+unique for every row, such as an `id` field. 
 
 ```vue
 <vue-good-table
@@ -186,10 +187,8 @@ identifier to the `rowKey` property in this option.
   :rows="rows"
   :groupOptions="{
     enabled: true,
-    collapsable: true
-  }"
-  :maintain-expanded="{
-    enabled: true,
+    collapsable: true,
+    maintainExpanded: true,
     rowKey: 'id'
   }"
 />
