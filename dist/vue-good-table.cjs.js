@@ -8082,14 +8082,11 @@ var script$3 = {
   methods: {
     reset: function reset() {
       var emitEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-      this.columnFilters = {};
-      var vSelect = this.$refs && this.$refs['vgt-multiselect'];
+      this.columnFilters = {}; // Clear the selection in the multiselect
 
-      if (vSelect) {
-        vSelect.forEach(function (ref) {
-          ref.clearSelection();
-        });
-      }
+      this.$refs['vgt-multiselect'].forEach(function (ref) {
+        ref.clearSelection();
+      });
 
       if (emitEvent) {
         this.$emit('filter-changed', this.columnFilters);
@@ -8259,7 +8256,7 @@ var __vue_staticRenderFns__$3 = [];
 var __vue_inject_styles__$3 = undefined;
 /* scoped */
 
-var __vue_scope_id__$3 = "data-v-523184e9";
+var __vue_scope_id__$3 = "data-v-e735923a";
 /* module identifier */
 
 var __vue_module_identifier__$3 = undefined;
@@ -13528,13 +13525,6 @@ var script$6 = {
         };
       }
     },
-    maintainExpanded: {
-      "default": function _default() {
-        return {
-          enabled: false
-        };
-      }
-    },
     selectOptions: {
       "default": function _default() {
         return {
@@ -13600,8 +13590,6 @@ var script$6 = {
       selectionInfoClass: '',
       selectionText: 'rows selected',
       clearSelectionText: 'clear',
-      // keys for rows that are currently expanded
-      expandedRowKeys: new Set(),
       // internal sort options
       sortable: true,
       defaultSortBy: null,
@@ -14020,22 +14008,12 @@ var script$6 = {
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
-
-      if (this.maintainExpanded.enabled && headerRow.vgtIsExpanded) {
-        this.expandedRowKeys.add(headerRow[this.maintainExpanded.rowKey]);
-      } else {
-        this.expandedRowKeys["delete"](headerRow[this.maintainExpanded.rowKey]);
-      }
     },
     expandAll: function expandAll() {
       var _this2 = this;
 
       this.filteredRows.forEach(function (row) {
         _this2.$set(row, 'vgtIsExpanded', true);
-
-        if (_this2.maintainExpanded.enabled) {
-          _this2.expandedRowKeys.add(row[_this2.maintainExpanded.rowKey]);
-        }
       });
     },
     collapseAll: function collapseAll() {
@@ -14043,8 +14021,6 @@ var script$6 = {
 
       this.filteredRows.forEach(function (row) {
         _this3.$set(row, 'vgtIsExpanded', false);
-
-        _this3.expandedRowKeys.clear();
       });
     },
     getColumnForField: function getColumnForField(field) {
@@ -14472,15 +14448,8 @@ var script$6 = {
       return classes;
     },
     handleGrouped: function handleGrouped(originalRows) {
-      var _this7 = this;
-
       lodash_foreach(originalRows, function (headerRow, i) {
         headerRow.vgt_header_id = i;
-
-        if (_this7.maintainExpanded.enabled && _this7.expandedRowKeys.has(headerRow[_this7.maintainExpanded.rowKey])) {
-          _this7.$set(headerRow, 'vgtIsExpanded', true);
-        }
-
         lodash_foreach(headerRow.children, function (childRow) {
           childRow.vgt_id = i;
         });
@@ -14488,7 +14457,7 @@ var script$6 = {
       return originalRows;
     },
     initializePagination: function initializePagination() {
-      var _this8 = this;
+      var _this7 = this;
 
       var _this$paginationOptio = this.paginationOptions,
           enabled = _this$paginationOptio.enabled,
@@ -14566,7 +14535,7 @@ var script$6 = {
 
       if (typeof setCurrentPage === 'number') {
         setTimeout(function () {
-          _this8.changePage(setCurrentPage);
+          _this7.changePage(setCurrentPage);
         }, 500);
       }
     },
@@ -14831,7 +14800,6 @@ var __vue_render__$6 = function __vue_render__() {
     return _c('tbody', {
       key: index
     }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
-      "class": _vm.getRowStyleClass(headerRow),
       attrs: {
         "header-row": headerRow,
         "columns": _vm.columns,
