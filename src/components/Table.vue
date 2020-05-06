@@ -876,7 +876,7 @@ export default {
               hRow = cloneDeep(hRow);
               hRow.children = [];
               reconstructedRows.push(hRow);
-            }
+        }
           }
           hRow.children.push(flatRow);
         }
@@ -1385,6 +1385,12 @@ export default {
     handleGrouped(originalRows) {
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
+        if (
+          this.groupOptions.maintainExpanded &&
+          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
+        ) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        }
         each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });
