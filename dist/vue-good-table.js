@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.19.1
+ * vue-good-table v2.19.2
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8084,11 +8084,14 @@
     methods: {
       reset: function reset() {
         var emitEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        this.columnFilters = {}; // Clear the selection in the multiselect
+        this.columnFilters = {};
+        var vSelect = this.$refs && this.$refs['vgt-multiselect'];
 
-        this.$refs['vgt-multiselect'].forEach(function (ref) {
-          ref.clearSelection();
-        });
+        if (vSelect) {
+          vSelect.forEach(function (ref) {
+            ref.clearSelection();
+          });
+        }
 
         if (emitEvent) {
           this.$emit('filter-changed', this.columnFilters);
@@ -8258,7 +8261,7 @@
   var __vue_inject_styles__$3 = undefined;
   /* scoped */
 
-  var __vue_scope_id__$3 = "data-v-e735923a";
+  var __vue_scope_id__$3 = "data-v-71fd6521";
   /* module identifier */
 
   var __vue_module_identifier__$3 = undefined;
@@ -13523,7 +13526,8 @@
       groupOptions: {
         "default": function _default() {
           return {
-            enabled: false
+            enabled: false,
+            collapsable: false
           };
         }
       },
@@ -13592,6 +13596,9 @@
         selectionInfoClass: '',
         selectionText: 'rows selected',
         clearSelectionText: 'clear',
+        // keys for rows that are currently expanded
+        maintainExpanded: true,
+        expandedRowKeys: new Set(),
         // internal sort options
         sortable: true,
         defaultSortBy: null,
@@ -13917,17 +13924,22 @@
         return computedRows;
       },
       paginated: function paginated() {
+        var _this2 = this;
+
         if (!this.processedRows.length) return [];
 
         if (this.mode === 'remote') {
           return this.processedRows;
         } // for every group, extract the child rows
         // to cater to paging
+        //* flatten the rows for paging.
 
 
         var paginatedRows = [];
         lodash_foreach(this.processedRows, function (childRows) {
           var _paginatedRows;
+
+          paginatedRows.push(childRows);
 
           (_paginatedRows = paginatedRows).push.apply(_paginatedRows, _toConsumableArray(childRows.children));
         });
@@ -13954,14 +13966,33 @@
 
 
         var reconstructedRows = [];
-        lodash_foreach(this.processedRows, function (headerRow) {
-          var i = headerRow.vgt_header_id;
-          var children = lodash_filter(paginatedRows, ['vgt_id', i]);
+        paginatedRows.forEach(function (flatRow) {
+          //* header row?
+          if (flatRow.vgt_header_id !== undefined) {
+            _this2.handleExpanded(flatRow);
 
-          if (children.length) {
-            var newHeaderRow = lodash_clonedeep(headerRow);
-            newHeaderRow.children = children;
+            var newHeaderRow = lodash_clonedeep(flatRow);
+            newHeaderRow.children = [];
             reconstructedRows.push(newHeaderRow);
+          } else {
+            //* child row
+            var hRow = reconstructedRows.find(function (r) {
+              return r.vgt_header_id === flatRow.vgt_id;
+            });
+
+            if (!hRow) {
+              hRow = _this2.processedRows.find(function (r) {
+                return r.vgt_header_id === flatRow.vgt_id;
+              });
+
+              if (hRow) {
+                hRow = lodash_clonedeep(hRow);
+                hRow.children = [];
+                reconstructedRows.push(hRow);
+              }
+            }
+
+            hRow.children.push(flatRow);
           }
         });
         return reconstructedRows;
@@ -14004,25 +14035,48 @@
       }
     },
     methods: {
+      //* we need to check for expanded row state here
+      //* to maintain it when sorting/filtering
+      handleExpanded: function handleExpanded(headerRow) {
+        if (this.maintainExpanded && this.expandedRowKeys.has(headerRow.vgt_header_id)) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        } else {
+          this.$set(headerRow, 'vgtIsExpanded', false);
+        }
+      },
       toggleExpand: function toggleExpand(index) {
-        var headerRow = this.filteredRows[index];
+        var headerRow = this.filteredRows.find(function (r) {
+          return r.vgt_header_id === index;
+        });
 
         if (headerRow) {
           this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
         }
+
+        if (this.maintainExpanded && headerRow.vgtIsExpanded) {
+          this.expandedRowKeys.add(headerRow.vgt_header_id);
+        } else {
+          this.expandedRowKeys["delete"](headerRow.vgt_header_id);
+        }
       },
       expandAll: function expandAll() {
-        var _this2 = this;
-
-        this.filteredRows.forEach(function (row) {
-          _this2.$set(row, 'vgtIsExpanded', true);
-        });
-      },
-      collapseAll: function collapseAll() {
         var _this3 = this;
 
         this.filteredRows.forEach(function (row) {
-          _this3.$set(row, 'vgtIsExpanded', false);
+          _this3.$set(row, 'vgtIsExpanded', true);
+
+          if (_this3.maintainExpanded) {
+            _this3.expandedRowKeys.add(row.vgt_header_id);
+          }
+        });
+      },
+      collapseAll: function collapseAll() {
+        var _this4 = this;
+
+        this.filteredRows.forEach(function (row) {
+          _this4.$set(row, 'vgtIsExpanded', false);
+
+          _this4.expandedRowKeys.clear();
         });
       },
       getColumnForField: function getColumnForField(field) {
@@ -14055,18 +14109,18 @@
         });
       },
       unselectAllInternal: function unselectAllInternal(forceAll) {
-        var _this4 = this;
+        var _this5 = this;
 
         var rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
         lodash_foreach(rows, function (headerRow, i) {
           lodash_foreach(headerRow.children, function (row, j) {
-            _this4.$set(row, 'vgtSelected', false);
+            _this5.$set(row, 'vgtSelected', false);
           });
         });
         this.emitSelectedRows();
       },
       toggleSelectAll: function toggleSelectAll() {
-        var _this5 = this;
+        var _this6 = this;
 
         if (this.allSelected) {
           this.unselectAllInternal();
@@ -14076,7 +14130,7 @@
         var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
         lodash_foreach(rows, function (headerRow) {
           lodash_foreach(headerRow.children, function (row) {
-            _this5.$set(row, 'vgtSelected', true);
+            _this6.$set(row, 'vgtSelected', true);
           });
         });
         this.emitSelectedRows();
@@ -14355,7 +14409,7 @@
       },
       // method to filter rows
       filterRows: function filterRows(columnFilters) {
-        var _this6 = this;
+        var _this7 = this;
 
         var fromFilter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
         // if (!this.rows.length) return;
@@ -14396,17 +14450,17 @@
           }
 
           var _loop = function _loop(i) {
-            var col = _this6.typedColumns[i];
+            var col = _this7.typedColumns[i];
 
-            if (_this6.columnFilters[col.field]) {
+            if (_this7.columnFilters[col.field]) {
               computedRows = lodash_foreach(computedRows, function (headerRow) {
                 var newChildren = headerRow.children.filter(function (row) {
                   // If column has a custom filter, use that.
                   if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
-                    return col.filterOptions.filterFn(_this6.collect(row, col.field), _this6.columnFilters[col.field]);
+                    return col.filterOptions.filterFn(_this7.collect(row, col.field), _this7.columnFilters[col.field]);
                   }
 
-                  var filterMultiselect = _this6.filterMultiselectItems(col, row);
+                  var filterMultiselect = _this7.filterMultiselectItems(col, row);
 
                   if (filterMultiselect !== undefined) {
                     return filterMultiselect;
@@ -14414,7 +14468,7 @@
 
 
                   var typeDef = col.typeDef;
-                  return typeDef.filterPredicate(_this6.collect(row, col.field), _this6.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
+                  return typeDef.filterPredicate(_this7.collect(row, col.field), _this7.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
                 }); // should we remove the header?
 
                 headerRow.children = newChildren;
@@ -14459,7 +14513,7 @@
         return originalRows;
       },
       initializePagination: function initializePagination() {
-        var _this7 = this;
+        var _this8 = this;
 
         var _this$paginationOptio = this.paginationOptions,
             enabled = _this$paginationOptio.enabled,
@@ -14537,7 +14591,7 @@
 
         if (typeof setCurrentPage === 'number') {
           setTimeout(function () {
-            _this7.changePage(setCurrentPage);
+            _this8.changePage(setCurrentPage);
           }, 500);
         }
       },
@@ -14802,6 +14856,7 @@
       return _c('tbody', {
         key: index
       }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
+        "class": _vm.getRowStyleClass(headerRow),
         attrs: {
           "header-row": headerRow,
           "columns": _vm.columns,
@@ -14815,7 +14870,7 @@
         },
         on: {
           "vgtExpand": function vgtExpand($event) {
-            return _vm.toggleExpand(index);
+            return _vm.toggleExpand(headerRow.vgt_header_id);
           }
         },
         scopedSlots: _vm._u([{
