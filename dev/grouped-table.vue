@@ -17,7 +17,7 @@
     :group-options="{
       enabled: true,
       headerPosition: 'top',
-      collapsable: 2,
+      collapsable: true,
       maintainExpanded: true,
     }"
     styleClass="vgt-table condensed bordered"

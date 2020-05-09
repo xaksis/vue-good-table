@@ -847,11 +847,9 @@ export default {
       each(this.processedRows, (headerRow) => {
         const i = headerRow.vgt_header_id;
         const children = filter(paginatedRows, ['vgt_id', i]);
-        if (children.length) {
-          const newHeaderRow = cloneDeep(headerRow);
-          newHeaderRow.children = children;
-          reconstructedRows.push(newHeaderRow);
-        }
+        const newHeaderRow = cloneDeep(headerRow);
+        newHeaderRow.children = children;
+        reconstructedRows.push(newHeaderRow);
       });
       return reconstructedRows;
     },
