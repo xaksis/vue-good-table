@@ -64,7 +64,7 @@ export default {
     },
     collapsable: {
       type: [Boolean, Number],
-      default: false
+      default: false,
     },
     collectFormatted: {
       type: Function,
@@ -86,12 +86,12 @@ export default {
   computed: {
   },
   methods: {
-    columnCollapsable: function (currentIndex) {
+    columnCollapsable(currentIndex) {
       if (this.collapsable === true) {
         return currentIndex === 0;
       }
       return currentIndex === this.collapsable;
-    }
+    },
   },
   mounted() {
   },
