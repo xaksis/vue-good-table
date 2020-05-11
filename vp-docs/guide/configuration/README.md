@@ -16,7 +16,6 @@ Array containing objects that describe table columns. The column object itself c
     {
       label: 'Name',
       field: 'name',
-      filterable: true,
     }
     //...
 ]

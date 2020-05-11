@@ -150,7 +150,7 @@
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
-              @vgtExpand="toggleExpand(index)"
+              @vgtExpand="toggleExpand(headerRow.vgt_header_id)"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
@@ -158,6 +158,7 @@
               :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
+              :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
@@ -345,6 +346,7 @@ export default {
       default() {
         return {
           enabled: false,
+          collapsable: false,
         };
       },
     },
@@ -418,6 +420,10 @@ export default {
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
+
+    // keys for rows that are currently expanded
+    maintainExpanded: true,
+    expandedRowKeys: new Set(),
 
     // internal sort options
     sortable: true,
@@ -809,8 +815,10 @@ export default {
 
       // for every group, extract the child rows
       // to cater to paging
+      //* flatten the rows for paging.
       let paginatedRows = [];
       each(this.processedRows, (childRows) => {
+        paginatedRows.push(childRows);
         paginatedRows.push(...childRows.children);
       });
 
@@ -837,13 +845,25 @@ export default {
       }
       // reconstruct paginated rows here
       const reconstructedRows = [];
-      each(this.processedRows, (headerRow) => {
-        const i = headerRow.vgt_header_id;
-        const children = filter(paginatedRows, ['vgt_id', i]);
-        if (children.length) {
-          const newHeaderRow = cloneDeep(headerRow);
-          newHeaderRow.children = children;
+      paginatedRows.forEach((flatRow) => {
+        //* header row?
+        if (flatRow.vgt_header_id !== undefined) {
+          this.handleExpanded(flatRow);
+          const newHeaderRow = cloneDeep(flatRow);
+          newHeaderRow.children = [];
           reconstructedRows.push(newHeaderRow);
+        } else {
+          //* child row
+          let hRow = reconstructedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
+          if (!hRow) {
+            hRow = this.processedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
+            if (hRow) {
+              hRow = cloneDeep(hRow);
+              hRow.children = [];
+              reconstructedRows.push(hRow);
+            }
+          }
+          hRow.children.push(flatRow);
         }
       });
       return reconstructedRows;
@@ -889,22 +909,42 @@ export default {
   },
 
   methods: {
+    //* we need to check for expanded row state here
+    //* to maintain it when sorting/filtering
+    handleExpanded(headerRow) {
+      if (this.maintainExpanded &&
+        this.expandedRowKeys.has(headerRow.vgt_header_id)) {
+        this.$set(headerRow, 'vgtIsExpanded', true);
+      } else {
+        this.$set(headerRow, 'vgtIsExpanded', false);
+      }
+    },
     toggleExpand(index) {
-      let headerRow = this.filteredRows[index];
+      const headerRow = this.filteredRows.find(r => r.vgt_header_id === index);
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
+      }
+      if (this.maintainExpanded
+        && headerRow.vgtIsExpanded) {
+        this.expandedRowKeys.add(headerRow.vgt_header_id);
+      } else {
+        this.expandedRowKeys.delete(headerRow.vgt_header_id);
       }
     },
 
     expandAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
+        if (this.maintainExpanded) {
+          this.expandedRowKeys.add(row.vgt_header_id);
+        }
       });
     },
 
     collapseAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', false);
+        this.expandedRowKeys.clear();
       });
     },
 
@@ -1206,7 +1246,7 @@ export default {
         }
 
         // Otherwise Use default filters
-        const typeDef = column.typeDef;
+        const { typeDef } = column;
         for (let filter of columnFilters) {
           let filterLabel = filter;
           if (typeof filter === 'object') {
@@ -1508,13 +1548,6 @@ export default {
         this.clearSelectionText = clearSelectionText;
       }
     },
-
-    // initializeColumns() {
-    //   // take care of default sort on mount
-    //   if (this.defaultSortBy) {
-    //     this.handleDefaultSort();
-    //   }
-    // },
   },
 
   mounted() {
