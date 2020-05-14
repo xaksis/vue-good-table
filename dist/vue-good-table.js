@@ -7684,13 +7684,6 @@
       },
       customRowsPerPageDropdown: function customRowsPerPageDropdown() {
         this.handlePerPage();
-      },
-      total: {
-        handler: function handler(newValue, oldValue) {
-          if (this.rowsPerPageOptions.indexOf(this.currentPerPage) === -1) {
-            this.currentPerPage = newValue;
-          }
-        }
       }
     },
     computed: {
