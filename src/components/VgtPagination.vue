@@ -91,6 +91,14 @@ export default {
     customRowsPerPageDropdown() {
       this.handlePerPage();
     },
+
+    total: {
+      handler(newValue, oldValue) {
+        if(this.rowsPerPageOptions.indexOf(this.currentPerPage) === -1) {
+          this.currentPerPage = newValue;
+        }
+      }
+    }
   },
 
   computed: {
