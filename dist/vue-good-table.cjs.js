@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.19.2
+ * vue-good-table v2.19.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -7682,6 +7682,13 @@ var script$1 = {
     },
     customRowsPerPageDropdown: function customRowsPerPageDropdown() {
       this.handlePerPage();
+    },
+    total: {
+      handler: function handler(newValue, oldValue) {
+        if (this.rowsPerPageOptions.indexOf(this.currentPerPage) === -1) {
+          this.currentPerPage = newValue;
+        }
+      }
     }
   },
   computed: {
@@ -13928,16 +13935,17 @@ var script$6 = {
 
       if (this.mode === 'remote') {
         return this.processedRows;
-      } // for every group, extract the child rows
-      // to cater to paging
-      //* flatten the rows for paging.
+      } //* flatten the rows for paging.
 
 
       var paginatedRows = [];
       lodash_foreach(this.processedRows, function (childRows) {
         var _paginatedRows;
 
-        paginatedRows.push(childRows);
+        //* only add headers when group options are enabled.
+        if (_this2.groupOptions.enabled) {
+          paginatedRows.push(childRows);
+        }
 
         (_paginatedRows = paginatedRows).push.apply(_paginatedRows, _toConsumableArray(childRows.children));
       });
