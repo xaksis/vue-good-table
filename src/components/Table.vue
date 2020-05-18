@@ -813,12 +813,13 @@ export default {
         return this.processedRows;
       }
 
-      // for every group, extract the child rows
-      // to cater to paging
       //* flatten the rows for paging.
       let paginatedRows = [];
       each(this.processedRows, (childRows) => {
-        paginatedRows.push(childRows);
+        //* only add headers when group options are enabled.
+        if (this.groupOptions.enabled) {
+          paginatedRows.push(childRows);
+        }
         paginatedRows.push(...childRows.children);
       });
 
