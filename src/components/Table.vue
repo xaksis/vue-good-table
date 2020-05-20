@@ -874,7 +874,9 @@ export default {
         if (this.groupOptions.enabled) {
           paginatedRows.push(childRows);
         }
-        paginatedRows.push(...childRows[groupChildObject]
+        paginatedRows.push(...childRows[groupChildObject]);
+      });
+      
       if (this.paginate) {
         let pageStart = (this.currentPage - 1) * this.currentPerPage;
 
@@ -912,11 +914,11 @@ export default {
             hRow = this.processedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
             if (hRow) {
               hRow = cloneDeep(hRow);
-              hRow.children = [];
+              hRow[groupChildObject] = [];
               reconstructedRows.push(hRow);
             }
           }
-          hRow.children.push(flatRow);
+          hRow[groupChildObject].push(flatRow);
         }
       });
       return reconstructedRows;
