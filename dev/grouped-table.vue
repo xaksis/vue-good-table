@@ -17,6 +17,9 @@
     :search-options="{
       enabled: false,
     }"
+    :pagination-options="{
+      enabled: true,
+    }"
     :group-options="{
       enabled: true,
       headerPosition: 'top',
@@ -84,6 +87,8 @@ export default {
             { name: 'Cat', diet: 'carnivore', count: 28, date: null },
             { name: 'Dog', diet: 'omnivore', count: 12, date: '2020-01-02T03:00:00+01:00' },
             { name: 'Dolphin', diet: 'carnivore', count: 9, date: '2020-01-29T03:00:00+01:00' },
+            { name: 'Shrew', diet: 'carnivore', count: 9 },
+            { name: 'Monkey', diet: 'carnivore', count: 9 },
           ],
         },
         {
@@ -95,6 +100,7 @@ export default {
             { name: 'lizard', diet: 'insectivore', count: 34, date: '2018-01-29T03:00:00+01:00' },
             { name: 'crocodile', diet: 'carnivore', count: 22, date: '2016-01-29T03:00:00+01:00' },
             { name: 'turtles', diet: 'herbivore', count: 29, date: '2016-01-28T03:00:00+01:00' },
+            { name: 'alligator', diet: 'herbivore', count: 29 },
           ],
         },
         {

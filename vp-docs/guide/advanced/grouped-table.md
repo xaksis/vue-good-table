@@ -8,8 +8,8 @@ To create grouped rows, you need two things.
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :groupOptions="{
-  	enabled: true
+  :group-options="{
+    enabled: true
   }"
 >
 </vue-good-table>
@@ -20,12 +20,12 @@ To create grouped rows, you need two things.
 ```js
 rows: [
   {
-    mode: "span", // span means this header will span all columns
-    label: "Mammal", // this is the label that'll be used for the header
+    mode: 'span', // span means this header will span all columns
+    label: 'Mammal', // this is the label that'll be used for the header
     html: false, // if this is true, label will be rendered as html
     children: [
-      { name: "Elephant", diet: "herbivore", count: 5 },
-      { name: "Cat", diet: "carnivore", count: 28 }
+      { name: 'Elephant', diet: 'herbivore', count: 5 },
+      { name: 'Cat', diet: 'carnivore', count: 28 }
     ]
   }
 ];
@@ -38,12 +38,12 @@ rows: [
 ```javascript
 rows: [
   {
-    name: "Mammals Total", // this is the label that'll be used for the header
+    name: 'Mammals Total', // this is the label that'll be used for the header
     diet: undefined,
-    count: "", // total count will be displayed here
+    count: '', // total count will be displayed here
     children: [
-      { name: "Elephant", diet: "herbivore", count: 5 },
-      { name: "Cat", diet: "carnivore", count: 28 }
+      { name: 'Elephant', diet: 'herbivore', count: 5 },
+      { name: 'Cat', diet: 'carnivore', count: 28 }
     ]
   }
 ];
@@ -55,9 +55,9 @@ rows: [
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  :groupOptions="{
-  	enabled: true,
-    headerPosition: 'bottom',
+  :group-options="{
+    enabled: true,
+    headerPosition: 'bottom'
   }"
 >
 </vue-good-table>
@@ -80,7 +80,7 @@ In your column definition add a property, `headerField`. This is just like `fiel
 
 // in methods we define sumCount
 methods: {
-  sumCount(rowObj) {
+  sumCount: function (rowObj) {
     console.log(rowObj);
     let sum = 0;
     for (let i = 0; i < rowObj.children.length; i++) {
@@ -109,12 +109,12 @@ In this case, the header row spans across all columns
     headerPosition: 'top'
   }"
 >
-    <template slot="table-header-row" slot-scope="props">
-      <span class="my-fancy-class">
-        {{ props.row.label }}
-      </span>
-    </template>
-  </vue-good-table>
+  <template slot="table-header-row" slot-scope="props">
+    <span class="my-fancy-class">
+      {{ props.row.label }}
+    </span>
+  </template>
+</vue-good-table>
 ```
 
 <grouped-custom-span :options="{enabled: true, headerPosition: 'top'}"/>
@@ -132,15 +132,15 @@ In this case header row expects a value for each column
     headerPosition: 'top'
   }"
 >
-    <template slot="table-header-row" slot-scope="props">
-      <span v-if="props.column.field == 'action'">
-        <button class="fancy-btn">Action</button>
-      </span>
-      <span v-else>
-        {{props.formattedRow[props.column.field]}}
-      </span>
-    </template>
-  </vue-good-table>
+  <template slot="table-header-row" slot-scope="props">
+    <span v-if="props.column.field == 'action'">
+      <button class="fancy-btn">Action</button>
+    </span>
+    <span v-else>
+      {{ props.formattedRow[props.column.field] }}
+    </span>
+  </template>
+</vue-good-table>
 ```
 
 <grouped-custom :options="{enabled: true, headerPosition: 'top'}"/>
@@ -154,14 +154,14 @@ In this case header row expects a value for each column
 
 ## Collapsable Rows
 
-To allow the row to collapse and expand you can use the groupOption "collapsable". You can either pass in a boolean or a number. 
+To allow the row to collapse and expand you can use the groupOption "collapsable". You can either pass in a boolean or a number.
 If `collapsable` is set to `true` then it will default to making the first column collapsable. Alternatively, you can specify the column index number.
 ```html
 <vue-good-table
   ref="myCustomTable"
   :columns="columns"
   :rows="rows"
-  :groupOptions="{
+  :group-options="{
     enabled: true,
     collapsable: true // or column index
   }"

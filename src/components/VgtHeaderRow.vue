@@ -91,7 +91,7 @@ export default {
     },
     collapsable: {
       type: [Boolean, Number],
-      default: false
+      default: false,
     },
     selectAllByGroup: {
       type: Boolean
@@ -137,7 +137,7 @@ export default {
     }
   },
   methods: {
-    columnCollapsable: function (currentIndex) {
+    columnCollapsable(currentIndex) {
       if (this.collapsable === true) {
         return currentIndex === 0;
       }
@@ -148,6 +148,7 @@ export default {
         groupIndex: this.groupIndex, checked: event.target.checked
       });
     }
+  },
   },
   mounted() {
   },
