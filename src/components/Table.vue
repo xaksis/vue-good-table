@@ -150,7 +150,7 @@
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
-              @vgtExpand="toggleExpand(headerRow.vgt_header_id)"
+              @vgtExpand="toggleExpand(headerRow[rowKeyField])"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
@@ -347,6 +347,7 @@ export default {
         return {
           enabled: false,
           collapsable: false,
+          rowKey: null
         };
       },
     },
@@ -528,6 +529,10 @@ export default {
         overflow: 'scroll-y',
         maxHeight: this.maxHeight ? this.maxHeight : 'auto',
       };
+    },
+
+    rowKeyField() {
+      return this.groupOptions.rowKey || 'vgt_header_id';
     },
 
     hasHeaderRowTemplate() {
@@ -914,22 +919,23 @@ export default {
     //* to maintain it when sorting/filtering
     handleExpanded(headerRow) {
       if (this.maintainExpanded &&
-        this.expandedRowKeys.has(headerRow.vgt_header_id)) {
+        this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
         this.$set(headerRow, 'vgtIsExpanded', true);
       } else {
         this.$set(headerRow, 'vgtIsExpanded', false);
       }
     },
-    toggleExpand(index) {
-      const headerRow = this.filteredRows.find(r => r.vgt_header_id === index);
+    toggleExpand(id) {
+      console.log(id);
+      const headerRow = this.filteredRows.find(r => r[this.rowKeyField] === id);
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
       if (this.maintainExpanded
         && headerRow.vgtIsExpanded) {
-        this.expandedRowKeys.add(headerRow.vgt_header_id);
+        this.expandedRowKeys.add(headerRow[this.rowKeyField]);
       } else {
-        this.expandedRowKeys.delete(headerRow.vgt_header_id);
+        this.expandedRowKeys.delete(headerRow[this.rowKeyField]);
       }
     },
 
@@ -937,7 +943,7 @@ export default {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
         if (this.maintainExpanded) {
-          this.expandedRowKeys.add(row.vgt_header_id);
+          this.expandedRowKeys.add(row[this.rowKeyField]);
         }
       });
     },
