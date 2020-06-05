@@ -926,7 +926,6 @@ export default {
       }
     },
     toggleExpand(id) {
-      console.log(id);
       const headerRow = this.filteredRows.find(r => r[this.rowKeyField] === id);
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
