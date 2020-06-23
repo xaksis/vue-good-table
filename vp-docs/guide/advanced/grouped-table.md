@@ -156,6 +156,9 @@ In this case header row expects a value for each column
 
 To allow the row to collapse and expand you can use the groupOption "collapsable". You can either pass in a boolean or a number.
 If `collapsable` is set to `true` then it will default to making the first column collapsable. Alternatively, you can specify the column index number.
+If you only add new rows to your table at the end, then the expanded or collapsed state of your rows will be maintained. 
+However if you need to insert rows before the last one, you can pass in `rowKey` inside of `groupOptions` with a unique identifier for your rows. 
+The expanded and collapsed state will then be maintained. 
 ```html
 <vue-good-table
   ref="myCustomTable"
@@ -163,6 +166,7 @@ If `collapsable` is set to `true` then it will default to making the first colum
   :rows="rows"
   :group-options="{
     enabled: true,
+    rowKey="id"
     collapsable: true // or column index
   }"
 >
