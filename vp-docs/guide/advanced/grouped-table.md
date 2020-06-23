@@ -2,7 +2,7 @@
 
 To create grouped rows, you need two things.
 
-#### 1. Add groupOptions to table component
+#### 1. Add group-options to table component
 
 ```html
 <vue-good-table
@@ -49,7 +49,7 @@ rows: [
 ];
 ```
 
-#### 4. If you want the header/summary row to show up at the bottom of the group, you can specify that in the groupOptions property of the table.
+#### 4. If you want the header/summary row to show up at the bottom of the group, you can specify that in the group-options property of the table.
 
 ```html
 <vue-good-table

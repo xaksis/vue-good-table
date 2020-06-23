@@ -13,7 +13,7 @@ Object containing select options
   @on-selected-rows-change="selectionChanged"
   :columns="columns"
   :rows="rows"
-  :selectOptions="{
+  :select-options="{
     enabled: true,
     selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
     selectionInfoClass: 'custom-class',
