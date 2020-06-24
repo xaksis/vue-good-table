@@ -4,7 +4,7 @@
     v-if="headerRow.mode === 'span'"
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
-    @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+    >
     <template v-if="selectAllByGroup">
       <slot name="table-header-group-select"
         :columns="columns"
@@ -16,16 +16,18 @@
           @change="toggleSelectGroup($event)" />
       </slot>
     </template>
-    <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
-    <slot
-      :row="headerRow"
-      name="table-header-row">
-      <span v-if="headerRow.html" v-html="headerRow.label">
-      </span>
-      <span v-else>
-        {{ headerRow.label }}
-      </span>
-    </slot>
+    <span @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+      <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+        <slot
+        :row="headerRow"
+        name="table-header-row">
+        <span v-if="headerRow.html" v-html="headerRow.label">
+        </span>
+        <span v-else>
+          {{ headerRow.label }}
+        </span>
+      </slot>
+    </span>
   </th>
   <!-- if the mode is not span, we display every column -->
   <th
