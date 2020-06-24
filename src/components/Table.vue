@@ -1560,7 +1560,9 @@ export default {
         this.selectAllByPage = selectAllByPage;
       }
 
-      this.selectAllByGroup = Boolean(selectAllByGroup);
+      if (typeof selectAllByGroup === 'boolean') {
+        this.selectAllByGroup = selectAllByGroup;
+      }
 
       if (typeof disableSelectInfo === 'boolean') {
         this.disableSelectInfo = disableSelectInfo;
