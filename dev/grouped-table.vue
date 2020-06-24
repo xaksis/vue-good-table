@@ -32,6 +32,7 @@
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
+    :row-style-class="rowStyleClassFn"
   >
     <template slot="table-footer-row" slot-scope="{headerRow}">
       <tr slot="table-footer-row">
@@ -133,6 +134,9 @@ export default {
     },
     sumCount(rowObj) {
       return rowObj.episodes.reduce((a, b) => a + (b.count || 0), 0);
+    },
+    rowStyleClassFn(row) {
+      return row.name;
     }
   },
   mounted() {
