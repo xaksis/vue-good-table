@@ -110,9 +110,6 @@ export default {
     groupIndex: {
       type: Number
     },
-    groupOptions: {
-      type: Object
-    }
   },
   data() {
     return {

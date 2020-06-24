@@ -163,7 +163,6 @@
               :get-classes="getClasses"
               :full-colspan="fullColspan"
               :groupIndex="index"
-              :groupOptions="groupOptions"
               @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
@@ -245,7 +244,6 @@
               :get-classes="getClasses"
               :full-colspan="fullColspan"
               :groupIndex="index"
-              :groupOptions="groupOptions"
               @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
@@ -876,7 +874,7 @@ export default {
               hRow = cloneDeep(hRow);
               hRow.children = [];
               reconstructedRows.push(hRow);
-        }
+            }
           }
           hRow.children.push(flatRow);
         }
