@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.19.3
+ * vue-good-table v2.19.5
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8282,10 +8282,18 @@ var VgtFilterRow = normalizeComponent_1({
   staticRenderFns: __vue_staticRenderFns__$3
 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, undefined, undefined);
 
-function getNextSort(currentSort) {
-  if (currentSort === 'asc') return 'desc'; // if (currentSort === 'desc') return null;
+var DEFAULT_SORT_TYPE = 'asc';
 
-  return 'asc';
+function getColumnFirstSortType(column) {
+  return column.firstSortType || DEFAULT_SORT_TYPE;
+}
+
+function getCurrentPrimarySort(sortArray, column) {
+  return sortArray.length === 1 && sortArray[0].field === column.field ? sortArray[0].type : undefined;
+}
+
+function getNextSort(currentSort) {
+  return currentSort === 'asc' ? 'desc' : DEFAULT_SORT_TYPE;
 }
 
 function getIndex(sortArray, column) {
@@ -8297,42 +8305,23 @@ function getIndex(sortArray, column) {
 }
 
 var primarySort = function (sortArray, column) {
-  if (sortArray.length && sortArray.length === 1 && sortArray[0].field === column.field) {
-    var type = getNextSort(sortArray[0].type);
-
-    if (type) {
-      sortArray[0].type = getNextSort(sortArray[0].type);
-    } else {
-      sortArray = [];
-    }
-  } else {
-    sortArray = [{
-      field: column.field,
-      type: 'asc'
-    }];
-  }
-
-  return sortArray;
+  var currentPrimarySort = getCurrentPrimarySort(sortArray, column);
+  return [{
+    field: column.field,
+    type: currentPrimarySort ? getNextSort(currentPrimarySort) : getColumnFirstSortType(column)
+  }];
 };
 
 var secondarySort = function (sortArray, column) {
-  //* this means that primary sort exists, we're
-  //* just adding a secondary sort
   var index = getIndex(sortArray, column);
 
   if (index === -1) {
     sortArray.push({
       field: column.field,
-      type: 'asc'
+      type: getColumnFirstSortType(column)
     });
   } else {
-    var type = getNextSort(sortArray[index].type);
-
-    if (type) {
-      sortArray[index].type = type;
-    } else {
-      sortArray.splice(index, 1);
-    }
+    sortArray[index].type = getNextSort(sortArray[index].type);
   }
 
   return sortArray;
@@ -13532,7 +13521,8 @@ var script$6 = {
       "default": function _default() {
         return {
           enabled: false,
-          collapsable: false
+          collapsable: false,
+          rowKey: null
         };
       }
     },
@@ -13696,6 +13686,9 @@ var script$6 = {
         overflow: 'scroll-y',
         maxHeight: this.maxHeight ? this.maxHeight : 'auto'
       };
+    },
+    rowKeyField: function rowKeyField() {
+      return this.groupOptions.rowKey || 'vgt_header_id';
     },
     hasHeaderRowTemplate: function hasHeaderRowTemplate() {
       return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
@@ -14044,15 +14037,17 @@ var script$6 = {
     //* we need to check for expanded row state here
     //* to maintain it when sorting/filtering
     handleExpanded: function handleExpanded(headerRow) {
-      if (this.maintainExpanded && this.expandedRowKeys.has(headerRow.vgt_header_id)) {
+      if (this.maintainExpanded && this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
         this.$set(headerRow, 'vgtIsExpanded', true);
       } else {
         this.$set(headerRow, 'vgtIsExpanded', false);
       }
     },
-    toggleExpand: function toggleExpand(index) {
+    toggleExpand: function toggleExpand(id) {
+      var _this3 = this;
+
       var headerRow = this.filteredRows.find(function (r) {
-        return r.vgt_header_id === index;
+        return r[_this3.rowKeyField] === id;
       });
 
       if (headerRow) {
@@ -14060,29 +14055,29 @@ var script$6 = {
       }
 
       if (this.maintainExpanded && headerRow.vgtIsExpanded) {
-        this.expandedRowKeys.add(headerRow.vgt_header_id);
+        this.expandedRowKeys.add(headerRow[this.rowKeyField]);
       } else {
-        this.expandedRowKeys["delete"](headerRow.vgt_header_id);
+        this.expandedRowKeys["delete"](headerRow[this.rowKeyField]);
       }
     },
     expandAll: function expandAll() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.filteredRows.forEach(function (row) {
-        _this3.$set(row, 'vgtIsExpanded', true);
+        _this4.$set(row, 'vgtIsExpanded', true);
 
-        if (_this3.maintainExpanded) {
-          _this3.expandedRowKeys.add(row.vgt_header_id);
+        if (_this4.maintainExpanded) {
+          _this4.expandedRowKeys.add(row[_this4.rowKeyField]);
         }
       });
     },
     collapseAll: function collapseAll() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.filteredRows.forEach(function (row) {
-        _this4.$set(row, 'vgtIsExpanded', false);
+        _this5.$set(row, 'vgtIsExpanded', false);
 
-        _this4.expandedRowKeys.clear();
+        _this5.expandedRowKeys.clear();
       });
     },
     getColumnForField: function getColumnForField(field) {
@@ -14115,18 +14110,18 @@ var script$6 = {
       });
     },
     unselectAllInternal: function unselectAllInternal(forceAll) {
-      var _this5 = this;
+      var _this6 = this;
 
       var rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
       lodash_foreach(rows, function (headerRow, i) {
         lodash_foreach(headerRow.children, function (row, j) {
-          _this5.$set(row, 'vgtSelected', false);
+          _this6.$set(row, 'vgtSelected', false);
         });
       });
       this.emitSelectedRows();
     },
     toggleSelectAll: function toggleSelectAll() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.allSelected) {
         this.unselectAllInternal();
@@ -14136,7 +14131,7 @@ var script$6 = {
       var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       lodash_foreach(rows, function (headerRow) {
         lodash_foreach(headerRow.children, function (row) {
-          _this6.$set(row, 'vgtSelected', true);
+          _this7.$set(row, 'vgtSelected', true);
         });
       });
       this.emitSelectedRows();
@@ -14415,7 +14410,7 @@ var script$6 = {
     },
     // method to filter rows
     filterRows: function filterRows(columnFilters) {
-      var _this7 = this;
+      var _this8 = this;
 
       var fromFilter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       // if (!this.rows.length) return;
@@ -14456,17 +14451,17 @@ var script$6 = {
         }
 
         var _loop = function _loop(i) {
-          var col = _this7.typedColumns[i];
+          var col = _this8.typedColumns[i];
 
-          if (_this7.columnFilters[col.field]) {
+          if (_this8.columnFilters[col.field]) {
             computedRows = lodash_foreach(computedRows, function (headerRow) {
               var newChildren = headerRow.children.filter(function (row) {
                 // If column has a custom filter, use that.
                 if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
-                  return col.filterOptions.filterFn(_this7.collect(row, col.field), _this7.columnFilters[col.field]);
+                  return col.filterOptions.filterFn(_this8.collect(row, col.field), _this8.columnFilters[col.field]);
                 }
 
-                var filterMultiselect = _this7.filterMultiselectItems(col, row);
+                var filterMultiselect = _this8.filterMultiselectItems(col, row);
 
                 if (filterMultiselect !== undefined) {
                   return filterMultiselect;
@@ -14474,7 +14469,7 @@ var script$6 = {
 
 
                 var typeDef = col.typeDef;
-                return typeDef.filterPredicate(_this7.collect(row, col.field), _this7.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
+                return typeDef.filterPredicate(_this8.collect(row, col.field), _this8.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
               }); // should we remove the header?
 
               headerRow.children = newChildren;
@@ -14519,7 +14514,7 @@ var script$6 = {
       return originalRows;
     },
     initializePagination: function initializePagination() {
-      var _this8 = this;
+      var _this9 = this;
 
       var _this$paginationOptio = this.paginationOptions,
           enabled = _this$paginationOptio.enabled,
@@ -14597,7 +14592,7 @@ var script$6 = {
 
       if (typeof setCurrentPage === 'number') {
         setTimeout(function () {
-          _this8.changePage(setCurrentPage);
+          _this9.changePage(setCurrentPage);
         }, 500);
       }
     },
@@ -14876,7 +14871,7 @@ var __vue_render__$6 = function __vue_render__() {
       },
       on: {
         "vgtExpand": function vgtExpand($event) {
-          return _vm.toggleExpand(headerRow.vgt_header_id);
+          return _vm.toggleExpand(headerRow[_vm.rowKeyField]);
         }
       },
       scopedSlots: _vm._u([{
