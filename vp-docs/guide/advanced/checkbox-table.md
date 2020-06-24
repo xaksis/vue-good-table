@@ -20,6 +20,7 @@ Object containing select options
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
     disableSelectInfo: true, // disable the select info panel on top
+    selectAllByGroup: true, // when used in combination with a grouped table, add a checkbox in the header row to check/uncheck the entire group
   }">
 ```
 
