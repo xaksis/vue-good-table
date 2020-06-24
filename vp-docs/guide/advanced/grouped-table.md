@@ -179,3 +179,4 @@ this.$refs.myCustomTable.collapseAll();
 ```
 
 * **Live Demo:** https://jsfiddle.net/nb6fcqs7
+
