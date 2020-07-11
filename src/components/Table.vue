@@ -1205,7 +1205,11 @@ export default {
       if (!type) {
         type = this.dataTypes[column.type] || defaultType;
       }
-      return type.format(value, column);
+
+      let result = type.format(value, column);
+      // we must have some values in compact mode
+      if (this.compactMode && (result == '' || result == null)) return '-';
+      return result;
     },
 
     formattedRow(row, isHeaderRow = false) {
