@@ -209,6 +209,7 @@
                 :key="i"
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
+                v-bind:data-label="compactMode ? column.label : undefined"
               >
                 <slot
                   name="table-row"
@@ -341,6 +342,7 @@ export default {
     responsive: { default: true },
     rtl: { default: false },
     rowStyleClass: { default: null, type: [Function, String] },
+    compactMode: { default: false, type: Boolean},
 
     groupOptions: {
       default() {
