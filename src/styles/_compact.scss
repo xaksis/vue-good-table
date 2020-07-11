@@ -1,0 +1,36 @@
+/*responsive compactMode*/
+@media (max-width: 800px) {
+  * {
+    box-sizing: border-box;
+  }
+
+  .vgt-table thead {
+    display: none;
+  }
+
+  .vgt-table,
+  .vgt-table tbody,
+  .vgt-table tr,
+  .vgt-table td {
+    display: block;
+    width: 100%;
+  }
+  .vgt-table tr {
+    margin-bottom: 15px;
+  }
+  .vgt-table td {
+    text-align: right;
+    padding-left: 50% !important;
+    position: relative;
+  }
+  .vgt-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+  }
+}
