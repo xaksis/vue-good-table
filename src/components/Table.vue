@@ -109,7 +109,7 @@
       >
         <table
           ref="table"
-          :class="tableStyleClasses"
+          :class="tableStyles"
         >
           <!-- Table header -->
           <thead
@@ -523,6 +523,12 @@ export default {
   },
 
   computed: {
+    tableStyles() {
+      if (this.compactMode)
+        return this.tableStyleClasses + 'vgt-compact'
+      else
+        return this.tableStyleClasses
+    },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
     },

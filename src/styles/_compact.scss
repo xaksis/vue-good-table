@@ -3,26 +3,26 @@
   * {
     box-sizing: border-box;
   }
-  .vgt-table thead {
+  .vgt-compact thead {
     display: none;
   }
 
-  .vgt-table,
-  .vgt-table tbody,
-  .vgt-table tr,
-  .vgt-table td {
+  .vgt-compact,
+  .vgt-compact tbody,
+  .vgt-compact tr,
+  .vgt-compact td {
     display: block;
     width: 100%;
   }
-  .vgt-table tr {
+  .vgt-compact tr {
     margin-bottom: 15px;
   }
-  .vgt-table td {
+  .vgt-compact td {
     text-align: right;
     padding-left: 50% !important;
     position: relative;
   }
-  .vgt-table td::before {
+  .vgt-compact td::before {
     content: attr(data-label);
     position: absolute;
     left: 0;
