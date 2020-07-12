@@ -1,35 +1,41 @@
 /*responsive compactMode*/
 @media (max-width: 560px) {
-  * {
-    box-sizing: border-box;
-  }
-  .vgt-compact thead {
-    display: none;
-  }
+  .vgt-compact {
+    * {
+      box-sizing: border-box;
+    }
 
-  .vgt-compact,
-  .vgt-compact tbody,
-  .vgt-compact tr,
-  .vgt-compact td {
-    display: block;
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+    }
+    thead {
+      display: none;
+    }
+    tr {
+      margin-bottom: 15px;
+    }
+    td {
+      text-align: right;
+      position: relative;
+      &:before {
+        content: attr(data-label);
+        position: relative;
+        float: left;
+        left: 0;
+        width: 40%;
+        padding-left: 10px;
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+  }
+  .compact-line-numbers {
     width: 100%;
-  }
-  .vgt-compact tr {
-    margin-bottom: 15px;
-  }
-  .vgt-compact td {
-    text-align: right;
-    position: relative;
-  }
-  .vgt-compact td::before {
-    content: attr(data-label);
-    position: relative;
-    float: left;
-    left: 0;
-    width: 40%;
-    padding-left: 15px;
-    font-size: 15px;
-    font-weight: bold;
-    text-align: left;
+    display: block;
+    padding: 0.3em 1em !important;
+    background: linear-gradient(#F4F5F8, #F1F3F6);
   }
 }
