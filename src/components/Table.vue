@@ -331,18 +331,18 @@ export default {
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: { default: false, type: Boolean },
+    fixedHeader: Boolean ,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
     styleClass: { default: 'vgt-table bordered' },
     columns: {},
     rows: {},
-    lineNumbers: { default: false },
-    responsive: { default: true },
-    rtl: { default: false },
+    lineNumbers: Boolean,
+    responsive: { default: true , type: Boolean },
+    rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
-    compactMode: { default: false, type: Boolean},
+    compactMode: Boolean,
 
     groupOptions: {
       default() {
