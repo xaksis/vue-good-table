@@ -9,7 +9,7 @@
     @on-sort-change="onSortChange"
     @on-column-filter="onColumnFilter"
     @on-per-page-change="onPerPageChange"
-    :compactMode="true"
+    compactMode
     :pagination-options="{
       enabled: true,
       perPage: 5,
