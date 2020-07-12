@@ -13488,10 +13488,7 @@
         "default": null,
         type: String
       },
-      fixedHeader: {
-        "default": false,
-        type: Boolean
-      },
+      fixedHeader: Boolean,
       theme: {
         "default": ''
       },
@@ -13506,23 +13503,17 @@
       },
       columns: {},
       rows: {},
-      lineNumbers: {
-        "default": false
-      },
+      lineNumbers: Boolean,
       responsive: {
-        "default": true
+        "default": true,
+        type: Boolean
       },
-      rtl: {
-        "default": false
-      },
+      rtl: Boolean,
       rowStyleClass: {
         "default": null,
         type: [Function, String]
       },
-      compactMode: {
-        "default": false,
-        type: Boolean
-      },
+      compactMode: Boolean,
       groupOptions: {
         "default": function _default() {
           return {
