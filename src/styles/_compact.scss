@@ -1,5 +1,5 @@
 /*responsive compactMode*/
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   * {
     box-sizing: border-box;
   }
@@ -19,14 +19,14 @@
   }
   .vgt-compact td {
     text-align: right;
-    padding-left: 50% !important;
     position: relative;
   }
   .vgt-compact td::before {
     content: attr(data-label);
-    position: absolute;
+    position: relative;
+    float: left;
     left: 0;
-    width: 50%;
+    width: 40%;
     padding-left: 15px;
     font-size: 15px;
     font-weight: bold;
