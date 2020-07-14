@@ -14909,7 +14909,7 @@
             }
           }
         }, [_vm.lineNumbers ? _c('th', {
-          "class": _vm.compactMode ? 'compact-line-numbers' : 'line-numbers'
+          staticClass: "line-numbers"
         }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(index)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
           staticClass: "vgt-checkbox-col",
           on: {
