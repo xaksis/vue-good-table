@@ -199,7 +199,7 @@ total number of rows that exist given a table/filter. refer to [remote workflow]
 
 type: `Boolean (default: false)`
 
-Enable mobile-friendly List view on small devices (screenSize below 560px)
+Enable mobile-friendly List view on small devices (screenSize below 576px)
 ```html
 <vue-good-table
   :columns="columns"
