@@ -189,7 +189,7 @@
               @auxclick="onRowAuxClicked(row, index, $event)">
               <th
                 v-if="lineNumbers"
-                :class="compactMode ? 'compact-line-numbers' : 'line-numbers'"
+                class="line-numbers"
               >
                 {{ getCurrentIndex(index) }}
               </th>

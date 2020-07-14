@@ -31,11 +31,10 @@
         text-align: left;
       }
     }
-  }
-  .compact-line-numbers {
-    width: 100%;
-    display: block;
-    padding: 0.3em 1em !important;
-    background: linear-gradient(#F4F5F8, #F1F3F6);
+    th.line-numbers {
+        width: 100% !important;
+        display: block;
+        padding: 0.3em 1em !important;
+      }
   }
 }
