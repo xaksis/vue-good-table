@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.19.5
+ * vue-good-table v2.20.0
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8647,6 +8647,32 @@
   //
   //
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   var script$5 = {
     name: 'VgtHeaderRow',
     props: {
@@ -8660,6 +8686,9 @@
         type: Boolean
       },
       selectable: {
+        type: Boolean
+      },
+      selectAllByGroup: {
         type: Boolean
       },
       collapsable: {
@@ -8677,12 +8706,23 @@
       },
       fullColspan: {
         type: Number
+      },
+      groupIndex: {
+        type: Number
       }
     },
     data: function data() {
       return {};
     },
-    computed: {},
+    computed: {
+      allSelected: function allSelected() {
+        var headerRow = this.headerRow,
+            groupChildObject = this.groupChildObject;
+        return headerRow.children.filter(function (row) {
+          return row.vgtSelected;
+        }).length === headerRow.children.length;
+      }
+    },
     methods: {
       columnCollapsable: function columnCollapsable(currentIndex) {
         if (this.collapsable === true) {
@@ -8690,6 +8730,12 @@
         }
 
         return currentIndex === this.collapsable;
+      },
+      toggleSelectGroup: function toggleSelectGroup(event) {
+        this.$emit('on-select-group-change', {
+          groupIndex: this.groupIndex,
+          checked: event.target.checked
+        });
       }
     },
     mounted: function mounted() {},
@@ -8711,7 +8757,23 @@
       staticClass: "vgt-left-align vgt-row-header",
       attrs: {
         "colspan": _vm.fullColspan
+      }
+    }, [_vm.selectAllByGroup ? [_vm._t("table-header-group-select", [_c('input', {
+      attrs: {
+        "type": "checkbox"
       },
+      domProps: {
+        "checked": _vm.allSelected
+      },
+      on: {
+        "change": function change($event) {
+          return _vm.toggleSelectGroup($event);
+        }
+      }
+    })], {
+      "columns": _vm.columns,
+      "row": _vm.headerRow
+    })] : _vm._e(), _vm._v(" "), _c('span', {
       on: {
         "click": function click($event) {
           _vm.collapsable ? _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded) : function () {};
@@ -8726,13 +8788,28 @@
       domProps: {
         "innerHTML": _vm._s(_vm.headerRow.label)
       }
-    }) : _c('span', [_vm._v("\n        " + _vm._s(_vm.headerRow.label) + "\n      ")])], {
+    }) : _c('span', [_vm._v("\n          " + _vm._s(_vm.headerRow.label) + "\n        ")])], {
       "row": _vm.headerRow
-    })], 2) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
+    })], 2)], 2) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
       staticClass: "vgt-row-header"
     }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
       staticClass: "vgt-row-header"
-    }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+    }, [_vm.selectAllByGroup ? [_vm._t("table-header-group-select", [_c('input', {
+      attrs: {
+        "type": "checkbox"
+      },
+      domProps: {
+        "checked": _vm.allSelected
+      },
+      on: {
+        "change": function change($event) {
+          return _vm.toggleSelectGroup($event);
+        }
+      }
+    })], {
+      "columns": _vm.columns,
+      "row": _vm.headerRow
+    })] : _vm._e()], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
       return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('th', {
         key: i,
         staticClass: "vgt-row-header",
@@ -13530,7 +13607,8 @@
             selectionInfoClass: '',
             selectionText: 'rows selected',
             clearSelectionText: 'clear',
-            disableSelectInfo: false
+            disableSelectInfo: false,
+            selectAllByGroup: false
           };
         }
       },
@@ -14136,6 +14214,13 @@
         });
         this.emitSelectedRows();
       },
+      toggleSelectGroup: function toggleSelectGroup(event, headerRow) {
+        var _this8 = this;
+
+        lodash_foreach(headerRow.children, function (row) {
+          _this8.$set(row, 'vgtSelected', event.checked);
+        });
+      },
       changePage: function changePage(value) {
         if (this.paginationOptions.enabled) {
           var paginationWidget = this.$refs.paginationBottom;
@@ -14413,7 +14498,7 @@
       },
       // method to filter rows
       filterRows: function filterRows(columnFilters) {
-        var _this8 = this;
+        var _this9 = this;
 
         var fromFilter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
         // if (!this.rows.length) return;
@@ -14454,17 +14539,17 @@
           }
 
           var _loop = function _loop(i) {
-            var col = _this8.typedColumns[i];
+            var col = _this9.typedColumns[i];
 
-            if (_this8.columnFilters[col.field]) {
+            if (_this9.columnFilters[col.field]) {
               computedRows = lodash_foreach(computedRows, function (headerRow) {
                 var newChildren = headerRow.children.filter(function (row) {
                   // If column has a custom filter, use that.
                   if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
-                    return col.filterOptions.filterFn(_this8.collect(row, col.field), _this8.columnFilters[col.field]);
+                    return col.filterOptions.filterFn(_this9.collect(row, col.field), _this9.columnFilters[col.field]);
                   }
 
-                  var filterMultiselect = _this8.filterMultiselectItems(col, row);
+                  var filterMultiselect = _this9.filterMultiselectItems(col, row);
 
                   if (filterMultiselect !== undefined) {
                     return filterMultiselect;
@@ -14472,7 +14557,7 @@
 
 
                   var typeDef = col.typeDef;
-                  return typeDef.filterPredicate(_this8.collect(row, col.field), _this8.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
+                  return typeDef.filterPredicate(_this9.collect(row, col.field), _this9.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
                 }); // should we remove the header?
 
                 headerRow.children = newChildren;
@@ -14508,8 +14593,15 @@
         return classes;
       },
       handleGrouped: function handleGrouped(originalRows) {
+        var _this10 = this;
+
         lodash_foreach(originalRows, function (headerRow, i) {
           headerRow.vgt_header_id = i;
+
+          if (_this10.groupOptions.maintainExpanded && _this10.expandedRowKeys.has(headerRow[_this10.groupOptions.rowKey])) {
+            _this10.$set(headerRow, 'vgtIsExpanded', true);
+          }
+
           lodash_foreach(headerRow.children, function (childRow) {
             childRow.vgt_id = i;
           });
@@ -14517,7 +14609,7 @@
         return originalRows;
       },
       initializePagination: function initializePagination() {
-        var _this9 = this;
+        var _this11 = this;
 
         var _this$paginationOptio = this.paginationOptions,
             enabled = _this$paginationOptio.enabled,
@@ -14595,7 +14687,7 @@
 
         if (typeof setCurrentPage === 'number') {
           setTimeout(function () {
-            _this9.changePage(setCurrentPage);
+            _this11.changePage(setCurrentPage);
           }, 500);
         }
       },
@@ -14661,7 +14753,8 @@
             clearSelectionText = _this$selectOptions.clearSelectionText,
             selectOnCheckboxOnly = _this$selectOptions.selectOnCheckboxOnly,
             selectAllByPage = _this$selectOptions.selectAllByPage,
-            disableSelectInfo = _this$selectOptions.disableSelectInfo;
+            disableSelectInfo = _this$selectOptions.disableSelectInfo,
+            selectAllByGroup = _this$selectOptions.selectAllByGroup;
 
         if (typeof enabled === 'boolean') {
           this.selectable = enabled;
@@ -14673,6 +14766,10 @@
 
         if (typeof selectAllByPage === 'boolean') {
           this.selectAllByPage = selectAllByPage;
+        }
+
+        if (typeof selectAllByGroup === 'boolean') {
+          this.selectAllByGroup = selectAllByGroup;
         }
 
         if (typeof disableSelectInfo === 'boolean') {
@@ -14866,15 +14963,20 @@
           "columns": _vm.columns,
           "line-numbers": _vm.lineNumbers,
           "selectable": _vm.selectable,
+          "select-all-by-group": _vm.selectAllByGroup,
           "collapsable": _vm.groupOptions.collapsable,
           "collect-formatted": _vm.collectFormatted,
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
-          "full-colspan": _vm.fullColspan
+          "full-colspan": _vm.fullColspan,
+          "groupIndex": index
         },
         on: {
           "vgtExpand": function vgtExpand($event) {
             return _vm.toggleExpand(headerRow[_vm.rowKeyField]);
+          },
+          "on-select-group-change": function onSelectGroupChange($event) {
+            return _vm.toggleSelectGroup($event, headerRow);
           }
         },
         scopedSlots: _vm._u([{
@@ -14954,10 +15056,17 @@
           "columns": _vm.columns,
           "line-numbers": _vm.lineNumbers,
           "selectable": _vm.selectable,
+          "select-all-by-group": _vm.selectAllByGroup,
           "collect-formatted": _vm.collectFormatted,
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
-          "full-colspan": _vm.fullColspan
+          "full-colspan": _vm.fullColspan,
+          "groupIndex": index
+        },
+        on: {
+          "on-select-group-change": function onSelectGroupChange($event) {
+            return _vm.toggleSelectGroup($event, headerRow);
+          }
         },
         scopedSlots: _vm._u([{
           key: "table-header-row",
