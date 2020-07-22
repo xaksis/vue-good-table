@@ -155,12 +155,15 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :select-all-by-group="selectAllByGroup"
               :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
+              :groupIndex="index"
+              @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
                 v-if="hasHeaderRowTemplate"
@@ -236,10 +239,13 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :select-all-by-group="selectAllByGroup"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
+              :groupIndex="index"
+              @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
                 v-if="hasHeaderRowTemplate"
@@ -362,6 +368,7 @@ export default {
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
           disableSelectInfo: false,
+          selectAllByGroup: false,
         };
       },
     },
@@ -1019,6 +1026,12 @@ export default {
       this.emitSelectedRows();
     },
 
+    toggleSelectGroup(event, headerRow) {
+      each(headerRow.children, (row) => {
+        this.$set(row, 'vgtSelected', event.checked);
+      });
+    },
+
     changePage(value) {
       if (this.paginationOptions.enabled) {
         let paginationWidget = this.$refs.paginationBottom;
@@ -1382,6 +1395,12 @@ export default {
     handleGrouped(originalRows) {
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
+        if (
+          this.groupOptions.maintainExpanded &&
+          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
+        ) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        }
         each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });
@@ -1536,6 +1555,7 @@ export default {
         selectOnCheckboxOnly,
         selectAllByPage,
         disableSelectInfo,
+        selectAllByGroup,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1548,6 +1568,10 @@ export default {
 
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
+      }
+
+      if (typeof selectAllByGroup === 'boolean') {
+        this.selectAllByGroup = selectAllByGroup;
       }
 
       if (typeof disableSelectInfo === 'boolean') {

@@ -6,7 +6,10 @@
     :columns="columns"
     :rows="rows"
     :line-numbers="true"
-    :select-options="{enabled: true}"
+    :select-options="{
+      enabled: true,
+      selectAllByGroup: true
+    }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
     @on-row-mouseenter="onMouseover"
