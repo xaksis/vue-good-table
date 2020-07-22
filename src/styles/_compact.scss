@@ -1,0 +1,40 @@
+/*responsive compactMode*/
+@media (max-width: 576px) {
+  .vgt-compact {
+    * {
+      box-sizing: border-box;
+    }
+
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+    }
+    thead {
+      display: none;
+    }
+    tr {
+      margin-bottom: 15px;
+    }
+    td {
+      text-align: right;
+      position: relative;
+      &:before {
+        content: attr(data-label);
+        position: relative;
+        float: left;
+        left: 0;
+        width: 40%;
+        padding-left: 10px;
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+    th.line-numbers {
+        width: 100% !important;
+        display: block;
+        padding: 0.3em 1em !important;
+      }
+  }
+}

@@ -13488,10 +13488,7 @@
         "default": null,
         type: String
       },
-      fixedHeader: {
-        "default": false,
-        type: Boolean
-      },
+      fixedHeader: Boolean,
       theme: {
         "default": ''
       },
@@ -13506,19 +13503,17 @@
       },
       columns: {},
       rows: {},
-      lineNumbers: {
-        "default": false
-      },
+      lineNumbers: Boolean,
       responsive: {
-        "default": true
+        "default": true,
+        type: Boolean
       },
-      rtl: {
-        "default": false
-      },
+      rtl: Boolean,
       rowStyleClass: {
         "default": null,
         type: [Function, String]
       },
+      compactMode: Boolean,
       groupOptions: {
         "default": function _default() {
           return {
@@ -13680,6 +13675,9 @@
       }
     },
     computed: {
+      tableStyles: function tableStyles() {
+        if (this.compactMode) return this.tableStyleClasses + 'vgt-compact';else return this.tableStyleClasses;
+      },
       hasFooterSlot: function hasFooterSlot() {
         return !!this.$slots['table-actions-bottom'];
       },
@@ -14324,7 +14322,10 @@
           type = this.dataTypes[column.type] || defaultType;
         }
 
-        return type.format(value, column);
+        var result = type.format(value, column); // we must have some values in compact mode
+
+        if (this.compactMode && (result == '' || result == null)) return '-';
+        return result;
       },
       formattedRow: function formattedRow(row) {
         var isHeaderRow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -14826,7 +14827,7 @@
       style: _vm.wrapperStyles
     }, [_c('table', {
       ref: "table",
-      "class": _vm.tableStyleClasses
+      "class": _vm.tableStyles
     }, [_c("vgt-table-header", {
       ref: "table-header-primary",
       tag: "thead",
@@ -14928,6 +14929,9 @@
           return !column.hidden && column.field ? _c('td', {
             key: i,
             "class": _vm.getClasses(i, 'td', row),
+            attrs: {
+              "data-label": _vm.compactMode ? column.label : undefined
+            },
             on: {
               "click": function click($event) {
                 return _vm.onCellClicked(row, column, index, $event);

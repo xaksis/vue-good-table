@@ -109,7 +109,7 @@
       >
         <table
           ref="table"
-          :class="tableStyleClasses"
+          :class="tableStyles"
         >
           <!-- Table header -->
           <thead
@@ -209,6 +209,7 @@
                 :key="i"
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
+                v-bind:data-label="compactMode ? column.label : undefined"
               >
                 <slot
                   name="table-row"
@@ -330,17 +331,18 @@ export default {
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: { default: false, type: Boolean },
+    fixedHeader: Boolean ,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
     styleClass: { default: 'vgt-table bordered' },
     columns: {},
     rows: {},
-    lineNumbers: { default: false },
-    responsive: { default: true },
-    rtl: { default: false },
+    lineNumbers: Boolean,
+    responsive: { default: true , type: Boolean },
+    rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
+    compactMode: Boolean,
 
     groupOptions: {
       default() {
@@ -521,6 +523,12 @@ export default {
   },
 
   computed: {
+    tableStyles() {
+      if (this.compactMode)
+        return this.tableStyleClasses + 'vgt-compact'
+      else
+        return this.tableStyleClasses
+    },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
     },
@@ -1203,7 +1211,11 @@ export default {
       if (!type) {
         type = this.dataTypes[column.type] || defaultType;
       }
-      return type.format(value, column);
+
+      let result = type.format(value, column);
+      // we must have some values in compact mode
+      if (this.compactMode && (result == '' || result == null)) return '-';
+      return result;
     },
 
     formattedRow(row, isHeaderRow = false) {
