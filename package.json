@@ -48,8 +48,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.filter": "^4.6.0",
     "lodash.foreach": "^4.5.0",
-    "lodash.isequal": "^4.5.0",
-    "vue-select": "^3.1.0"
+    "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^18.2.0",
