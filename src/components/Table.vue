@@ -1322,11 +1322,6 @@ export default {
                   );
                 }
 
-                const filterMultiselect = this.filterMultiselectItems(col, row);
-                if (filterMultiselect !== undefined) {
-                  return filterMultiselect;
-                }
-
                 // Otherwise Use default filters
                 const { typeDef } = col;
                 return typeDef.filterPredicate(

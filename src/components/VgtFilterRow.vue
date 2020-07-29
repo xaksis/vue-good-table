@@ -8,7 +8,7 @@
 
     <div
       v-if="isFilterable(column)">
-      <input v-if="!isDropdown(column) && !isMultiselectDropdown(column)"
+      <input v-if="!isDropdown(column)"
         type="text"
         class="vgt-input"
         :placeholder="getPlaceholder(column)"
@@ -41,16 +41,6 @@
           :key="i"
           :value="option.value">{{ option.text }}</option>
       </select>
-
-      <v-select v-if="isMultiselectDropdown(column)"
-        :options="column.filterOptions.filterMultiselectDropdownItems"
-        :loading="column.filterOptions.loading"
-        :placeholder="getPlaceholder(column)"
-        multiple
-        @input="(selectedItems) => updateFiltersOnKeyup(column, selectedItems)"
-        ref="vgt-multiselect"
-      />
-
     </div>
   </th>
 </tr>
@@ -104,13 +94,6 @@ export default {
     reset(emitEvent = false) {
       this.columnFilters = {};
 
-      const vSelect = this.$refs && this.$refs['vgt-multiselect'];
-      if (vSelect) {
-        vSelect.forEach((ref) => {
-          ref.clearSelection();
-        });
-      }
-
       if (emitEvent) {
         this.$emit('filter-changed', this.columnFilters);
       }
@@ -135,14 +118,6 @@ export default {
     isDropdownArray(column) {
       return this.isDropdown(column)
         && typeof column.filterOptions.filterDropdownItems[0] !== 'object';
-    },
-
-    isMultiselectDropdown(column) {
-      return (
-        this.isFilterable(column) &&
-        column.filterOptions &&
-        column.filterOptions.filterMultiselectDropdownItems
-      );
     },
 
     // get column's defined placeholder or default one
