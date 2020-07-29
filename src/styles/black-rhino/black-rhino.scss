@@ -59,23 +59,13 @@
   }
 
   //input
-  .vgt-input, .vgt-select{
+  .vgt-input{
     color: $text-color;
     background-color: $input-bg;
     border: 1px solid $input-border-color;
     &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: $text-color;
       opacity: 0.3; /* Firefox */
-    }
-  }
-
-  .v-select {
-    background-color: $input-bg;
-    input {
-      color: $text-color;
-    }
-    .vs__open-indicator {
-      fill: $text-color
     }
   }
 }
@@ -157,7 +147,7 @@
         }
       }
     }
-    .vgt-input, .vgt-select{
+    .vgt-input{
       color: $text-color;
       background-color: darken($thead-bg-color-2, 5%);
       border: 1px solid $input-border-color;
