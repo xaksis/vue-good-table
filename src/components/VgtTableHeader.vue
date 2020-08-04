@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import assign from 'lodash.assign';
 import VgtFilterRow from './VgtFilterRow.vue';
 import * as SortUtils from './utils/sort.js';
 
@@ -165,7 +164,7 @@ export default {
     },
 
     getHeaderClasses(column, index) {
-      const classes = assign({}, this.getClasses(index, 'th'), {
+      const classes = Object.assign({}, this.getClasses(index, 'th'), {
         sortable: this.isSortableColumn(column),
         'sorting sorting-desc': this.getColumnSort(column) === 'desc',
         'sorting sorting-asc': this.getColumnSort(column) === 'asc',

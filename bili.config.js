@@ -30,6 +30,7 @@ module.exports = {
     vue: {
       css: false,
     },
+    visualizer: true
   },
   bundleNodeModules: true,
 };
