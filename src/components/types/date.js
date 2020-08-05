@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { format, parse, isValid, compareAsc } from 'date-fns/esm';
 import clone from 'lodash.clonedeep';
 import def from './default';
 
@@ -9,36 +9,27 @@ date.isRight = true;
 date.compare = function (x, y, column) {
   function cook(d) {
     if (column && column.dateInputFormat) {
-      return dayjs(`${d}`, `${column.dateInputFormat}`, new Date());
+      return parse(`${d}`, `${column.dateInputFormat}`, new Date());
     }
     return d;
   }
   x = cook(x);
   y = cook(y);
-  if (!x.isValid()) {
+  if (!isValid(x)) {
     return -1;
   }
-  if (!y.isValid()) {
+  if (!isValid(y)) {
     return 1;
   }
-
-  if(x.isSame(y)) {
-    return 0;
-  }
-  else if(x.isBefore(y)) {
-      return -1;
-  }
-  else {
-      return 1;
-  }
+  return compareAsc(x, y);
 };
 
 date.format = function (v, column) {
   if (v === undefined || v === null) return '';
   // convert to date
-  const date = dayjs(v, column.dateInputFormat);
-  if (date.isValid()) {
-    return date.format(column.dateOutputFormat);
+  const date = parse(v, column.dateInputFormat, new Date());
+  if (isValid(date)) {
+    return format(date, column.dateOutputFormat);
   }
   console.error(`Not a valid date: "${v}"`);
   return null;

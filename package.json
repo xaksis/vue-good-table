@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "dayjs": "^1.8.32",
+    "date-fns": "^2.15.0",
     "diacriticless": "1.0.1",
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
