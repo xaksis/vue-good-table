@@ -83,6 +83,69 @@ Sometimes you might want to customize column headers. You can do that in the fol
 </vue-good-table>
 ```
 
+## Custom column filters
+Sometimes you might want a custom filter. You can do that in the following way:
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <template slot="column-filter" slot-scope="props">
+    <my-custom-filter
+      v-if="props.column.filterOptions.customFilter"       
+      @input="handleCustomFilter"/>
+  </template>
+</vue-good-table>
+```
+Add a custom property in your `columns` to conditionally render the `custom-filter` slot where needed. 
+```javascript
+columns: [
+  {
+    label: 'Name',
+    field: 'name'
+  },
+  {
+    label: 'Category',
+    field: 'category'
+  },
+  {
+    label: 'Statistics',
+    field: 'statistics',
+    filterOptions: {
+      customFilter: true
+    }
+  } 
+]
+// in your methods
+handleCustomFilter(value) {
+  // filtering logic here
+}
+````
+Instead of handling the custom filtering in your own component, the `updateFilters` method can be used. 
+The `updateFilters` method passes your column filter value into `vue-good-table` with the rest of the column filters. 
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows">
+  <template slot="column-filter" slot-scope="{ column, updateFilters }">
+    <my-custom-filter
+      v-if="column.customFilter"       
+      @input="(value) => updateFilters(column, value)"/>
+  </template>
+</vue-good-table>
+```
+In your columns, you may want to display the value from one property but need to filter on another. 
+If you set a `slotFilterField` in your filterOptions, that property will be used for the custom filter slot. 
+```javascript
+{
+  label: 'Name',
+  field: 'name.displayName',
+  filterOptions: {
+    customFilter: true,
+    slotFilterField: 'name.id'
+  }
+}
+```
+
 ## Custom pagination
 
 Sometimes you might want to customize the pagination. You can do that in the following way:
