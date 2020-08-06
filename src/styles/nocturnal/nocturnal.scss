@@ -55,7 +55,7 @@
   }
 
   //input
-  .vgt-input{
+  .vgt-input, .vgt-select{
     color: $text-color;
     background-color: darken($thead-bg-color-2, 5%);
     border: 1px solid $input-border-color;
@@ -115,7 +115,7 @@
         }
       }
     }
-    .vgt-input{
+    .vgt-input, .vgt-select{
       color: $text-color;
       background-color: darken($thead-bg-color-2, 5%);
       border: 1px solid $input-border-color;
