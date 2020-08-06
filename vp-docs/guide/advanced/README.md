@@ -121,14 +121,15 @@ handleCustomFilter(value) {
 }
 ```
 You can add a function to handle the filtering logic in your own component, or optionally `updateFilters` can be used. 
-The `updateFilters` is a method in `vue-good-table` and will include your custom filter value with the other column filters. 
+The `updateFilters` method is in `vue-good-table` and will include your custom filter value with the other column filters. 
+You can also provide a function to `formatValue` inside of `filterOptions` to transform the value before filtering on it. 
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows">
   <template slot="column-filter" slot-scope="{ column, updateFilters }">
     <my-custom-filter
-      v-if="column.customFilter"       
+      v-if="column.filterOptions.customFilter"       
       @input="(value) => updateFilters(column, value)"/>
   </template>
 </vue-good-table>
@@ -141,10 +142,15 @@ If you set a `slotFilterField` in your filterOptions, that property will be used
   field: 'name.displayName',
   filterOptions: {
     customFilter: true,
-    slotFilterField: 'name.id'
+    slotFilterField: 'name.id',
+    formatValue: function (value) {
+      return valueArray.join(',');  
+    } 
   }
 }
 ```
+Note the `formatValue` function. This is where you can provide formatting logic to transform your filter value. 
+
 ::: tip Upgrading from versions 2.19.0-2.20.0
 Older versions of `vue-good-table` included a built-in multiselect filter.
 If you upgrade to the latest version and would still like to use this filter, follow these steps:
@@ -159,13 +165,13 @@ If you upgrade to the latest version and would still like to use this filter, fo
 * Make sure to set the `multiple` attribute for a multiselect filter.
 * Set an array of options on the `options` attribute of `v-select`. If you were using the 
 built in multiselect filter, move them from the column property `filterOptions.multiSelectDropdownItems`.
-* `vue-select` emits an array of values when set to `multiple`. You may need to format the emitted value 
-to match what is needed for filtering.  
+* `vue-select` emits an array of values when set to `multiple`. To convert the array of data into 
+a comma separated string or another format, provide a function on `filterOptions.formatValue`.  
 ``` html
 <v-select
   :options="optionList"
   multiple
-  @input="(value) => updateFilters(column, formatFilterValue(valuesArray))"
+  @input="(valuesArray) => updateFilters(column, valuesArray)"
 />
 ```
 ``` javascript
@@ -181,11 +187,20 @@ data: {
       name: 'Don',
       id: 2
     }
-  ];
+  ],
+  columns: [
+    {
+      label: 'name',
+      field: 'name',
+      filterOptions: {
+        customFilter: true,
+        formatValue: this.formatFilterValue
+    }
+  ]
 },
 methods: {
   formatFilterValue(valuesArray) {
-    return values.map((value) => return value.id).join(',');
+    return values.map((value) => value.id).join(',');
   }
 }
 ```
