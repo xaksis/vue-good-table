@@ -147,7 +147,9 @@ export default {
 
     updateSlotFilter(column, value) {
       let fieldToFilter = column.filterOptions.slotFilterField || column.field;
-      value = column.filterOptions.formatValue(value);
+      if (typeof column.filterOptions.formatValue === 'function') {
+        value = column.filterOptions.formatValue(value);
+      }
       this.updateFiltersImmediately(fieldToFilter, value);
     },
 
