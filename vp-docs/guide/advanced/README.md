@@ -119,9 +119,9 @@ columns: [
 handleCustomFilter(value) {
   // filtering logic here
 }
-````
-Instead of handling the custom filtering in your own component, the `updateFilters` method can be used. 
-The `updateFilters` method passes your column filter value into `vue-good-table` with the rest of the column filters. 
+```
+You can add a function to handle the filtering logic in your own component, or optionally `updateFilters` can be used. 
+The `updateFilters` is a method in `vue-good-table` and will include your custom filter value with the other column filters. 
 ```html
 <vue-good-table
   :columns="columns"
@@ -145,6 +145,51 @@ If you set a `slotFilterField` in your filterOptions, that property will be used
   }
 }
 ```
+::: tip Upgrading from versions 2.19.0-2.20.0
+Older versions of `vue-good-table` included a built-in multiselect filter.
+If you upgrade to the latest version and would still like to use this filter, follow these steps:
+* Install and set up `vue-select` in your project, follwing the guide at https://vue-select.org.
+``` html
+<v-select
+  :options="optionList"
+  multiple
+  @input="(value) => updateFilters(column, value)"
+/>
+```
+* Make sure to set the `multiple` attribute for a multiselect filter.
+* Set an array of options on the `options` attribute of `v-select`. If you were using the 
+built in multiselect filter, move them from the column property `filterOptions.multiSelectDropdownItems`.
+* `vue-select` emits an array of values when set to `multiple`. You may need to format the emitted value 
+to match what is needed for filtering.  
+``` html
+<v-select
+  :options="optionList"
+  multiple
+  @input="(value) => updateFilters(column, formatFilterValue(valuesArray))"
+/>
+```
+``` javascript
+// vue-select emits an array of any objects selected in the dropdown
+// which is being converted to a string of ids to pass into the column filter value
+data: {
+  optionList: [
+    {
+       name: 'Joan',
+       id: 1   
+    },
+    {
+      name: 'Don',
+      id: 2
+    }
+  ];
+},
+methods: {
+  formatFilterValue(valuesArray) {
+    return values.map((value) => return value.id).join(',');
+  }
+}
+```
+:::
 
 ## Custom pagination
 
