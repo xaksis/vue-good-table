@@ -180,8 +180,8 @@ a comma separated string or another format, provide a function on `filterOptions
 data: {
   optionList: [
     {
-       name: 'Joan',
-       id: 1   
+      name: 'Joan',
+      id: 1
     },
     {
       name: 'Don',
