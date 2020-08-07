@@ -202,7 +202,7 @@ data: {
 },
 methods: {
   formatFilterValue(valuesArray) {
-    return values.map((value) => value.id).join(',');
+    return valuesArray.map((value) => value.id).join(',');
   }
 }
 ```
