@@ -175,7 +175,7 @@ export default {
           createdAt: '',
           score: 0.03343,
           bool: null,
-          exact: 'rematch'
+          exact: 'rematch',
           average: 2
         },
         {
