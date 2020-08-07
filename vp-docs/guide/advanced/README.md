@@ -195,6 +195,7 @@ data: {
       filterOptions: {
         customFilter: true,
         formatValue: this.formatFilterValue
+      }
     }
   ]
 },
