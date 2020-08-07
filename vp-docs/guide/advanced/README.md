@@ -129,7 +129,7 @@ You can also provide a function to `formatValue` inside of `filterOptions` to tr
   :rows="rows">
   <template slot="column-filter" slot-scope="{ column, updateFilters }">
     <my-custom-filter
-      v-if="column.filterOptions.customFilter"       
+      v-if="column.filterOptions.customFilter"
       @input="(value) => updateFilters(column, value)"/>
   </template>
 </vue-good-table>
