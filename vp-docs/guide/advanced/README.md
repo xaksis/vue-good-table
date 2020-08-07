@@ -170,6 +170,7 @@ a comma separated string or another format, provide a function on `filterOptions
 ``` html
 <v-select
   :options="optionList"
+  label="name"
   multiple
   @input="(valuesArray) => updateFilters(column, valuesArray)"
 />
