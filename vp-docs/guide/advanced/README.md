@@ -151,7 +151,7 @@ If you set a `slotFilterField` in your filterOptions, that property will be used
 ```
 Note the `formatValue` function. This is where you can provide formatting logic to transform your filter value. 
 
-::: tip Upgrading from versions 2.19.0-2.20.0
+### Upgrading from versions 2.20.0-2.21.0
 Older versions of `vue-good-table` included a built-in multiselect filter.
 If you upgrade to the latest version and would still like to use this filter, follow these steps:
 * Install and set up `vue-select` in your project, follwing the guide at https://vue-select.org.
