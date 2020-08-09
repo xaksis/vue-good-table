@@ -58,7 +58,7 @@ columns: [
     field: 'createdAt',
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd', // expects 2018-03-16
-    dateOutputFormat: 'MMM Do yyyy', // outputs Mar 16th 2018
+    dateOutputFormat: 'MMM do yyyy', // outputs Mar 16th 2018
   },
   // ...
 ]
