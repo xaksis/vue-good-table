@@ -11,8 +11,8 @@
       <p>A light, expandable link and text hover effect library for VueJS.</p>
     </div>
     <div class="feature">
-      <h2><a href="https://timerbit.com">TimerBit</a></h2>
-      <p>Track time spent on projects &amp; tasks using reliable cloud-based timers.</p>
+      <h2><a href="https://userbitapp.com">UserBit</a></h2>
+      <p>Cloud-based platform for UX and Product teams.</p>
     </div>
   </div>
 </div>

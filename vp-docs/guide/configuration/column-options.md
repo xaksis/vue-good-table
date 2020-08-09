@@ -177,7 +177,7 @@ type `Boolean`
 
 indicates whether this column will require html rendering. 
 ::: tip 
-The preferred way of creating columns that have html is by [using slots](#custom-row-template)
+The preferred way of creating columns that have html is by [using slots](../advanced/#custom-row-template)
 :::
 
 ```javascript
