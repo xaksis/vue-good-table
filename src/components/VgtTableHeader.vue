@@ -30,6 +30,17 @@
     :columns="columns"
     :mode="mode"
     :typed-columns="typedColumns">
+      <template
+        slot="column-filter"
+        slot-scope="props"
+      >
+        <slot
+          name="column-filter"
+          :column="props.column"
+          :updateFilters="props.updateFilters"
+        >
+        </slot>
+      </template>
   </tr>
 </thead>
 </template>

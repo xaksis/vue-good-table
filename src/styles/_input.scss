@@ -24,21 +24,3 @@
   }
 }
 
-.v-select {
-  border-radius: 4px;
-  color: $text-color;
-  &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: $text-color;
-    opacity: 0.3; /* Firefox */
-  }
-  &:focus {
-    outline: none;
-    border-color: $link-color;
-  }
-  input {
-   color: $text-color
-  }
-  .vs__open-indicator {
-    fill: $text-color
-  }
-}
