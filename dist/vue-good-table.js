@@ -7428,6 +7428,15 @@
   //
   //
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   var script = {
     name: 'VgtPaginationPageInfo',
     props: {
@@ -7563,9 +7572,16 @@
 
     return _c('div', {
       staticClass: "footer__navigation__page-info"
-    }, [_vm._v("\n  " + _vm._s(_vm.pageText) + " "), _c('input', {
+    }, [_c('form', [_c('label', {
+      attrs: {
+        "for": "change-page-input"
+      }
+    }, [_vm._v(_vm._s(_vm.pageText) + " "), _c('input', {
       staticClass: "footer__navigation__page-info__current-entry",
       attrs: {
+        "id": "change-page-input",
+        "aria-describedby": "change-page-hint",
+        "aria-controls": "vgb-table",
         "type": "text"
       },
       domProps: {
@@ -7581,7 +7597,11 @@
           return _vm.changePage($event);
         }
       }
-    }), _vm._v(" " + _vm._s(_vm.pageInfo) + "\n")]);
+    }), _vm._v(" " + _vm._s(_vm.pageInfo) + "\n    ")]), _vm._v(" "), _c('span', {
+      attrs: {
+        "id": "change-page-hint"
+      }
+    }, [_vm._v("\n      Type a page number and press Enter to change the page.\n    ")])])]);
   };
 
   var __vue_staticRenderFns__ = [];
@@ -7590,7 +7610,7 @@
   var __vue_inject_styles__ = undefined;
   /* scoped */
 
-  var __vue_scope_id__ = "data-v-9a8cd1f4";
+  var __vue_scope_id__ = "data-v-50551ba2";
   /* module identifier */
 
   var __vue_module_identifier__ = undefined;
@@ -7699,7 +7719,7 @@
           first = 0;
         }
 
-        return "".concat(first, " - ").concat(last, " ").concat(this.ofText, " ").concat(this.total);
+        return "".concat(first, "\u2013").concat(last, " ").concat(this.ofText, " ").concat(this.total);
       },
       // Can go to next page
       nextIsPossible: function nextIsPossible() {
@@ -7807,9 +7827,12 @@
       staticClass: "vgt-wrap__footer vgt-clearfix"
     }, [_c('div', {
       staticClass: "footer__row-count vgt-pull-left"
-    }, [_c('span', {
-      staticClass: "footer__row-count__label"
-    }, [_vm._v(_vm._s(_vm.rowsPerPageText))]), _vm._v(" "), _c('select', {
+    }, [_c('form', [_c('label', {
+      staticClass: "footer__row-count__label",
+      attrs: {
+        "for": "select-rows-per-page"
+      }
+    }, [_vm._v(_vm._s(_vm.rowsPerPageText) + ":")]), _vm._v(" "), _c('select', {
       directives: [{
         name: "model",
         rawName: "v-model",
@@ -7818,8 +7841,10 @@
       }],
       staticClass: "footer__row-count__select",
       attrs: {
+        "id": "select-rows-per-page",
         "autocomplete": "off",
-        "name": "perPageSelect"
+        "name": "perPageSelect",
+        "aria-controls": "vgt-table"
       },
       on: {
         "change": [function ($event) {
@@ -7843,16 +7868,17 @@
       domProps: {
         "value": _vm.total
       }
-    }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)]), _vm._v(" "), _c('div', {
+    }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)])]), _vm._v(" "), _c('div', {
       staticClass: "footer__navigation vgt-pull-right"
-    }, [_c('a', {
+    }, [_c('button', {
       staticClass: "footer__navigation__page-btn",
       "class": {
         disabled: !_vm.prevIsPossible
       },
       attrs: {
-        "href": "javascript:undefined",
-        "tabindex": "0"
+        "type": "button",
+        "aria-controls": "vgb-table",
+        "disabled": !_vm.prevIsPossible
       },
       on: {
         "click": function click($event) {
@@ -7866,6 +7892,9 @@
       "class": {
         'left': !_vm.rtl,
         'right': _vm.rtl
+      },
+      attrs: {
+        "aria-hidden": "true"
       }
     }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _vm.mode === 'pages' ? _c('pagination-page-info', {
       attrs: {
@@ -7880,14 +7909,15 @@
       }
     }) : _c('div', {
       staticClass: "footer__navigation__info"
-    }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('a', {
+    }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('button', {
       staticClass: "footer__navigation__page-btn",
       "class": {
         disabled: !_vm.nextIsPossible
       },
       attrs: {
-        "href": "javascript:undefined",
-        "tabindex": "0"
+        "type": "button",
+        "aria-controls": "vgb-table",
+        "disabled": "!nextIsPossible"
       },
       on: {
         "click": function click($event) {
@@ -7901,6 +7931,9 @@
       "class": {
         'right': !_vm.rtl,
         'left': _vm.rtl
+      },
+      attrs: {
+        "aria-hidden": "true"
       }
     })])], 1)]);
   };
@@ -7931,6 +7964,13 @@
     staticRenderFns: __vue_staticRenderFns__$1
   }, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   //
   //
   //
@@ -7994,15 +8034,16 @@
       staticClass: "vgt-global-search vgt-clearfix"
     }, [_c('div', {
       staticClass: "vgt-global-search__input vgt-pull-left"
-    }, [_vm.searchEnabled ? _c('span', {
-      staticClass: "input__icon"
-    }, [_c('div', {
-      staticClass: "magnifying-glass"
-    })]) : _vm._e(), _vm._v(" "), _vm.searchEnabled ? _c('input', {
+    }, [_vm.searchEnabled ? _c('form', {
+      attrs: {
+        "role": "search"
+      }
+    }, [_vm._m(0), _vm._v(" "), _c('input', {
       staticClass: "vgt-input vgt-pull-left",
       attrs: {
+        "id": "vgt-search",
         "type": "text",
-        "placeholder": _vm.globalSearchPlaceholder
+        "placeholder": null
       },
       domProps: {
         "value": _vm.value
@@ -8019,12 +8060,31 @@
           return _vm.entered($event.target.value);
         }
       }
-    }) : _vm._e()]), _vm._v(" "), _c('div', {
+    })]) : _vm._e()]), _vm._v(" "), _c('div', {
       staticClass: "vgt-global-search__actions vgt-pull-right"
     }, [_vm._t("internal-table-actions")], 2)]) : _vm._e();
   };
 
-  var __vue_staticRenderFns__$2 = [];
+  var __vue_staticRenderFns__$2 = [function () {
+    var _vm = this;
+
+    var _h = _vm.$createElement;
+
+    var _c = _vm._self._c || _h;
+
+    return _c('label', {
+      attrs: {
+        "for": "vgt-search"
+      }
+    }, [_c('span', {
+      staticClass: "input__icon",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    }, [_c('div', {
+      staticClass: "magnifying-glass"
+    })]), _vm._v("\n    Search this table\n      ")]);
+  }];
   /* style */
 
   var __vue_inject_styles__$2 = undefined;
@@ -8438,6 +8498,9 @@
 
         return null;
       },
+      getColumnSortLong: function getColumnSortLong(column) {
+        return this.getColumnSort(column) === 'asc' ? 'ascending' : 'descending';
+      },
       getHeaderClasses: function getHeaderClasses(column, index) {
         var classes = lodash_assign({}, this.getClasses(index, 'th'), {
           sortable: this.isSortableColumn(column),
@@ -8542,6 +8605,12 @@
         key: index,
         "class": _vm.getHeaderClasses(column, index),
         style: _vm.columnStyles[index],
+        attrs: {
+          "tabindex": "0",
+          "aria-label": column.label + ": activate to sort column " + _vm.getColumnSortLong(column),
+          "aria-sort": _vm.getColumnSortLong(column),
+          "aria-controls": "col-" + index
+        },
         on: {
           "click": function click($event) {
             return _vm.sort($event, column);
@@ -8582,7 +8651,7 @@
   var __vue_inject_styles__$4 = undefined;
   /* scoped */
 
-  var __vue_scope_id__$4 = "data-v-2d1e3c02";
+  var __vue_scope_id__$4 = "data-v-6f4985df";
   /* module identifier */
 
   var __vue_module_identifier__$4 = undefined;
@@ -14839,8 +14908,18 @@
     }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
       staticClass: "vgt-fixed-header"
     }, [_vm.fixedHeader ? _c('table', {
-      "class": _vm.tableStyleClasses
-    }, [_c("vgt-table-header", {
+      "class": _vm.tableStyleClasses,
+      attrs: {
+        "id": "vgt-table"
+      }
+    }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
+      return _c('col', {
+        key: index,
+        attrs: {
+          "id": "col-" + index
+        }
+      });
+    }), 0), _vm._v(" "), _c("vgt-table-header", {
       ref: "table-header-secondary",
       tag: "thead",
       attrs: {
@@ -14877,8 +14956,18 @@
       style: _vm.wrapperStyles
     }, [_c('table', {
       ref: "table",
-      "class": _vm.tableStyles
-    }, [_c("vgt-table-header", {
+      "class": _vm.tableStyles,
+      attrs: {
+        "id": "vgt-table"
+      }
+    }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
+      return _c('col', {
+        key: index,
+        attrs: {
+          "id": "col-" + index
+        }
+      });
+    }), 0), _vm._v(" "), _c("vgt-table-header", {
       ref: "table-header-primary",
       tag: "thead",
       attrs: {

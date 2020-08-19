@@ -1,10 +1,19 @@
 <template>
 <div class="footer__navigation__page-info">
-  {{pageText}} <input
+  <form>
+  <label for="change-page-input">{{pageText}} <input
+    id="change-page-input"
+    aria-describedby="change-page-hint"
+    aria-controls="vgb-table"
     class="footer__navigation__page-info__current-entry"
     type="text"
     @keyup.enter.stop="changePage"
     :value="currentPage"> {{pageInfo}}
+    </label>
+    <span id="change-page-hint">
+      Type a page number and press Enter to change the page.
+    </span>
+    </form>
 </div>
 </template>
 

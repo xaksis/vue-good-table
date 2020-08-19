@@ -11,9 +11,13 @@
     </th>
     <th v-for="(column, index) in columns"
       :key="index"
+      tabindex="0"
       @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
+      :aria-label="`${column.label}: activate to sort column ${getColumnSortLong(column)}`"
+      :aria-sort="getColumnSortLong(column)"
+      :aria-controls="`col-${index}`"
       v-if="!column.hidden">
       <slot name="table-column" :column="column">
         <span>{{column.label}}</span>
@@ -136,6 +140,7 @@ export default {
     };
   },
   computed: {
+
   },
   methods: {
     reset() {
@@ -173,6 +178,12 @@ export default {
         }
       }
       return null;
+    },
+
+    getColumnSortLong(column) {
+      return this.getColumnSort(column) === 'asc'
+        ? 'ascending'
+        : 'descending'
     },
 
     getHeaderClasses(column, index) {
