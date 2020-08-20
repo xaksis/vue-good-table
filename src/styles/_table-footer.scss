@@ -12,8 +12,8 @@
       vertical-align: middle;
     }
     &__label{
-      font-size: 14px;
-      color: $secondary-text-color;
+      // font-size: 14px;
+      // color: $secondary-text-color;
     }
     &__select{
       background-color: transparent;
@@ -33,7 +33,7 @@
     }
   }
   .footer__navigation{
-    font-size: 14px;
+    // font-size: 14px;
     &__page-btn, &__info, &__page-info{
       display: inline-block;
       vertical-align: middle;
@@ -87,7 +87,7 @@
     }
     &__info, &__page-info{
       display: inline-block;
-      color: $secondary-text-color;
+      // color: $secondary-text-color;
       margin:  0px 16px;
     }
     &__page-info{

@@ -1,8 +1,8 @@
 <template>
 <thead>
   <tr>
-    <th v-if="lineNumbers" class="line-numbers"></th>
-    <th v-if="selectable" class="vgt-checkbox-col">
+    <th scope="col" v-if="lineNumbers" class="line-numbers"></th>
+    <th scope="col" v-if="selectable" class="vgt-checkbox-col">
       <input
         type="checkbox"
         :checked="allSelected"
@@ -10,17 +10,21 @@
         @change="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
+      scope="col"
       :key="index"
-      tabindex="0"
-      @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
-      :aria-label="`${column.label}: activate to sort column ${getColumnSortLong(column)}`"
       :aria-sort="getColumnSortLong(column)"
       :aria-controls="`col-${index}`"
       v-if="!column.hidden">
       <slot name="table-column" :column="column">
-        <span>{{column.label}}</span>
+        {{column.label}}
+      </slot>
+      <slot v-if="sortable" name="sort-button" :column="column">
+        <button
+        @click="sort($event, column)"
+        aria-label="`sort by ${column.label} in ${sortButtonOrder} order`">
+        </button>
       </slot>
     </th>
   </tr>
@@ -184,6 +188,12 @@ export default {
       return this.getColumnSort(column) === 'asc'
         ? 'ascending'
         : 'descending'
+    },
+
+    sortButtonOrder () {
+      return this.getColumnSort(column) === 'asc'
+        ? 'descending'
+        : 'ascending'
     },
 
     getHeaderClasses(column, index) {

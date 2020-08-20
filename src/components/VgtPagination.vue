@@ -22,17 +22,7 @@
       </form>
     </div>
     <div class="footer__navigation vgt-pull-right">
-      <button
-        type="button"
-        aria-controls="vgb-table"
-        class="footer__navigation__page-btn"
-        :disabled="!prevIsPossible"
-        :class="{ disabled: !prevIsPossible }"
-        @click.prevent.stop="previousPage">
-        <span aria-hidden="true" class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
-        <span>{{prevText}}</span>
-      </button>
-      <pagination-page-info
+            <pagination-page-info
         @page-changed="changePage"
         :totalRecords="total"
         :lastPage="pagesCount"
@@ -43,8 +33,20 @@
       </pagination-page-info>
       <div v-else class="footer__navigation__info">{{paginatedInfo}}</div>
       <button
+        v-show="prevIsPossible"
         type="button"
-        aria-controls="vgb-table"
+        aria-controls="vgt-table"
+        class="footer__navigation__page-btn"
+        :class="{ disabled: !prevIsPossible }"
+        @click.prevent.stop="previousPage">
+        <span aria-hidden="true" class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
+        <span>{{prevText}}</span>
+      </button>
+
+      <button
+        v-show="nextIsPossible"
+        type="button"
+        aria-controls="vgt-table"
         class="footer__navigation__page-btn"
         disabled="!nextIsPossible"
         :class="{ disabled: !nextIsPossible }"
@@ -129,7 +131,7 @@ export default {
         first = 0;
       }
 
-      return `${first}–${last} ${this.ofText} ${this.total}`;
+      return `Showing ${first} to ${last} ${this.ofText} ${this.total} entries`;
     },
 
     // Can go to next page

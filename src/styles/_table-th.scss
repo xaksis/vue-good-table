@@ -84,12 +84,12 @@ $sort-chevron-width: 5px;
     &.vgt-checkbox-col{
       vertical-align: middle;
     }
-    &.sorting-asc{
+    &.sorting-asc button {
       &:after{
         border-bottom: $sort-chevron-width solid $link-color;
       }
     }
-    &.sorting-desc {
+    &.sorting-desc button {
       &:before{
         border-top: $sort-chevron-width solid $link-color;
       }

@@ -7713,7 +7713,7 @@ var script$1 = {
         first = 0;
       }
 
-      return "".concat(first, "\u2013").concat(last, " ").concat(this.ofText, " ").concat(this.total);
+      return "Showing ".concat(first, " to ").concat(last, " ").concat(this.ofText, " ").concat(this.total, " entries");
     },
     // Can go to next page
     nextIsPossible: function nextIsPossible() {
@@ -7864,15 +7864,33 @@ var __vue_render__$1 = function __vue_render__() {
     }
   }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)])]), _vm._v(" "), _c('div', {
     staticClass: "footer__navigation vgt-pull-right"
-  }, [_c('button', {
+  }, [_vm.mode === 'pages' ? _c('pagination-page-info', {
+    attrs: {
+      "totalRecords": _vm.total,
+      "lastPage": _vm.pagesCount,
+      "currentPage": _vm.currentPage,
+      "ofText": _vm.ofText,
+      "pageText": _vm.pageText
+    },
+    on: {
+      "page-changed": _vm.changePage
+    }
+  }) : _c('div', {
+    staticClass: "footer__navigation__info"
+  }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.prevIsPossible,
+      expression: "prevIsPossible"
+    }],
     staticClass: "footer__navigation__page-btn",
     "class": {
       disabled: !_vm.prevIsPossible
     },
     attrs: {
       "type": "button",
-      "aria-controls": "vgb-table",
-      "disabled": !_vm.prevIsPossible
+      "aria-controls": "vgt-table"
     },
     on: {
       "click": function click($event) {
@@ -7890,27 +7908,20 @@ var __vue_render__$1 = function __vue_render__() {
     attrs: {
       "aria-hidden": "true"
     }
-  }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _vm.mode === 'pages' ? _c('pagination-page-info', {
-    attrs: {
-      "totalRecords": _vm.total,
-      "lastPage": _vm.pagesCount,
-      "currentPage": _vm.currentPage,
-      "ofText": _vm.ofText,
-      "pageText": _vm.pageText
-    },
-    on: {
-      "page-changed": _vm.changePage
-    }
-  }) : _c('div', {
-    staticClass: "footer__navigation__info"
-  }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('button', {
+  }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _c('button', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.nextIsPossible,
+      expression: "nextIsPossible"
+    }],
     staticClass: "footer__navigation__page-btn",
     "class": {
       disabled: !_vm.nextIsPossible
     },
     attrs: {
       "type": "button",
-      "aria-controls": "vgb-table",
+      "aria-controls": "vgt-table",
       "disabled": "!nextIsPossible"
     },
     on: {
@@ -8495,6 +8506,9 @@ var script$4 = {
     getColumnSortLong: function getColumnSortLong(column) {
       return this.getColumnSort(column) === 'asc' ? 'ascending' : 'descending';
     },
+    thDescribedBy: function thDescribedBy(column) {
+      return this.getColumnSort() ? 'vgt-tablw-caption' : null;
+    },
     getHeaderClasses: function getHeaderClasses(column, index) {
       var classes = lodash_assign({}, this.getClasses(index, 'th'), {
         sortable: this.isSortableColumn(column),
@@ -8601,7 +8615,7 @@ var __vue_render__$4 = function __vue_render__() {
       style: _vm.columnStyles[index],
       attrs: {
         "tabindex": "0",
-        "aria-label": column.label + ": activate to sort column " + _vm.getColumnSortLong(column),
+        "aria-describedby": _vm.thDescribedBy,
         "aria-sort": _vm.getColumnSortLong(column),
         "aria-controls": "col-" + index
       },
@@ -8610,7 +8624,7 @@ var __vue_render__$4 = function __vue_render__() {
           return _vm.sort($event, column);
         }
       }
-    }, [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(column.label))])], {
+    }, [_vm._t("table-column", [_vm._v("\n        " + _vm._s(column.label) + "\n      ")], {
       "column": column
     })], 2) : _vm._e();
   })], 2), _vm._v(" "), _c("vgt-filter-row", {
@@ -8645,7 +8659,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-6f4985df";
+var __vue_scope_id__$4 = "data-v-9c7c0494";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
@@ -14906,7 +14920,11 @@ var __vue_render__$6 = function __vue_render__() {
     attrs: {
       "id": "vgt-table"
     }
-  }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
+  }, [_vm.sortable ? _c('caption', {
+    attrs: {
+      "id": "vgt-caption"
+    }
+  }, [_vm._v("\n        Activate column headers to sort.\n      ")]) : _vm._e(), _vm._v(" "), _c('colgroup', _vm._l(_vm.columns, function (column, index) {
     return _c('col', {
       key: index,
       attrs: {
@@ -14954,7 +14972,11 @@ var __vue_render__$6 = function __vue_render__() {
     attrs: {
       "id": "vgt-table"
     }
-  }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
+  }, [_vm.sortable ? _c('caption', {
+    attrs: {
+      "id": "vgt-caption"
+    }
+  }, [_vm._v("\n        Activate column headers to sort.\n      ")]) : _vm._e(), _vm._v(" "), _c('colgroup', _vm._l(_vm.columns, function (column, index) {
     return _c('col', {
       key: index,
       attrs: {
@@ -15083,11 +15105,7 @@ var __vue_render__$6 = function __vue_render__() {
               return _vm.onCellClicked(row, column, index, $event);
             }
           }
-        }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
-          domProps: {
-            "innerHTML": _vm._s(_vm.collect(row, column.field))
-          }
-        }) : _vm._e()], {
+        }, [_vm._t("table-row", [!column.html ? [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")] : void 0], {
           "row": row,
           "column": column,
           "formattedRow": _vm.formattedRow(row),

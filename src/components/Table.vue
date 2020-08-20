@@ -116,6 +116,9 @@
           ref="table"
           :class="tableStyles"
         >
+        <caption v-if="sortable" id="vgt-caption">
+          Activate column headers to sort.
+        </caption>
         <colgroup>
           <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
         </colgroup>
@@ -239,14 +242,13 @@
                   :formattedRow="formattedRow(row)"
                   :index="index"
                 >
-                  <span v-if="!column.html">
+                  <template v-if="!column.html">
                     {{ collectFormatted(row, column) }}
-                  </span>
-                  <span
-                    v-if="column.html"
+                  </template>
+                  <template v-else
                     v-html="collect(row, column.field)"
                   >
-                  </span>
+                  </template>
                 </slot>
               </td>
             </tr>
