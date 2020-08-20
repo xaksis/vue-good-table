@@ -23,7 +23,7 @@
       <slot v-if="sortable" name="sort-button" :column="column">
         <button
         @click="sort($event, column)"
-        aria-label="`sort by ${column.label} in ${sortButtonOrder} order`">
+        :aria-label="`sort by ${column.label} in ${sortButtonOrder} order`">
         </button>
       </slot>
     </th>
