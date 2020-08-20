@@ -116,9 +116,6 @@
           ref="table"
           :class="tableStyles"
         >
-        <caption v-if="sortable" id="vgt-caption">
-          Activate column headers to sort.
-        </caption>
         <colgroup>
           <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
         </colgroup>

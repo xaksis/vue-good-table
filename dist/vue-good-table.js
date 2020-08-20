@@ -8512,8 +8512,8 @@
       getColumnSortLong: function getColumnSortLong(column) {
         return this.getColumnSort(column) === 'asc' ? 'ascending' : 'descending';
       },
-      thDescribedBy: function thDescribedBy(column) {
-        return this.getColumnSort() ? 'vgt-tablw-caption' : null;
+      sortButtonOrder: function sortButtonOrder() {
+        return this.getColumnSort(column) === 'asc' ? 'descending' : 'ascending';
       },
       getHeaderClasses: function getHeaderClasses(column, index) {
         var classes = lodash_assign({}, this.getClasses(index, 'th'), {
@@ -8600,9 +8600,15 @@
     var _c = _vm._self._c || _h;
 
     return _c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', {
-      staticClass: "line-numbers"
+      staticClass: "line-numbers",
+      attrs: {
+        "scope": "col"
+      }
     }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
-      staticClass: "vgt-checkbox-col"
+      staticClass: "vgt-checkbox-col",
+      attrs: {
+        "scope": "col"
+      }
     }, [_c('input', {
       attrs: {
         "type": "checkbox"
@@ -8620,19 +8626,24 @@
         "class": _vm.getHeaderClasses(column, index),
         style: _vm.columnStyles[index],
         attrs: {
-          "tabindex": "0",
-          "aria-describedby": _vm.thDescribedBy,
+          "scope": "col",
           "aria-sort": _vm.getColumnSortLong(column),
           "aria-controls": "col-" + index
+        }
+      }, [_vm._t("table-column", [_vm._v("\n        " + _vm._s(column.label) + "\n      ")], {
+        "column": column
+      }), _vm._v(" "), _vm.sortable ? _vm._t("sort-button", [_c('button', {
+        attrs: {
+          "aria-label": "`sort by ${column.label} in ${sortButtonOrder} order`"
         },
         on: {
           "click": function click($event) {
             return _vm.sort($event, column);
           }
         }
-      }, [_vm._t("table-column", [_vm._v("\n        " + _vm._s(column.label) + "\n      ")], {
+      })], {
         "column": column
-      })], 2) : _vm._e();
+      }) : _vm._e()], 2) : _vm._e();
     })], 2), _vm._v(" "), _c("vgt-filter-row", {
       ref: "filter-row",
       tag: "tr",
@@ -8665,7 +8676,7 @@
   var __vue_inject_styles__$4 = undefined;
   /* scoped */
 
-  var __vue_scope_id__$4 = "data-v-9c7c0494";
+  var __vue_scope_id__$4 = "data-v-3494f4c6";
   /* module identifier */
 
   var __vue_module_identifier__$4 = undefined;
@@ -14926,11 +14937,7 @@
       attrs: {
         "id": "vgt-table"
       }
-    }, [_vm.sortable ? _c('caption', {
-      attrs: {
-        "id": "vgt-caption"
-      }
-    }, [_vm._v("\n        Activate column headers to sort.\n      ")]) : _vm._e(), _vm._v(" "), _c('colgroup', _vm._l(_vm.columns, function (column, index) {
+    }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
       return _c('col', {
         key: index,
         attrs: {
@@ -14978,11 +14985,7 @@
       attrs: {
         "id": "vgt-table"
       }
-    }, [_vm.sortable ? _c('caption', {
-      attrs: {
-        "id": "vgt-caption"
-      }
-    }, [_vm._v("\n        Activate column headers to sort.\n      ")]) : _vm._e(), _vm._v(" "), _c('colgroup', _vm._l(_vm.columns, function (column, index) {
+    }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
       return _c('col', {
         key: index,
         attrs: {

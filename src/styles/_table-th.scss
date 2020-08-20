@@ -6,8 +6,7 @@ $sort-chevron-width: 5px;
     vertical-align: middle;
     position: relative;
     &.sortable{
-      cursor: pointer;
-      &:after{
+      button &:after{
         content: '';
         position: absolute;
         height: 0px;
@@ -19,7 +18,7 @@ $sort-chevron-width: 5px;
         border-right: $sort-chevron-width solid transparent;
         border-bottom: $sort-chevron-width solid $chevron-color;
       }
-      &:before{
+      button &:before{
         content: '';
         position: absolute;
         height: 0px;
