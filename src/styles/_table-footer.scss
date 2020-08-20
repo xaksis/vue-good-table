@@ -12,28 +12,18 @@
       vertical-align: middle;
     }
     &__label{
-      // font-size: 14px;
-      // color: $secondary-text-color;
+      font-size: 1.2rem;
     }
     &__select{
-      background-color: transparent;
-      width: auto;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      height: auto;
-      font-size: 14px;
+      background-color: #fff;
+      width: 40px;
+      border: 1px solid #333;
+      font-size: 1.2rem;
       margin-left: 8px;
-      color:  $text-color;
-      font-weight: bold;
-      &:focus{
-        outline: none;
-        border-color: $link-color;
-      }
     }
   }
   .footer__navigation{
-    // font-size: 14px;
+    font-size: 1.2rem
     &__page-btn, &__info, &__page-info{
       display: inline-block;
       vertical-align: middle;
@@ -87,7 +77,6 @@
     }
     &__info, &__page-info{
       display: inline-block;
-      // color: $secondary-text-color;
       margin:  0px 16px;
     }
     &__page-info{

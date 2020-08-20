@@ -7,7 +7,7 @@
             <span aria-hidden="true" class="input__icon">
       <div class="magnifying-glass"></div>
     </span>
-    Search this table
+    Search
       </label>
     <input
       id="vgt-search"
