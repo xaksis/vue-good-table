@@ -6,7 +6,12 @@ $sort-chevron-width: 5px;
     vertical-align: middle;
     position: relative;
     &.sortable{
-      button:after{
+      button {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        width: 5%;
+      &:after{
         content: '';
         position: absolute;
         height: 0px;
@@ -18,7 +23,7 @@ $sort-chevron-width: 5px;
         border-right: $sort-chevron-width solid transparent;
         border-bottom: $sort-chevron-width solid $chevron-color;
       }
-      button:before{
+      &:before{
         content: '';
         position: absolute;
         height: 0px;
@@ -30,6 +35,7 @@ $sort-chevron-width: 5px;
         border-right: $sort-chevron-width solid transparent;
         border-top: $sort-chevron-width solid $chevron-color;
       }
+    }
     }
   }
   & th.line-numbers, & th.vgt-checkbox-col {

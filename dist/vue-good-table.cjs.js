@@ -8632,7 +8632,7 @@ var __vue_render__$4 = function __vue_render__() {
       "column": column
     }), _vm._v(" "), _vm.sortable ? _vm._t("sort-button", [_c('button', {
       attrs: {
-        "aria-label": "`sort by ${column.label} in ${sortButtonOrder} order`"
+        "aria-label": "sort by " + column.label + " in " + _vm.sortButtonOrder + " order"
       },
       on: {
         "click": function click($event) {
@@ -8674,7 +8674,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-3494f4c6";
+var __vue_scope_id__$4 = "data-v-f22b1f50";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
