@@ -35,21 +35,22 @@
           :allText="allText"
         ></vgt-pagination>
       </slot>
-      <vgt-global-search
-        @on-keyup="searchTableOnKeyUp"
-        @on-enter="searchTableOnEnter"
-        v-model="globalSearchTerm"
-        :search-enabled="searchEnabled && externalSearchQuery == null"
-        :global-search-placeholder="searchPlaceholder"
-      >
-        <template slot="internal-table-actions">
-          <slot
-            v-if="columnFilterEnabled" 
-            name="table-actions">
-              <vgt-column-dropdown :columns="columns" @input="toggleFilteredColumn"/>
-          </slot>
-        </template>
-      </vgt-global-search>
+      <div slot="internal-table-actions">
+        <slot name="table-actions-header"></slot>
+        <slot name="table-actions-global-search">
+          <vgt-global-search
+            @on-keyup="searchTableOnKeyUp"
+            @on-enter="searchTableOnEnter"
+            v-model="globalSearchTerm"
+            :search-enabled="searchEnabled && externalSearchQuery == null"
+            :global-search-placeholder="searchPlaceholder"
+          />
+        </slot>
+        <slot name="table-actions-dropdown">
+            <vgt-column-dropdown v-if="columnFilterEnabled" :columns="columns" @input="toggleFilteredColumn"/>
+        </slot>
+      </div>
+      
       <div
         v-if="selectedRowCount && !disableSelectInfo"
         class="vgt-selection-info-row clearfix"

@@ -3,6 +3,7 @@
   <button @click="expandAll">Expand All</button>
   <button @click="collapseAll">Collapse All</button>
   <vue-good-table
+    id="vgt-root"
     :columns="columns"
     :rows="rows"
     :line-numbers="true"
@@ -32,12 +33,14 @@
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
-    :row-style-class="rowStyleClassFn"
   >
     <template slot="table-footer-row" slot-scope="{headerRow}">
       <tr slot="table-footer-row">
         <td colspan="9999">total: {{ sumCount(headerRow) }}</td>
       </tr>
+    </template>
+    <template slot="table-actions">
+      Test
     </template>
   </vue-good-table>
 </div>
@@ -134,9 +137,6 @@ export default {
     },
     sumCount(rowObj) {
       return rowObj.episodes.reduce((a, b) => a + (b.count || 0), 0);
-    },
-    rowStyleClassFn(row) {
-      return row.name;
     }
   },
   mounted() {
@@ -147,7 +147,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.row-style{
-    background-color: red;
-  }
+.row-style {
+  background-color: red;
+}
+#vgt-root >>> .vgt-dropdown {
+  float: right;
+  margin-bottom: 5px;
+}
+
 </style>

@@ -15081,7 +15081,12 @@
       "pageChanged": _vm.pageChanged,
       "perPageChanged": _vm.perPageChanged,
       "total": _vm.totalRows || _vm.totalRowCount
-    }) : _vm._e(), _vm._v(" "), _c('vgt-global-search', {
+    }) : _vm._e(), _vm._v(" "), _c('div', {
+      attrs: {
+        "slot": "internal-table-actions"
+      },
+      slot: "internal-table-actions"
+    }, [_vm._t("table-actions-header"), _vm._v(" "), _vm._t("table-actions-global-search", [_c('vgt-global-search', {
       attrs: {
         "search-enabled": _vm.searchEnabled && _vm.externalSearchQuery == null,
         "global-search-placeholder": _vm.searchPlaceholder
@@ -15097,16 +15102,14 @@
         },
         expression: "globalSearchTerm"
       }
-    }, [_c('template', {
-      slot: "internal-table-actions"
-    }, [_vm.columnFilterEnabled ? _vm._t("table-actions", [_c('vgt-column-dropdown', {
+    })]), _vm._v(" "), _vm._t("table-actions-dropdown", [_vm.columnFilterEnabled ? _c('vgt-column-dropdown', {
       attrs: {
         "columns": _vm.columns
       },
       on: {
         "input": _vm.toggleFilteredColumn
       }
-    })]) : _vm._e()], 2)], 2), _vm._v(" "), _vm.selectedRowCount && !_vm.disableSelectInfo ? _c('div', {
+    }) : _vm._e()])], 2), _vm._v(" "), _vm.selectedRowCount && !_vm.disableSelectInfo ? _c('div', {
       staticClass: "vgt-selection-info-row clearfix",
       "class": _vm.selectionInfoClass
     }, [_c('span', [_vm._v(_vm._s(_vm.selectionInfo))]), _vm._v(" "), _c('a', {
