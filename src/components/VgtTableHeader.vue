@@ -161,7 +161,7 @@ export default {
     },
     sort(e, column) {
       console.log('clicked sort: ' + column.label)
-      console.log('sortable? : +this.isSortableColumn(column))
+      console.log('sortable? :' +this.isSortableColumn(column))
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) 
       console.log('not sortable')
