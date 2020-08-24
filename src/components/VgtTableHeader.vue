@@ -20,8 +20,9 @@
       <slot name="table-column" :column="column">
         {{column.label}}
       </slot>
-      <slot v-if="sortable" name="sort-button" :column="column">
+      <slot name="sort-button" :column="column">
         <button
+        v-if="isSortableColumn(column)"
         @click="sort($event, column)">
         <span class="sr-only">
           Sort table by {{ column.label }} in {{ sortButtonOrder }}
@@ -161,6 +162,7 @@ export default {
       return isSortable;
     },
     sort(e, column) {
+      console.log('clicked sort')
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) 
       console.log('not sortable')

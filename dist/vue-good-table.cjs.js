@@ -8485,7 +8485,8 @@ var script$4 = {
     },
     sort: function sort(e, column) {
       //* if column is not sortable, return right here
-      if (!this.isSortableColumn(column)) return;
+      if (!this.isSortableColumn(column)) console.log('not sortable');
+      return;
 
       if (e.shiftKey) {
         this.sorts = secondarySort(this.sorts, column);
@@ -8494,6 +8495,7 @@ var script$4 = {
       }
 
       this.$emit('on-sort-change', this.sorts);
+      console.log('sort started');
     },
     setInitialSort: function setInitialSort(sorts) {
       this.sorts = sorts;
@@ -8639,7 +8641,7 @@ var __vue_render__$4 = function __vue_render__() {
       }
     }, [_c('span', {
       staticClass: "sr-only"
-    }, [_vm._v("\n          Sort by " + _vm._s(column.label) + " in " + _vm._s(_vm.sortButtonOrder) + "\n          ")])])], {
+    }, [_vm._v("\n          Sort table by " + _vm._s(column.label) + " in " + _vm._s(_vm.sortButtonOrder) + "\n          ")])])], {
       "column": column
     }) : _vm._e()], 2) : _vm._e();
   })], 2), _vm._v(" "), _c("vgt-filter-row", {
@@ -8674,7 +8676,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-81c2bc4e";
+var __vue_scope_id__$4 = "data-v-679032cb";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
