@@ -166,6 +166,8 @@ export default {
       console.log('not sortable')
       return;
 
+      console.log('is sortable')
+
       if (e.shiftKey) {
                    console.log('secondary sort')
         this.sorts = SortUtils.secondarySort(this.sorts, column);
