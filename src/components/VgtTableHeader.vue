@@ -20,7 +20,6 @@
       <slot name="table-column" :column="column">
         {{column.label}}
       </slot>
-      <slot name="sort-button" :column="column">
         <button
         v-if="isSortableColumn(column)"
         @click="sort($event, column)">
@@ -28,7 +27,6 @@
           Sort table by {{ column.label }} in {{ sortButtonOrder }}
           </span>
         </button>
-      </slot>
     </th>
   </tr>
   <tr

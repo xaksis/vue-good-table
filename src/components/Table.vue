@@ -104,16 +104,6 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
-            <template v-if="sortable">
-              <slot name="sort-button" slot-scope="props" :column="props.column">
-                <button
-                  @click="sort($event, column)">
-                  <span class="sr-only">
-                  Sort by {{ column.label }} in {{ sortButtonOrder }}
-                </span>
-                </button>
-                </slot>
-            </template>
           </thead>
         </table>
       </div>

@@ -8480,7 +8480,8 @@ var script$4 = {
       return isSortable;
     },
     sort: function sort(e, column) {
-      //* if column is not sortable, return right here
+      console.log('clicked sort'); //* if column is not sortable, return right here
+
       if (!this.isSortableColumn(column)) console.log('not sortable');
       return;
 
@@ -8629,7 +8630,7 @@ var __vue_render__$4 = function __vue_render__() {
       }
     }, [_vm._t("table-column", [_vm._v("\n        " + _vm._s(column.label) + "\n      ")], {
       "column": column
-    }), _vm._v(" "), _vm.sortable ? _vm._t("sort-button", [_c('button', {
+    }), _vm._v(" "), _vm._t("sort-button", [_vm.isSortableColumn(column) ? _c('button', {
       on: {
         "click": function click($event) {
           return _vm.sort($event, column);
@@ -8637,9 +8638,9 @@ var __vue_render__$4 = function __vue_render__() {
       }
     }, [_c('span', {
       staticClass: "sr-only"
-    }, [_vm._v("\n          Sort table by " + _vm._s(column.label) + " in " + _vm._s(_vm.sortButtonOrder) + "\n          ")])])], {
+    }, [_vm._v("\n          Sort table by " + _vm._s(column.label) + " in " + _vm._s(_vm.sortButtonOrder) + "\n          ")])]) : _vm._e()], {
       "column": column
-    }) : _vm._e()], 2) : _vm._e();
+    })], 2) : _vm._e();
   })], 2), _vm._v(" "), _c("vgt-filter-row", {
     ref: "filter-row",
     tag: "tr",
@@ -8672,7 +8673,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-679032cb";
+var __vue_scope_id__$4 = "data-v-307502bd";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
