@@ -7921,8 +7921,7 @@ var __vue_render__$1 = function __vue_render__() {
     },
     attrs: {
       "type": "button",
-      "aria-controls": "vgt-table",
-      "disabled": "!nextIsPossible"
+      "aria-controls": "vgt-table"
     },
     on: {
       "click": function click($event) {
@@ -8088,7 +8087,9 @@ var __vue_staticRenderFns__$2 = [function () {
     }
   }, [_c('div', {
     staticClass: "magnifying-glass"
-  })]), _vm._v("\n    Search\n      ")]);
+  })]), _vm._v(" "), _c('span', {
+    staticClass: "sr-only"
+  }, [_vm._v("Search")])]);
 }];
 /* style */
 
@@ -13747,7 +13748,7 @@ var script$6 = {
       tableLoading: false,
       // text options
       nextText: 'Next',
-      prevText: 'Prev',
+      prevText: 'Previous',
       rowsPerPageText: 'Rows per page',
       ofText: 'of',
       allText: 'All',

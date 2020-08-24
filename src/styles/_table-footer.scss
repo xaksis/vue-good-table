@@ -3,6 +3,7 @@
 }
 .vgt-wrap__footer{
   color: $text-color;
+  font-size:  1.2rem;
   padding:  1em;
   border: 1px solid $border-color;
   background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
@@ -16,13 +17,19 @@
     }
     &__select{
       background-color: #fff;
-      width: 40px;
+      width: auto;
       border: 1px solid #333;
       font-size: 1.2rem;
       margin-left: 8px;
+      padding: 3px;
+      -webkit-appearance: listbox;
+      -moz-appearance: listbox;
     }
   }
   .footer__navigation{
+    > button:first-of-type {
+      margin-right: 16px;
+    } 
     font-size: 1.2rem
     &__page-btn, &__info, &__page-info{
       display: inline-block;
@@ -74,9 +81,6 @@
           margin-left:  -3px;
         }
       }
-       > button:first-of-type {
-         margin: 0;
-       } 
     }
     &__info, &__page-info{
       display: inline-block;
@@ -91,6 +95,8 @@
         font-weight: bold;
       }
     }
+  
+  
   }
 }
 

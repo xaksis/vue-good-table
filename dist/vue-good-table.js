@@ -7927,8 +7927,7 @@
       },
       attrs: {
         "type": "button",
-        "aria-controls": "vgt-table",
-        "disabled": "!nextIsPossible"
+        "aria-controls": "vgt-table"
       },
       on: {
         "click": function click($event) {
@@ -8094,7 +8093,9 @@
       }
     }, [_c('div', {
       staticClass: "magnifying-glass"
-    })]), _vm._v("\n    Search\n      ")]);
+    })]), _vm._v(" "), _c('span', {
+      staticClass: "sr-only"
+    }, [_vm._v("Search")])]);
   }];
   /* style */
 
@@ -13753,7 +13754,7 @@
         tableLoading: false,
         // text options
         nextText: 'Next',
-        prevText: 'Prev',
+        prevText: 'Previous',
         rowsPerPageText: 'Rows per page',
         ofText: 'of',
         allText: 'All',
