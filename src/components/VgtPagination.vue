@@ -22,7 +22,7 @@
       </form>
     </div>
     <div class="footer__navigation vgt-pull-right">
-            <pagination-page-info
+      <pagination-page-info
         @page-changed="changePage"
         :totalRecords="total"
         :lastPage="pagesCount"
@@ -48,7 +48,6 @@
         type="button"
         aria-controls="vgt-table"
         class="footer__navigation__page-btn"
-        disabled="!nextIsPossible"
         :class="{ disabled: !nextIsPossible }"
         @click.prevent.stop="nextPage">
         <span>{{nextText}}</span>

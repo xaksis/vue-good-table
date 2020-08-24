@@ -8092,7 +8092,7 @@ var __vue_staticRenderFns__$2 = [function () {
     }
   }, [_c('div', {
     staticClass: "magnifying-glass"
-  })]), _vm._v("\n    Search this table\n      ")]);
+  })]), _vm._v("\n    Search\n      ")]);
 }];
 /* style */
 

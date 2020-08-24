@@ -433,7 +433,7 @@ export default {
 
     // text options
     nextText: 'Next',
-    prevText: 'Prev',
+    prevText: 'Previous',
     rowsPerPageText: 'Rows per page',
     ofText: 'of',
     allText: 'All',

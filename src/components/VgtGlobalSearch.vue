@@ -4,10 +4,10 @@
     <form v-if="searchEnabled" role="search">
 
       <label for="vgt-search">
-            <span aria-hidden="true" class="input__icon">
-      <div class="magnifying-glass"></div>
-    </span>
-    Search
+        <span aria-hidden="true" class="input__icon">
+        <div class="magnifying-glass"></div>
+        </span>
+        <span class="sr-only">Search</span>
       </label>
     <input
       id="vgt-search"

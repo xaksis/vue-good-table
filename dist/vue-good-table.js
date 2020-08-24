@@ -8094,7 +8094,7 @@
       }
     }, [_c('div', {
       staticClass: "magnifying-glass"
-    })]), _vm._v("\n    Search this table\n      ")]);
+    })]), _vm._v("\n    Search\n      ")]);
   }];
   /* style */
 
