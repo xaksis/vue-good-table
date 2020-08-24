@@ -8488,6 +8488,7 @@ var script$4 = {
 
       if (!this.isSortableColumn(column)) console.log('not sortable');
       return;
+      console.log('is sortable');
 
       if (e.shiftKey) {
         console.log('secondary sort');
@@ -8677,7 +8678,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-01375ab4";
+var __vue_scope_id__$4 = "data-v-616c1d02";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
