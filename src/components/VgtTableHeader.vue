@@ -160,7 +160,7 @@ export default {
       return isSortable;
     },
     sort(e, column) {
-      console.log('clicked sort')
+      console.log('clicked sort: ' + column)
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) 
       console.log('not sortable')
@@ -169,10 +169,11 @@ export default {
       if (e.shiftKey) {
         this.sorts = SortUtils.secondarySort(this.sorts, column);
       } else {
+              console.log('primary sort')
         this.sorts = SortUtils.primarySort(this.sorts, column);
       }
       this.$emit('on-sort-change', this.sorts);
-      console.log('sort started')
+      console.log('sort change emitted')
     },
 
     setInitialSort(sorts) {
