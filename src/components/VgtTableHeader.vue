@@ -24,7 +24,7 @@
         <button
         @click="sort($event, column)">
         <span class="sr-only">
-          Sort by {{ column.label }} in {{ sortButtonOrder }}
+          Sort table by {{ column.label }} in {{ sortButtonOrder }}
           </span>
         </button>
       </slot>
@@ -162,7 +162,9 @@ export default {
     },
     sort(e, column) {
       //* if column is not sortable, return right here
-      if (!this.isSortableColumn(column)) return;
+      if (!this.isSortableColumn(column)) 
+      console.log('not sortable')
+      return;
 
       if (e.shiftKey) {
         this.sorts = SortUtils.secondarySort(this.sorts, column);
@@ -170,6 +172,7 @@ export default {
         this.sorts = SortUtils.primarySort(this.sorts, column);
       }
       this.$emit('on-sort-change', this.sorts);
+      console.log('sort started')
     },
 
     setInitialSort(sorts) {

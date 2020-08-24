@@ -14974,7 +14974,7 @@
           })];
         }
       }], null, true)
-    })], 1) : _vm._e()]), _vm._v(" "), _c('div', {
+    }, [_vm._v(" "), _vm.sortable ? void 0 : _vm._e()], 2)], 1) : _vm._e()]), _vm._v(" "), _c('div', {
       "class": {
         'vgt-responsive': _vm.responsive
       },
