@@ -24,6 +24,7 @@ function getIndex(sortArray, column) {
 }
 
 exports.primarySort = (sortArray, column) => {
+  console.log('at primary sort')
   const currentPrimarySort = getCurrentPrimarySort(sortArray, column);
   return [{
     field: column.field,

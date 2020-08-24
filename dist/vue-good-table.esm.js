@@ -8480,7 +8480,8 @@ var script$4 = {
       return isSortable;
     },
     sort: function sort(e, column) {
-      console.log('clicked sort: ' + column.label); //* if column is not sortable, return right here
+      console.log('clicked sort: ' + column.label);
+      console.log('sortable? :' + this.isSortableColumn(column)); //* if column is not sortable, return right here
 
       if (!this.isSortableColumn(column)) console.log('not sortable');
       return;
@@ -8674,7 +8675,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-616c1d02";
+var __vue_scope_id__$4 = "data-v-b062600e";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
