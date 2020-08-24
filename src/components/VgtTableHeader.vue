@@ -160,13 +160,14 @@ export default {
       return isSortable;
     },
     sort(e, column) {
-      console.log('clicked sort: ' + column)
+      console.log('clicked sort: ' + column.label)
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) 
       console.log('not sortable')
       return;
 
       if (e.shiftKey) {
+                   console.log('secondary sort')
         this.sorts = SortUtils.secondarySort(this.sorts, column);
       } else {
               console.log('primary sort')
