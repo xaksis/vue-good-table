@@ -16,9 +16,7 @@
       font-size: 1.2rem;
     }
     &__select{
-      background-color: #fff;
       width: auto;
-      border: 1px solid #333;
       font-size: 1.2rem;
       margin-left: 8px;
       padding: 3px;
@@ -40,10 +38,6 @@
       color: $text-color;
       font-weight: bold;
       white-space:nowrap;
-      &:focus{
-        outline: none;
-        border: 0;
-      }
       &.disabled,
       &.disabled:hover {
         opacity: 0.5;
