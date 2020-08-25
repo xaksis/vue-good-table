@@ -8367,7 +8367,6 @@ function getIndex(sortArray, column) {
 }
 
 var primarySort = function (sortArray, column) {
-  console.log('at primary sort');
   var currentPrimarySort = getCurrentPrimarySort(sortArray, column);
   return [{
     field: column.field,
@@ -8485,22 +8484,16 @@ var script$4 = {
       return isSortable;
     },
     sort: function sort(e, column) {
-      console.log('clicked sort: ' + column.label);
-      console.log('sortable? :' + this.isSortableColumn(column)); //* if column is not sortable, return right here
-
+      //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) return;
 
       if (e.shiftKey) {
-        console.log('secondary sort');
         this.sorts = secondarySort(this.sorts, column);
       } else {
-        console.log('primary sort');
         this.sorts = primarySort(this.sorts, column);
       }
 
-      console.log('sorted?');
       this.$emit('on-sort-change', this.sorts);
-      console.log('sort change emitted');
     },
     setInitialSort: function setInitialSort(sorts) {
       this.sorts = sorts;
@@ -8679,7 +8672,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-43c72d4c";
+var __vue_scope_id__$4 = "data-v-ffe564fa";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
