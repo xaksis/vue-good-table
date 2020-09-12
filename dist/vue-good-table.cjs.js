@@ -8348,6 +8348,10 @@ var script$4 = {
       "default": null,
       type: String
     },
+    theadTrStyleClass: {
+      "default": null,
+      type: String
+    },
     //* Sort related
     sortable: {
       type: Boolean
@@ -8526,7 +8530,9 @@ var __vue_render__$4 = function __vue_render__() {
 
   return _c('thead', {
     "class": _vm.theadStyleClass
-  }, [_c('tr', [_vm.lineNumbers ? _c('th', {
+  }, [_c('tr', {
+    "class": _vm.theadTrStyleClass
+  }, [_vm.lineNumbers ? _c('th', {
     staticClass: "line-numbers"
   }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
     staticClass: "vgt-checkbox-col"
@@ -8586,7 +8592,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-28c0efca";
+var __vue_scope_id__$4 = "data-v-502c757c";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
@@ -13605,6 +13611,14 @@ var script$6 = {
       "default": null,
       type: String
     },
+    theadTrStyleClass: {
+      "default": null,
+      type: String
+    },
+    tbodyStyleClass: {
+      "default": null,
+      type: String
+    },
     compactMode: Boolean,
     groupOptions: {
       "default": function _default() {
@@ -14864,7 +14878,8 @@ var __vue_render__$6 = function __vue_render__() {
       "searchEnabled": _vm.searchEnabled,
       "paginated": _vm.paginated,
       "table-ref": _vm.$refs.table,
-      "thead-style-class": _vm.theadStyleClass
+      "thead-style-class": _vm.theadStyleClass,
+      "thead-tr-style-class": _vm.theadTrStyleClass
     },
     on: {
       "on-toggle-select-all": _vm.toggleSelectAll,
@@ -14901,7 +14916,8 @@ var __vue_render__$6 = function __vue_render__() {
       "typed-columns": _vm.typedColumns,
       "getClasses": _vm.getClasses,
       "searchEnabled": _vm.searchEnabled,
-      "thead-style-class": _vm.theadStyleClass
+      "thead-style-class": _vm.theadStyleClass,
+      "thead-tr-style-class": _vm.theadTrStyleClass
     },
     on: {
       "on-toggle-select-all": _vm.toggleSelectAll,
@@ -14926,7 +14942,8 @@ var __vue_render__$6 = function __vue_render__() {
     }], null, true)
   }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index) {
     return _c('tbody', {
-      key: index
+      key: index,
+      "class": _vm.tbodyStyleClass
     }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
       "class": _vm.getRowStyleClass(headerRow),
       attrs: {
@@ -15050,7 +15067,9 @@ var __vue_render__$6 = function __vue_render__() {
         }
       }], null, true)
     }) : _vm._e()], 2);
-  }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', [_c('tr', [_c('td', {
+  }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', {
+    "class": _vm.tbodyStyleClass
+  }, [_c('tr', [_c('td', {
     attrs: {
       "colspan": _vm.fullColspan
     }

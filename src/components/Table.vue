@@ -89,6 +89,7 @@
             :paginated="paginated"
             :table-ref="$refs.table"
             :thead-style-class="theadStyleClass"
+            :thead-tr-style-class="theadTrStyleClass"
           >
             <template
               slot="table-column"
@@ -130,6 +131,7 @@
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
             :thead-style-class="theadStyleClass"
+            :thead-tr-style-class="theadTrStyleClass"
           >
             <template
               slot="table-column"
@@ -156,6 +158,7 @@
 
           <!-- Table body starts here -->
           <tbody
+            :class="tbodyStyleClass"
             v-for="(headerRow, index) in paginated"
             :key="index"
           >
@@ -275,7 +278,7 @@
             </vgt-header-row>
           </tbody>
 
-          <tbody v-if="showEmptySlot">
+          <tbody v-if="showEmptySlot" :class="tbodyStyleClass">
             <tr>
               <td :colspan="fullColspan">
                 <slot name="emptystate">
@@ -362,6 +365,8 @@ export default {
     rowStyleClass: { default: null, type: [Function, String] },
 
     theadStyleClass: { default: null, type: String },
+    theadTrStyleClass: { default: null, type: String },
+    tbodyStyleClass: { default: null, type: String },
 
     compactMode: Boolean,
 
