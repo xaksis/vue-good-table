@@ -88,6 +88,7 @@
             :searchEnabled="searchEnabled"
             :paginated="paginated"
             :table-ref="$refs.table"
+            :thead-style-class="theadStyleClass"
           >
             <template
               slot="table-column"
@@ -128,6 +129,7 @@
             :typed-columns="typedColumns"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
+            :thead-style-class="theadStyleClass"
           >
             <template
               slot="table-column"
@@ -358,6 +360,9 @@ export default {
     responsive: { default: true , type: Boolean },
     rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
+
+    theadStyleClass: { default: null, type: String },
+
     compactMode: Boolean,
 
     groupOptions: {

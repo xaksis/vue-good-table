@@ -1,5 +1,5 @@
 <template>
-<thead>
+<thead :class="theadStyleClass">
   <tr>
     <th v-if="lineNumbers" class="line-numbers"></th>
     <th v-if="selectable" class="vgt-checkbox-col">
@@ -76,6 +76,8 @@ export default {
       type: String,
     },
     typedColumns: {},
+
+    theadStyleClass: { default: null, type: String },
 
     //* Sort related
     sortable: {

@@ -8346,6 +8346,10 @@
         type: String
       },
       typedColumns: {},
+      theadStyleClass: {
+        "default": null,
+        type: String
+      },
       //* Sort related
       sortable: {
         type: Boolean
@@ -8522,7 +8526,9 @@
 
     var _c = _vm._self._c || _h;
 
-    return _c('thead', [_c('tr', [_vm.lineNumbers ? _c('th', {
+    return _c('thead', {
+      "class": _vm.theadStyleClass
+    }, [_c('tr', [_vm.lineNumbers ? _c('th', {
       staticClass: "line-numbers"
     }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
       staticClass: "vgt-checkbox-col"
@@ -8582,7 +8588,7 @@
   var __vue_inject_styles__$4 = undefined;
   /* scoped */
 
-  var __vue_scope_id__$4 = "data-v-2d1e3c02";
+  var __vue_scope_id__$4 = "data-v-28c0efca";
   /* module identifier */
 
   var __vue_module_identifier__$4 = undefined;
@@ -13597,6 +13603,10 @@
         "default": null,
         type: [Function, String]
       },
+      theadStyleClass: {
+        "default": null,
+        type: String
+      },
       compactMode: Boolean,
       groupOptions: {
         "default": function _default() {
@@ -14855,7 +14865,8 @@
         "getClasses": _vm.getClasses,
         "searchEnabled": _vm.searchEnabled,
         "paginated": _vm.paginated,
-        "table-ref": _vm.$refs.table
+        "table-ref": _vm.$refs.table,
+        "thead-style-class": _vm.theadStyleClass
       },
       on: {
         "on-toggle-select-all": _vm.toggleSelectAll,
@@ -14891,7 +14902,8 @@
         "sortable": _vm.sortable,
         "typed-columns": _vm.typedColumns,
         "getClasses": _vm.getClasses,
-        "searchEnabled": _vm.searchEnabled
+        "searchEnabled": _vm.searchEnabled,
+        "thead-style-class": _vm.theadStyleClass
       },
       on: {
         "on-toggle-select-all": _vm.toggleSelectAll,
