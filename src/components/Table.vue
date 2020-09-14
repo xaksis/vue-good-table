@@ -106,7 +106,7 @@
         </table>
       </div>
       <div
-        :class="{'vgt-responsive': responsive}"
+        :class="wrapperClasses"
         :style="wrapperStyles"
       >
         <table
@@ -365,6 +365,7 @@ export default {
     rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
 
+    tableWrapperStyleClass: { default: null, type: String },
     theadStyleClass: { default: null, type: String },
     theadTrStyleClass: { default: null, type: String },
     tbodyStyleClass: { default: null, type: String },
@@ -559,6 +560,19 @@ export default {
     },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
+    },
+    wrapperClasses() {
+      let classes = '';
+
+      if (this.responsive) {
+        classes += 'vgt-responsive';
+      }
+
+      if (this.tableWrapperStyleClass) {
+        classes += this.tableWrapperStyleClass;
+      }
+
+      return classes;
     },
     wrapperStyles() {
       return {

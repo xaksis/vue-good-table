@@ -13607,6 +13607,10 @@ var script$6 = {
       "default": null,
       type: [Function, String]
     },
+    tableWrapperStyleClass: {
+      "default": null,
+      type: String
+    },
     theadStyleClass: {
       "default": null,
       type: String
@@ -13787,6 +13791,19 @@ var script$6 = {
     },
     hasFooterSlot: function hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
+    },
+    wrapperClasses: function wrapperClasses() {
+      var classes = '';
+
+      if (this.responsive) {
+        classes += 'vgt-responsive';
+      }
+
+      if (this.tableWrapperStyleClass) {
+        classes += this.tableWrapperStyleClass;
+      }
+
+      return classes;
     },
     wrapperStyles: function wrapperStyles() {
       return {
@@ -14895,9 +14912,7 @@ var __vue_render__$6 = function __vue_render__() {
       }
     }], null, true)
   })], 1) : _vm._e()]), _vm._v(" "), _c('div', {
-    "class": {
-      'vgt-responsive': _vm.responsive
-    },
+    "class": _vm.wrapperClasses,
     style: _vm.wrapperStyles
   }, [_c('table', {
     ref: "table",
