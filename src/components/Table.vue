@@ -157,7 +157,20 @@
           </thead>
 
           <!-- Table body starts here -->
+          <tbody v-if="showEmptySlot" :class="tbodyStyleClass">
+          <tr>
+            <td :colspan="fullColspan">
+              <slot name="emptystate">
+                <div class="vgt-center-align vgt-text-disabled">
+                  No data for table
+                </div>
+              </slot>
+            </td>
+          </tr>
+          </tbody>
+
           <tbody
+            v-else
             :class="tbodyStyleClass"
             v-for="(headerRow, index) in paginated"
             :key="index"
@@ -276,18 +289,6 @@
                 </slot>
               </template>
             </vgt-header-row>
-          </tbody>
-
-          <tbody v-if="showEmptySlot" :class="tbodyStyleClass">
-            <tr>
-              <td :colspan="fullColspan">
-                <slot name="emptystate">
-                  <div class="vgt-center-align vgt-text-disabled">
-                    No data for table
-                  </div>
-                </slot>
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
