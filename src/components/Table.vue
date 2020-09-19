@@ -213,6 +213,7 @@
               >
                 <input
                   type="checkbox"
+                  :disabled="row.vgtDisabled"
                   :checked="row.vgtSelected"
                 />
               </th>
