@@ -64,9 +64,8 @@
           </slot>
         </div>
       </div>
-      <div class="vgt-fixed-header">
+      <div class="vgt-fixed-header" v-if="fixedHeader">
         <table
-          v-if="fixedHeader"
           :class="tableStyleClasses"
         >
           <!-- Table header -->
@@ -176,57 +175,57 @@
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
-            <tr
-              v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
-              v-for="(row, index) in headerRow.children"
-              :key="row.originalIndex"
-              :class="getRowStyleClass(row)"
-              @mouseenter="onMouseenter(row, index)"
-              @mouseleave="onMouseleave(row, index)"
-              @dblclick="onRowDoubleClicked(row, index, $event)"
-              @click="onRowClicked(row, index, $event)"
-              @auxclick="onRowAuxClicked(row, index, $event)">
-              <th
-                v-if="lineNumbers"
-                class="line-numbers"
-              >
-                {{ getCurrentIndex(index) }}
-              </th>
-              <th
-                v-if="selectable"
-                @click.stop="onCheckboxClicked(row, index, $event)"
-                class="vgt-checkbox-col"
-              >
-                <input
-                  type="checkbox"
-                  :checked="row.vgtSelected"
-                />
-              </th>
-              <td
-                @click="onCellClicked(row, column, index, $event)"
-                v-for="(column, i) in columns"
-                :key="i"
-                :class="getClasses(i, 'td', row)"
-                v-if="!column.hidden && column.field"
-              >
-                <slot
-                  name="table-row"
-                  :row="row"
-                  :column="column"
-                  :formattedRow="formattedRow(row)"
-                  :index="index"
+            <template v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true">
+              <tr
+                v-for="(row, index) in headerRow.children"
+                :key="row.originalIndex"
+                :class="getRowStyleClass(row)"
+                @mouseenter="onMouseenter(row, index)"
+                @mouseleave="onMouseleave(row, index)"
+                @dblclick="onRowDoubleClicked(row, index, $event)"
+                @click="onRowClicked(row, index, $event)"
+                @auxclick="onRowAuxClicked(row, index, $event)">
+                <th
+                  v-if="lineNumbers"
+                  class="line-numbers"
                 >
-                  <span v-if="!column.html">
-                    {{ collectFormatted(row, column) }}
-                  </span>
-                  <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
+                  {{ getCurrentIndex(index) }}
+                </th>
+                <th
+                  v-if="selectable"
+                  @click.stop="onCheckboxClicked(row, index, $event)"
+                  class="vgt-checkbox-col"
+                >
+                  <input
+                    type="checkbox"
+                    :checked="row.vgtSelected"
+                  />
+                </th>
+                <td
+                  @click="onCellClicked(row, column, index, $event)"
+                  v-for="(column, i) in computedColumns"
+                  :key="i"
+                  :class="getClasses(i, 'td', row)"
+                >
+                  <slot
+                    name="table-row"
+                    :row="row"
+                    :column="column"
+                    :formattedRow="formattedRow(row)"
+                    :index="index"
                   >
-                  </span>
-                </slot>
-              </td>
-            </tr>
+                    <span v-if="!column.html">
+                      {{ collectFormatted(row, column) }}
+                    </span>
+                    <span
+                      v-if="column.html"
+                      v-html="collect(row, column.field)"
+                    >
+                    </span>
+                  </slot>
+                </td>
+              </tr>
+            </template>
             <!-- if group row header is at the bottom -->
             <vgt-header-row
               v-if="groupHeaderOnBottom"
@@ -334,8 +333,8 @@ export default {
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
     styleClass: { default: 'vgt-table bordered' },
-    columns: {},
-    rows: {},
+    columns: { type: Array },
+    rows: { type: Array },
     lineNumbers: { default: false },
     responsive: { default: true },
     rtl: { default: false },
@@ -514,6 +513,16 @@ export default {
   },
 
   computed: {
+    computedColumns () {
+      let renderedColumns = [];
+      for (const column of this.columns) {
+        if (!column.hidden && column.field) {
+          renderedColumns.push(column);
+        }
+      }
+      return renderedColumns;
+    },
+
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
     },

@@ -9,12 +9,11 @@
         :indeterminate.prop="allSelectedIndeterminate"
         @change="toggleSelectAll" />
     </th>
-    <th v-for="(column, index) in columns"
+    <th v-for="(column, index) in renderedColumns"
       :key="index"
       @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
-      :style="columnStyles[index]"
-      v-if="!column.hidden">
+      :style="columnStyles[index]">
       <slot name="table-column" :column="column">
         <span>{{column.label}}</span>
       </slot>
@@ -122,9 +121,19 @@ export default {
       lineNumberThStyle: {},
       columnStyles: [],
       sorts: [],
+      ro: null
     };
   },
   computed: {
+    renderedColumns () {
+      let renderedColumns = [];
+      this.columns.forEach((column) => {
+        if (!column.hidden) {
+          renderedColumns.push(column);
+        }
+      });
+      return renderedColumns;
+    }
   },
   methods: {
     reset() {
@@ -228,10 +237,15 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('resize', this.setColumnStyles);
+    this.$nextTick(() => {
+      this.ro = new ResizeObserver(() => {
+          this.setColumnStyles();
+      });
+      this.ro.observe(this.$parent.$el);
+    });
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.setColumnStyles);
+    this.ro.disconnect();
   },
   components: {
     'vgt-filter-row': VgtFilterRow,
