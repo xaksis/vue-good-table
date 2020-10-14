@@ -35,6 +35,11 @@
         skipDiacritics: true,
         externalQuery: searchTerm,
       }">
+      <template slot="checkbox" slot-scope="props">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" :checked="props.row.vgtSelected">
+        </div>
+      </template>
     </vue-good-table>
     <h3>Remote Table</h3>
     <remote-table/>
