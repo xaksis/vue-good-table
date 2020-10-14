@@ -213,6 +213,7 @@
               >
                 <slot name="checkbox" :row="row">
                   <input
+                      class="vgt-checkbox"
                       type="checkbox"
                       :checked="row.vgtSelected"
                   />
