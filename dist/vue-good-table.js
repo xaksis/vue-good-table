@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.0
+ * vue-good-table v2.21.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8397,7 +8397,8 @@
         checkBoxThStyle: {},
         lineNumberThStyle: {},
         columnStyles: [],
-        sorts: []
+        sorts: [],
+        ro: null
       };
     },
     computed: {},
@@ -8501,10 +8502,28 @@
       }
     },
     mounted: function mounted() {
-      window.addEventListener('resize', this.setColumnStyles);
+      var _this = this;
+
+      this.$nextTick(function () {
+        // We're going to watch the parent element for resize events, and calculate column widths if it changes
+        _this.ro = new ResizeObserver(function () {
+          _this.setColumnStyles();
+        });
+
+        _this.ro.observe(_this.$parent.$el); // If this is a fixed-header table, we want to observe each column header from the non-fixed header.
+        // You can imagine two columns swapping widths, which wouldn't cause the above to trigger.
+        // This gets the first tr element of the primary table header, and iterates through its children (the th elements)
+
+
+        if (_this.tableRef) {
+          Array.from(_this.$parent.$refs['table-header-primary'].$el.children[0].children).forEach(function (header) {
+            _this.ro.observe(header);
+          });
+        }
+      });
     },
     beforeDestroy: function beforeDestroy() {
-      window.removeEventListener('resize', this.setColumnStyles);
+      this.ro.disconnect();
     },
     components: {
       'vgt-filter-row': __vue_component__$3
@@ -8582,7 +8601,7 @@
   var __vue_inject_styles__$4 = undefined;
   /* scoped */
 
-  var __vue_scope_id__$4 = "data-v-2d1e3c02";
+  var __vue_scope_id__$4 = undefined;
   /* module identifier */
 
   var __vue_module_identifier__$4 = undefined;
