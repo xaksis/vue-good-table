@@ -80,16 +80,17 @@ export default {
           firstSortType: 'desc',
           filterOptions: {
             enabled: true,
-            filterDropdownItems: [
-              {
-                value: 24,
-                text: '24',
-              },
-              {
-                value: 16,
-                text: '16',
-              },
-            ],
+            filterDropdownItems: ['24', '16', '30'],
+            // filterDropdownItems: [
+            //   {
+            //     value: 24,
+            //     text: '24',
+            //   },
+            //   {
+            //     value: 16,
+            //     text: '16',
+            //   },
+            // ],
           },
         },
         {

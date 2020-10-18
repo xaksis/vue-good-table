@@ -194,6 +194,7 @@ data: {
       label: 'name',
       field: 'name',
       filterOptions: {
+        enabled: true,
         customFilter: true,
         formatValue: this.formatFilterValue
       }
