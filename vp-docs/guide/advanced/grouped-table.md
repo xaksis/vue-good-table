@@ -109,7 +109,7 @@ In this case, the header row spans across all columns
     headerPosition: 'top'
   }"
 >
-  <template slot="table-header-row" slot-scope="props">
+  <template v-slot:table-header-row="props">
     <span class="my-fancy-class">
       {{ props.row.label }}
     </span>
@@ -132,7 +132,7 @@ In this case header row expects a value for each column
     headerPosition: 'top'
   }"
 >
-  <template slot="table-header-row" slot-scope="props">
+  <template v-slot:table-header-row="props">
     <span v-if="props.column.field == 'action'">
       <button class="fancy-btn">Action</button>
     </span>

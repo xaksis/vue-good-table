@@ -7,7 +7,7 @@
     :search-options="{ 
       enabled: true,
     }">
-    <template slot="table-header-row" slot-scope="props">
+    <template v-slot:table-header-row="props">
       <span class="my-fancy-class">
         {{ props.row.label }}
       </span>

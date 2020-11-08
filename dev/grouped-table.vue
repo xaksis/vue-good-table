@@ -28,7 +28,7 @@
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
   >
-    <!-- <template slot="table-header-row" slot-scope="props">
+    <!-- <template v-slot:table-header-row="props">
       <span v-if="props.row.mode === 'span'">
         My header label is - <strong>{{ props.row.label }}</strong>
       </span>

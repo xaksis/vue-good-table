@@ -31,8 +31,7 @@
     :mode="mode"
     :typed-columns="typedColumns">
       <template
-        slot="column-filter"
-        slot-scope="props"
+        v-slot:column-filter="props"
       >
         <slot
           name="column-filter"

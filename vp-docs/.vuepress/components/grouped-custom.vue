@@ -7,7 +7,7 @@
     :search-options="{ 
       enabled: true,
     }">
-    <template slot="table-header-row" slot-scope="props">
+    <template v-slot:table-header-row="props">
       <span v-if="props.column.field == 'action'">
         <button class="fancy-btn" @click="showAlert(props)">Action</button>
       </span>

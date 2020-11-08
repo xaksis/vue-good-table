@@ -1120,7 +1120,7 @@ vue-good-table also supports dynamic td templates where you dictate how to displ
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="table-row" slot-scope="props">
+  <template v-slot:table-row="props">
     <span v-if="props.column.field == 'age'">
       age: {{props.row.age}}
     </span>
@@ -1143,7 +1143,7 @@ Sometimes you might want to use custom column formatting. You can do that in the
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="table-column" slot-scope="props">
+  <template v-slot:table-column="props">
      <span v-if="props.column.label =='Name'">
         <i class="fa fa-address-book"></i> {{props.column.label}}
      </span>

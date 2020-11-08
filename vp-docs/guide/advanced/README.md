@@ -7,7 +7,7 @@ Sometimes you might want to customize exactly how rows are displayed in a table.
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="table-row" slot-scope="props">
+  <template v-slot:table-row="props">
     <span v-if="props.column.field == 'age'">
       <span style="font-weight: bold; color: blue;">{{props.row.age}}</span> 
     </span>
@@ -37,7 +37,7 @@ Sometimes you might want to add columns to the table that are not part of your r
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="table-row" slot-scope="props">
+  <template v-slot:table-row="props">
     <span v-if="props.column.field == 'before'">
       before
     </span>
@@ -72,7 +72,7 @@ Sometimes you might want to customize column headers. You can do that in the fol
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="table-column" slot-scope="props">
+  <template v-slot:table-column="props">
      <span v-if="props.column.label =='Name'">
         <i class="fa fa-address-book"></i> {{props.column.label}}
      </span>
@@ -89,7 +89,7 @@ Sometimes you might want a custom filter. You can do that in the following way:
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="column-filter" slot-scope="props">
+  <template v-slot:column-filter="props">
     <my-custom-filter
       v-if="props.column.filterOptions.customFilter"       
       @input="handleCustomFilter"/>
@@ -127,7 +127,7 @@ You can also provide a function to `formatValue` inside of `filterOptions` to tr
 <vue-good-table
   :columns="columns"
   :rows="rows">
-  <template slot="column-filter" slot-scope="{ column, updateFilters }">
+  <template v-slot:column-filter="{ column, updateFilters }">
     <my-custom-filter
       v-if="column.filterOptions.customFilter"
       @input="(value) => updateFilters(column, value)"/>
@@ -217,7 +217,7 @@ Sometimes you might want to customize the pagination. You can do that in the fol
   :columns="columns"
   :rows="rows"
   :pagination-options="{enabled: true}">
-  <template slot="pagination-bottom" slot-scope="props">
+  <template v-slot:pagination-bottom="props">
     <custom-pagination
       :total="props.total"
       :pageChanged="props.pageChanged"

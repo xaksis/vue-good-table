@@ -90,8 +90,7 @@
             :table-ref="$refs.table"
           >
             <template
-              slot="table-column"
-              slot-scope="props"
+              v-slot:table-column="props"
             >
               <slot
                 name="table-column"
@@ -130,8 +129,7 @@
             :searchEnabled="searchEnabled"
           >
             <template
-              slot="table-column"
-              slot-scope="props"
+              v-slot:table-column="props"
             >
               <slot
                 name="table-column"
@@ -141,8 +139,7 @@
               </slot>
             </template>
             <template
-              slot="column-filter"
-              slot-scope="props"
+              v-slot:column-filter="props"
             >
               <slot
                 name="column-filter"
@@ -177,8 +174,7 @@
             >
               <template
                 v-if="hasHeaderRowTemplate"
-                slot="table-header-row"
-                slot-scope="props"
+                v-slot:table-header-row="props"
               >
                 <slot
                   name="table-header-row"
@@ -259,8 +255,7 @@
             >
               <template
                 v-if="hasHeaderRowTemplate"
-                slot="table-header-row"
-                slot-scope="props"
+                v-slot:table-header-row="props"
               >
                 <slot
                   name="table-header-row"
