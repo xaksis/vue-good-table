@@ -239,13 +239,13 @@
                   :formattedRow="formattedRow(row)"
                   :index="index"
                 >
-                  <template v-if="!column.html">
+                  <span v-if="!column.html">
                     {{ collectFormatted(row, column) }}
-                  </template>
-                  <template v-else
+                  </span>
+                  <span v-else
                     v-html="collect(row, column.field)"
                   >
-                  </template>
+                  </span>
                 </slot>
               </td>
             </tr>
