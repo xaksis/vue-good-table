@@ -242,9 +242,7 @@
                   <span v-if="!column.html">
                     {{ collectFormatted(row, column) }}
                   </span>
-                  <span v-else
-                    v-html="collect(row, column.field)"
-                  >
+                  <span v-else v-html="collect(row, column.field)">
                   </span>
                 </slot>
               </td>
