@@ -36,7 +36,7 @@ Enable/disable sorting on table as a whole.
 
 type: `Object` or `Array`
 
-Allows specifying a default sort for the table on wakeup
+Allows specifying a default sort for the table on wakeup. Both **field** and **type** values are required.
 ```html
 <vue-good-table
   :columns="columns"

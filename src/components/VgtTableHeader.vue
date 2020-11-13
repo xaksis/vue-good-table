@@ -30,6 +30,17 @@
     :columns="columns"
     :mode="mode"
     :typed-columns="typedColumns">
+      <template
+        slot="column-filter"
+        slot-scope="props"
+      >
+        <slot
+          name="column-filter"
+          :column="props.column"
+          :updateFilters="props.updateFilters"
+        >
+        </slot>
+      </template>
   </tr>
 </thead>
 </template>
@@ -121,6 +132,7 @@ export default {
       lineNumberThStyle: {},
       columnStyles: [],
       sorts: [],
+      ro: null
     };
   },
   computed: {
@@ -227,17 +239,28 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('resize', this.setColumnStyles);
+    this.$nextTick(() => {
+      // We're going to watch the parent element for resize events, and calculate column widths if it changes
+      this.ro = new ResizeObserver(() => {
+          this.setColumnStyles();
+      });
+      this.ro.observe(this.$parent.$el);
+      
+      // If this is a fixed-header table, we want to observe each column header from the non-fixed header.
+      // You can imagine two columns swapping widths, which wouldn't cause the above to trigger.
+      // This gets the first tr element of the primary table header, and iterates through its children (the th elements)
+      if (this.tableRef) {
+        Array.from(this.$parent.$refs['table-header-primary'].$el.children[0].children).forEach((header) => {
+          this.ro.observe(header);
+        })
+      }
+    });
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.setColumnStyles);
+    this.ro.disconnect();
   },
   components: {
     'vgt-filter-row': VgtFilterRow,
   },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

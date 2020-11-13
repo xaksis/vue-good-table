@@ -16,7 +16,6 @@ Array containing objects that describe table columns. The column object itself c
     {
       label: 'Name',
       field: 'name',
-      filterable: true,
     }
     //...
 ]
@@ -195,3 +194,17 @@ totalRecords is only useful for remote mode. When server controls pagination the
 :::
 
 total number of rows that exist given a table/filter. refer to [remote workflow](/guide/advanced/remote-workflow.md) for more details
+
+## compactMode
+
+type: `Boolean (default: false)`
+
+Enable mobile-friendly List view on small devices (screenSize below 576px)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  compactMode>
+</vue-good-table>
+```
+<rtl-table />

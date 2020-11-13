@@ -1,3 +1,5 @@
+@import './striped';
+
 // base table styles
 @import './variables';
 @import './utils';
@@ -9,9 +11,9 @@
 
 // table enhancements
 @import './bordered';
-@import './striped';
 @import './rtl';
 @import './condensed';
+@import './compact';
 
 // controls on top
 @import './control-bar';

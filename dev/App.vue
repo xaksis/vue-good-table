@@ -77,18 +77,20 @@ export default {
           label: 'Age',
           field: 'age',
           type: 'number',
+          firstSortType: 'desc',
           filterOptions: {
             enabled: true,
-            filterDropdownItems: [
-              {
-                value: 24,
-                text: '24',
-              },
-              {
-                value: 16,
-                text: '16',
-              },
-            ],
+            filterDropdownItems: ['24', '16', '30'],
+            // filterDropdownItems: [
+            //   {
+            //     value: 24,
+            //     text: '24',
+            //   },
+            //   {
+            //     value: 16,
+            //     text: '16',
+            //   },
+            // ],
           },
         },
         {
@@ -134,31 +136,7 @@ export default {
               'rematch',
             ],
           },
-        },
-        {
-          label: 'Multiselect',
-          field: 'multiselect',
-          filterOptions: {
-            enabled: true,
-            filterMultiselectDropdownItems: [
-              { id: 1, label: 'hello'},
-              'oh no'
-            ],
-          },
-        },
-        {
-          label: 'Average age',
-          field: 'average',
-          type: 'number',
-          filterOptions: {
-            enabled: true,
-            filterMultiselectDropdownItems: [
-              1,
-              1.5,
-              2
-            ],
-          },
-        },
+        }
       ],
       rows: [
         // { id:1, name:"John", age: 20, createdAt: '2018-02-18T00:00:43-05:00',score: 0.03343 },
@@ -170,7 +148,6 @@ export default {
           score: 0.03343,
           bool: true,
           exact: 'match',
-          multiselect: 'hello',
           average: 1
         },
         {
@@ -181,7 +158,6 @@ export default {
           score: 0.03343,
           bool: true,
           exact: 'match',
-          multiselect: 'oh no',
           average: null
         },
         {
@@ -191,8 +167,7 @@ export default {
           createdAt: '2011-10-11',
           score: 0.03343,
           bool: false,
-          exact: null,
-          multiselect: null
+          exact: null
         },
         {
           id: 5,
@@ -202,7 +177,6 @@ export default {
           score: 0.03343,
           bool: null,
           exact: 'rematch',
-          multiselect: 'hello world',
           average: 2
         },
         {
@@ -213,7 +187,6 @@ export default {
           score: 0.03343,
           bool: null,
           exact: 'rematch',
-          multiselect: 'hello',
           average: 3
         },
         {
@@ -224,7 +197,6 @@ export default {
           score: 0.03343,
           bool: null,
           exact: null,
-          multiselect: 'hello',
           average: 2
         },
         {
@@ -235,7 +207,6 @@ export default {
           score: 0.03343,
           bool: true,
           exact: 'match',
-          multiselect: 'hello',
           average: 1.5
         },
         {
@@ -246,7 +217,6 @@ export default {
           score: null,
           bool: 'false',
           exact: null,
-          multiselect: 'hello',
           average: 1
         },
         {
@@ -257,7 +227,6 @@ export default {
           score: 0.03343,
           bool: true,
           exact: 'rematch',
-          multiselect: 'hello',
           average: 1
         },
       ],

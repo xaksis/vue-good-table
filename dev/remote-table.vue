@@ -9,6 +9,7 @@
     @on-sort-change="onSortChange"
     @on-column-filter="onColumnFilter"
     @on-per-page-change="onPerPageChange"
+    compactMode
     :pagination-options="{
       enabled: true,
       perPage: 5,
@@ -19,7 +20,7 @@
     :search-options="{
       enabled: false,
     }"
-    styleClass="vgt-table condensed bordered">
+    styleClass="vgt-table condensed bordered striped">
   </vue-good-table>
 </div>
 </template>

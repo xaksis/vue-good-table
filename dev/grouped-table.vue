@@ -6,7 +6,10 @@
     :columns="columns"
     :rows="rows"
     :line-numbers="true"
-    :select-options="{enabled: true}"
+    :select-options="{
+      enabled: true,
+      selectAllByGroup: true
+    }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
     @on-row-mouseenter="onMouseover"
@@ -14,10 +17,13 @@
     :search-options="{
       enabled: false,
     }"
+    :pagination-options="{
+      enabled: true,
+    }"
     :group-options="{
       enabled: true,
       headerPosition: 'top',
-      collapsable: 2
+      collapsable: true,
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
@@ -72,6 +78,8 @@ export default {
             { name: 'Cat', diet: 'carnivore', count: 28 },
             { name: 'Dog', diet: 'omnivore', count: 12 },
             { name: 'Dolphin', diet: 'carnivore', count: 9 },
+            { name: 'Shrew', diet: 'carnivore', count: 9 },
+            { name: 'Monkey', diet: 'carnivore', count: 9 },
           ],
         },
         {
@@ -83,6 +91,7 @@ export default {
             { name: 'lizard', diet: 'insectivore', count: 34 },
             { name: 'crocodile', diet: 'carnivore', count: 22 },
             { name: 'turtles', diet: 'herbivore', count: 29 },
+            { name: 'alligator', diet: 'herbivore', count: 29 },
           ],
         },
         {

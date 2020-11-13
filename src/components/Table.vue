@@ -109,7 +109,7 @@
       >
         <table
           ref="table"
-          :class="tableStyleClasses"
+          :class="tableStyles"
         >
           <!-- Table header -->
           <thead
@@ -140,6 +140,16 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
+            <template
+              slot="column-filter"
+              slot-scope="props"
+            >
+              <slot
+                name="column-filter"
+                :column="props.column"
+                :updateFilters="props.updateFilters"
+              ></slot>
+            </template>
           </thead>
 
           <!-- Table body starts here -->
@@ -150,16 +160,20 @@
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
-              @vgtExpand="toggleExpand(index)"
+              @vgtExpand="toggleExpand(headerRow[rowKeyField])"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :select-all-by-group="selectAllByGroup"
               :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
+              :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
+              :groupIndex="index"
+              @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
                 v-if="hasHeaderRowTemplate"
@@ -208,6 +222,7 @@
                 :key="i"
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
+                v-bind:data-label="compactMode ? column.label : undefined"
               >
                 <slot
                   name="table-row"
@@ -234,10 +249,13 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :select-all-by-group="selectAllByGroup"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
+              :groupIndex="index"
+              @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
                 v-if="hasHeaderRowTemplate"
@@ -326,22 +344,25 @@ export default {
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: { default: false, type: Boolean },
+    fixedHeader: Boolean ,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
     styleClass: { default: 'vgt-table bordered' },
     columns: {},
     rows: {},
-    lineNumbers: { default: false },
-    responsive: { default: true },
-    rtl: { default: false },
+    lineNumbers: Boolean,
+    responsive: { default: true , type: Boolean },
+    rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
+    compactMode: Boolean,
 
     groupOptions: {
       default() {
         return {
           enabled: false,
+          collapsable: false,
+          rowKey: null
         };
       },
     },
@@ -354,6 +375,7 @@ export default {
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
           disableSelectInfo: false,
+          selectAllByGroup: false,
         };
       },
     },
@@ -415,6 +437,10 @@ export default {
     selectionInfoClass: '',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
+
+    // keys for rows that are currently expanded
+    maintainExpanded: true,
+    expandedRowKeys: new Set(),
 
     // internal sort options
     sortable: true,
@@ -511,6 +537,12 @@ export default {
   },
 
   computed: {
+    tableStyles() {
+      if (this.compactMode)
+        return this.tableStyleClasses + 'vgt-compact'
+      else
+        return this.tableStyleClasses
+    },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
     },
@@ -519,6 +551,10 @@ export default {
         overflow: 'scroll-y',
         maxHeight: this.maxHeight ? this.maxHeight : 'auto',
       };
+    },
+
+    rowKeyField() {
+      return this.groupOptions.rowKey || 'vgt_header_id';
     },
 
     hasHeaderRowTemplate() {
@@ -804,10 +840,13 @@ export default {
         return this.processedRows;
       }
 
-      // for every group, extract the child rows
-      // to cater to paging
+      //* flatten the rows for paging.
       let paginatedRows = [];
       this.processedRows.forEach((childRows) => {
+        //* only add headers when group options are enabled.
+        if (this.groupOptions.enabled) {
+          paginatedRows.push(childRows);
+        }
         paginatedRows.push(...childRows.children);
       });
 
@@ -834,13 +873,25 @@ export default {
       }
       // reconstruct paginated rows here
       const reconstructedRows = [];
-      this.processedRows.forEach((headerRow) => {
-        const i = headerRow.vgt_header_id;
-        const children = paginatedRows.filter((row) => row.vgt_id == i);
-        if (children.length) {
-          const newHeaderRow = cloneDeep(headerRow);
-          newHeaderRow.children = children;
+      paginatedRows.forEach((flatRow) => {
+        //* header row?
+        if (flatRow.vgt_header_id !== undefined) {
+          this.handleExpanded(flatRow);
+          const newHeaderRow = cloneDeep(flatRow);
+          newHeaderRow.children = [];
           reconstructedRows.push(newHeaderRow);
+        } else {
+          //* child row
+          let hRow = reconstructedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
+          if (!hRow) {
+            hRow = this.processedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
+            if (hRow) {
+              hRow = cloneDeep(hRow);
+              hRow.children = [];
+              reconstructedRows.push(hRow);
+            }
+          }
+          hRow.children.push(flatRow);
         }
       });
       return reconstructedRows;
@@ -886,22 +937,42 @@ export default {
   },
 
   methods: {
-    toggleExpand(index) {
-      let headerRow = this.filteredRows[index];
+    //* we need to check for expanded row state here
+    //* to maintain it when sorting/filtering
+    handleExpanded(headerRow) {
+      if (this.maintainExpanded &&
+        this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
+        this.$set(headerRow, 'vgtIsExpanded', true);
+      } else {
+        this.$set(headerRow, 'vgtIsExpanded', false);
+      }
+    },
+    toggleExpand(id) {
+      const headerRow = this.filteredRows.find(r => r[this.rowKeyField] === id);
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
+      }
+      if (this.maintainExpanded
+        && headerRow.vgtIsExpanded) {
+        this.expandedRowKeys.add(headerRow[this.rowKeyField]);
+      } else {
+        this.expandedRowKeys.delete(headerRow[this.rowKeyField]);
       }
     },
 
     expandAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
+        if (this.maintainExpanded) {
+          this.expandedRowKeys.add(row[this.rowKeyField]);
+        }
       });
     },
 
     collapseAll() {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', false);
+        this.expandedRowKeys.clear();
       });
     },
 
@@ -960,6 +1031,12 @@ export default {
         });
       });
       this.emitSelectedRows();
+    },
+
+    toggleSelectGroup(event, headerRow) {
+      each(headerRow.children, (row) => {
+        this.$set(row, 'vgtSelected', event.checked);
+      });
     },
 
     changePage(value) {
@@ -1154,7 +1231,11 @@ export default {
       if (!type) {
         type = this.dataTypes[column.type] || defaultType;
       }
-      return type.format(value, column);
+
+      let result = type.format(value, column);
+      // we must have some values in compact mode
+      if (this.compactMode && (result == '' || result == null)) return '-';
+      return result;
     },
 
     formattedRow(row, isHeaderRow = false) {
@@ -1192,33 +1273,6 @@ export default {
         classes[custom] = true;
       }
       return classes;
-    },
-
-    filterMultiselectItems(column, row) {
-      const columnFieldName = column.field;
-      const columnFilters = this.columnFilters[columnFieldName];
-      if (column.filterOptions && column.filterOptions.filterMultiselectDropdownItems) {
-        if (columnFilters.length === 0) {
-          return true;
-        }
-
-        // Otherwise Use default filters
-        const typeDef = column.typeDef;
-        for (let filter of columnFilters) {
-          let filterLabel = filter;
-          if (typeof filter === 'object') {
-            filterLabel = filter.label;
-          }
-          if (typeDef.filterPredicate(
-            this.collect(row, columnFieldName),
-            filterLabel
-          )) {
-            return true;
-          }
-        }
-        return false;
-      }
-      return undefined;
     },
 
     // method to filter rows
@@ -1275,11 +1329,6 @@ export default {
                   );
                 }
 
-                const filterMultiselect = this.filterMultiselectItems(col, row);
-                if (filterMultiselect !== undefined) {
-                  return filterMultiselect;
-                }
-
                 // Otherwise Use default filters
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
@@ -1321,6 +1370,12 @@ export default {
     handleGrouped(originalRows) {
       originalRows.forEach((headerRow, i) => {
         headerRow.vgt_header_id = i;
+        if (
+          this.groupOptions.maintainExpanded &&
+          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
+        ) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        }
         headerRow.children.forEach((childRow) => {
           childRow.vgt_id = i;
         });
@@ -1475,6 +1530,7 @@ export default {
         selectOnCheckboxOnly,
         selectAllByPage,
         disableSelectInfo,
+        selectAllByGroup,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1487,6 +1543,10 @@ export default {
 
       if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
+      }
+
+      if (typeof selectAllByGroup === 'boolean') {
+        this.selectAllByGroup = selectAllByGroup;
       }
 
       if (typeof disableSelectInfo === 'boolean') {
@@ -1505,13 +1565,6 @@ export default {
         this.clearSelectionText = clearSelectionText;
       }
     },
-
-    // initializeColumns() {
-    //   // take care of default sort on mount
-    //   if (this.defaultSortBy) {
-    //     this.handleDefaultSort();
-    //   }
-    // },
   },
 
   mounted() {
@@ -1531,7 +1584,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "node_modules/vue-select/dist/vue-select";
 
 @import "../styles/style";
 </style>

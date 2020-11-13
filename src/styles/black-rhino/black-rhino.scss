@@ -68,16 +68,6 @@
       opacity: 0.3; /* Firefox */
     }
   }
-
-  .v-select {
-    background-color: $input-bg;
-    input {
-      color: $text-color;
-    }
-    .vs__open-indicator {
-      fill: $text-color
-    }
-  }
 }
 
 .vgt-wrap.black-rhino{

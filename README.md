@@ -8,8 +8,6 @@
 
 An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
 
-Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
-
 <!-- 
 ### Basic Table
 ![Basic Screenshot](README/images/vgt-table.regular.png) -->
