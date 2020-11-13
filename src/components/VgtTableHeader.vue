@@ -24,7 +24,7 @@
         v-if="isSortableColumn(column)"
         @click="sort($event, column)">
         <span class="sr-only">
-          Sort table by {{ column.label }} in {{ sortButtonOrder }}
+          Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
           </span>
         </button>
     </th>
@@ -189,12 +189,6 @@ export default {
       return this.getColumnSort(column) === 'asc'
         ? 'ascending'
         : 'descending'
-    },
-
-    sortButtonOrder () {
-      return this.getColumnSort(column) === 'asc'
-        ? 'descending'
-        : 'ascending'
     },
 
     getHeaderClasses(column, index) {
