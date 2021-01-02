@@ -138,7 +138,7 @@ export default {
     },
 
     getName(column) {
-      return `vgt-' + ${column.field}`;
+      return `vgt-${column.field}`;
     },
 
     updateFiltersOnEnter(column, value) {
