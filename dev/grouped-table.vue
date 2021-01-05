@@ -19,6 +19,7 @@
     }"
     :pagination-options="{
       enabled: true,
+      perPage: 2,
     }"
     :group-options="{
       enabled: true,
