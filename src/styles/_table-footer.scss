@@ -3,6 +3,7 @@
 }
 .vgt-wrap__footer{
   color: $text-color;
+  font-size:  1.2rem;
   padding:  1em;
   border: 1px solid $border-color;
   background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
@@ -12,28 +13,22 @@
       vertical-align: middle;
     }
     &__label{
-      font-size: 14px;
-      color: $secondary-text-color;
+      font-size: 1.2rem;
     }
     &__select{
-      background-color: transparent;
       width: auto;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      height: auto;
-      font-size: 14px;
+      font-size: 1.2rem;
       margin-left: 8px;
-      color:  $text-color;
-      font-weight: bold;
-      &:focus{
-        outline: none;
-        border-color: $link-color;
-      }
+      padding: 3px;
+      -webkit-appearance: listbox;
+      -moz-appearance: listbox;
     }
   }
   .footer__navigation{
-    font-size: 14px;
+    > button:first-of-type {
+      margin-right: 16px;
+    } 
+    font-size: 1.2rem
     &__page-btn, &__info, &__page-info{
       display: inline-block;
       vertical-align: middle;
@@ -43,10 +38,6 @@
       color: $text-color;
       font-weight: bold;
       white-space:nowrap;
-      &:focus{
-        outline: none;
-        border: 0;
-      }
       &.disabled,
       &.disabled:hover {
         opacity: 0.5;
@@ -63,7 +54,7 @@
         height:  24px;
         border-radius: 15%;
         position:  relative;
-        margin:  0px 8px;
+        margin:  0;
         &:after{
           content:  '';
           position:  absolute;
@@ -87,7 +78,6 @@
     }
     &__info, &__page-info{
       display: inline-block;
-      color: $secondary-text-color;
       margin:  0px 16px;
     }
     &__page-info{
@@ -99,6 +89,8 @@
         font-weight: bold;
       }
     }
+  
+  
   }
 }
 

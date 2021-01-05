@@ -6,30 +6,36 @@ $sort-chevron-width: 5px;
     vertical-align: middle;
     position: relative;
     &.sortable{
-      cursor: pointer;
-      &:after{
-        content: '';
+      button {
         position: absolute;
-        height: 0px;
-        width: 0px;
-        right: 6px;
-        top: 50%;
-        margin-top: -7px;
-        border-left: $sort-chevron-width solid transparent;
-        border-right: $sort-chevron-width solid transparent;
-        border-bottom: $sort-chevron-width solid $chevron-color;
-      }
-      &:before{
-        content: '';
-        position: absolute;
-        height: 0px;
-        width: 0px;
-        right: 6px;
-        top: 50%;
-        margin-bottom: -7px;
-        border-left: $sort-chevron-width solid transparent;
-        border-right: $sort-chevron-width solid transparent;
-        border-top: $sort-chevron-width solid $chevron-color;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        &:after{
+          content: '';
+          position: absolute;
+          height: 0px;
+          width: 0px;
+          right: 6px;
+          top: 50%;
+          margin-top: -7px;
+          border-left: $sort-chevron-width solid transparent;
+          border-right: $sort-chevron-width solid transparent;
+          border-bottom: $sort-chevron-width solid $chevron-color;
+        }
+        &:before{
+          content: '';
+          position: absolute;
+          height: 0px;
+          width: 0px;
+          right: 6px;
+          top: 50%;
+          margin-bottom: -7px;
+          border-left: $sort-chevron-width solid transparent;
+          border-right: $sort-chevron-width solid transparent;
+          border-top: $sort-chevron-width solid $chevron-color;
+        }
       }
     }
   }
@@ -84,12 +90,12 @@ $sort-chevron-width: 5px;
     &.vgt-checkbox-col{
       vertical-align: middle;
     }
-    &.sorting-asc{
+    &.sorting-asc button {
       &:after{
         border-bottom: $sort-chevron-width solid $link-color;
       }
     }
-    &.sorting-desc {
+    &.sorting-desc button {
       &:before{
         border-top: $sort-chevron-width solid $link-color;
       }

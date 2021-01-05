@@ -1,8 +1,8 @@
 <template>
 <thead>
   <tr>
-    <th v-if="lineNumbers" class="line-numbers"></th>
-    <th v-if="selectable" class="vgt-checkbox-col">
+    <th scope="col" v-if="lineNumbers" class="line-numbers"></th>
+    <th scope="col" v-if="selectable" class="vgt-checkbox-col">
       <input
         type="checkbox"
         :checked="allSelected"
@@ -10,14 +10,23 @@
         @change="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
+      scope="col"
       :key="index"
-      @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
+      :aria-sort="getColumnSortLong(column)"
+      :aria-controls="`col-${index}`"
       v-if="!column.hidden">
       <slot name="table-column" :column="column">
-        <span>{{column.label}}</span>
+        {{column.label}}
       </slot>
+        <button
+        v-if="isSortableColumn(column)"
+        @click="sort($event, column)">
+        <span class="sr-only">
+          Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
+          </span>
+        </button>
     </th>
   </tr>
   <tr
@@ -137,6 +146,7 @@ export default {
     };
   },
   computed: {
+
   },
   methods: {
     reset() {
@@ -174,6 +184,12 @@ export default {
         }
       }
       return null;
+    },
+
+    getColumnSortLong(column) {
+      return this.getColumnSort(column) === 'asc'
+        ? 'ascending'
+        : 'descending'
     },
 
     getHeaderClasses(column, index) {

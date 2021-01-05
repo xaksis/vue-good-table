@@ -1,18 +1,25 @@
 <template>
 <div v-if="showControlBar" class="vgt-global-search vgt-clearfix">
   <div class="vgt-global-search__input vgt-pull-left">
-    <span v-if="searchEnabled" class="input__icon">
-      <div class="magnifying-glass"></div>
-    </span>
+    <form v-if="searchEnabled" role="search">
+
+      <label for="vgt-search">
+        <span aria-hidden="true" class="input__icon">
+        <div class="magnifying-glass"></div>
+        </span>
+        <span class="sr-only">Search</span>
+      </label>
     <input
-      v-if="searchEnabled"
+      id="vgt-search"
       type="text"
       class="vgt-input vgt-pull-left"
-      :placeholder="globalSearchPlaceholder"
+      :placeholder="null"
       :value="value"
       @input="updateValue($event.target.value)"
       @keyup.enter="entered($event.target.value)" />
+    </form>
   </div>
+
   <div class="vgt-global-search__actions vgt-pull-right">
     <slot name="internal-table-actions">
     </slot>

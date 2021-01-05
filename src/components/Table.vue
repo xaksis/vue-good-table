@@ -66,9 +66,13 @@
       </div>
       <div class="vgt-fixed-header">
         <table
+          id="vgt-table"
           v-if="fixedHeader"
           :class="tableStyleClasses"
         >
+        <colgroup>
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+        </colgroup>
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -108,9 +112,13 @@
         :style="wrapperStyles"
       >
         <table
+          id="vgt-table"
           ref="table"
           :class="tableStyles"
         >
+        <colgroup>
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+        </colgroup>
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -234,10 +242,7 @@
                   <span v-if="!column.html">
                     {{ collectFormatted(row, column) }}
                   </span>
-                  <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
-                  >
+                  <span v-else v-html="collect(row, column.field)">
                   </span>
                 </slot>
               </td>
@@ -426,7 +431,7 @@ export default {
 
     // text options
     nextText: 'Next',
-    prevText: 'Prev',
+    prevText: 'Previous',
     rowsPerPageText: 'Rows per page',
     ofText: 'of',
     allText: 'All',
