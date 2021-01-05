@@ -1048,17 +1048,18 @@ export default {
     },
 
     changePage(value) {
-      if (this.paginationOptions.enabled) {
-        let paginationWidget = this.$refs.paginationBottom;
-        if (this.paginationOptions.position === 'top') {
-          paginationWidget = this.$refs.paginationTop;
+      let { enabled, position } = this.paginationOptions
+      let { paginationBottom, paginationTop } = this.$refs
+      if (enabled) {
+        if ((position === 'top' || position === 'both') && paginationTop) {
+          paginationTop.currentPage = value
         }
-        if (paginationWidget) {
-          paginationWidget.currentPage = value;
-          // we also need to set the currentPage
-          // for table.
-          this.currentPage = value;
+        if ((position === 'bottom' || position === 'both') && paginationBottom) {
+          paginationBottom.currentPage = value
         }
+        // we also need to set the currentPage
+        // for table.
+        this.currentPage = value;
       }
     },
 
@@ -1082,6 +1083,15 @@ export default {
 
     perPageChanged(pagination) {
       this.currentPerPage = pagination.currentPerPage;
+      // ensure that both sides of pagination are in agreement
+      // this fixes changes during position = 'both'
+      let paginationPosition = this.paginationOptions.position
+      if (this.$refs.paginationTop && (paginationPosition === 'top' || paginationPosition === 'both')) {
+        this.$refs.paginationTop.currentPerPage = this.currentPerPage
+      }
+      if (this.$refs.paginationBottom && (paginationPosition === 'bottom' || paginationPosition === 'both')) {
+        this.$refs.paginationBottom.currentPerPage = this.currentPerPage
+      }
       //* update perPage also
       const perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
