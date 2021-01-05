@@ -134,7 +134,7 @@ export default {
       });
     }
   },
-  
+
   mounted() {
   },
   components: {

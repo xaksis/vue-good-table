@@ -15,6 +15,7 @@
       <div
         v-if="isFilterable(column)">
         <input v-if="!isDropdown(column)"
+          :name="getName(column)"
           type="text"
           class="vgt-input"
           :placeholder="getPlaceholder(column)"
@@ -24,6 +25,7 @@
 
         <!-- options are a list of primitives -->
         <select v-if="isDropdownArray(column)"
+          :name="getName(column)"
           class="vgt-select"
           :value="columnFilters[column.field]"
           @change="updateFilters(column, $event.target.value)">
@@ -38,6 +40,7 @@
 
         <!-- options are a list of objects with text and value -->
         <select v-if="isDropdownObjects(column)"
+          :name="getName(column)"
           class="vgt-select"
           :value="columnFilters[column.field]"
           @change="updateFilters(column, $event.target.value, true)">
@@ -132,6 +135,10 @@ export default {
     getPlaceholder(column) {
       const placeholder = (this.isFilterable(column) && column.filterOptions.placeholder) || `Filter ${column.label}`;
       return placeholder;
+    },
+
+    getName(column) {
+      return `vgt-${column.field}`;
     },
 
     updateFiltersOnEnter(column, value) {
