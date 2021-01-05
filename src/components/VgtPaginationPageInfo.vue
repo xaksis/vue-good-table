@@ -1,19 +1,22 @@
 <template>
 <div class="footer__navigation__page-info">
   <form>
-  <label for="change-page-input">{{pageText}} <input
-    id="change-page-input"
-    aria-describedby="change-page-hint"
-    aria-controls="vgb-table"
-    class="footer__navigation__page-info__current-entry"
-    type="text"
-    @keyup.enter.stop="changePage"
-    :value="currentPage"> {{pageInfo}}
+    <label for="change-page-input" class="page-info__label">
+      <span>{{pageText}}</span>
+      <input
+        id="change-page-input"
+        aria-describedby="change-page-hint"
+        aria-controls="vgb-table"
+        class="footer__navigation__page-info__current-entry"
+        type="text"
+        @keyup.enter.stop="changePage"
+        :value="currentPage"> 
+      <span>{{pageInfo}}</span>
     </label>
-    <span id="change-page-hint">
+    <span id="change-page-hint" style="display: none;">
       Type a page number and press Enter to change the page.
     </span>
-    </form>
+  </form>
 </div>
 </template>
 

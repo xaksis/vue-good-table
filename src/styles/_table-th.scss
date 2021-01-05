@@ -7,11 +7,19 @@ $sort-chevron-width: 5px;
     position: relative;
     &.sortable{
       button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background: transparent;
+        border: none;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        &:focus{
+          outline: none;
+        }
         &:after{
           content: '';
           position: absolute;

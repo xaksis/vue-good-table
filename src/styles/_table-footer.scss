@@ -1,9 +1,11 @@
+$footer-font-size: 1.1rem;
+
 .vgt-wrap__actions-footer{
   border: 1px solid $border-color;
 }
 .vgt-wrap__footer{
   color: $text-color;
-  font-size:  1.2rem;
+  font-size:  $footer-font-size;
   padding:  1em;
   border: 1px solid $border-color;
   background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
@@ -13,11 +15,11 @@
       vertical-align: middle;
     }
     &__label{
-      font-size: 1.2rem;
+      font-size: $footer-font-size;
     }
     &__select{
       width: auto;
-      font-size: 1.2rem;
+      font-size: $footer-font-size;
       margin-left: 8px;
       padding: 3px;
       -webkit-appearance: listbox;
@@ -28,16 +30,25 @@
     > button:first-of-type {
       margin-right: 16px;
     } 
-    font-size: 1.2rem
+    font-size: $footer-font-size;
     &__page-btn, &__info, &__page-info{
       display: inline-block;
       vertical-align: middle;
     }
     &__page-btn{
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background: transparent;
+      border: none;
       text-decoration: none;
       color: $text-color;
       font-weight: bold;
       white-space:nowrap;
+      vertical-align: middle;
+      &:hover{
+        cursor: pointer;
+      }
       &.disabled,
       &.disabled:hover {
         opacity: 0.5;
@@ -49,12 +60,19 @@
           border-left-color: $text-color;
         }
       }
+      span{
+        display: inline-block;
+        vertical-align: middle;
+        font-size: $footer-font-size;
+      }
       .chevron{
         width:  24px;
         height:  24px;
         border-radius: 15%;
         position:  relative;
         margin:  0;
+        display: inline-block;
+        vertical-align: middle;
         &:after{
           content:  '';
           position:  absolute;
@@ -81,9 +99,14 @@
       margin:  0px 16px;
     }
     &__page-info{
+      span{
+        display: inline-block;
+        vertical-align: middle;
+      }
       &__current-entry{
         width: 30px;
         text-align: center;
+        vertical-align: middle;
         display: inline-block;
         margin: 0px 10px;
         font-weight: bold;
