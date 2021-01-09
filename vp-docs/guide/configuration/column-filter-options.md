@@ -25,7 +25,7 @@ columns: [
 ]
 ```
 
-## classStyle
+## styleClass
 
 type: `string`
 Class to be added to the parent th element. You can specify several classes separated by a space.
