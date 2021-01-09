@@ -12,7 +12,7 @@ columns: [
     label: 'name',
     field: 'user_name',
     filterOptions: {
-      classStyle: 'class1', // class to be added to the parent th element
+	  styleClass: 'class1', // class to be added to the parent th element
   	  enabled: true, // enable filter for this column
       placeholder: 'Filter This Thing', // placeholder for filter input
       filterValue: 'Jane', // initial populated value for this filter
