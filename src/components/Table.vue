@@ -28,6 +28,7 @@
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
+          :perPageDropdownEnabled="perPageDropdownEnabled"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
@@ -313,6 +314,7 @@
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
+          :perPageDropdownEnabled="perPageDropdownEnabled"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
@@ -405,6 +407,7 @@ export default {
           enabled: false,
           perPage: 10,
           perPageDropdown: null,
+          perPageDropdownEnabled: true,
           position: 'bottom',
           dropdownAllowAll: true,
           mode: 'records', // or pages
@@ -1407,6 +1410,7 @@ export default {
         perPage,
         position,
         perPageDropdown,
+        perPageDropdownEnabled,
         dropdownAllowAll,
         nextLabel,
         prevLabel,
@@ -1439,6 +1443,10 @@ export default {
         if (!this.perPage) {
           [this.perPage] = perPageDropdown;
         }
+      }
+
+      if (typeof perPageDropdownEnabled === 'boolean') {
+        this.perPageDropdownEnabled = perPageDropdownEnabled;
       }
 
       if (typeof dropdownAllowAll === 'boolean') {

@@ -1,6 +1,6 @@
 <template>
   <div class="vgt-wrap__footer vgt-clearfix">
-    <div class="footer__row-count vgt-pull-left">
+    <div v-if="perPageDropdownEnabled" class="footer__row-count vgt-pull-left">
       <form>
         <label :for="id" class="footer__row-count__label">{{rowsPerPageText}}:</label>
         <select
@@ -70,6 +70,7 @@ export default {
     total: { default: null },
     perPage: {},
     rtl: { default: false },
+    perPageDropdownEnabled: { default: true },
     customRowsPerPageDropdown: { default() { return []; } },
     paginateDropdownAllowAll: { default: true },
     mode: { default: 'records' },
