@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.2
+ * vue-good-table v2.21.3
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -7472,7 +7472,9 @@ var script = {
     }
   },
   data: function data() {
-    return {};
+    return {
+      id: this.getId()
+    };
   },
   computed: {
     pageInfo: function pageInfo() {
@@ -7480,6 +7482,9 @@ var script = {
     }
   },
   methods: {
+    getId: function getId() {
+      return "vgt-page-input-".concat(Math.floor(Math.random() * Date.now()));
+    },
     changePage: function changePage(event) {
       var value = parseInt(event.target.value, 10); //! invalid number
 
@@ -7585,15 +7590,21 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "footer__navigation__page-info"
-  }, [_c('form', [_c('label', {
+  }, [_c('form', {
+    on: {
+      "submit": function submit($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c('label', {
     staticClass: "page-info__label",
     attrs: {
-      "for": "change-page-input"
+      "for": _vm.id
     }
   }, [_c('span', [_vm._v(_vm._s(_vm.pageText))]), _vm._v(" "), _c('input', {
     staticClass: "footer__navigation__page-info__current-entry",
     attrs: {
-      "id": "change-page-input",
+      "id": _vm.id,
       "aria-describedby": "change-page-hint",
       "aria-controls": "vgb-table",
       "type": "text"
@@ -7627,7 +7638,7 @@ var __vue_staticRenderFns__ = [];
 var __vue_inject_styles__ = undefined;
 /* scoped */
 
-var __vue_scope_id__ = "data-v-3cd6e31f";
+var __vue_scope_id__ = "data-v-46bdd082";
 /* module identifier */
 
 var __vue_module_identifier__ = undefined;
@@ -7659,6 +7670,9 @@ var script$1 = {
     perPage: {},
     rtl: {
       "default": false
+    },
+    perPageDropdownEnabled: {
+      "default": true
     },
     customRowsPerPageDropdown: {
       "default": function _default() {
@@ -7693,6 +7707,7 @@ var script$1 = {
   },
   data: function data() {
     return {
+      id: this.getId(),
       currentPage: 1,
       prevPage: 0,
       currentPerPage: 10,
@@ -7746,6 +7761,9 @@ var script$1 = {
     }
   },
   methods: {
+    getId: function getId() {
+      return "vgt-select-rpp-".concat(Math.floor(Math.random() * Date.now()));
+    },
     // Change current page
     changePage: function changePage(pageNumber) {
       var emit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
@@ -7840,12 +7858,12 @@ var __vue_render__$1 = function __vue_render__() {
 
   return _c('div', {
     staticClass: "vgt-wrap__footer vgt-clearfix"
-  }, [_c('div', {
+  }, [_vm.perPageDropdownEnabled ? _c('div', {
     staticClass: "footer__row-count vgt-pull-left"
   }, [_c('form', [_c('label', {
     staticClass: "footer__row-count__label",
     attrs: {
-      "for": "select-rows-per-page"
+      "for": _vm.id
     }
   }, [_vm._v(_vm._s(_vm.rowsPerPageText) + ":")]), _vm._v(" "), _c('select', {
     directives: [{
@@ -7856,7 +7874,7 @@ var __vue_render__$1 = function __vue_render__() {
     }],
     staticClass: "footer__row-count__select",
     attrs: {
-      "id": "select-rows-per-page",
+      "id": _vm.id,
       "autocomplete": "off",
       "name": "perPageSelect",
       "aria-controls": "vgt-table"
@@ -7878,12 +7896,12 @@ var __vue_render__$1 = function __vue_render__() {
       domProps: {
         "value": option
       }
-    }, [_vm._v("\n        " + _vm._s(option) + "\n      ")]);
+    }, [_vm._v("\n          " + _vm._s(option) + "\n        ")]);
   }), _vm._v(" "), _vm.paginateDropdownAllowAll ? _c('option', {
     domProps: {
       "value": _vm.total
     }
-  }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "footer__navigation vgt-pull-right"
   }, [_vm.mode === 'pages' ? _c('pagination-page-info', {
     attrs: {
@@ -8015,13 +8033,13 @@ var __vue_component__$1 = /*#__PURE__*/normalizeComponent({
 //
 //
 //
-//
 var script$2 = {
   name: 'VgtGlobalSearch',
   props: ['value', 'searchEnabled', 'globalSearchPlaceholder'],
   data: function data() {
     return {
-      globalSearchTerm: null
+      globalSearchTerm: null,
+      id: this.getId()
     };
   },
   computed: {
@@ -8038,6 +8056,9 @@ var script$2 = {
     },
     entered: function entered(value) {
       this.$emit('on-enter', value);
+    },
+    getId: function getId() {
+      return "vgt-search-".concat(Math.floor(Math.random() * Date.now()));
     }
   }
 };
@@ -8060,11 +8081,22 @@ var __vue_render__$2 = function __vue_render__() {
   }, [_vm.searchEnabled ? _c('form', {
     attrs: {
       "role": "search"
+    },
+    on: {
+      "submit": function submit($event) {
+        $event.preventDefault();
+      }
     }
-  }, [_vm._m(0), _vm._v(" "), _c('input', {
+  }, [_c('label', {
+    attrs: {
+      "for": _vm.id
+    }
+  }, [_vm._m(0), _vm._v(" "), _c('span', {
+    staticClass: "sr-only"
+  }, [_vm._v("Search")])]), _vm._v(" "), _c('input', {
     staticClass: "vgt-input vgt-pull-left",
     attrs: {
-      "id": "vgt-search",
+      "id": _vm.id,
       "type": "text",
       "placeholder": null
     },
@@ -8095,20 +8127,14 @@ var __vue_staticRenderFns__$2 = [function () {
 
   var _c = _vm._self._c || _h;
 
-  return _c('label', {
-    attrs: {
-      "for": "vgt-search"
-    }
-  }, [_c('span', {
+  return _c('span', {
     staticClass: "input__icon",
     attrs: {
       "aria-hidden": "true"
     }
   }, [_c('div', {
     staticClass: "magnifying-glass"
-  })]), _vm._v(" "), _c('span', {
-    staticClass: "sr-only"
-  }, [_vm._v("Search")])]);
+  })]);
 }];
 /* style */
 
@@ -8190,6 +8216,10 @@ var script$3 = {
     isDropdownArray: function isDropdownArray(column) {
       return this.isDropdown(column) && _typeof(column.filterOptions.filterDropdownItems[0]) !== 'object';
     },
+    getClasses: function getClasses(column) {
+      var firstClass = 'filter-th';
+      return column.filterOptions && column.filterOptions.styleClass ? [firstClass].concat(_toConsumableArray(column.filterOptions.styleClass.split(' '))).join(' ') : firstClass;
+    },
     // get column's defined placeholder or default one
     getPlaceholder: function getPlaceholder(column) {
       var placeholder = this.isFilterable(column) && column.filterOptions.placeholder || "Filter ".concat(column.label);
@@ -8261,7 +8291,7 @@ var __vue_render__$3 = function __vue_render__() {
   return _vm.hasFilterRow ? _c('tr', [_vm.lineNumbers ? _c('th') : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th') : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
     return !column.hidden ? _c('th', {
       key: index,
-      staticClass: "filter-th"
+      "class": _vm.getClasses(column)
     }, [_vm._t("column-filter", [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', {
       staticClass: "vgt-input",
       attrs: {
@@ -8347,7 +8377,7 @@ var __vue_staticRenderFns__$3 = [];
 var __vue_inject_styles__$3 = undefined;
 /* scoped */
 
-var __vue_scope_id__$3 = "data-v-7fda9668";
+var __vue_scope_id__$3 = "data-v-76ee74f4";
 /* module identifier */
 
 var __vue_module_identifier__$3 = undefined;
@@ -13740,6 +13770,7 @@ var script$6 = {
           enabled: false,
           perPage: 10,
           perPageDropdown: null,
+          perPageDropdownEnabled: true,
           position: 'bottom',
           dropdownAllowAll: true,
           mode: 'records' // or pages
@@ -14692,6 +14723,7 @@ var script$6 = {
           perPage = _this$paginationOptio2.perPage,
           position = _this$paginationOptio2.position,
           perPageDropdown = _this$paginationOptio2.perPageDropdown,
+          perPageDropdownEnabled = _this$paginationOptio2.perPageDropdownEnabled,
           dropdownAllowAll = _this$paginationOptio2.dropdownAllowAll,
           nextLabel = _this$paginationOptio2.nextLabel,
           prevLabel = _this$paginationOptio2.prevLabel,
@@ -14727,6 +14759,10 @@ var script$6 = {
 
           this.perPage = _perPageDropdown[0];
         }
+      }
+
+      if (typeof perPageDropdownEnabled === 'boolean') {
+        this.perPageDropdownEnabled = perPageDropdownEnabled;
       }
 
       if (typeof dropdownAllowAll === 'boolean') {
@@ -14912,6 +14948,7 @@ var __vue_render__$6 = function __vue_render__() {
       "nextText": _vm.nextText,
       "prevText": _vm.prevText,
       "rowsPerPageText": _vm.rowsPerPageText,
+      "perPageDropdownEnabled": _vm.perPageDropdownEnabled,
       "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
       "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
       "ofText": _vm.ofText,
@@ -15000,6 +15037,14 @@ var __vue_render__$6 = function __vue_render__() {
       fn: function fn(props) {
         return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
           "column": props.column
+        })];
+      }
+    }, {
+      key: "column-filter",
+      fn: function fn(props) {
+        return [_vm._t("column-filter", null, {
+          "column": props.column,
+          "updateFilters": props.updateFilters
         })];
       }
     }], null, true)
@@ -15201,6 +15246,7 @@ var __vue_render__$6 = function __vue_render__() {
       "nextText": _vm.nextText,
       "prevText": _vm.prevText,
       "rowsPerPageText": _vm.rowsPerPageText,
+      "perPageDropdownEnabled": _vm.perPageDropdownEnabled,
       "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
       "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
       "ofText": _vm.ofText,
