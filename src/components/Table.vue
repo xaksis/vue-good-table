@@ -105,6 +105,16 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
+            <template
+                slot="column-filter"
+                slot-scope="props"
+            >
+              <slot
+                  name="column-filter"
+                  :column="props.column"
+                  :updateFilters="props.updateFilters"
+              ></slot>
+            </template>
           </thead>
         </table>
       </div>

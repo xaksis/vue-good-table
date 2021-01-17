@@ -81,6 +81,7 @@ export default {
           filterOptions: {
             enabled: true,
             filterDropdownItems: ['24', '16', '30'],
+            styleClass: 'class1'
             // filterDropdownItems: [
             //   {
             //     value: 24,
