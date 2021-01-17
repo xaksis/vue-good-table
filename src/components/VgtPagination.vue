@@ -2,9 +2,9 @@
   <div class="vgt-wrap__footer vgt-clearfix">
     <div class="footer__row-count vgt-pull-left">
       <form>
-        <label for="select-rows-per-page" class="footer__row-count__label">{{rowsPerPageText}}:</label>
+        <label :for="id" class="footer__row-count__label">{{rowsPerPageText}}:</label>
         <select
-          id="select-rows-per-page"
+          :id="id"
           autocomplete="off"
           name="perPageSelect"
           class="footer__row-count__select"
@@ -83,13 +83,15 @@ export default {
     allText: { default: 'All' },
   },
 
-  data: () => ({
-    currentPage: 1,
-    prevPage: 0,
-    currentPerPage: 10,
-    rowsPerPageOptions: [],
-  }),
-
+  data() {
+    return {
+      id: this.getId(),
+      currentPage: 1,
+      prevPage: 0,
+      currentPerPage: 10,
+      rowsPerPageOptions: [],
+    };
+  },
   watch: {
     perPage: {
       handler(newValue, oldValue) {
@@ -145,6 +147,9 @@ export default {
   },
 
   methods: {
+    getId() {
+      return `vgt-select-rpp-${Math.floor(Math.random() * Date.now())}`;
+    },
     // Change current page
     changePage(pageNumber, emit = true) {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {

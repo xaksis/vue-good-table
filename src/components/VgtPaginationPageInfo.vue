@@ -1,10 +1,10 @@
 <template>
 <div class="footer__navigation__page-info">
   <form @submit.prevent>
-    <label for="change-page-input" class="page-info__label">
+    <label :for="id" class="page-info__label">
       <span>{{pageText}}</span>
       <input
-        id="change-page-input"
+        :id="id"
         aria-describedby="change-page-hint"
         aria-controls="vgb-table"
         class="footer__navigation__page-info__current-entry"
@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+      id: this.getId(),
     };
   },
   computed: {
@@ -52,6 +53,9 @@ export default {
     },
   },
   methods: {
+    getId() {
+      return `vgt-page-input-${Math.floor(Math.random() * Date.now())}`;
+    },
     changePage(event) {
       const value = parseInt(event.target.value, 10);
 

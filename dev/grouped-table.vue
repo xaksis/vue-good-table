@@ -15,7 +15,7 @@
     @on-row-mouseenter="onMouseover"
     @on-row-mouseleave="onMouseover"
     :search-options="{
-      enabled: false,
+      enabled: true,
     }"
     :pagination-options="{
       enabled: true,

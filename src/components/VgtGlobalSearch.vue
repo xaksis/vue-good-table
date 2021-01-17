@@ -2,14 +2,14 @@
 <div v-if="showControlBar" class="vgt-global-search vgt-clearfix">
   <div class="vgt-global-search__input vgt-pull-left">
     <form @submit.prevent v-if="searchEnabled" role="search">
-      <label for="vgt-search">
+      <label :for="id">
         <span aria-hidden="true" class="input__icon">
         <div class="magnifying-glass"></div>
         </span>
         <span class="sr-only">Search</span>
       </label>
     <input
-      id="vgt-search"
+      :id="id"
       type="text"
       class="vgt-input vgt-pull-left"
       :placeholder="null"
@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       globalSearchTerm: null,
+      id: this.getId(),
     };
   },
   computed: {
@@ -53,6 +54,9 @@ export default {
     },
     entered(value) {
       this.$emit('on-enter', value);
+    },
+    getId() {
+      return `vgt-search-${Math.floor(Math.random() * Date.now())}`;
     },
   },
 };
