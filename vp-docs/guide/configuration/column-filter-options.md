@@ -12,6 +12,7 @@ columns: [
     label: 'name',
     field: 'user_name',
     filterOptions: {
+	  styleClass: 'class1', // class to be added to the parent th element
   	  enabled: true, // enable filter for this column
       placeholder: 'Filter This Thing', // placeholder for filter input
       filterValue: 'Jane', // initial populated value for this filter
@@ -23,6 +24,11 @@ columns: [
   // ...
 ]
 ```
+
+## styleClass
+
+type: `string`
+Class to be added to the parent th element. You can specify several classes separated by a space.
 
 ## enabled
 

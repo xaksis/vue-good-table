@@ -2,9 +2,11 @@
 <tr v-if="hasFilterRow">
   <th v-if="lineNumbers"></th>
   <th v-if="selectable"></th>
-  <th class="filter-th"
+  <th
     v-for="(column, index) in columns" :key="index"
-    v-if="!column.hidden">
+    v-if="!column.hidden"
+    :class="getClasses(column)"
+    >
 
     <slot
         name="column-filter"
@@ -129,6 +131,11 @@ export default {
     isDropdownArray(column) {
       return this.isDropdown(column)
         && typeof column.filterOptions.filterDropdownItems[0] !== 'object';
+    },
+
+    getClasses(column) {
+      const firstClass = 'filter-th';
+      return (column.filterOptions && column.filterOptions.styleClass) ? [firstClass, ...column.filterOptions.styleClass.split(' ')].join(' ') : firstClass;
     },
 
     // get column's defined placeholder or default one
