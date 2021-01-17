@@ -33,7 +33,6 @@
       :search-options="{
         enabled: true,
         skipDiacritics: true,
-        externalQuery: searchTerm,
       }">
     </vue-good-table>
     <h3>Remote Table</h3>

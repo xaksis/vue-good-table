@@ -1,8 +1,7 @@
 <template>
 <div v-if="showControlBar" class="vgt-global-search vgt-clearfix">
   <div class="vgt-global-search__input vgt-pull-left">
-    <form v-if="searchEnabled" role="search">
-
+    <form @submit.prevent v-if="searchEnabled" role="search">
       <label for="vgt-search">
         <span aria-hidden="true" class="input__icon">
         <div class="magnifying-glass"></div>

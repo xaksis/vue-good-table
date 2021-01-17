@@ -2,23 +2,23 @@
   <div class="vgt-wrap__footer vgt-clearfix">
     <div class="footer__row-count vgt-pull-left">
       <form>
-      <label for="select-rows-per-page" class="footer__row-count__label">{{rowsPerPageText}}:</label>
-      <select
-        id="select-rows-per-page"
-        autocomplete="off"
-        name="perPageSelect"
-        class="footer__row-count__select"
-        v-model="currentPerPage"
-        @change="perPageChanged"
-        aria-controls="vgt-table">
-        <option
-          v-for="(option, idx) in rowsPerPageOptions"
-          :key="'rows-dropdown-option-' + idx"
-          :value="option">
-          {{ option }}
-        </option>
-        <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
-      </select>
+        <label for="select-rows-per-page" class="footer__row-count__label">{{rowsPerPageText}}:</label>
+        <select
+          id="select-rows-per-page"
+          autocomplete="off"
+          name="perPageSelect"
+          class="footer__row-count__select"
+          v-model="currentPerPage"
+          @change="perPageChanged"
+          aria-controls="vgt-table">
+          <option
+            v-for="(option, idx) in rowsPerPageOptions"
+            :key="'rows-dropdown-option-' + idx"
+            :value="option">
+            {{ option }}
+          </option>
+          <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
+        </select>
       </form>
     </div>
     <div class="footer__navigation vgt-pull-right">

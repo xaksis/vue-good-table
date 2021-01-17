@@ -1,6 +1,6 @@
 <template>
 <div class="footer__navigation__page-info">
-  <form>
+  <form @submit.prevent>
     <label for="change-page-input" class="page-info__label">
       <span>{{pageText}}</span>
       <input
