@@ -1218,7 +1218,7 @@ export default {
     },
 
     // field can be:
-    // 1. function
+    // 1. function (passed as a string using function.name. For example: 'bound myFunction')
     // 2. regular property - ex: 'prop'
     // 3. nested property path - ex: 'nested.prop'
     collect(obj, field) {
@@ -1369,9 +1369,13 @@ export default {
           return;
         }
 
+        const fieldKey = (field) => {
+          return typeof(field) === 'function' ? field.name : field;
+        }
+
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
-          if (this.columnFilters[col.field]) {
+          if (this.columnFilters[fieldKey(col.field)]) {
             computedRows = each(computedRows, (headerRow) => {
               const newChildren = headerRow[groupChildObject].filter((row) => {
                 // If column has a custom filter, use that.
@@ -1381,7 +1385,7 @@ export default {
                 ) {
                   return col.filterOptions.filterFn(
                     this.collect(row, col.field),
-                    this.columnFilters[col.field]
+                    this.columnFilters[fieldKey(col.field)]
                   );
                 }
 
@@ -1394,7 +1398,7 @@ export default {
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
                   this.collect(row, col.field),
-                  this.columnFilters[col.field],
+                  this.columnFilters[fieldKey(col.field)],
                   false,
                   col.filterOptions &&
                     typeof col.filterOptions.filterDropdownItems === 'object'
