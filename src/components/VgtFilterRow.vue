@@ -12,14 +12,14 @@
         type="text"
         class="vgt-input"
         :placeholder="getPlaceholder(column)"
-        :value="columnFilters[column.field]"
+        :value="columnFilters[fieldKey(column.field)]"
         @keyup.enter="updateFiltersOnEnter(column, $event.target.value)"
         @input="updateFiltersOnKeyup(column, $event.target.value)" />
 
       <!-- options are a list of primitives -->
       <select v-if="isDropdownArray(column)"
         class="vgt-select"
-        :value="columnFilters[column.field]"
+        :value="columnFilters[fieldKey(column.field)]"
         @change="updateFilters(column, $event.target.value)">
           <option value="" key="-1">{{ getPlaceholder(column) }}</option>
           <option
@@ -33,7 +33,7 @@
       <!-- options are a list of objects with text and value -->
       <select v-if="isDropdownObjects(column)"
         class="vgt-select"
-        :value="columnFilters[column.field]"
+        :value="columnFilters[fieldKey(column.field)]"
         @change="updateFilters(column, $event.target.value, true)">
         <option value="" key="-1">{{ getPlaceholder(column) }}</option>
         <option
@@ -172,7 +172,7 @@ export default {
     },
 
     updateFiltersImmediately(column, value) {
-      this.$set(this.columnFilters, column.field, value);
+      this.$set(this.columnFilters, this.fieldKey(column.field), value);
       this.$emit('filter-changed', this.columnFilters);
     },
 
@@ -192,6 +192,10 @@ export default {
       //* lets emit event once all filters are set
       this.$emit('filter-changed', this.columnFilters);
     },
+    fieldKey(field) {
+      return typeof(field) === 'function' ? field.name : field;
+    },
+
   },
 };
 </script>
