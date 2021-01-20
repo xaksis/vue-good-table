@@ -21,7 +21,7 @@
           type="text"
           class="vgt-input"
           :placeholder="getPlaceholder(column)"
-          :value="columnFilters[column.field]"
+          :value="columnFilters[fieldKey(column.field)]"
           @keyup.enter="updateFiltersOnEnter(column, $event.target.value)"
           @input="updateFiltersOnKeyup(column, $event.target.value)" />
 
@@ -29,7 +29,7 @@
         <select v-if="isDropdownArray(column)"
           :name="getName(column)"
           class="vgt-select"
-          :value="columnFilters[column.field]"
+          :value="columnFilters[fieldKey(column.field)]"
           @change="updateFilters(column, $event.target.value)">
             <option value="" key="-1">{{ getPlaceholder(column) }}</option>
             <option
@@ -44,7 +44,7 @@
         <select v-if="isDropdownObjects(column)"
           :name="getName(column)"
           class="vgt-select"
-          :value="columnFilters[column.field]"
+          :value="columnFilters[fieldKey(column.field)]"
           @change="updateFilters(column, $event.target.value, true)">
           <option value="" key="-1">{{ getPlaceholder(column) }}</option>
           <option
@@ -88,6 +88,7 @@ export default {
     };
   },
   computed: {
+
     // to create a filter row, we need to
     // make sure that there is atleast 1 column
     // that requires filtering
@@ -104,6 +105,14 @@ export default {
     },
   },
   methods: {
+
+    fieldKey(column) {
+      if (typeof(column) === 'function') {
+        return column.name;
+      }
+      return column;
+    },
+
     reset(emitEvent = false) {
       this.columnFilters = {};
 
@@ -145,7 +154,7 @@ export default {
     },
 
     getName(column) {
-      return `vgt-${column.field}`;
+      return `vgt-${this.fieldKey(column.field)}`;
     },
 
     updateFiltersOnEnter(column, value) {
@@ -177,7 +186,7 @@ export default {
     },
 
     updateFiltersImmediately(field, value) {
-      this.$set(this.columnFilters, field, value);
+      this.$set(this.columnFilters, this.fieldKey(field), value);
       this.$emit('filter-changed', this.columnFilters);
     },
 
@@ -189,7 +198,7 @@ export default {
         if (this.isFilterable(col)
           && typeof col.filterOptions.filterValue !== 'undefined'
           && col.filterOptions.filterValue !== null) {
-          this.$set(this.columnFilters, col.field, col.filterOptions.filterValue);
+          this.$set(this.columnFilters, this.fieldKey(col.field), col.filterOptions.filterValue);
           // this.updateFilters(col, col.filterOptions.filterValue);
           // this.$set(col.filterOptions, 'filterValue', undefined);
         }
