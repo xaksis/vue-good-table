@@ -30,7 +30,7 @@
           :name="getName(column)"
           class="vgt-select"
           :value="columnFilters[column.field]"
-          @change="updateFilters(column, $event.target.value)">
+          @change="updateFiltersImmediately(column.field, $event.target.value)">
             <option value="" key="-1">{{ getPlaceholder(column) }}</option>
             <option
               v-for="(option, i) in column.filterOptions.filterDropdownItems"
@@ -45,7 +45,7 @@
           :name="getName(column)"
           class="vgt-select"
           :value="columnFilters[column.field]"
-          @change="updateFilters(column, $event.target.value, true)">
+          @change="updateFiltersImmediately(column.field, $event.target.value)">
           <option value="" key="-1">{{ getPlaceholder(column) }}</option>
           <option
             v-for="(option, i) in column.filterOptions.filterDropdownItems"
