@@ -10,10 +10,23 @@ function getCurrentPrimarySort(sortArray, column) {
   : undefined;
 }
 
-function getNextSort(currentSort) {
-  return (currentSort === 'asc')
-    ? 'desc'
-    : DEFAULT_SORT_TYPE;
+function getNextSort(currentSort, column, resetAfterThirdClick) {
+  const columnFirstSortType = getColumnFirstSortType(column);
+  if (currentSort === 'asc' && columnFirstSortType === 'asc') {
+    return 'desc';
+  } else if (currentSort === 'asc' && columnFirstSortType === 'desc' && resetAfterThirdClick) {
+    return 'none';
+  } else if (currentSort === 'asc' && columnFirstSortType === 'desc' && !resetAfterThirdClick) {
+    return 'desc'
+  } else if (currentSort === 'desc' && columnFirstSortType === 'desc') {
+    return 'asc';
+  } else if (currentSort === 'desc' && columnFirstSortType === 'asc' && resetAfterThirdClick) {
+    return 'none';
+  } else if (currentSort === 'desc' && columnFirstSortType === 'asc' && !resetAfterThirdClick) {
+    return 'desc';
+  }
+
+  return DEFAULT_SORT_TYPE;
 }
 
 function getIndex(sortArray, column) {
@@ -23,15 +36,28 @@ function getIndex(sortArray, column) {
   return -1;
 }
 
-exports.primarySort = (sortArray, column) => {
+exports.primarySort = (sortArray, column, resetAfterThirdClick) => {
   const currentPrimarySort = getCurrentPrimarySort(sortArray, column);
+
+  if (!currentPrimarySort) {
+    return [{
+      field: column.field,
+      type: getColumnFirstSortType(column)
+    }];
+  }
+
+  const type = getNextSort(currentPrimarySort, column, resetAfterThirdClick);
+  if (type === 'none') {
+    return [];
+  }
+
   return [{
     field: column.field,
-    type: currentPrimarySort ? getNextSort(currentPrimarySort) : getColumnFirstSortType(column),
+    type
   }];
 };
 
-exports.secondarySort = (sortArray, column) => {
+exports.secondarySort = (sortArray, column, resetAfterThirdClick) => {
   const index = getIndex(sortArray, column);
   if (index === -1) {
     sortArray.push({
@@ -39,7 +65,7 @@ exports.secondarySort = (sortArray, column) => {
       type: getColumnFirstSortType(column),
     });
   } else {
-    sortArray[index].type = getNextSort(sortArray[index].type);
+    sortArray[index].type = getNextSort(sortArray[index].type, column, resetAfterThirdClick);
   }
   return sortArray;
 };

@@ -90,6 +90,9 @@ export default {
     sortable: {
       type: Boolean,
     },
+    resetSortAfterThirdClick: {
+      type: Boolean,
+    },
     // sortColumn: {
     //   type: Number,
     // },
@@ -165,9 +168,9 @@ export default {
       if (!this.isSortableColumn(column)) return;
 
       if (e.shiftKey) {
-        this.sorts = SortUtils.secondarySort(this.sorts, column);
+        this.sorts = SortUtils.secondarySort(this.sorts, column, this.resetSortAfterThirdClick);
       } else {
-        this.sorts = SortUtils.primarySort(this.sorts, column);
+        this.sorts = SortUtils.primarySort(this.sorts, column, this.resetSortAfterThirdClick);
       }
       this.$emit('on-sort-change', this.sorts);
     },
