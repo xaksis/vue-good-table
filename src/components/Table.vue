@@ -88,6 +88,7 @@
             :all-selected-indeterminate="allSelectedIndeterminate"
             :mode="mode"
             :sortable="sortable"
+            :reset-sort-after-third-click="resetSortAfterThirdClick"
             :typed-columns="typedColumns"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
@@ -144,6 +145,7 @@
             :all-selected-indeterminate="allSelectedIndeterminate"
             :mode="mode"
             :sortable="sortable"
+            :reset-sort-after-third-click="resetSortAfterThirdClick"
             :typed-columns="typedColumns"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
@@ -406,6 +408,7 @@ export default {
         return {
           enabled: true,
           initialSortBy: {},
+          resetAfterThirdClick: false,
         };
       },
     },
@@ -466,6 +469,7 @@ export default {
     // internal sort options
     sortable: true,
     defaultSortBy: null,
+    resetSortAfterThirdClick: false,
 
     // internal search options
     searchEnabled: false,
@@ -1534,7 +1538,7 @@ export default {
     },
 
     initializeSort() {
-      const { enabled, initialSortBy } = this.sortOptions;
+      const { enabled, initialSortBy, resetAfterThirdClick } = this.sortOptions;
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
@@ -1554,6 +1558,10 @@ export default {
           );
           if (hasField) ref.setInitialSort([initialSortBy]);
         }
+      }
+
+      if (typeof resetAfterThirdClick === 'boolean') {
+        this.resetSortAfterThirdClick = resetAfterThirdClick;
       }
     },
 

@@ -28,7 +28,7 @@
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
-        initialSortBy: [{field: 'name', type: 'asc'}],
+        resetAfterThirdClick: true
       }"
       :search-options="{
         enabled: true,
@@ -387,8 +387,10 @@ export default {
     onSortChange(params) {
       console.log('on-sort-change:');
       console.log(params);
-      const [nameFilter] = params;
-      console.log(typeof nameFilter.field === 'function');
+      if (params.length > 0) {
+        const [nameFilter] = params;
+        console.log(typeof nameFilter.field === 'function');
+      }
     },
 
     onRowClick(params) {
