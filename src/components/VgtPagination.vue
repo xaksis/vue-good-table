@@ -82,6 +82,7 @@ export default {
     ofText: { default: 'of' },
     pageText: { default: 'page' },
     allText: { default: 'All' },
+    initialPage: { default: null },
   },
 
   data() {
@@ -112,7 +113,14 @@ export default {
           this.currentPerPage = newValue;
         }
       }
-    }
+    },
+
+    initialPage: {
+      handler(value, oldValue) {
+        if (!value || value === oldValue) return;
+        this.changePage(value, false);
+      }
+    },
   },
 
   computed: {
