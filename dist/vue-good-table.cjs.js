@@ -7707,6 +7707,9 @@ var script$1 = {
     },
     allText: {
       "default": 'All'
+    },
+    initialPage: {
+      "default": null
     }
   },
   data: function data() {
@@ -7734,6 +7737,12 @@ var script$1 = {
         if (this.rowsPerPageOptions.indexOf(this.currentPerPage) === -1) {
           this.currentPerPage = newValue;
         }
+      }
+    },
+    initialPage: {
+      handler: function handler(value, oldValue) {
+        if (!value || value === oldValue) return;
+        this.changePage(value, false);
       }
     }
   },
@@ -8328,7 +8337,7 @@ var __vue_render__$3 = function __vue_render__() {
       },
       on: {
         "change": function change($event) {
-          return _vm.updateFilters(column, $event.target.value);
+          return _vm.updateFiltersImmediately(column.field, $event.target.value);
         }
       }
     }, [_c('option', {
@@ -8353,7 +8362,7 @@ var __vue_render__$3 = function __vue_render__() {
       },
       on: {
         "change": function change($event) {
-          return _vm.updateFilters(column, $event.target.value, true);
+          return _vm.updateFiltersImmediately(column.field, $event.target.value);
         }
       }
     }, [_c('option', {
@@ -8381,7 +8390,7 @@ var __vue_staticRenderFns__$3 = [];
 var __vue_inject_styles__$3 = undefined;
 /* scoped */
 
-var __vue_scope_id__$3 = "data-v-76ee74f4";
+var __vue_scope_id__$3 = "data-v-5a65dbc0";
 /* module identifier */
 
 var __vue_module_identifier__$3 = undefined;
@@ -14946,13 +14955,14 @@ var __vue_render__$6 = function __vue_render__() {
     ref: "paginationTop",
     attrs: {
       "perPage": _vm.perPage,
+      "initialPage": _vm.currentPage,
       "rtl": _vm.rtl,
       "total": _vm.totalRows || _vm.totalRowCount,
       "mode": _vm.paginationMode,
       "nextText": _vm.nextText,
       "prevText": _vm.prevText,
       "rowsPerPageText": _vm.rowsPerPageText,
-      "perPageDropdownEnabled": _vm.perPageDropdownEnabled,
+      "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
       "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
       "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
       "ofText": _vm.ofText,
@@ -15244,13 +15254,14 @@ var __vue_render__$6 = function __vue_render__() {
     ref: "paginationBottom",
     attrs: {
       "perPage": _vm.perPage,
+      "initialPage": _vm.currentPage,
       "rtl": _vm.rtl,
       "total": _vm.totalRows || _vm.totalRowCount,
       "mode": _vm.paginationMode,
       "nextText": _vm.nextText,
       "prevText": _vm.prevText,
       "rowsPerPageText": _vm.rowsPerPageText,
-      "perPageDropdownEnabled": _vm.perPageDropdownEnabled,
+      "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
       "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
       "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
       "ofText": _vm.ofText,
