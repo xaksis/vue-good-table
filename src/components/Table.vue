@@ -34,7 +34,6 @@
           :ofText="ofText"
           :pageText="pageText"
           :allText="allText"
-          :paginated="paginated"
         ></vgt-pagination>
       </slot>
       <vgt-global-search
@@ -331,7 +330,6 @@
           :ofText="ofText"
           :pageText="pageText"
           :allText="allText"
-          :paginated="paginated"
         ></vgt-pagination>
       </slot>
     </div>
