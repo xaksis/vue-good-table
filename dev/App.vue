@@ -117,7 +117,7 @@ export default {
         },
         {
           label: 'Valid',
-          field: 'bool',
+          field: this.fieldValid,
           type: 'boolean',
           filterOptions: {
             enabled: true,
@@ -129,7 +129,7 @@ export default {
         },
         {
           label: 'Exact',
-          field: 'exact',
+          field: this.fieldExact,
           filterOptions: {
             enabled: true,
             filterDropdownItems: [
@@ -234,6 +234,12 @@ export default {
     };
   },
   methods: {
+    fieldValid(row) {
+      return row.bool;
+    },
+    fieldExact(row) {
+      return row.exact;
+    },
     changePage() {
       this.currentPage += 1;
       this.$set(this.paginationOptions, 'setCurrentPage', this.currentPage);
