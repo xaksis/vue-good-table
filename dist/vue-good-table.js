@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.3
+ * vue-good-table v2.21.4
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8202,6 +8202,13 @@
       }
     },
     methods: {
+      fieldKey: function fieldKey(field) {
+        if (typeof field === 'function' && field.name) {
+          return field.name;
+        }
+
+        return field;
+      },
       reset: function reset() {
         var emitEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
         this.columnFilters = {};
@@ -8232,7 +8239,7 @@
         return placeholder;
       },
       getName: function getName(column) {
-        return "vgt-".concat(column.field);
+        return "vgt-".concat(this.fieldKey(column.field));
       },
       updateFiltersOnEnter: function updateFiltersOnEnter(column, value) {
         if (this.timer) clearTimeout(this.timer);
@@ -8263,7 +8270,7 @@
         }, 400);
       },
       updateFiltersImmediately: function updateFiltersImmediately(field, value) {
-        this.$set(this.columnFilters, field, value);
+        this.$set(this.columnFilters, this.fieldKey(field), value);
         this.$emit('filter-changed', this.columnFilters);
       },
       populateInitialFilters: function populateInitialFilters() {
@@ -8272,7 +8279,7 @@
           // filters supplied by user
 
           if (this.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
-            this.$set(this.columnFilters, col.field, col.filterOptions.filterValue); // this.updateFilters(col, col.filterOptions.filterValue);
+            this.$set(this.columnFilters, this.fieldKey(col.field), col.filterOptions.filterValue); // this.updateFilters(col, col.filterOptions.filterValue);
             // this.$set(col.filterOptions, 'filterValue', undefined);
           }
         } //* lets emit event once all filters are set
@@ -8306,7 +8313,7 @@
           "placeholder": _vm.getPlaceholder(column)
         },
         domProps: {
-          "value": _vm.columnFilters[column.field]
+          "value": _vm.columnFilters[_vm.fieldKey(column.field)]
         },
         on: {
           "keyup": function keyup($event) {
@@ -8326,11 +8333,11 @@
           "name": _vm.getName(column)
         },
         domProps: {
-          "value": _vm.columnFilters[column.field]
+          "value": _vm.columnFilters[_vm.fieldKey(column.field)]
         },
         on: {
           "change": function change($event) {
-            return _vm.updateFilters(column, $event.target.value);
+            return _vm.updateFiltersImmediately(column.field, $event.target.value);
           }
         }
       }, [_c('option', {
@@ -8351,11 +8358,11 @@
           "name": _vm.getName(column)
         },
         domProps: {
-          "value": _vm.columnFilters[column.field]
+          "value": _vm.columnFilters[_vm.fieldKey(column.field)]
         },
         on: {
           "change": function change($event) {
-            return _vm.updateFilters(column, $event.target.value, true);
+            return _vm.updateFiltersImmediately(column.field, $event.target.value);
           }
         }
       }, [_c('option', {
@@ -8383,7 +8390,7 @@
   var __vue_inject_styles__$3 = undefined;
   /* scoped */
 
-  var __vue_scope_id__$3 = "data-v-76ee74f4";
+  var __vue_scope_id__$3 = "data-v-6ab04d42";
   /* module identifier */
 
   var __vue_module_identifier__$3 = undefined;
@@ -8402,6 +8409,11 @@
   }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);
 
   var DEFAULT_SORT_TYPE = 'asc';
+  var SORT_TYPES = {
+    Ascending: 'asc',
+    Descending: 'desc',
+    None: 'none'
+  };
 
   function getColumnFirstSortType(column) {
     return column.firstSortType || DEFAULT_SORT_TYPE;
@@ -8412,7 +8424,11 @@
   }
 
   function getNextSort(currentSort) {
-    return currentSort === 'asc' ? 'desc' : DEFAULT_SORT_TYPE;
+    if (currentSort === SORT_TYPES.Ascending) {
+      return SORT_TYPES.Descending;
+    }
+
+    return SORT_TYPES.Ascending;
   }
 
   function getIndex(sortArray, column) {
@@ -8425,9 +8441,10 @@
 
   var primarySort = function (sortArray, column) {
     var currentPrimarySort = getCurrentPrimarySort(sortArray, column);
+    var nextPrimarySort = getNextSort(currentPrimarySort);
     return [{
       field: column.field,
-      type: currentPrimarySort ? getNextSort(currentPrimarySort) : getColumnFirstSortType(column)
+      type: currentPrimarySort ? nextPrimarySort : getColumnFirstSortType(column)
     }];
   };
 
@@ -14524,7 +14541,7 @@
         this.changePage(1);
       },
       // field can be:
-      // 1. function
+      // 1. function (passed as a string using function.name. For example: 'bound myFunction')
       // 2. regular property - ex: 'prop'
       // 3. nested property path - ex: 'nested.prop'
       collect: function collect(obj, field) {
@@ -14628,64 +14645,102 @@
         // if not we don't need to do anything
 
         if (this.columnFilters && Object.keys(this.columnFilters).length) {
-          // every time we filter rows, we need to set current page
-          // to 1
-          // if the mode is remote, we only need to reset, if this is
-          // being called from filter, not when rows are changing
-          if (this.mode !== 'remote' || fromFilter) {
-            this.changePage(1);
-          } // we need to emit an event and that's that.
-          // but this only needs to be invoked if filter is changing
-          // not when row object is modified.
+          var _ret = function () {
+            // every time we filter rows, we need to set current page
+            // to 1
+            // if the mode is remote, we only need to reset, if this is
+            // being called from filter, not when rows are changing
+            if (_this9.mode !== 'remote' || fromFilter) {
+              _this9.changePage(1);
+            } // we need to emit an event and that's that.
+            // but this only needs to be invoked if filter is changing
+            // not when row object is modified.
 
 
-          if (fromFilter) {
-            this.$emit('on-column-filter', {
-              columnFilters: this.columnFilters
-            });
-          } // if mode is remote, we don't do any filtering here.
-
-
-          if (this.mode === 'remote') {
             if (fromFilter) {
-              this.$emit('update:isLoading', true);
-            } else {
-              // if remote filtering has already been taken care of.
-              this.filteredRows = computedRows;
-            }
-
-            return;
-          }
-
-          var _loop = function _loop(i) {
-            var col = _this9.typedColumns[i];
-
-            if (_this9.columnFilters[col.field]) {
-              computedRows = lodash_foreach(computedRows, function (headerRow) {
-                var newChildren = headerRow.children.filter(function (row) {
-                  // If column has a custom filter, use that.
-                  if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
-                    return col.filterOptions.filterFn(_this9.collect(row, col.field), _this9.columnFilters[col.field]);
-                  } // Otherwise Use default filters
-
-
-                  var typeDef = col.typeDef;
-                  return typeDef.filterPredicate(_this9.collect(row, col.field), _this9.columnFilters[col.field], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
-                }); // should we remove the header?
-
-                headerRow.children = newChildren;
+              _this9.$emit('on-column-filter', {
+                columnFilters: _this9.columnFilters
               });
-            }
-          };
+            } // if mode is remote, we don't do any filtering here.
 
-          for (var i = 0; i < this.typedColumns.length; i++) {
-            _loop(i);
-          }
+
+            if (_this9.mode === 'remote') {
+              if (fromFilter) {
+                _this9.$emit('update:isLoading', true);
+              } else {
+                // if remote filtering has already been taken care of.
+                _this9.filteredRows = computedRows;
+              }
+
+              return {
+                v: void 0
+              };
+            }
+
+            var fieldKey = function fieldKey(field) {
+              if (typeof field === 'function' && field.name) {
+                return field.name;
+              }
+
+              return field;
+            };
+
+            var _loop = function _loop(i) {
+              var col = _this9.typedColumns[i];
+
+              if (_this9.columnFilters[fieldKey(col.field)]) {
+                computedRows = lodash_foreach(computedRows, function (headerRow) {
+                  var newChildren = headerRow.children.filter(function (row) {
+                    // If column has a custom filter, use that.
+                    if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
+                      return col.filterOptions.filterFn(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)]);
+                    } // Otherwise Use default filters
+
+
+                    var typeDef = col.typeDef;
+                    return typeDef.filterPredicate(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
+                  }); // should we remove the header?
+
+                  headerRow.children = newChildren;
+                });
+              }
+            };
+
+            for (var i = 0; i < _this9.typedColumns.length; i++) {
+              _loop(i);
+            }
+          }();
+
+          if (_typeof(_ret) === "object") return _ret.v;
         }
 
         this.filteredRows = computedRows;
       },
-      getCurrentIndex: function getCurrentIndex(index) {
+      getCurrentIndex: function getCurrentIndex(rowId) {
+        console.log(rowId);
+        var index = 0;
+        var found = false;
+
+        for (var i = 0; i < this.paginated.length; i += 1) {
+          var headerRow = this.paginated[i];
+          var children = headerRow.children;
+
+          if (children && children.length) {
+            for (var j = 0; j < children.length; j += 1) {
+              var c = children[j];
+
+              if (c.originalIndex === rowId) {
+                found = true;
+                break;
+              }
+
+              index += 1;
+            }
+          }
+
+          if (found) break;
+        }
+
         return (this.currentPage - 1) * this.currentPerPage + index + 1;
       },
       getRowStyleClass: function getRowStyleClass(row) {
@@ -14954,7 +15009,7 @@
         "nextText": _vm.nextText,
         "prevText": _vm.prevText,
         "rowsPerPageText": _vm.rowsPerPageText,
-        "perPageDropdownEnabled": _vm.perPageDropdownEnabled,
+        "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
         "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
         "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
         "ofText": _vm.ofText,
@@ -15108,9 +15163,9 @@
           })];
         }
       }], null, true)
-    }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index) {
+    }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, hIndex) {
       return _c('tbody', {
-        key: index
+        key: hIndex
       }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
         "class": _vm.getRowStyleClass(headerRow),
         attrs: {
@@ -15124,7 +15179,7 @@
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
           "full-colspan": _vm.fullColspan,
-          "groupIndex": index
+          "groupIndex": hIndex
         },
         on: {
           "vgtExpand": function vgtExpand($event) {
@@ -15167,7 +15222,7 @@
           }
         }, [_vm.lineNumbers ? _c('th', {
           staticClass: "line-numbers"
-        }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(index)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+        }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(row.originalIndex)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
           staticClass: "vgt-checkbox-col",
           on: {
             "click": function click($event) {
@@ -15177,7 +15232,8 @@
           }
         }, [_c('input', {
           attrs: {
-            "type": "checkbox"
+            "type": "checkbox",
+            "disabled": row.vgtDisabled
           },
           domProps: {
             "checked": row.vgtSelected
@@ -15216,7 +15272,7 @@
           "formatted-row": _vm.formattedRow,
           "get-classes": _vm.getClasses,
           "full-colspan": _vm.fullColspan,
-          "groupIndex": index
+          "groupIndex": _vm.index
         },
         on: {
           "on-select-group-change": function onSelectGroupChange($event) {
@@ -15252,7 +15308,7 @@
         "nextText": _vm.nextText,
         "prevText": _vm.prevText,
         "rowsPerPageText": _vm.rowsPerPageText,
-        "perPageDropdownEnabled": _vm.perPageDropdownEnabled,
+        "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
         "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
         "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
         "ofText": _vm.ofText,
