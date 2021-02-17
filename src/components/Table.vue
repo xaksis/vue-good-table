@@ -1345,7 +1345,10 @@ export default {
         }
 
         const fieldKey = (field) => {
-          return typeof(field) === 'function' ? field.name : field;
+          if (typeof(field) === 'function' && field.name) {
+            return field.name;
+          }
+          return field;
         }
 
         for (let i = 0; i < this.typedColumns.length; i++) {

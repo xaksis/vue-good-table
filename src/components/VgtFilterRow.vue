@@ -106,11 +106,11 @@ export default {
   },
   methods: {
 
-    fieldKey(column) {
-      if (typeof(column) === 'function') {
-        return column.name;
+    fieldKey(field) {
+      if (typeof(field) === 'function' && field.name) {
+        return field.name;
       }
-      return column;
+      return field;
     },
 
     reset(emitEvent = false) {
