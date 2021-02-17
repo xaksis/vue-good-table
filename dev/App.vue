@@ -28,7 +28,6 @@
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
-        initialSortBy: [{field: 'name', type: 'asc'}],
       }"
       :search-options="{
         enabled: true,

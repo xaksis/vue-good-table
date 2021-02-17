@@ -34,6 +34,7 @@
           :ofText="ofText"
           :pageText="pageText"
           :allText="allText"
+          :paginated="paginated"
         ></vgt-pagination>
       </slot>
       <vgt-global-search
@@ -173,8 +174,8 @@
 
           <!-- Table body starts here -->
           <tbody
-            v-for="(headerRow, index) in paginated"
-            :key="index"
+            v-for="(headerRow, hIndex) in paginated"
+            :key="hIndex"
           >
             <!-- if group row header is at the top -->
             <vgt-header-row
@@ -191,7 +192,7 @@
               :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
-              :groupIndex="index"
+              :groupIndex="hIndex"
               @on-select-group-change="toggleSelectGroup($event, headerRow)"
             >
               <template
@@ -223,7 +224,7 @@
                 v-if="lineNumbers"
                 class="line-numbers"
               >
-                {{ getCurrentIndex(index) }}
+                {{ getCurrentIndex(row.originalIndex) }}
               </th>
               <th
                 v-if="selectable"
@@ -330,6 +331,7 @@
           :ofText="ofText"
           :pageText="pageText"
           :allText="allText"
+          :paginated="paginated"
         ></vgt-pagination>
       </slot>
     </div>
@@ -691,14 +693,14 @@ export default {
     totalRowCount() {
       let total = 0;
       each(this.processedRows, (headerRow) => {
-        total += headerRow.children ? headerRow.children.length : 1;
+        total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
     },
     totalPageRowCount() {
       let total = 0;
       each(this.paginated, (headerRow) => {
-        total += headerRow.children ? headerRow.children.length : 1;
+        total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
     },
@@ -1386,7 +1388,25 @@ export default {
       this.filteredRows = computedRows;
     },
 
-    getCurrentIndex(index) {
+    getCurrentIndex(rowId) {
+      console.log(rowId);
+      let index = 0;
+      let found = false;
+      for (let i = 0; i < this.paginated.length; i += 1) {
+        const headerRow = this.paginated[i];
+        const { children } = headerRow;
+        if (children && children.length) {
+          for (let j = 0; j < children.length; j += 1) {
+            const c = children[j];
+            if (c.originalIndex === rowId) {
+              found = true;
+              break;
+            }
+            index += 1;
+          }
+        }
+        if (found) break;
+      }
       return ((this.currentPage - 1) * this.currentPerPage) + index + 1;
     },
 

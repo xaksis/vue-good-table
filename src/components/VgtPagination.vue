@@ -82,6 +82,7 @@ export default {
     ofText: { default: 'of' },
     pageText: { default: 'page' },
     allText: { default: 'All' },
+    paginated: {},
   },
 
   data() {
@@ -127,7 +128,8 @@ export default {
     // Current displayed items
     paginatedInfo() {
       let first = ((this.currentPage - 1) * this.currentPerPage) + 1;
-      const last = Math.min(this.total, this.currentPage * this.currentPerPage);
+      let last = Math.min(this.total, this.currentPage * this.currentPerPage);
+      // last = last - this.paginated.length;
 
       if (last === 0) {
         first = 0;

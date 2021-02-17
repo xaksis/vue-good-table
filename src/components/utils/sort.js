@@ -1,4 +1,9 @@
 const DEFAULT_SORT_TYPE = 'asc';
+const SORT_TYPES = {
+  Ascending: 'asc',
+  Descending: 'desc',
+  None: 'none',
+};
 
 function getColumnFirstSortType(column) {
   return column.firstSortType || DEFAULT_SORT_TYPE;
@@ -11,9 +16,10 @@ function getCurrentPrimarySort(sortArray, column) {
 }
 
 function getNextSort(currentSort) {
-  return (currentSort === 'asc')
-    ? 'desc'
-    : DEFAULT_SORT_TYPE;
+  if (currentSort === SORT_TYPES.Ascending) {
+    return SORT_TYPES.Descending;
+  }
+  return SORT_TYPES.Ascending;
 }
 
 function getIndex(sortArray, column) {
@@ -25,9 +31,10 @@ function getIndex(sortArray, column) {
 
 exports.primarySort = (sortArray, column) => {
   const currentPrimarySort = getCurrentPrimarySort(sortArray, column);
+  const nextPrimarySort = getNextSort(currentPrimarySort);
   return [{
     field: column.field,
-    type: currentPrimarySort ? getNextSort(currentPrimarySort) : getColumnFirstSortType(column),
+    type: currentPrimarySort ? nextPrimarySort : getColumnFirstSortType(column),
   }];
 };
 

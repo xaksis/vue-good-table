@@ -19,12 +19,12 @@
     }"
     :pagination-options="{
       enabled: true,
-      perPage: 2,
+      perPage: 5,
     }"
     :group-options="{
       enabled: true,
       headerPosition: 'top',
-      collapsable: true,
+      collapsable: false,
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
@@ -84,7 +84,8 @@ export default {
           ],
         },
         {
-          name: 'Reptile Total',
+          label: 'Reptile Total',
+          mode: 'span',
           diet: '',
           count: '',
           children: [
