@@ -1388,7 +1388,6 @@ export default {
     },
 
     getCurrentIndex(rowId) {
-      console.log(rowId);
       let index = 0;
       let found = false;
       for (let i = 0; i < this.paginated.length; i += 1) {
