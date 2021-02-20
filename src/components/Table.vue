@@ -21,6 +21,7 @@
           ref="paginationTop"
           @page-changed="pageChanged"
           @per-page-changed="perPageChanged"
+          @last-page="lastPage"
           :perPage="perPage"
           :rtl="rtl"
           :total="totalRows || totalRowCount"
@@ -318,6 +319,7 @@
           ref="paginationBottom"
           @page-changed="pageChanged"
           @per-page-changed="perPageChanged"
+          @last-page="lastPage"
           :perPage="perPage"
           :rtl="rtl"
           :total="totalRows || totalRowCount"
@@ -1093,6 +1095,10 @@ export default {
       if (this.mode === 'remote') {
         this.$emit('update:isLoading', true);
       }
+    },
+
+    lastPage(pagination) {
+      this.$emit('on-last-page', pagination);
     },
 
     perPageChanged(pagination) {

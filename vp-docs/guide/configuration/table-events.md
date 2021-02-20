@@ -128,6 +128,25 @@ event emitted on pagination page change (when pagination is enabled)
    }
  }
  ```
+
+## @on-last-page
+event emitted on pagination last page reached (when pagination is enabled)
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-last-page="onLastPage">
+ ```
+ ```javascript
+ methods: {
+   onLastPage(params) {
+     // params.currentPage - current page that pagination is at
+     // params.prevPage - previous page
+     // params.currentPerPage - number of items per page
+     // params.total - total number of items in the table
+   }
+ }
+ ```
  
 ## @on-per-page-change
 event emitted on per page dropdown change (when pagination is enabled)
