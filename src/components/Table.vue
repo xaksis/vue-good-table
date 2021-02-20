@@ -24,6 +24,7 @@
           @last-page="lastPage"
           :perPage="perPage"
           :rtl="rtl"
+          :lazyLoad="lazyLoad"
           :total="totalRows || totalRowCount"
           :mode="paginationMode"
           :nextText="nextText"
@@ -322,6 +323,7 @@
           @last-page="lastPage"
           :perPage="perPage"
           :rtl="rtl"
+          :lazyLoad="lazyLoad"
           :total="totalRows || totalRowCount"
           :mode="paginationMode"
           :nextText="nextText"
@@ -423,7 +425,8 @@ export default {
           perPageDropdownEnabled: true,
           position: 'bottom',
           dropdownAllowAll: true,
-          mode: 'records', // or pages
+          mode: 'records', // or pages,
+          lazyLoad: false,
         };
       },
     },
@@ -486,6 +489,7 @@ export default {
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
     paginationMode: 'records',
+    lazyLoad: false,
 
     currentPage: 1,
     currentPerPage: 10,
@@ -1461,6 +1465,7 @@ export default {
         allLabel,
         setCurrentPage,
         mode,
+        lazyLoad,
       } = this.paginationOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1526,6 +1531,10 @@ export default {
         setTimeout(() => {
           this.changePage(setCurrentPage);
         }, 500);
+      }
+
+      if (typeof lazyLoad === 'boolean') {
+        this.lazyLoad = lazyLoad;
       }
     },
 

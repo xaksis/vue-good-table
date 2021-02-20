@@ -44,11 +44,11 @@
       </button>
 
       <button
-        v-show="nextIsPossible"
+        v-show="nextIsPossible || lazyLoad"
         type="button"
         aria-controls="vgt-table"
         class="footer__navigation__page-btn"
-        :class="{ disabled: !nextIsPossible }"
+        :class="{ disabled: !nextIsPossible && !lazyLoad }"
         @click.prevent.stop="nextPage">
         <span>{{nextText}}</span>
         <span aria-hidden="true" class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
@@ -74,6 +74,7 @@ export default {
     customRowsPerPageDropdown: { default() { return []; } },
     paginateDropdownAllowAll: { default: true },
     mode: { default: 'records' },
+    lazyLoad: { default: false },
 
     // text options
     nextText: { default: 'Next' },
@@ -166,6 +167,8 @@ export default {
         this.prevPage = this.currentPage;
         ++this.currentPage;
         this.pageChanged();
+      } else {
+        this.lastPage();
       }
     },
 
@@ -181,6 +184,14 @@ export default {
     // Indicate page changing
     pageChanged() {
       this.$emit('page-changed', {
+        currentPage: this.currentPage,
+        prevPage: this.prevPage,
+      });
+    },
+
+    // Indicate last page reached
+    lastPage() {
+      this.$emit('last-page', {
         currentPage: this.currentPage,
         prevPage: this.prevPage,
       });
