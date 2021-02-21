@@ -1,8 +1,8 @@
 <template>
 <thead>
   <tr>
-    <th v-if="lineNumbers" class="line-numbers"></th>
-    <th v-if="selectable" class="vgt-checkbox-col">
+    <th scope="col" v-if="lineNumbers" class="line-numbers"></th>
+    <th scope="col" v-if="selectable" class="vgt-checkbox-col">
       <input
         type="checkbox"
         :checked="allSelected"
@@ -10,14 +10,23 @@
         @change="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
+      scope="col"
       :key="index"
-      @click="sort($event, column)"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
+      :aria-sort="getColumnSortLong(column)"
+      :aria-controls="`col-${index}`"
       v-if="!column.hidden">
       <slot name="table-column" :column="column">
-        <span>{{column.label}}</span>
+        {{column.label}}
       </slot>
+        <button
+        v-if="isSortableColumn(column)"
+        @click="sort($event, column)">
+        <span class="sr-only">
+          Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
+          </span>
+        </button>
     </th>
   </tr>
   <tr
@@ -30,6 +39,17 @@
     :columns="columns"
     :mode="mode"
     :typed-columns="typedColumns">
+      <template
+        slot="column-filter"
+        slot-scope="props"
+      >
+        <slot
+          name="column-filter"
+          :column="props.column"
+          :updateFilters="props.updateFilters"
+        >
+        </slot>
+      </template>
   </tr>
 </thead>
 </template>
@@ -122,9 +142,11 @@ export default {
       lineNumberThStyle: {},
       columnStyles: [],
       sorts: [],
+      ro: null
     };
   },
   computed: {
+
   },
   methods: {
     reset() {
@@ -162,6 +184,12 @@ export default {
         }
       }
       return null;
+    },
+
+    getColumnSortLong(column) {
+      return this.getColumnSort(column) === 'asc'
+        ? 'ascending'
+        : 'descending'
     },
 
     getHeaderClasses(column, index) {
@@ -228,17 +256,28 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('resize', this.setColumnStyles);
+    this.$nextTick(() => {
+      // We're going to watch the parent element for resize events, and calculate column widths if it changes
+      this.ro = new ResizeObserver(() => {
+          this.setColumnStyles();
+      });
+      this.ro.observe(this.$parent.$el);
+      
+      // If this is a fixed-header table, we want to observe each column header from the non-fixed header.
+      // You can imagine two columns swapping widths, which wouldn't cause the above to trigger.
+      // This gets the first tr element of the primary table header, and iterates through its children (the th elements)
+      if (this.tableRef) {
+        Array.from(this.$parent.$refs['table-header-primary'].$el.children[0].children).forEach((header) => {
+          this.ro.observe(header);
+        })
+      }
+    });
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.setColumnStyles);
+    this.ro.disconnect();
   },
   components: {
     'vgt-filter-row': VgtFilterRow,
   },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

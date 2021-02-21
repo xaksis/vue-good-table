@@ -116,6 +116,21 @@ Number of rows to show per page
   }">
 </vue-good-table>
 ```
+## perPageDropdownEnabled
+
+type: `Boolean (default: true)`
+
+Show or hide the per page dropdown
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :pagination-options="{
+    enabled: true,
+    perPageDropdownEnabled: false,
+  }">
+</vue-good-table>
+```
 
 ## perPageDropdown
 

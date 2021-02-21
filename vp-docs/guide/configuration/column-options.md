@@ -58,7 +58,7 @@ columns: [
     field: 'createdAt',
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd', // expects 2018-03-16
-    dateOutputFormat: 'MMM Do yyyy', // outputs Mar 16th 2018
+    dateOutputFormat: 'MMM do yyyy', // outputs Mar 16th 2018
   },
   // ...
 ]
@@ -91,6 +91,27 @@ columns: [
     label: 'name',
     field: 'user_name',
     sortable: false,
+  },
+  // ...
+]
+```
+
+## firstSortType
+
+type `String (default: 'asc')`
+
+controls the first sort type when sorting by the column. If you want the first sort type for this column to be descending, set this property to 'desc'. Possible values:
+* _asc_ - the initial sort will be ascending
+* _desc_ - the initial sort will be descending 
+
+
+```javascript
+columns: [
+  { 
+    label: 'name',
+    field: 'user_name',
+    sortable: true,
+    firstSortType: 'desc'
   },
   // ...
 ]
@@ -156,7 +177,7 @@ type `Boolean`
 
 indicates whether this column will require html rendering. 
 ::: tip 
-The preferred way of creating columns that have html is by [using slots](#custom-row-template)
+The preferred way of creating columns that have html is by [using slots](../advanced/#custom-row-template)
 :::
 
 ```javascript

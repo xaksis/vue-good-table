@@ -1,32 +1,27 @@
 <template>
   <div class="vgt-wrap__footer vgt-clearfix">
-    <div class="footer__row-count vgt-pull-left">
-      <span class="footer__row-count__label">{{rowsPerPageText}}</span>
-      <select
-        autocomplete="off"
-        name="perPageSelect"
-        class="footer__row-count__select"
-        v-model="currentPerPage"
-        @change="perPageChanged">
-        <option
-          v-for="(option, idx) in rowsPerPageOptions"
-          :key="'rows-dropdown-option-' + idx"
-          :value="option">
-          {{ option }}
-        </option>
-        <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
-      </select>
+    <div v-if="perPageDropdownEnabled" class="footer__row-count vgt-pull-left">
+      <form>
+        <label :for="id" class="footer__row-count__label">{{rowsPerPageText}}:</label>
+        <select
+          :id="id"
+          autocomplete="off"
+          name="perPageSelect"
+          class="footer__row-count__select"
+          v-model="currentPerPage"
+          @change="perPageChanged"
+          aria-controls="vgt-table">
+          <option
+            v-for="(option, idx) in rowsPerPageOptions"
+            :key="'rows-dropdown-option-' + idx"
+            :value="option">
+            {{ option }}
+          </option>
+          <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
+        </select>
+      </form>
     </div>
     <div class="footer__navigation vgt-pull-right">
-      <a
-        href="javascript:undefined"
-        class="footer__navigation__page-btn"
-        :class="{ disabled: !prevIsPossible }"
-        @click.prevent.stop="previousPage"
-        tabindex="0">
-        <span class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
-        <span>{{prevText}}</span>
-      </a>
       <pagination-page-info
         @page-changed="changePage"
         :totalRecords="total"
@@ -37,11 +32,27 @@
         v-if="mode === 'pages'">
       </pagination-page-info>
       <div v-else class="footer__navigation__info">{{paginatedInfo}}</div>
-      <a href="javascript:undefined" class="footer__navigation__page-btn"
-         :class="{ disabled: !nextIsPossible }" @click.prevent.stop="nextPage" tabindex="0">
+      <button
+        v-show="prevIsPossible"
+        type="button"
+        aria-controls="vgt-table"
+        class="footer__navigation__page-btn"
+        :class="{ disabled: !prevIsPossible }"
+        @click.prevent.stop="previousPage">
+        <span aria-hidden="true" class="chevron" v-bind:class="{ 'left': !rtl, 'right': rtl }"></span>
+        <span>{{prevText}}</span>
+      </button>
+
+      <button
+        v-show="nextIsPossible"
+        type="button"
+        aria-controls="vgt-table"
+        class="footer__navigation__page-btn"
+        :class="{ disabled: !nextIsPossible }"
+        @click.prevent.stop="nextPage">
         <span>{{nextText}}</span>
-        <span class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
-      </a>
+        <span aria-hidden="true" class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
+      </button>
     </div>
   </div>
 </template>
@@ -59,6 +70,7 @@ export default {
     total: { default: null },
     perPage: {},
     rtl: { default: false },
+    perPageDropdownEnabled: { default: true },
     customRowsPerPageDropdown: { default() { return []; } },
     paginateDropdownAllowAll: { default: true },
     mode: { default: 'records' },
@@ -72,13 +84,15 @@ export default {
     allText: { default: 'All' },
   },
 
-  data: () => ({
-    currentPage: 1,
-    prevPage: 0,
-    currentPerPage: 10,
-    rowsPerPageOptions: [],
-  }),
-
+  data() {
+    return {
+      id: this.getId(),
+      currentPage: 1,
+      prevPage: 0,
+      currentPerPage: 10,
+      rowsPerPageOptions: [],
+    };
+  },
   watch: {
     perPage: {
       handler(newValue, oldValue) {
@@ -119,7 +133,7 @@ export default {
         first = 0;
       }
 
-      return `${first} - ${last} ${this.ofText} ${this.total}`;
+      return `Showing ${first} to ${last} ${this.ofText} ${this.total} entries`;
     },
 
     // Can go to next page
@@ -134,6 +148,9 @@ export default {
   },
 
   methods: {
+    getId() {
+      return `vgt-select-rpp-${Math.floor(Math.random() * Date.now())}`;
+    },
     // Change current page
     changePage(pageNumber, emit = true) {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {

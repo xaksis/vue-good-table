@@ -28,7 +28,7 @@ export default {
           field: 'createdAt',
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd',
-          dateOutputFormat: 'MMM Do yy',
+          dateOutputFormat: 'MMM do yy',
         },
         {
           label: 'Percent',
@@ -37,7 +37,7 @@ export default {
         },
       ],
       rows: [
-        { id:1, name:"John", age: 20, createdAt: '',score: 0.03343 },
+        { id:1, name:"John", age: 20, createdAt: '2011-07-02',score: 0.03343 },
         { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
         { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
         { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },

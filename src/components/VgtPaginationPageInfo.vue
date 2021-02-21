@@ -1,10 +1,22 @@
 <template>
 <div class="footer__navigation__page-info">
-  {{pageText}} <input
-    class="footer__navigation__page-info__current-entry"
-    type="text"
-    @keyup.enter.stop="changePage"
-    :value="currentPage"> {{pageInfo}}
+  <form @submit.prevent>
+    <label :for="id" class="page-info__label">
+      <span>{{pageText}}</span>
+      <input
+        :id="id"
+        aria-describedby="change-page-hint"
+        aria-controls="vgb-table"
+        class="footer__navigation__page-info__current-entry"
+        type="text"
+        @keyup.enter.stop="changePage"
+        :value="currentPage"> 
+      <span>{{pageInfo}}</span>
+    </label>
+    <span id="change-page-hint" style="display: none;">
+      Type a page number and press Enter to change the page.
+    </span>
+  </form>
 </div>
 </template>
 
@@ -32,6 +44,7 @@ export default {
   },
   data() {
     return {
+      id: this.getId(),
     };
   },
   computed: {
@@ -40,6 +53,9 @@ export default {
     },
   },
   methods: {
+    getId() {
+      return `vgt-page-input-${Math.floor(Math.random() * Date.now())}`;
+    },
     changePage(event) {
       const value = parseInt(event.target.value, 10);
 

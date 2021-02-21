@@ -68,16 +68,6 @@
       opacity: 0.3; /* Firefox */
     }
   }
-
-  .v-select {
-    background-color: $input-bg;
-    input {
-      color: $text-color;
-    }
-    .vs__open-indicator {
-      fill: $text-color
-    }
-  }
 }
 
 .vgt-wrap.black-rhino{
@@ -93,7 +83,7 @@
       }
       &__select{
         color:  $text-color-td;
-        background: $table-bg;
+        background: $input-bg;
         border: none;
         -webkit-appearance: none; 
         -moz-appearance: none;

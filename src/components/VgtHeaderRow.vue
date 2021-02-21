@@ -4,8 +4,7 @@
     v-if="spanColumns"
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
-    @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
-    <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+    >
     <template v-if="selectAllByGroup">
       <slot name="table-header-group-select"
         :columns="columns"
@@ -17,15 +16,18 @@
           @change="toggleSelectGroup($event)" />
       </slot>
     </template>
-    <slot
-      :row="headerRow"
-      name="table-header-row">
-      <span v-if="headerRow.html" v-html="headerRow.label">
-      </span>
-      <span v-else>
-        {{ headerRow.label }}
-      </span>
-    </slot>
+    <span @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+      <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+        <slot
+        :row="headerRow"
+        name="table-header-row">
+        <span v-if="headerRow.html" v-html="headerRow.label">
+        </span>
+        <span v-else>
+          {{ headerRow.label }}
+        </span>
+      </slot>
+    </span>
   </th>
   <!-- if the mode is not span, we display every column -->
   <th
@@ -33,8 +35,7 @@
     v-if="!spanColumns && lineNumbers"></th>
   <th
     class="vgt-row-header"
-    :class="{ 'vgt-checkbox-col': selectAllByGroup }"
-    v-if="!spanColumns && selectable">
+    v-if="headerRow.mode !== 'span' && selectable">
     <template v-if="selectAllByGroup"
     >
       <slot name="table-header-group-select"
@@ -48,28 +49,26 @@
       </slot>
     </template>
   </th>
-  <template v-if="!spanColumns"> 
-    <th
-      v-for="(column, i) in hiddenColumns"
-      :key="i"
-      class="vgt-row-header"
+  <th
+    v-if="headerRow.mode !== 'span' && !column.hidden"
+    v-for="(column, i) in columns"
+    :key="i"
+    class="vgt-row-header"
     :class="getClasses(i, 'td')"
     @click="columnCollapsable(i) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
-    <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
-      
-      <slot
-        :row="headerRow"
-        :column="column"
-        :formattedRow="formattedRow(headerRow, true)"
-        name="table-header-row">
-        <span v-if="!column.html">
-          {{ collectFormatted(headerRow, column, true) }}
-        </span>
-        <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
-        </span>
-      </slot>
-    </th>
-  </template>
+    <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>    
+    <slot
+      :row="headerRow"
+      :column="column"
+      :formattedRow="formattedRow(headerRow, true)"
+      name="table-header-row">
+      <span v-if="!column.html">
+        {{ collectFormatted(headerRow, column, true) }}
+      </span>
+      <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
+      </span>
+    </slot>
+  </th>
 </tr>
 </template>
 
@@ -88,6 +87,9 @@ export default {
     },
     selectable: {
       type: Boolean,
+    },
+    selectAllByGroup: {
+      type: Boolean
     },
     collapsable: {
       type: [Boolean, Number],
@@ -149,6 +151,7 @@ export default {
       });
     }
   },
+
   mounted() {
   },
   components: {

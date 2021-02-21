@@ -4,245 +4,278 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Pagination Options | vue-good-table</title>
-    <meta name="description" content="A powerful data table plugin for VueJS">
+    <meta name="generator" content="VuePress 1.8.0">
     <link rel="icon" href="/vue-good-table/favicon.png">
+    <meta name="description" content="A powerful data table plugin for VueJS">
     
-    <link rel="preload" href="/vue-good-table/assets/css/0.styles.e7edf81e.css" as="style"><link rel="preload" href="/vue-good-table/assets/js/app.999f9153.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/3.c12716aa.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/2.ffe13969.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/32.e2ac0746.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/17.e084db6c.js" as="script"><link rel="prefetch" href="/vue-good-table/assets/js/10.fa81043b.js"><link rel="prefetch" href="/vue-good-table/assets/js/11.0669f884.js"><link rel="prefetch" href="/vue-good-table/assets/js/12.5511894e.js"><link rel="prefetch" href="/vue-good-table/assets/js/13.8c27a08d.js"><link rel="prefetch" href="/vue-good-table/assets/js/14.96bd8188.js"><link rel="prefetch" href="/vue-good-table/assets/js/15.4276bc5e.js"><link rel="prefetch" href="/vue-good-table/assets/js/16.2f6fbf18.js"><link rel="prefetch" href="/vue-good-table/assets/js/18.d5912efe.js"><link rel="prefetch" href="/vue-good-table/assets/js/19.a80555b3.js"><link rel="prefetch" href="/vue-good-table/assets/js/20.911bd9e4.js"><link rel="prefetch" href="/vue-good-table/assets/js/21.777a265b.js"><link rel="prefetch" href="/vue-good-table/assets/js/22.032b4329.js"><link rel="prefetch" href="/vue-good-table/assets/js/23.a8e59371.js"><link rel="prefetch" href="/vue-good-table/assets/js/24.618f36fd.js"><link rel="prefetch" href="/vue-good-table/assets/js/25.27ff3376.js"><link rel="prefetch" href="/vue-good-table/assets/js/26.01c582dc.js"><link rel="prefetch" href="/vue-good-table/assets/js/27.b8e2400a.js"><link rel="prefetch" href="/vue-good-table/assets/js/28.1b7a3403.js"><link rel="prefetch" href="/vue-good-table/assets/js/29.e0ea7058.js"><link rel="prefetch" href="/vue-good-table/assets/js/30.ce294a9c.js"><link rel="prefetch" href="/vue-good-table/assets/js/31.07b26ab4.js"><link rel="prefetch" href="/vue-good-table/assets/js/33.e18a2c6e.js"><link rel="prefetch" href="/vue-good-table/assets/js/34.0df87884.js"><link rel="prefetch" href="/vue-good-table/assets/js/35.97217762.js"><link rel="prefetch" href="/vue-good-table/assets/js/36.0d2f5889.js"><link rel="prefetch" href="/vue-good-table/assets/js/37.18288e69.js"><link rel="prefetch" href="/vue-good-table/assets/js/38.b464d5d6.js"><link rel="prefetch" href="/vue-good-table/assets/js/4.07c9e7fa.js"><link rel="prefetch" href="/vue-good-table/assets/js/5.1b9e7c8b.js"><link rel="prefetch" href="/vue-good-table/assets/js/6.4381fd13.js"><link rel="prefetch" href="/vue-good-table/assets/js/7.1ce1c4bc.js"><link rel="prefetch" href="/vue-good-table/assets/js/8.0afc2f5a.js"><link rel="prefetch" href="/vue-good-table/assets/js/9.fa1513d5.js">
-    <link rel="stylesheet" href="/vue-good-table/assets/css/0.styles.e7edf81e.css">
+    <link rel="preload" href="/vue-good-table/assets/css/0.styles.f06250fc.css" as="style"><link rel="preload" href="/vue-good-table/assets/js/app.1396e822.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/3.7f7863c6.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/2.76723c22.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/33.79569e1f.js" as="script"><link rel="preload" href="/vue-good-table/assets/js/19.f77a32ae.js" as="script"><link rel="prefetch" href="/vue-good-table/assets/js/10.12678232.js"><link rel="prefetch" href="/vue-good-table/assets/js/11.252d18d4.js"><link rel="prefetch" href="/vue-good-table/assets/js/12.e5f7f6ff.js"><link rel="prefetch" href="/vue-good-table/assets/js/13.5a2ac759.js"><link rel="prefetch" href="/vue-good-table/assets/js/14.63353498.js"><link rel="prefetch" href="/vue-good-table/assets/js/15.4506d772.js"><link rel="prefetch" href="/vue-good-table/assets/js/16.846df9ba.js"><link rel="prefetch" href="/vue-good-table/assets/js/17.6e8eb709.js"><link rel="prefetch" href="/vue-good-table/assets/js/18.4262e228.js"><link rel="prefetch" href="/vue-good-table/assets/js/20.7f6105d4.js"><link rel="prefetch" href="/vue-good-table/assets/js/21.6a82e546.js"><link rel="prefetch" href="/vue-good-table/assets/js/22.8cf7c56b.js"><link rel="prefetch" href="/vue-good-table/assets/js/23.9d76c3b9.js"><link rel="prefetch" href="/vue-good-table/assets/js/24.6f8184b5.js"><link rel="prefetch" href="/vue-good-table/assets/js/25.3b6c35fd.js"><link rel="prefetch" href="/vue-good-table/assets/js/26.8aa99c89.js"><link rel="prefetch" href="/vue-good-table/assets/js/27.d3eedffd.js"><link rel="prefetch" href="/vue-good-table/assets/js/28.74b23af3.js"><link rel="prefetch" href="/vue-good-table/assets/js/29.8c775e3c.js"><link rel="prefetch" href="/vue-good-table/assets/js/30.004f94c8.js"><link rel="prefetch" href="/vue-good-table/assets/js/31.d4b03168.js"><link rel="prefetch" href="/vue-good-table/assets/js/32.b755eda7.js"><link rel="prefetch" href="/vue-good-table/assets/js/34.48f4aeb7.js"><link rel="prefetch" href="/vue-good-table/assets/js/35.99608765.js"><link rel="prefetch" href="/vue-good-table/assets/js/36.b119343c.js"><link rel="prefetch" href="/vue-good-table/assets/js/37.46132454.js"><link rel="prefetch" href="/vue-good-table/assets/js/38.bf97418b.js"><link rel="prefetch" href="/vue-good-table/assets/js/39.cf8b66d8.js"><link rel="prefetch" href="/vue-good-table/assets/js/4.b1a57be2.js"><link rel="prefetch" href="/vue-good-table/assets/js/5.aae07deb.js"><link rel="prefetch" href="/vue-good-table/assets/js/6.fdc2d57a.js"><link rel="prefetch" href="/vue-good-table/assets/js/7.cca9a0ab.js"><link rel="prefetch" href="/vue-good-table/assets/js/8.7f5edf34.js"><link rel="prefetch" href="/vue-good-table/assets/js/9.436b1020.js">
+    <link rel="stylesheet" href="/vue-good-table/assets/css/0.styles.f06250fc.css">
   </head>
   <body>
-    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/vue-good-table/" class="home-link router-link-active"><img src="/vue-good-table/vgt-logo.png" alt="vue-good-table" class="logo"> <span class="site-name can-hide">vue-good-table</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/vue-good-table/" class="nav-link">Home</a></div><div class="nav-item"><a href="/vue-good-table/guide/" class="nav-link router-link-active">Guide</a></div> <a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/vue-good-table/" class="home-link router-link-active"><img src="/vue-good-table/vgt-logo.png" alt="vue-good-table" class="logo"> <span class="site-name can-hide">vue-good-table</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/vue-good-table/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/vue-good-table/guide/" class="nav-link router-link-active">
+  Guide
+</a></div> <a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
     GitHub
-    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/vue-good-table/" class="nav-link">Home</a></div><div class="nav-item"><a href="/vue-good-table/guide/" class="nav-link router-link-active">Guide</a></div> <a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/vue-good-table/" class="nav-link">
+  Home
+</a></div><div class="nav-item"><a href="/vue-good-table/guide/" class="nav-link router-link-active">
+  Guide
+</a></div> <a href="https://github.com/xaksis/vue-good-table" target="_blank" rel="noopener noreferrer" class="repo-link">
     GitHub
-    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav> <div class="carbon-ads"></div> <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Introduction</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/" class="sidebar-link">Getting Started</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Configuration</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/configuration/" class="sidebar-link">Table Options</a></li><li><a href="/vue-good-table/guide/configuration/table-events.html" class="sidebar-link">Table Events</a></li><li><a href="/vue-good-table/guide/configuration/search-options.html" class="sidebar-link">Search Options</a></li><li><a href="/vue-good-table/guide/configuration/sort-options.html" class="sidebar-link">Sort Options</a></li><li><a href="/vue-good-table/guide/configuration/pagination-options.html" class="active sidebar-link">Pagination Options</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#enabled" class="sidebar-link">enabled</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#mode" class="sidebar-link">mode</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#position" class="sidebar-link">position</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#perpage" class="sidebar-link">perPage</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#perpagedropdown" class="sidebar-link">perPageDropdown</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#dropdownallowall" class="sidebar-link">dropdownAllowAll</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#setcurrentpage" class="sidebar-link">setCurrentPage</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#pagination-label-text-options" class="sidebar-link">pagination label/text options</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#replace-pagination-component" class="sidebar-link">Replace Pagination Component</a></li></ul></li><li><a href="/vue-good-table/guide/configuration/column-options.html" class="sidebar-link">Column Options</a></li><li><a href="/vue-good-table/guide/configuration/column-filter-options.html" class="sidebar-link">Column Filter Options</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Advanced Configuration</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/advanced/" class="sidebar-link">Customizations</a></li><li><a href="/vue-good-table/guide/advanced/checkbox-table.html" class="sidebar-link">Checkbox Table</a></li><li><a href="/vue-good-table/guide/advanced/grouped-table.html" class="sidebar-link">Grouped Table</a></li><li><a href="/vue-good-table/guide/advanced/remote-workflow.html" class="sidebar-link">Server Side Table</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Style Configuration</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/style-configuration/" class="sidebar-link">Themes</a></li><li><a href="/vue-good-table/guide/style-configuration/style-classes.html" class="sidebar-link">Style Classes</a></li><li><a href="/vue-good-table/guide/style-configuration/sass.html" class="sidebar-link">Sass</a></li></ul></section></li></ul> </aside> <main class="page"><div data-v-4fb0bc70><div class="box" data-v-4fb0bc70><div class="ad-box" data-v-4fb0bc70>
-      Do you have a UX team? I Would really appreciate their feedback on my new product - <a target="_blank" rel="noopener noreferrer" href="https://userbitapp.com" data-v-4fb0bc70>UserBit</a></div></div></div> <div class="theme-default-content content__default"><h1 id="pagination-options"><a href="#pagination-options" aria-hidden="true" class="header-anchor">#</a> Pagination Options</h1> <p>A set of options that are related to table pagination. Each of these are optional and reasonable defaults will be used if you leave off the property.</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav> <div class="carbon-ads"></div> <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Introduction</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/" aria-current="page" class="sidebar-link">Getting Started</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Configuration</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/configuration/" aria-current="page" class="sidebar-link">Table Options</a></li><li><a href="/vue-good-table/guide/configuration/table-events.html" class="sidebar-link">Table Events</a></li><li><a href="/vue-good-table/guide/configuration/search-options.html" class="sidebar-link">Search Options</a></li><li><a href="/vue-good-table/guide/configuration/sort-options.html" class="sidebar-link">Sort Options</a></li><li><a href="/vue-good-table/guide/configuration/pagination-options.html" aria-current="page" class="active sidebar-link">Pagination Options</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#enabled" class="sidebar-link">enabled</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#mode" class="sidebar-link">mode</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#position" class="sidebar-link">position</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#perpage" class="sidebar-link">perPage</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#perpagedropdownenabled" class="sidebar-link">perPageDropdownEnabled</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#perpagedropdown" class="sidebar-link">perPageDropdown</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#dropdownallowall" class="sidebar-link">dropdownAllowAll</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#setcurrentpage" class="sidebar-link">setCurrentPage</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#pagination-label-text-options" class="sidebar-link">pagination label/text options</a></li><li class="sidebar-sub-header"><a href="/vue-good-table/guide/configuration/pagination-options.html#replace-pagination-component" class="sidebar-link">Replace Pagination Component</a></li></ul></li><li><a href="/vue-good-table/guide/configuration/column-options.html" class="sidebar-link">Column Options</a></li><li><a href="/vue-good-table/guide/configuration/column-filter-options.html" class="sidebar-link">Column Filter Options</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Advanced Configuration</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/advanced/" class="sidebar-link">Customizations</a></li><li><a href="/vue-good-table/guide/advanced/checkbox-table.html" class="sidebar-link">Checkbox Table</a></li><li><a href="/vue-good-table/guide/advanced/grouped-table.html" class="sidebar-link">Grouped Table</a></li><li><a href="/vue-good-table/guide/advanced/remote-workflow.html" class="sidebar-link">Server Side Table</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Style Configuration</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/vue-good-table/guide/style-configuration/" class="sidebar-link">Themes</a></li><li><a href="/vue-good-table/guide/style-configuration/style-classes.html" class="sidebar-link">Style Classes</a></li><li><a href="/vue-good-table/guide/style-configuration/sass.html" class="sidebar-link">Sass</a></li></ul></section></li></ul> </aside> <main class="page"><div data-v-4fb0bc70><div class="box" data-v-4fb0bc70><div class="ad-box" data-v-4fb0bc70>
+      Do you have a UX team? I Would really appreciate their feedback on my new product - <a target="_blank" rel="noopener noreferrer" href="https://userbitapp.com" data-v-4fb0bc70>UserBit</a></div></div></div> <div class="theme-default-content content__default"><h1 id="pagination-options"><a href="#pagination-options" class="header-anchor">#</a> Pagination Options</h1> <p>A set of options that are related to table pagination. Each of these are optional and reasonable defaults will be used if you leave off the property.</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
-    mode: 'records',
+    mode: <span class="token punctuation">'</span>records<span class="token punctuation">'</span>,
     perPage: 5,
-    position: 'top',
+    position: <span class="token punctuation">'</span>top<span class="token punctuation">'</span>,
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
     setCurrentPage: 2,
-    nextLabel: 'next',
-    prevLabel: 'prev',
-    rowsPerPageLabel: 'Rows per page',
-    ofLabel: 'of',
-    pageLabel: 'page', // for 'pages' mode
-    allLabel: 'All',
+    nextLabel: <span class="token punctuation">'</span>next<span class="token punctuation">'</span>,
+    prevLabel: <span class="token punctuation">'</span>prev<span class="token punctuation">'</span>,
+    rowsPerPageLabel: <span class="token punctuation">'</span>Rows per page<span class="token punctuation">'</span>,
+    ofLabel: <span class="token punctuation">'</span>of<span class="token punctuation">'</span>,
+    pageLabel: <span class="token punctuation">'</span>page<span class="token punctuation">'</span>, // for <span class="token punctuation">'</span>pages<span class="token punctuation">'</span> mode
+    allLabel: <span class="token punctuation">'</span>All<span class="token punctuation">'</span>,
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="enabled"><a href="#enabled" aria-hidden="true" class="header-anchor">#</a> enabled</h2> <p>type: <code>Boolean (default: false)</code></p> <p>Enable Pagination for table. By default the paginator is created at the bottom of the table.</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="enabled"><a href="#enabled" class="header-anchor">#</a> enabled</h2> <p>type: <code>Boolean (default: false)</code></p> <p>Enable Pagination for table. By default the paginator is created at the bottom of the table.</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="mode"><a href="#mode" aria-hidden="true" class="header-anchor">#</a> mode</h2> <p>type: <code>String (default: 'records')</code></p> <p>You can render pagination controls in two modes - 'records' and 'pages'. Below, you'll find examples of both.</p> <div class="tip custom-block"><p>For tables that may have many pages, 'pages' mode offers the ability to jump to any valid page.</p></div> <h3 id="records-mode-default"><a href="#records-mode-default" aria-hidden="true" class="header-anchor">#</a> records mode (default)</h3> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="mode"><a href="#mode" class="header-anchor">#</a> mode</h2> <p>type: <code>String (default: 'records')</code></p> <p>You can render pagination controls in two modes - 'records' and 'pages'. Below, you'll find examples of both.</p> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>For tables that may have many pages, 'pages' mode offers the ability to jump to any valid page.</p></div> <h3 id="records-mode-default"><a href="#records-mode-default" class="header-anchor">#</a> records mode (default)</h3> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
-    mode: 'records'
+    mode: <span class="token punctuation">'</span>records<span class="token punctuation">'</span>
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><div><div class="vgt-wrap "><!----> <div class="vgt-inner-wrap"><!----> <!----> <!----> <div class="vgt-fixed-header"><!----></div> <div class="vgt-responsive" style="overflow:scroll-y;max-height:auto;"><table class="vgt-table bordered "><thead data-v-3ba5bdcd><tr data-v-3ba5bdcd><!----> <!----> <th class="vgt-left-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Name</span></th><th class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Age</span></th><th class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Created On</span></th><th class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Percent</span></th></tr> <!----></thead> <tbody><!----> <tr><!----> <!----> <td class="vgt-left-align"><span>
+</code></pre></div><div><div class="vgt-wrap "><!----> <div class="vgt-inner-wrap"><!----> <!----> <!----> <div class="vgt-fixed-header"><!----></div> <div class="vgt-responsive" style="overflow:scroll-y;max-height:auto;"><table id="vgt-table" class="vgt-table bordered "><colgroup><col id="col-0"><col id="col-1"><col id="col-2"><col id="col-3"></colgroup> <thead><tr><!----> <!----> <th scope="col" aria-sort="descending" aria-controls="col-0" class="vgt-left-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Name</span> <button><span class="sr-only">
+          Sort table by Name in descending order
+          </span></button></th><th scope="col" aria-sort="descending" aria-controls="col-1" class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Age</span> <button><span class="sr-only">
+          Sort table by Age in descending order
+          </span></button></th><th scope="col" aria-sort="descending" aria-controls="col-2" class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Created On</span> <button><span class="sr-only">
+          Sort table by Created On in descending order
+          </span></button></th><th scope="col" aria-sort="descending" aria-controls="col-3" class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Percent</span> <button><span class="sr-only">
+          Sort table by Percent in descending order
+          </span></button></th></tr> <!----></thead> <tbody><!----> <tr><!----> <!----> <td class="vgt-left-align"><span>
                   John
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   20
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Jul 2nd 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Jane
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   24
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 304th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 31st 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Susan
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   16
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 303rd 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 30th 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Chris
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   55
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 284th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 11th 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Dan
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   40
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 294th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 21st 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   John
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   20
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 304th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 31st 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr> <!----></tbody> <!----></table></div> <!----> <div class="vgt-wrap__footer vgt-clearfix"><div class="footer__row-count vgt-pull-left"><span class="footer__row-count__label">Rows per page</span> <select autocomplete="off" name="perPageSelect" class="footer__row-count__select"><option selected="selected" value="2">
-        2
-      </option><option value="10">
-        10
-      </option><option value="20">
-        20
-      </option><option value="30">
-        30
-      </option><option value="40">
-        40
-      </option><option value="50">
-        50
-      </option> <option value="6">All</option></select></div> <div class="footer__navigation vgt-pull-right"><a href="javascript:undefined" tabindex="0" class="footer__navigation__page-btn disabled"><span class="chevron left"></span> <span>Prev</span></a> <div class="footer__navigation__info">1 - 2 of 6</div> <a href="javascript:undefined" tabindex="0" class="footer__navigation__page-btn"><span>Next</span> <span class="chevron right"></span></a></div></div></div></div></div> <h3 id="pages-mode"><a href="#pages-mode" aria-hidden="true" class="header-anchor">#</a> pages mode</h3> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+                </span></td></tr> <!----></tbody> <!----></table></div> <!----> <div class="vgt-wrap__footer vgt-clearfix"><div class="footer__row-count vgt-pull-left"><form><label for="vgt-select-rpp-830542009526" class="footer__row-count__label">Rows per page:</label> <select id="vgt-select-rpp-830542009526" autocomplete="off" name="perPageSelect" aria-controls="vgt-table" class="footer__row-count__select"><option selected="selected" value="2">
+          2
+        </option><option value="10">
+          10
+        </option><option value="20">
+          20
+        </option><option value="30">
+          30
+        </option><option value="40">
+          40
+        </option><option value="50">
+          50
+        </option> <option value="6">All</option></select></form></div> <div class="footer__navigation vgt-pull-right"><div class="footer__navigation__info">Showing 1 to 2 of 6 entries</div> <button type="button" aria-controls="vgt-table" class="footer__navigation__page-btn disabled" style="display:none;"><span aria-hidden="true" class="chevron left"></span> <span>Previous</span></button> <button type="button" aria-controls="vgt-table" class="footer__navigation__page-btn" style="display:;"><span>Next</span> <span aria-hidden="true" class="chevron right"></span></button></div></div></div></div></div> <h3 id="pages-mode"><a href="#pages-mode" class="header-anchor">#</a> pages mode</h3> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
-    mode: 'pages'
+    mode: <span class="token punctuation">'</span>pages<span class="token punctuation">'</span>
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><div><div class="vgt-wrap "><!----> <div class="vgt-inner-wrap"><!----> <!----> <!----> <div class="vgt-fixed-header"><!----></div> <div class="vgt-responsive" style="overflow:scroll-y;max-height:auto;"><table class="vgt-table bordered "><thead data-v-3ba5bdcd><tr data-v-3ba5bdcd><!----> <!----> <th class="vgt-left-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Name</span></th><th class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Age</span></th><th class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Created On</span></th><th class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;" data-v-3ba5bdcd><span data-v-3ba5bdcd>Percent</span></th></tr> <!----></thead> <tbody><!----> <tr><!----> <!----> <td class="vgt-left-align"><span>
+</code></pre></div><div><div class="vgt-wrap "><!----> <div class="vgt-inner-wrap"><!----> <!----> <!----> <div class="vgt-fixed-header"><!----></div> <div class="vgt-responsive" style="overflow:scroll-y;max-height:auto;"><table id="vgt-table" class="vgt-table bordered "><colgroup><col id="col-0"><col id="col-1"><col id="col-2"><col id="col-3"></colgroup> <thead><tr><!----> <!----> <th scope="col" aria-sort="descending" aria-controls="col-0" class="vgt-left-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Name</span> <button><span class="sr-only">
+          Sort table by Name in descending order
+          </span></button></th><th scope="col" aria-sort="descending" aria-controls="col-1" class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Age</span> <button><span class="sr-only">
+          Sort table by Age in descending order
+          </span></button></th><th scope="col" aria-sort="descending" aria-controls="col-2" class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Created On</span> <button><span class="sr-only">
+          Sort table by Created On in descending order
+          </span></button></th><th scope="col" aria-sort="descending" aria-controls="col-3" class="vgt-right-align sortable" style="min-width:auto;max-width:auto;width:auto;"><span>Percent</span> <button><span class="sr-only">
+          Sort table by Percent in descending order
+          </span></button></th></tr> <!----></thead> <tbody><!----> <tr><!----> <!----> <td class="vgt-left-align"><span>
                   John
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   20
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Jul 2nd 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Jane
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   24
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 304th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 31st 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Susan
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   16
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 303rd 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 30th 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Chris
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   55
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 284th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 11th 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   Dan
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   40
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 294th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 21st 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
+                </span></td></tr><tr><!----> <!----> <td class="vgt-left-align"><span>
                   John
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
                   20
-                </span> <!----></td><td class="vgt-right-align"><span>
-                  Oct 304th 11
-                </span> <!----></td><td class="vgt-right-align"><span>
+                </span></td><td class="vgt-right-align"><span>
+                  Oct 31st 11
+                </span></td><td class="vgt-right-align"><span>
                   3.34%
-                </span> <!----></td></tr> <!----></tbody> <!----></table></div> <!----> <div class="vgt-wrap__footer vgt-clearfix"><div class="footer__row-count vgt-pull-left"><span class="footer__row-count__label">Rows per page</span> <select autocomplete="off" name="perPageSelect" class="footer__row-count__select"><option selected="selected" value="2">
-        2
-      </option><option value="10">
-        10
-      </option><option value="20">
-        20
-      </option><option value="30">
-        30
-      </option><option value="40">
-        40
-      </option><option value="50">
-        50
-      </option> <option value="6">All</option></select></div> <div class="footer__navigation vgt-pull-right"><a href="javascript:undefined" tabindex="0" class="footer__navigation__page-btn disabled"><span class="chevron left"></span> <span>Prev</span></a> <div class="footer__navigation__page-info" data-v-6d5a6232>
-  page <input type="text" value="1" class="footer__navigation__page-info__current-entry" data-v-6d5a6232> of 3
-</div> <a href="javascript:undefined" tabindex="0" class="footer__navigation__page-btn"><span>Next</span> <span class="chevron right"></span></a></div></div></div></div></div> <h2 id="position"><a href="#position" aria-hidden="true" class="header-anchor">#</a> position</h2> <p>type: <code>String (default: 'bottom')</code></p> <p>Add pagination on 'top' or 'bottom' (top and bottom) of the table (default position is bottom)</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+                </span></td></tr> <!----></tbody> <!----></table></div> <!----> <div class="vgt-wrap__footer vgt-clearfix"><div class="footer__row-count vgt-pull-left"><form><label for="vgt-select-rpp-1310239645927" class="footer__row-count__label">Rows per page:</label> <select id="vgt-select-rpp-1310239645927" autocomplete="off" name="perPageSelect" aria-controls="vgt-table" class="footer__row-count__select"><option selected="selected" value="2">
+          2
+        </option><option value="10">
+          10
+        </option><option value="20">
+          20
+        </option><option value="30">
+          30
+        </option><option value="40">
+          40
+        </option><option value="50">
+          50
+        </option> <option value="6">All</option></select></form></div> <div class="footer__navigation vgt-pull-right"><div class="footer__navigation__page-info" data-v-eb5118a4><form data-v-eb5118a4><label for="vgt-page-input-165690277402" class="page-info__label" data-v-eb5118a4><span data-v-eb5118a4>page</span> <input id="vgt-page-input-165690277402" aria-describedby="change-page-hint" aria-controls="vgb-table" type="text" value="1" class="footer__navigation__page-info__current-entry" data-v-eb5118a4> <span data-v-eb5118a4>of 3</span></label> <span id="change-page-hint" style="display: none;" data-v-eb5118a4>
+      Type a page number and press Enter to change the page.
+    </span></form></div> <button type="button" aria-controls="vgt-table" class="footer__navigation__page-btn disabled" style="display:none;"><span aria-hidden="true" class="chevron left"></span> <span>Previous</span></button> <button type="button" aria-controls="vgt-table" class="footer__navigation__page-btn" style="display:;"><span>Next</span> <span aria-hidden="true" class="chevron right"></span></button></div></div></div></div></div> <h2 id="position"><a href="#position" class="header-anchor">#</a> position</h2> <p>type: <code>String (default: 'bottom')</code></p> <p>Add pagination on 'top' or 'bottom' (top and bottom) of the table (default position is bottom)</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
-    position: 'top'
+    position: <span class="token punctuation">'</span>top<span class="token punctuation">'</span>
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="perpage"><a href="#perpage" aria-hidden="true" class="header-anchor">#</a> perPage</h2> <p>type: <code>Integer (default: 10)</code></p> <p>Number of rows to show per page</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="perpage"><a href="#perpage" class="header-anchor">#</a> perPage</h2> <p>type: <code>Integer (default: 10)</code></p> <p>Number of rows to show per page</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
     perPage: 5
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="perpagedropdown"><a href="#perpagedropdown" aria-hidden="true" class="header-anchor">#</a> perPageDropdown</h2> <p>type: <code>Array (default: [10,20,30,40,50])</code></p> <p>Customize the dropdown options for the amount of items per page</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="perpagedropdownenabled"><a href="#perpagedropdownenabled" class="header-anchor">#</a> perPageDropdownEnabled</h2> <p>type: <code>Boolean (default: true)</code></p> <p>Show or hide the per page dropdown</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
+    enabled: true,
+    perPageDropdownEnabled: false,
+  }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><h2 id="perpagedropdown"><a href="#perpagedropdown" class="header-anchor">#</a> perPageDropdown</h2> <p>type: <code>Array (default: [10,20,30,40,50])</code></p> <p>Customize the dropdown options for the amount of items per page</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
     perPageDropdown: [3, 7, 9]
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="dropdownallowall"><a href="#dropdownallowall" aria-hidden="true" class="header-anchor">#</a> dropdownAllowAll</h2> <p>type: <code>Boolean (default: true)</code></p> <p>enables/disables 'All' in the per page dropdown.</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="dropdownallowall"><a href="#dropdownallowall" class="header-anchor">#</a> dropdownAllowAll</h2> <p>type: <code>Boolean (default: true)</code></p> <p>enables/disables 'All' in the per page dropdown.</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="setcurrentpage"><a href="#setcurrentpage" aria-hidden="true" class="header-anchor">#</a> setCurrentPage</h2> <p>type: <code>Number</code></p> <p>set current page programmatically.</p> <div class="warning custom-block"><p>There's no validation for number of pages so please be careful using this.</p></div> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="setcurrentpage"><a href="#setcurrentpage" class="header-anchor">#</a> setCurrentPage</h2> <p>type: <code>Number</code></p> <p>set current page programmatically.</p> <div class="custom-block warning"><p class="custom-block-title">WARNING</p> <p>There's no validation for number of pages so please be careful using this.</p></div> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
     setCurrentPage: 2,
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="pagination-label-text-options"><a href="#pagination-label-text-options" aria-hidden="true" class="header-anchor">#</a> pagination label/text options</h2> <p>you can change one or more of the texts shown on pagination by overriding the labels in the following way:</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
-  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
-  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{
+</code></pre></div><h2 id="pagination-label-text-options"><a href="#pagination-label-text-options" class="header-anchor">#</a> pagination label/text options</h2> <p>you can change one or more of the texts shown on pagination by overriding the labels in the following way:</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vue-good-table</span>
+  <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>columns<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:rows</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>rows<span class="token punctuation">&quot;</span></span>
+  <span class="token attr-name">:pagination-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{
     enabled: true,
-    nextLabel: 'next',
-    prevLabel: 'prev',
-    rowsPerPageLabel: 'Rows per page',
-    ofLabel: 'of',
-    pageLabel: 'page', // for 'pages' mode
-    allLabel: 'All',
+    nextLabel: <span class="token punctuation">'</span>next<span class="token punctuation">'</span>,
+    prevLabel: <span class="token punctuation">'</span>prev<span class="token punctuation">'</span>,
+    rowsPerPageLabel: <span class="token punctuation">'</span>Rows per page<span class="token punctuation">'</span>,
+    ofLabel: <span class="token punctuation">'</span>of<span class="token punctuation">'</span>,
+    pageLabel: <span class="token punctuation">'</span>page<span class="token punctuation">'</span>, // for <span class="token punctuation">'</span>pages<span class="token punctuation">'</span> mode
+    allLabel: <span class="token punctuation">'</span>All<span class="token punctuation">'</span>,
   }<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vue-good-table</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="replace-pagination-component"><a href="#replace-pagination-component" aria-hidden="true" class="header-anchor">#</a> Replace Pagination Component</h2> <p>you can also replace the pagination component with your own component - <a href="/vue-good-table/guide/advanced/#custom-pagination">Custom Pagination</a></p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">7/4/2019, 7:48:15 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
-        ←
-        <a href="/vue-good-table/guide/configuration/sort-options.html" class="prev">
-          Sort Options
-        </a></span> <span class="next"><a href="/vue-good-table/guide/configuration/column-options.html">
-          Column Options
-        </a>
-        →
-      </span></p></div> </main></div><div class="global-ui"></div></div>
-    <script src="/vue-good-table/assets/js/app.999f9153.js" defer></script><script src="/vue-good-table/assets/js/3.c12716aa.js" defer></script><script src="/vue-good-table/assets/js/2.ffe13969.js" defer></script><script src="/vue-good-table/assets/js/32.e2ac0746.js" defer></script><script src="/vue-good-table/assets/js/17.e084db6c.js" defer></script>
+</code></pre></div><h2 id="replace-pagination-component"><a href="#replace-pagination-component" class="header-anchor">#</a> Replace Pagination Component</h2> <p>you can also replace the pagination component with your own component - <a href="/vue-good-table/guide/advanced/#custom-pagination">Custom Pagination</a></p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">1/16/2021, 10:31:59 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/vue-good-table/guide/configuration/sort-options.html" class="prev">
+        Sort Options
+      </a></span> <span class="next"><a href="/vue-good-table/guide/configuration/column-options.html">
+        Column Options
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/vue-good-table/assets/js/app.1396e822.js" defer></script><script src="/vue-good-table/assets/js/3.7f7863c6.js" defer></script><script src="/vue-good-table/assets/js/2.76723c22.js" defer></script><script src="/vue-good-table/assets/js/33.79569e1f.js" defer></script><script src="/vue-good-table/assets/js/19.f77a32ae.js" defer></script>
   </body>
 </html>

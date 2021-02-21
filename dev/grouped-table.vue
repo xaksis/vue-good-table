@@ -16,10 +16,11 @@
     @on-row-mouseenter="onMouseover"
     @on-row-mouseleave="onMouseover"
     :search-options="{
-      enabled: false,
+      enabled: true,
     }"
     :pagination-options="{
       enabled: true,
+      perPage: 5,
     }"
     :group-options="{
       enabled: true,
@@ -96,7 +97,8 @@ export default {
           ],
         },
         {
-          name: 'Reptile Total',
+          label: 'Reptile Total',
+          mode: 'span',
           diet: '',
           count: '',
           episodes: [

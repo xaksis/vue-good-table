@@ -64,16 +64,6 @@
       opacity: 0.3; /* Firefox */
     }
   }
-
-  .v-select {
-    background-color: darken($thead-bg-color-2, 5%);
-    input {
-      color: $text-color;
-    }
-    .vs__open-indicator {
-      fill: $text-color
-    }
-  }
 }
 
 .vgt-wrap.nocturnal{
@@ -82,14 +72,39 @@
     border: 1px solid $border-color;
     background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
     .footer__row-count{
+      position: relative;
       &__label{
         color: $secondary-text-color;
       }
       &__select{
         color:  $text-color;
+        background: darken($thead-bg-color-2, 5%);
+        border: none;
+        -webkit-appearance: none; 
+        -moz-appearance: none;
+        appearance: none;
+        padding-right: 15px;
+        padding-left: 10px;
+        border-radius: 3px;
+        text-align: center;
         &:focus{
           border-color: $link-color;
         }
+      }
+      &::after{
+        content: '';
+        display: block;
+        position: absolute;
+        height: 0px;
+        width: 0px;
+        right: 6px;
+        top: 50%;
+        margin-top: -1px;
+        border-top:  6px solid $text-color;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: none;
+        pointer-events: none
       }
     }
     .footer__navigation{

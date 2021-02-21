@@ -6,6 +6,12 @@
   border:  1px solid $border-color;
   border-bottom: 0px;
   background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
+  form {
+    display: flex;
+    label {
+      margin-top: 3px;
+    }
+  }
 }
 .vgt-global-search__input{
   position:  relative;
@@ -21,7 +27,7 @@
       display: block;
       width: 16px;
       height: 16px;
-      border: 2px solid darken($border-color, 2%);
+      border: 2px solid #494949;
       position: relative;
       border-radius: 50%;
       &:before{
@@ -30,7 +36,7 @@
         position: absolute;
         right: -7px;
         bottom: -5px;
-        background: darken($border-color, 2%);
+        background: #494949;
         width: 8px;
         height: 4px;
         border-radius: 2px;

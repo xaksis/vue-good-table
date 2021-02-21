@@ -13,13 +13,14 @@ Object containing select options
   @on-selected-rows-change="selectionChanged"
   :columns="columns"
   :rows="rows"
-  :selectOptions="{
+  :select-options="{
     enabled: true,
     selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
     selectionInfoClass: 'custom-class',
     selectionText: 'rows selected',
     clearSelectionText: 'clear',
     disableSelectInfo: true, // disable the select info panel on top
+    selectAllByGroup: true, // when used in combination with a grouped table, add a checkbox in the header row to check/uncheck the entire group
   }">
 ```
 

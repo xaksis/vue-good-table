@@ -28,6 +28,7 @@
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
+          :perPageDropdownEnabled="paginationOptions.perPageDropdownEnabled"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
@@ -70,9 +71,13 @@
       </div>
       <div class="vgt-fixed-header">
         <table
+          id="vgt-table"
           v-if="fixedHeader"
           :class="tableStyleClasses"
         >
+        <colgroup>
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+        </colgroup>
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -104,6 +109,16 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
+            <template
+                slot="column-filter"
+                slot-scope="props"
+            >
+              <slot
+                  name="column-filter"
+                  :column="props.column"
+                  :updateFilters="props.updateFilters"
+              ></slot>
+            </template>
           </thead>
         </table>
       </div>
@@ -112,9 +127,13 @@
         :style="wrapperStyles"
       >
         <table
+          id="vgt-table"
           ref="table"
-          :class="tableStyleClasses"
+          :class="tableStyles"
         >
+        <colgroup>
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+        </colgroup>
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -144,30 +163,40 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
+            <template
+              slot="column-filter"
+              slot-scope="props"
+            >
+              <slot
+                name="column-filter"
+                :column="props.column"
+                :updateFilters="props.updateFilters"
+              ></slot>
+            </template>
           </thead>
 
           <!-- Table body starts here -->
           <tbody
-            v-for="(headerRow, index) in paginated"
-            :key="index"
+            v-for="(headerRow, hIndex) in paginated"
+            :key="hIndex"
           >
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop"
-              @vgtExpand="toggleExpand(headerRow.vgt_header_id)"
+              @vgtExpand="toggleExpand(headerRow[rowKeyField])"
               :mode="mode"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
-              :collapsable="groupOptions.collapsable"
               :select-all-by-group="selectAllByGroup"
+              :collapsable="groupOptions.collapsable"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :class="getRowStyleClass(headerRow)"
               :get-classes="getClasses"
               :full-colspan="fullColspan"
-              :groupIndex="index"
+              :groupIndex="hIndex"
               :groupOptions="groupOptions"
               :groupChildObject="groupChildObject"
               @on-select-group-change="toggleSelectGroup($event, headerRow)"
@@ -202,7 +231,7 @@
                 v-if="lineNumbers"
                 class="line-numbers"
               >
-                {{ getCurrentIndex(index) }}
+                {{ getCurrentIndex(row.originalIndex) }}
               </th>
               <td
                 v-if="selectable"
@@ -211,6 +240,7 @@
               >
                 <input
                   type="checkbox"
+                  :disabled="row.vgtDisabled"
                   :checked="row.vgtSelected"
                 />
               </td>
@@ -220,6 +250,7 @@
                 :key="i"
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
+                v-bind:data-label="compactMode ? column.label : undefined"
               >
                 <slot
                   name="table-row"
@@ -231,10 +262,7 @@
                   <span v-if="!column.html">
                     {{ collectFormatted(row, column) }}
                   </span>
-                  <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
-                  >
+                  <span v-else v-html="collect(row, column.field)">
                   </span>
                 </slot>
               </td>
@@ -314,6 +342,7 @@
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
+          :perPageDropdownEnabled="paginationOptions.perPageDropdownEnabled"
           :customRowsPerPageDropdown="customRowsPerPageDropdown"
           :paginateDropdownAllowAll="paginateDropdownAllowAll"
           :ofText="ofText"
@@ -354,23 +383,25 @@ export default {
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: { default: false, type: Boolean },
+    fixedHeader: Boolean ,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
     styleClass: { default: 'vgt-table bordered' },
     columns: {},
     rows: {},
-    lineNumbers: { default: false },
-    responsive: { default: true },
-    rtl: { default: false },
+    lineNumbers: Boolean,
+    responsive: { default: true , type: Boolean },
+    rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
+    compactMode: Boolean,
 
     groupOptions: {
       default() {
         return {
           enabled: false,
           collapsable: false,
+          rowKey: null,
           mode: '',
         };
       },
@@ -384,6 +415,7 @@ export default {
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
           disableSelectInfo: false,
+          selectAllByGroup: false,
         };
       },
     },
@@ -405,6 +437,7 @@ export default {
           enabled: false,
           perPage: 10,
           perPageDropdown: null,
+          perPageDropdownEnabled: true,
           position: 'bottom',
           dropdownAllowAll: true,
           mode: 'records', // or pages
@@ -439,7 +472,7 @@ export default {
 
     // text options
     nextText: 'Next',
-    prevText: 'Prev',
+    prevText: 'Previous',
     rowsPerPageText: 'Rows per page',
     ofText: 'of',
     allText: 'All',
@@ -564,6 +597,12 @@ export default {
   },
 
   computed: {
+    tableStyles() {
+      if (this.compactMode)
+        return this.tableStyleClasses + 'vgt-compact'
+      else
+        return this.tableStyleClasses
+    },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
     },
@@ -572,6 +611,10 @@ export default {
         overflow: 'scroll-y',
         maxHeight: this.maxHeight ? this.maxHeight : 'auto',
       };
+    },
+
+    rowKeyField() {
+      return this.groupOptions.rowKey || 'vgt_header_id';
     },
 
     hasHeaderRowTemplate() {
@@ -970,22 +1013,22 @@ export default {
     //* to maintain it when sorting/filtering
     handleExpanded(headerRow) {
       if (this.maintainExpanded &&
-        this.expandedRowKeys.has(headerRow.vgt_header_id)) {
+        this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
         this.$set(headerRow, 'vgtIsExpanded', true);
       } else {
         this.$set(headerRow, 'vgtIsExpanded', false);
       }
     },
-    toggleExpand(index) {
-      const headerRow = this.filteredRows.find(r => r.vgt_header_id === index);
+    toggleExpand(id) {
+      const headerRow = this.filteredRows.find(r => r[this.rowKeyField] === id);
       if (headerRow) {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
       if (this.maintainExpanded
         && headerRow.vgtIsExpanded) {
-        this.expandedRowKeys.add(headerRow.vgt_header_id);
+        this.expandedRowKeys.add(headerRow[this.rowKeyField]);
       } else {
-        this.expandedRowKeys.delete(headerRow.vgt_header_id);
+        this.expandedRowKeys.delete(headerRow[this.rowKeyField]);
       }
     },
 
@@ -993,7 +1036,7 @@ export default {
       this.filteredRows.forEach((row) => {
         this.$set(row, 'vgtIsExpanded', true);
         if (this.maintainExpanded) {
-          this.expandedRowKeys.add(row.vgt_header_id);
+          this.expandedRowKeys.add(row[this.rowKeyField]);
         }
       });
   },
@@ -1072,17 +1115,18 @@ export default {
     },
 
     changePage(value) {
-      if (this.paginationOptions.enabled) {
-        let paginationWidget = this.$refs.paginationBottom;
-        if (this.paginationOptions.position === 'top') {
-          paginationWidget = this.$refs.paginationTop;
+      let { enabled, position } = this.paginationOptions
+      let { paginationBottom, paginationTop } = this.$refs
+      if (enabled) {
+        if ((position === 'top' || position === 'both') && paginationTop) {
+          paginationTop.currentPage = value
         }
-        if (paginationWidget) {
-          paginationWidget.currentPage = value;
-          // we also need to set the currentPage
-          // for table.
-          this.currentPage = value;
+        if ((position === 'bottom' || position === 'both') && paginationBottom) {
+          paginationBottom.currentPage = value
         }
+        // we also need to set the currentPage
+        // for table.
+        this.currentPage = value;
       }
     },
 
@@ -1106,6 +1150,15 @@ export default {
 
     perPageChanged(pagination) {
       this.currentPerPage = pagination.currentPerPage;
+      // ensure that both sides of pagination are in agreement
+      // this fixes changes during position = 'both'
+      let paginationPosition = this.paginationOptions.position
+      if (this.$refs.paginationTop && (paginationPosition === 'top' || paginationPosition === 'both')) {
+        this.$refs.paginationTop.currentPerPage = this.currentPerPage
+      }
+      if (this.$refs.paginationBottom && (paginationPosition === 'bottom' || paginationPosition === 'both')) {
+        this.$refs.paginationBottom.currentPerPage = this.currentPerPage
+      }
       //* update perPage also
       const perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
@@ -1263,7 +1316,11 @@ export default {
       if (!type) {
         type = this.dataTypes[column.type] || defaultType;
       }
-      return type.format(value, column);
+
+      let result = type.format(value, column);
+      // we must have some values in compact mode
+      if (this.compactMode && (result == '' || result == null)) return '-';
+      return result;
     },
 
     formattedRow(row, isHeaderRow = false) {
@@ -1301,33 +1358,6 @@ export default {
         classes[custom] = true;
       }
       return classes;
-    },
-
-    filterMultiselectItems(column, row) {
-      const columnFieldName = column.field;
-      const columnFilters = this.columnFilters[columnFieldName];
-      if (column.filterOptions && column.filterOptions.filterMultiselectDropdownItems) {
-        if (columnFilters.length === 0) {
-          return true;
-        }
-
-        // Otherwise Use default filters
-        const { typeDef } = column;
-        for (let filter of columnFilters) {
-          let filterLabel = filter;
-          if (typeof filter === 'object') {
-            filterLabel = filter.label;
-          }
-          if (typeDef.filterPredicate(
-            this.collect(row, columnFieldName),
-            filterLabel
-          )) {
-            return true;
-          }
-        }
-        return false;
-      }
-      return undefined;
     },
 
     // method to filter rows
@@ -1370,7 +1400,10 @@ export default {
         }
 
         const fieldKey = (field) => {
-          return typeof(field) === 'function' ? field.name : field;
+          if (typeof(field) === 'function' && field.name) {
+            return field.name;
+          }
+          return field;
         }
 
         for (let i = 0; i < this.typedColumns.length; i++) {
@@ -1387,11 +1420,6 @@ export default {
                     this.collect(row, col.field),
                     this.columnFilters[fieldKey(col.field)]
                   );
-                }
-
-                const filterMultiselect = this.filterMultiselectItems(col, row);
-                if (filterMultiselect !== undefined) {
-                  return filterMultiselect;
                 }
 
                 // Otherwise Use default filters
@@ -1413,7 +1441,24 @@ export default {
       this.filteredRows = computedRows;
     },
 
-    getCurrentIndex(index) {
+    getCurrentIndex(rowId) {
+      let index = 0;
+      let found = false;
+      for (let i = 0; i < this.paginated.length; i += 1) {
+        const headerRow = this.paginated[i];
+        const { children } = headerRow;
+        if (children && children.length) {
+          for (let j = 0; j < children.length; j += 1) {
+            const c = children[j];
+            if (c.originalIndex === rowId) {
+              found = true;
+              break;
+            }
+            index += 1;
+          }
+        }
+        if (found) break;
+      }
       return ((this.currentPage - 1) * this.currentPerPage) + index + 1;
     },
 
@@ -1436,6 +1481,12 @@ export default {
       const { groupChildObject } = this;
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
+        if (
+          this.groupOptions.maintainExpanded &&
+          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
+        ) {
+          this.$set(headerRow, 'vgtIsExpanded', true);
+        }
         each(headerRow[groupChildObject], (childRow) => {
           childRow.vgt_id = i;
         });
@@ -1452,6 +1503,7 @@ export default {
         perPage,
         position,
         perPageDropdown,
+        perPageDropdownEnabled,
         dropdownAllowAll,
         nextLabel,
         prevLabel,
@@ -1484,6 +1536,10 @@ export default {
         if (!this.perPage) {
           [this.perPage] = perPageDropdown;
         }
+      }
+
+      if (typeof perPageDropdownEnabled === 'boolean') {
+        this.perPageDropdownEnabled = perPageDropdownEnabled;
       }
 
       if (typeof dropdownAllowAll === 'boolean') {
@@ -1593,7 +1649,7 @@ export default {
         selectOnCheckboxOnly,
         selectAllByPage,
         disableSelectInfo,
-        selectAllByGroup
+        selectAllByGroup,
       } = this.selectOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1608,8 +1664,10 @@ export default {
         this.selectAllByPage = selectAllByPage;
       }
 
-      this.selectAllByGroup = Boolean(selectAllByGroup);
-      
+      if (typeof selectAllByGroup === 'boolean') {
+        this.selectAllByGroup = selectAllByGroup;
+      }
+
       if (typeof disableSelectInfo === 'boolean') {
         this.disableSelectInfo = disableSelectInfo;
       }
@@ -1654,7 +1712,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "node_modules/vue-select/dist/vue-select";
 
 @import "../styles/style";
 </style>
