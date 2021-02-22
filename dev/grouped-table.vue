@@ -86,7 +86,7 @@ export default {
           mode: 'span',
           diet: '',
           count: '',
-          episodes: [
+          children: [
             { name: 'Elephant', diet: 'herbivore', count: 5, date: '2020-02-29T03:00:00+01:00' },
             { name: 'Cat', diet: 'carnivore', count: 28, date: null },
             { name: 'Dog', diet: 'omnivore', count: 12, date: '2020-01-02T03:00:00+01:00' },
@@ -100,7 +100,7 @@ export default {
           mode: 'span',
           diet: '',
           count: '',
-          episodes: [
+          children: [
             { name: 'Snake', diet: 'carnivore', count: 40, date: '2019-01-29T03:00:00+01:00' },
             { name: 'lizard', diet: 'insectivore', count: 34, date: '2018-01-29T03:00:00+01:00' },
             { name: 'crocodile', diet: 'carnivore', count: 22, date: '2016-01-29T03:00:00+01:00' },
@@ -112,7 +112,7 @@ export default {
           name: 'Fish Total',
           diet: '',
           count: '',
-          episodes: [
+          children: [
             { name: 'Shark', diet: 'carnivore', count: 2, date: '2020-04-29T03:00:00+01:00' },
             { name: 'koi', diet: 'omnivore', count: 14, date: '2020-03-29T03:00:00+01:00' },
             { name: 'guppy', diet: 'omnivore', count: 35, date: '2020-02-29T03:00:00+01:00' },
@@ -137,7 +137,7 @@ export default {
       console.log(params);
     },
     sumCount(rowObj) {
-      return rowObj.episodes.reduce((a, b) => a + (b.count || 0), 0);
+      return rowObj.children.reduce((a, b) => a + (b.count || 0), 0);
     }
   },
   mounted() {
