@@ -27,7 +27,6 @@
       headerPosition: 'top',
       collapsable: 2,
       mode: 'span',
-      customChildObject: 'episodes'
     }"
     :column-filter-options="{
         enabled: true
