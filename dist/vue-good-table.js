@@ -8897,8 +8897,6 @@
       }
     }, _defineProperty(_props, "selectAllByGroup", {
       type: Boolean
-    }), _defineProperty(_props, "groupChildObject", {
-      type: String
     }), _defineProperty(_props, "collectFormatted", {
       type: Function
     }), _defineProperty(_props, "formattedRow", {
@@ -8917,11 +8915,10 @@
     },
     computed: {
       allSelected: function allSelected() {
-        var headerRow = this.headerRow,
-            groupChildObject = this.groupChildObject;
-        return headerRow[groupChildObject].filter(function (row) {
+        var headerRow = this.headerRow;
+        return headerRow.children.filter(function (row) {
           return row.vgtSelected;
-        }).length === headerRow[groupChildObject].length;
+        }).length === headerRow.children.length;
       },
       hiddenColumns: function hiddenColumns() {
         var columns = this.columns;
@@ -14126,9 +14123,8 @@
       },
       showEmptySlot: function showEmptySlot() {
         if (!this.paginated.length) return true;
-        var groupChildObject = this.groupChildObject;
 
-        if (this.paginated[0].label === 'no groups' && !this.paginated[0][groupChildObject].length) {
+        if (this.paginated[0].label === 'no groups' && !this.paginated[0].children.length) {
           return true;
         }
 
@@ -14151,9 +14147,8 @@
       },
       selectedPageRows: function selectedPageRows() {
         var selectedRows = [];
-        var groupChildObject = this.groupChildObject;
         lodash_foreach(this.paginated, function (headerRow) {
-          lodash_foreach(headerRow[groupChildObject], function (row) {
+          lodash_foreach(headerRow.children, function (row) {
             if (row.vgtSelected) {
               selectedRows.push(row);
             }
@@ -14163,9 +14158,8 @@
       },
       selectedRows: function selectedRows() {
         var selectedRows = [];
-        var groupChildObject = this.groupChildObject;
         lodash_foreach(this.processedRows, function (headerRow) {
-          lodash_foreach(headerRow[groupChildObject], function (row) {
+          lodash_foreach(headerRow.children, function (row) {
             if (row.vgtSelected) {
               selectedRows.push(row);
             }
@@ -14204,22 +14198,17 @@
 
         return false;
       },
-      groupChildObject: function groupChildObject() {
-        return this.groupOptions.customChildObject || 'children';
-      },
       totalRowCount: function totalRowCount() {
-        var groupChildObject = this.groupChildObject;
         var total = 0;
         lodash_foreach(this.processedRows, function (headerRow) {
-          total += headerRow[groupChildObject] ? headerRow[groupChildObject].length : 0;
+          total += headerRow.children ? headerRow.children.length : 0;
         });
         return total;
       },
       totalPageRowCount: function totalPageRowCount() {
         var total = 0;
-        var groupChildObject = this.groupChildObject;
         lodash_foreach(this.paginated, function (headerRow) {
-          total += headerRow[groupChildObject] ? headerRow[groupChildObject].length : 0;
+          total += headerRow.children ? headerRow.children.length : 0;
         });
         return total;
       },
@@ -14272,9 +14261,8 @@
           // here also we need to de-construct and then
           // re-construct the rows.
           var allRows = [];
-          var groupChildObject = this.groupChildObject;
           lodash_foreach(this.filteredRows, function (headerRow) {
-            allRows.push.apply(allRows, _toConsumableArray(headerRow[groupChildObject]));
+            allRows.push.apply(allRows, _toConsumableArray(headerRow.children));
           });
           var filteredRows = [];
           lodash_foreach(allRows, function (row) {
@@ -14317,7 +14305,7 @@
 
             if (children.length) {
               var newHeaderRow = lodash_clonedeep(headerRow);
-              newHeaderRow[groupChildObject] = children;
+              newHeaderRow.children = children;
               computedRows.push(newHeaderRow);
             }
           });
@@ -14326,7 +14314,7 @@
         if (this.sorts.length) {
           //* we need to sort
           computedRows.forEach(function (cRows) {
-            cRows[_this.groupChildObject].sort(function (xRow, yRow) {
+            cRows.children.sort(function (xRow, yRow) {
               //* we need to get column for each sort
               var sortValue;
 
@@ -14364,7 +14352,6 @@
       paginated: function paginated() {
         var _this2 = this;
 
-        var groupChildObject = this.groupChildObject;
         if (!this.processedRows.length) return [];
 
         if (this.mode === 'remote') {
@@ -14381,7 +14368,7 @@
             paginatedRows.push(childRows);
           }
 
-          (_paginatedRows = paginatedRows).push.apply(_paginatedRows, _toConsumableArray(childRows[groupChildObject]));
+          (_paginatedRows = paginatedRows).push.apply(_paginatedRows, _toConsumableArray(childRows.children));
         });
 
         if (this.paginate) {
@@ -14412,7 +14399,7 @@
             _this2.handleExpanded(flatRow);
 
             var newHeaderRow = lodash_clonedeep(flatRow);
-            newHeaderRow[groupChildObject] = [];
+            newHeaderRow.children = [];
             reconstructedRows.push(newHeaderRow);
           } else {
             //* child row
@@ -14427,19 +14414,18 @@
 
               if (hRow) {
                 hRow = lodash_clonedeep(hRow);
-                hRow[groupChildObject] = [];
+                hRow.children = [];
                 reconstructedRows.push(hRow);
               }
             }
 
-            hRow[groupChildObject].push(flatRow);
+            hRow.children.push(flatRow);
           }
         });
         return reconstructedRows;
       },
       originalRows: function originalRows() {
         var rows = lodash_clonedeep(this.rows);
-        var groupChildObject = this.groupChildObject;
         var nestedRows = [];
 
         if (!this.groupOptions.enabled) {
@@ -14455,7 +14441,7 @@
 
         var index = 0;
         lodash_foreach(nestedRows, function (headerRow, i) {
-          lodash_foreach(headerRow[groupChildObject], function (row, j) {
+          lodash_foreach(headerRow.children, function (row, j) {
             row.originalIndex = index++;
           });
         });
@@ -14555,9 +14541,8 @@
         var _this6 = this;
 
         var rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-        var groupChildObject = this.groupChildObject;
         lodash_foreach(rows, function (headerRow, i) {
-          lodash_foreach(headerRow[groupChildObject], function (row, j) {
+          lodash_foreach(headerRow.children, function (row, j) {
             _this6.$set(row, 'vgtSelected', false);
           });
         });
@@ -14572,9 +14557,8 @@
         }
 
         var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
-        var groupChildObject = this.groupChildObject;
         lodash_foreach(rows, function (headerRow) {
-          lodash_foreach(headerRow[groupChildObject], function (row) {
+          lodash_foreach(headerRow.children, function (row) {
             _this7.$set(row, 'vgtSelected', true);
           });
         });
@@ -14583,8 +14567,7 @@
       toggleSelectGroup: function toggleSelectGroup(event, headerRow) {
         var _this8 = this;
 
-        var groupChildObject = this.groupChildObject;
-        lodash_foreach(headerRow[groupChildObject], function (row) {
+        lodash_foreach(headerRow.children, function (row) {
           _this8.$set(row, 'vgtSelected', event.checked);
         });
       },
@@ -14842,8 +14825,7 @@
         // this is invoked either as a result of changing filters
         // or as a result of modifying rows.
         this.columnFilters = columnFilters;
-        var computedRows = lodash_clonedeep(this.originalRows);
-        var groupChildObject = this.groupChildObject; // do we have a filter to care about?
+        var computedRows = lodash_clonedeep(this.originalRows); // do we have a filter to care about?
         // if not we don't need to do anything
 
         if (this.columnFilters && Object.keys(this.columnFilters).length) {
@@ -14892,7 +14874,7 @@
 
               if (_this9.columnFilters[fieldKey(col.field)]) {
                 computedRows = lodash_foreach(computedRows, function (headerRow) {
-                  var newChildren = headerRow[groupChildObject].filter(function (row) {
+                  var newChildren = headerRow.children.filter(function (row) {
                     // If column has a custom filter, use that.
                     if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
                       return col.filterOptions.filterFn(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)]);
@@ -14903,7 +14885,7 @@
                     return typeDef.filterPredicate(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
                   }); // should we remove the header?
 
-                  headerRow[groupChildObject] = newChildren;
+                  headerRow.children = newChildren;
                 });
               }
             };
@@ -14964,7 +14946,6 @@
       handleGrouped: function handleGrouped(originalRows) {
         var _this10 = this;
 
-        var groupChildObject = this.groupChildObject;
         lodash_foreach(originalRows, function (headerRow, i) {
           headerRow.vgt_header_id = i;
 
@@ -14972,7 +14953,7 @@
             _this10.$set(headerRow, 'vgtIsExpanded', true);
           }
 
-          lodash_foreach(headerRow[groupChildObject], function (childRow) {
+          lodash_foreach(headerRow.children, function (childRow) {
             childRow.vgt_id = i;
           });
         });
@@ -15406,8 +15387,7 @@
           "get-classes": _vm.getClasses,
           "full-colspan": _vm.fullColspan,
           "groupIndex": hIndex,
-          "groupOptions": _vm.groupOptions,
-          "groupChildObject": _vm.groupChildObject
+          "groupOptions": _vm.groupOptions
         },
         on: {
           "vgtExpand": function vgtExpand($event) {
@@ -15427,7 +15407,7 @@
             })] : undefined;
           }
         }], null, true)
-      }) : _vm._e(), _vm._v(" "), _vm._l(headerRow[_vm.groupChildObject], function (row, index) {
+      }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
         return (_vm.groupOptions.collapsable ? headerRow.vgtIsExpanded : true) ? _c('tr', {
           key: row.originalIndex,
           ref: "row-" + row.originalIndex,
@@ -15503,8 +15483,7 @@
           "get-classes": _vm.getClasses,
           "full-colspan": _vm.fullColspan,
           "groupIndex": _vm.index,
-          "groupOptions": _vm.groupOptions,
-          "groupChildObject": _vm.groupChildObject
+          "groupOptions": _vm.groupOptions
         },
         on: {
           "on-select-group-change": function onSelectGroupChange($event) {

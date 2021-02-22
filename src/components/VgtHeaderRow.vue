@@ -98,9 +98,6 @@ export default {
     selectAllByGroup: {
       type: Boolean
     },
-    groupChildObject: {
-      type: String
-    },
     collectFormatted: {
       type: Function,
     },
@@ -126,8 +123,8 @@ export default {
   },
   computed: {
     allSelected() {
-      const { headerRow, groupChildObject } = this;
-      return headerRow[groupChildObject].filter((row) => row.vgtSelected).length === headerRow[groupChildObject].length;
+      const { headerRow } = this;
+      return headerRow.children.filter((row) => row.vgtSelected).length === headerRow.children.length;
     },
     hiddenColumns() {
       const { columns } = this;
