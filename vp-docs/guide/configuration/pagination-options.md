@@ -20,6 +20,7 @@ A set of options that are related to table pagination. Each of these are optiona
     ofLabel: 'of',
     pageLabel: 'page', // for 'pages' mode
     allLabel: 'All',
+    infoFn: (params) => `my own page ${params.firstRecordOnPage}`, 
   }">
 </vue-good-table>
 ```
@@ -201,6 +202,31 @@ you can change one or more of the texts shown on pagination by overriding the la
     allLabel: 'All',
   }">
 </vue-good-table>
+```
+
+### InfoFn
+Provide your own function to lay out pagination info how you like:
+
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :pagination-options="{
+    enabled: true,
+    infoFn: (params) => `Showing ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of page ${params.currentPage}`,
+  }">
+</vue-good-table>
+```
+
+the parameters passed to infoFn are the following: 
+```javascript
+{
+  firstRecordOnPage: 'index of the first record on the current page',
+  lastRecordOnPage: 'index of the last record on the current page',
+  totalRecords: 'total number of records',
+  currentPage: 'current page',
+  totalPage: 'total number of pages',
+}
 ```
 
 ## Replace Pagination Component

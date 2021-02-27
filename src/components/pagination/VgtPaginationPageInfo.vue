@@ -1,6 +1,9 @@
 <template>
 <div class="footer__navigation__page-info">
-  <form @submit.prevent>
+  <div v-if="infoFn">
+    {{infoFn(infoParams)}}
+  </div>
+  <form v-else-if="mode === 'pages'" @submit.prevent>
     <label :for="id" class="page-info__label">
       <span>{{pageText}}</span>
       <input
@@ -17,6 +20,9 @@
       Type a page number and press Enter to change the page.
     </span>
   </form>
+  <div v-else>
+    {{recordInfo}}
+  </div>
 </div>
 </template>
 
@@ -41,6 +47,18 @@ export default {
       default: 'page',
       type: String,
     },
+    currentPerPage: {},
+    mode: {
+      default: 'records',
+    },
+    infoFn: { default: null },
+  },
+  watch: {
+    currentPage: {
+      handler() {
+        console.log(this.currentPage);
+      },
+    },
   },
   data() {
     return {
@@ -50,6 +68,31 @@ export default {
   computed: {
     pageInfo() {
       return `${this.ofText} ${this.lastPage}`;
+    },
+    firstRecordOnPage() {
+      return ((this.currentPage - 1) * this.currentPerPage) + 1;
+    },
+    lastRecordOnPage() {
+      return Math.min(this.totalRecords, this.currentPage * this.currentPerPage);
+    },
+    recordInfo() {
+      let first = this.firstRecordOnPage;
+      const last = this.lastRecordOnPage;
+
+      if (last === 0) {
+        first = 0;
+      }
+
+      return `${first} - ${last} ${this.ofText} ${this.totalRecords}`;
+    },
+    infoParams() {
+      return {
+        firstRecordOnPage: this.firstRecordOnPage,
+        lastRecordOnPage: this.lastRecordOnPage,
+        totalRecords: this.totalRecords,
+        currentPage: this.currentPage,
+        totalPages: this.lastPage,
+      };
     },
   },
   methods: {

@@ -13,7 +13,7 @@
           aria-controls="vgt-table">
           <option
             v-for="(option, idx) in rowsPerPageOptions"
-            :key="'rows-dropdown-option-' + idx"
+            :key="idx"
             :value="option">
             {{ option }}
           </option>
@@ -24,16 +24,15 @@
     <div class="footer__navigation vgt-pull-right">
       <pagination-page-info
         @page-changed="changePage"
-        :totalRecords="total"
-        :lastPage="pagesCount"
-        :currentPage="currentPage"
-        :ofText="ofText"
-        :pageText="pageText"
-        v-if="mode === 'pages'">
-      </pagination-page-info>
-      <div v-else class="footer__navigation__info">{{paginatedInfo}}</div>
+        :total-records="total"
+        :last-page="pagesCount"
+        :current-page="currentPage"
+        :current-per-page="currentPerPage"
+        :of-text="ofText"
+        :page-text="pageText"
+        :info-fn="infoFn"
+        :mode="mode" />
       <button
-        v-show="prevIsPossible"
         type="button"
         aria-controls="vgt-table"
         class="footer__navigation__page-btn"
@@ -44,7 +43,6 @@
       </button>
 
       <button
-        v-show="nextIsPossible"
         type="button"
         aria-controls="vgt-table"
         class="footer__navigation__page-btn"
@@ -82,6 +80,7 @@ export default {
     ofText: { default: 'of' },
     pageText: { default: 'page' },
     allText: { default: 'All' },
+    infoFn: { default: null },
   },
 
   data() {
@@ -94,6 +93,11 @@ export default {
     };
   },
   watch: {
+    currentPage: {
+      handler() {
+        console.log(this.currentPage);
+      },
+    },
     perPage: {
       handler(newValue, oldValue) {
         this.handlePerPage();
@@ -122,18 +126,6 @@ export default {
       const remainder = this.total % this.currentPerPage;
 
       return remainder === 0 ? quotient : quotient + 1;
-    },
-
-    // Current displayed items
-    paginatedInfo() {
-      let first = ((this.currentPage - 1) * this.currentPerPage) + 1;
-      const last = Math.min(this.total, this.currentPage * this.currentPerPage);
-
-      if (last === 0) {
-        first = 0;
-      }
-
-      return `Showing ${first} to ${last} ${this.ofText} ${this.total} entries`;
     },
 
     // Can go to next page

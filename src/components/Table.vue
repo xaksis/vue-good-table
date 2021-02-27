@@ -34,6 +34,7 @@
           :ofText="ofText"
           :pageText="pageText"
           :allText="allText"
+          :info-fn="paginationInfoFn"
         ></vgt-pagination>
       </slot>
       <vgt-global-search
@@ -331,6 +332,7 @@
           :ofText="ofText"
           :pageText="pageText"
           :allText="allText"
+          :info-fn="paginationInfoFn"
         ></vgt-pagination>
       </slot>
     </div>
@@ -343,9 +345,8 @@ import assign from 'lodash.assign';
 import cloneDeep from 'lodash.clonedeep';
 import filter from 'lodash.filter';
 import isEqual from 'lodash.isequal';
-import diacriticless from 'diacriticless';
 import defaultType from './types/default';
-import VgtPagination from './VgtPagination.vue';
+import VgtPagination from './pagination/VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
@@ -416,12 +417,14 @@ export default {
       default() {
         return {
           enabled: false,
+          position: 'bottom',
           perPage: 10,
           perPageDropdown: null,
           perPageDropdownEnabled: true,
           position: 'bottom',
           dropdownAllowAll: true,
           mode: 'records', // or pages
+          infoFn: null,
         };
       },
     },
@@ -484,6 +487,7 @@ export default {
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
     paginationMode: 'records',
+    paginationInfoFn: null,
 
     currentPage: 1,
     currentPerPage: 10,
@@ -1062,13 +1066,13 @@ export default {
     },
 
     changePage(value) {
-      let { enabled, position } = this.paginationOptions
+      const enabled = this.paginate;
       let { paginationBottom, paginationTop } = this.$refs
       if (enabled) {
-        if ((position === 'top' || position === 'both') && paginationTop) {
+        if (this.paginateOnTop && paginationTop) {
           paginationTop.currentPage = value
         }
-        if ((position === 'bottom' || position === 'both') && paginationBottom) {
+        if (this.paginateOnBottom && paginationBottom) {
           paginationBottom.currentPage = value
         }
         // we also need to set the currentPage
@@ -1455,6 +1459,7 @@ export default {
         allLabel,
         setCurrentPage,
         mode,
+        infoFn,
       } = this.paginationOptions;
 
       if (typeof enabled === 'boolean') {
@@ -1520,6 +1525,10 @@ export default {
         setTimeout(() => {
           this.changePage(setCurrentPage);
         }, 500);
+      }
+
+      if (typeof infoFn === 'function') {
+        this.paginationInfoFn = infoFn;
       }
     },
 
