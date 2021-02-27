@@ -27,6 +27,10 @@
 </template>
 
 <script>
+import {
+  PAGINATION_MODES,
+} from '../utils/constants';
+
 export default {
   name: 'VgtPaginationPageInfo',
   props: {
@@ -49,7 +53,7 @@ export default {
     },
     currentPerPage: {},
     mode: {
-      default: 'records',
+      default: PAGINATION_MODES.Records,
     },
     infoFn: { default: null },
   },

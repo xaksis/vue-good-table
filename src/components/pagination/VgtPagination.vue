@@ -58,8 +58,10 @@
 <script>
 import cloneDeep from 'lodash.clonedeep';
 import VgtPaginationPageInfo from './VgtPaginationPageInfo.vue';
-
-const DEFAULT_ROWS_PER_PAGE_DROPDOWN = [10, 20, 30, 40, 50];
+import {
+  PAGINATION_MODES,
+  DEFAULT_ROWS_PER_PAGE_DROPDOWN
+} from '../utils/constants';
 
 export default {
   name: 'VgtPagination',
@@ -71,7 +73,7 @@ export default {
     perPageDropdownEnabled: { default: true },
     customRowsPerPageDropdown: { default() { return []; } },
     paginateDropdownAllowAll: { default: true },
-    mode: { default: 'records' },
+    mode: { default: PAGINATION_MODES.Records },
 
     // text options
     nextText: { default: 'Next' },
