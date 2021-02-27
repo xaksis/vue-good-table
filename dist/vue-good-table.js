@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.4
+ * vue-good-table v2.21.5
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -25,6 +25,21 @@
     }
 
     return _typeof(obj);
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
   }
 
   function _slicedToArray(arr, i) {
@@ -7456,6 +7471,12 @@
   //
   //
   //
+  //
+  //
+  //
+  //
+  //
+  //
   var script = {
     name: 'VgtPaginationPageInfo',
     props: {
@@ -7475,6 +7496,20 @@
       pageText: {
         "default": 'page',
         type: String
+      },
+      currentPerPage: {},
+      mode: {
+        "default": 'records'
+      },
+      infoFn: {
+        "default": null
+      }
+    },
+    watch: {
+      currentPage: {
+        handler: function handler() {
+          console.log(this.currentPage);
+        }
       }
     },
     data: function data() {
@@ -7485,6 +7520,31 @@
     computed: {
       pageInfo: function pageInfo() {
         return "".concat(this.ofText, " ").concat(this.lastPage);
+      },
+      firstRecordOnPage: function firstRecordOnPage() {
+        return (this.currentPage - 1) * this.currentPerPage + 1;
+      },
+      lastRecordOnPage: function lastRecordOnPage() {
+        return Math.min(this.totalRecords, this.currentPage * this.currentPerPage);
+      },
+      recordInfo: function recordInfo() {
+        var first = this.firstRecordOnPage;
+        var last = this.lastRecordOnPage;
+
+        if (last === 0) {
+          first = 0;
+        }
+
+        return "".concat(first, " - ").concat(last, " ").concat(this.ofText, " ").concat(this.totalRecords);
+      },
+      infoParams: function infoParams() {
+        return {
+          firstRecordOnPage: this.firstRecordOnPage,
+          lastRecordOnPage: this.lastRecordOnPage,
+          totalRecords: this.totalRecords,
+          currentPage: this.currentPage,
+          totalPages: this.lastPage
+        };
       }
     },
     methods: {
@@ -7596,7 +7656,7 @@
 
     return _c('div', {
       staticClass: "footer__navigation__page-info"
-    }, [_c('form', {
+    }, [_vm.infoFn ? _c('div', [_vm._v("\n    " + _vm._s(_vm.infoFn(_vm.infoParams)) + "\n  ")]) : _vm.mode === 'pages' ? _c('form', {
       on: {
         "submit": function submit($event) {
           $event.preventDefault();
@@ -7635,7 +7695,7 @@
       attrs: {
         "id": "change-page-hint"
       }
-    }, [_vm._v("\n      Type a page number and press Enter to change the page.\n    ")])])]);
+    }, [_vm._v("\n      Type a page number and press Enter to change the page.\n    ")])]) : _c('div', [_vm._v("\n    " + _vm._s(_vm.recordInfo) + "\n  ")])]);
   };
 
   var __vue_staticRenderFns__ = [];
@@ -7644,7 +7704,7 @@
   var __vue_inject_styles__ = undefined;
   /* scoped */
 
-  var __vue_scope_id__ = "data-v-46bdd082";
+  var __vue_scope_id__ = "data-v-bc45687a";
   /* module identifier */
 
   var __vue_module_identifier__ = undefined;
@@ -7709,6 +7769,9 @@
       },
       allText: {
         "default": 'All'
+      },
+      infoFn: {
+        "default": null
       }
     },
     data: function data() {
@@ -7721,6 +7784,11 @@
       };
     },
     watch: {
+      currentPage: {
+        handler: function handler() {
+          console.log(this.currentPage);
+        }
+      },
       perPage: {
         handler: function handler(newValue, oldValue) {
           this.handlePerPage();
@@ -7745,17 +7813,6 @@
         var quotient = Math.floor(this.total / this.currentPerPage);
         var remainder = this.total % this.currentPerPage;
         return remainder === 0 ? quotient : quotient + 1;
-      },
-      // Current displayed items
-      paginatedInfo: function paginatedInfo() {
-        var first = (this.currentPage - 1) * this.currentPerPage + 1;
-        var last = Math.min(this.total, this.currentPage * this.currentPerPage);
-
-        if (last === 0) {
-          first = 0;
-        }
-
-        return "Showing ".concat(first, " to ").concat(last, " ").concat(this.ofText, " ").concat(this.total, " entries");
       },
       // Can go to next page
       nextIsPossible: function nextIsPossible() {
@@ -7898,7 +7955,7 @@
       }
     }, [_vm._l(_vm.rowsPerPageOptions, function (option, idx) {
       return _c('option', {
-        key: 'rows-dropdown-option-' + idx,
+        key: idx,
         domProps: {
           "value": option
         }
@@ -7909,26 +7966,21 @@
       }
     }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)])]) : _vm._e(), _vm._v(" "), _c('div', {
       staticClass: "footer__navigation vgt-pull-right"
-    }, [_vm.mode === 'pages' ? _c('pagination-page-info', {
+    }, [_c('pagination-page-info', {
       attrs: {
-        "totalRecords": _vm.total,
-        "lastPage": _vm.pagesCount,
-        "currentPage": _vm.currentPage,
-        "ofText": _vm.ofText,
-        "pageText": _vm.pageText
+        "total-records": _vm.total,
+        "last-page": _vm.pagesCount,
+        "current-page": _vm.currentPage,
+        "current-per-page": _vm.currentPerPage,
+        "of-text": _vm.ofText,
+        "page-text": _vm.pageText,
+        "info-fn": _vm.infoFn,
+        "mode": _vm.mode
       },
       on: {
         "page-changed": _vm.changePage
       }
-    }) : _c('div', {
-      staticClass: "footer__navigation__info"
-    }, [_vm._v(_vm._s(_vm.paginatedInfo))]), _vm._v(" "), _c('button', {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: _vm.prevIsPossible,
-        expression: "prevIsPossible"
-      }],
+    }), _vm._v(" "), _c('button', {
       staticClass: "footer__navigation__page-btn",
       "class": {
         disabled: !_vm.prevIsPossible
@@ -7954,12 +8006,6 @@
         "aria-hidden": "true"
       }
     }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.prevText))])]), _vm._v(" "), _c('button', {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: _vm.nextIsPossible,
-        expression: "nextIsPossible"
-      }],
       staticClass: "footer__navigation__page-btn",
       "class": {
         disabled: !_vm.nextIsPossible
@@ -13789,16 +13835,15 @@
       // pagination
       paginationOptions: {
         "default": function _default() {
-          return {
+          var _ref;
+
+          return _ref = {
             enabled: false,
+            position: 'bottom',
             perPage: 10,
             perPageDropdown: null,
-            perPageDropdownEnabled: true,
-            position: 'bottom',
-            dropdownAllowAll: true,
-            mode: 'records' // or pages
-
-          };
+            perPageDropdownEnabled: true
+          }, _defineProperty(_ref, "position", 'bottom'), _defineProperty(_ref, "dropdownAllowAll", true), _defineProperty(_ref, "mode", 'records'), _defineProperty(_ref, "infoFn", null), _ref;
         }
       },
       searchOptions: {
@@ -13853,6 +13898,7 @@
         customRowsPerPageDropdown: [],
         paginateDropdownAllowAll: true,
         paginationMode: 'records',
+        paginationInfoFn: null,
         currentPage: 1,
         currentPerPage: 10,
         sorts: [],
@@ -14388,19 +14434,17 @@
         });
       },
       changePage: function changePage(value) {
-        var _this$paginationOptio = this.paginationOptions,
-            enabled = _this$paginationOptio.enabled,
-            position = _this$paginationOptio.position;
+        var enabled = this.paginate;
         var _this$$refs = this.$refs,
             paginationBottom = _this$$refs.paginationBottom,
             paginationTop = _this$$refs.paginationTop;
 
         if (enabled) {
-          if ((position === 'top' || position === 'both') && paginationTop) {
+          if (this.paginateOnTop && paginationTop) {
             paginationTop.currentPage = value;
           }
 
-          if ((position === 'bottom' || position === 'both') && paginationBottom) {
+          if (this.paginateOnBottom && paginationBottom) {
             paginationBottom.currentPage = value;
           } // we also need to set the currentPage
           // for table.
@@ -14717,7 +14761,6 @@
         this.filteredRows = computedRows;
       },
       getCurrentIndex: function getCurrentIndex(rowId) {
-        console.log(rowId);
         var index = 0;
         var found = false;
 
@@ -14779,21 +14822,22 @@
       initializePagination: function initializePagination() {
         var _this11 = this;
 
-        var _this$paginationOptio2 = this.paginationOptions,
-            enabled = _this$paginationOptio2.enabled,
-            perPage = _this$paginationOptio2.perPage,
-            position = _this$paginationOptio2.position,
-            perPageDropdown = _this$paginationOptio2.perPageDropdown,
-            perPageDropdownEnabled = _this$paginationOptio2.perPageDropdownEnabled,
-            dropdownAllowAll = _this$paginationOptio2.dropdownAllowAll,
-            nextLabel = _this$paginationOptio2.nextLabel,
-            prevLabel = _this$paginationOptio2.prevLabel,
-            rowsPerPageLabel = _this$paginationOptio2.rowsPerPageLabel,
-            ofLabel = _this$paginationOptio2.ofLabel,
-            pageLabel = _this$paginationOptio2.pageLabel,
-            allLabel = _this$paginationOptio2.allLabel,
-            setCurrentPage = _this$paginationOptio2.setCurrentPage,
-            mode = _this$paginationOptio2.mode;
+        var _this$paginationOptio = this.paginationOptions,
+            enabled = _this$paginationOptio.enabled,
+            perPage = _this$paginationOptio.perPage,
+            position = _this$paginationOptio.position,
+            perPageDropdown = _this$paginationOptio.perPageDropdown,
+            perPageDropdownEnabled = _this$paginationOptio.perPageDropdownEnabled,
+            dropdownAllowAll = _this$paginationOptio.dropdownAllowAll,
+            nextLabel = _this$paginationOptio.nextLabel,
+            prevLabel = _this$paginationOptio.prevLabel,
+            rowsPerPageLabel = _this$paginationOptio.rowsPerPageLabel,
+            ofLabel = _this$paginationOptio.ofLabel,
+            pageLabel = _this$paginationOptio.pageLabel,
+            allLabel = _this$paginationOptio.allLabel,
+            setCurrentPage = _this$paginationOptio.setCurrentPage,
+            mode = _this$paginationOptio.mode,
+            infoFn = _this$paginationOptio.infoFn;
 
         if (typeof enabled === 'boolean') {
           this.paginate = enabled;
@@ -14862,6 +14906,10 @@
           setTimeout(function () {
             _this11.changePage(setCurrentPage);
           }, 500);
+        }
+
+        if (typeof infoFn === 'function') {
+          this.paginationInfoFn = infoFn;
         }
       },
       initializeSearch: function initializeSearch() {
@@ -15014,7 +15062,8 @@
         "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
         "ofText": _vm.ofText,
         "pageText": _vm.pageText,
-        "allText": _vm.allText
+        "allText": _vm.allText,
+        "info-fn": _vm.paginationInfoFn
       },
       on: {
         "page-changed": _vm.pageChanged,
@@ -15313,7 +15362,8 @@
         "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
         "ofText": _vm.ofText,
         "pageText": _vm.pageText,
-        "allText": _vm.allText
+        "allText": _vm.allText,
+        "info-fn": _vm.paginationInfoFn
       },
       on: {
         "page-changed": _vm.pageChanged,
