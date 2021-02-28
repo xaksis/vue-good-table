@@ -71,7 +71,7 @@ type `String`
 provide the format to parse date string. 
 
 ::: tip
-Vue-good-table uses date-fns for date parsing. [Check out their formats here](https://date-fns.org/v2.0.0-beta.4/docs/parse).
+Vue-good-table uses date-fns for date parsing. [Check out their formats here](https://date-fns.org/v2.17.0/docs/parse).
 :::
 
 ## dateOutputFormat
