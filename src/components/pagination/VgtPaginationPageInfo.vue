@@ -57,13 +57,6 @@ export default {
     },
     infoFn: { default: null },
   },
-  watch: {
-    currentPage: {
-      handler() {
-        console.log(this.currentPage);
-      },
-    },
-  },
   data() {
     return {
       id: this.getId(),

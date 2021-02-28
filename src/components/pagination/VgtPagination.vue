@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import cloneDeep from 'lodash.clonedeep';
 import VgtPaginationPageInfo from './VgtPaginationPageInfo.vue';
 import {
   PAGINATION_MODES,
@@ -95,11 +94,6 @@ export default {
     };
   },
   watch: {
-    currentPage: {
-      handler() {
-        console.log(this.currentPage);
-      },
-    },
     perPage: {
       handler(newValue, oldValue) {
         this.handlePerPage();
@@ -196,10 +190,10 @@ export default {
       if (this.customRowsPerPageDropdown !== null
         && (Array.isArray(this.customRowsPerPageDropdown)
         && this.customRowsPerPageDropdown.length !== 0)) {
-        this.rowsPerPageOptions = cloneDeep(this.customRowsPerPageDropdown);
+        this.rowsPerPageOptions = JSON.parse(JSON.stringify(this.customRowsPerPageDropdown));
       } else {
         //* otherwise we use the default rows per page dropdown
-        this.rowsPerPageOptions = cloneDeep(DEFAULT_ROWS_PER_PAGE_DROPDOWN);
+        this.rowsPerPageOptions = JSON.parse(JSON.stringify(DEFAULT_ROWS_PER_PAGE_DROPDOWN));
       }
 
       if (this.perPage) {

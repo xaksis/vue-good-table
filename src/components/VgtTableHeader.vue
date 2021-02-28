@@ -55,9 +55,8 @@
 </template>
 
 <script>
-import assign from 'lodash.assign';
 import VgtFilterRow from './VgtFilterRow.vue';
-import * as SortUtils from './utils/sort.js';
+import { primarySort, secondarySort } from './utils/sort';
 
 export default {
   name: 'VgtTableHeader',
@@ -165,9 +164,9 @@ export default {
       if (!this.isSortableColumn(column)) return;
 
       if (e.shiftKey) {
-        this.sorts = SortUtils.secondarySort(this.sorts, column);
+        this.sorts = secondarySort(this.sorts, column);
       } else {
-        this.sorts = SortUtils.primarySort(this.sorts, column);
+        this.sorts = primarySort(this.sorts, column);
       }
       this.$emit('on-sort-change', this.sorts);
     },
@@ -193,7 +192,7 @@ export default {
     },
 
     getHeaderClasses(column, index) {
-      const classes = assign({}, this.getClasses(index, 'th'), {
+      const classes = Object.assign({}, this.getClasses(index, 'th'), {
         sortable: this.isSortableColumn(column),
         'sorting sorting-desc': this.getColumnSort(column) === 'desc',
         'sorting sorting-asc': this.getColumnSort(column) === 'asc',

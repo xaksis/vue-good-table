@@ -1,8 +1,7 @@
 import { format, parse, isValid, compareAsc } from 'date-fns';
-import clone from 'lodash.clonedeep';
 import def from './default';
 
-const date = clone(def);
+const date = Object.assign({}, def);
 
 date.isRight = true;
 

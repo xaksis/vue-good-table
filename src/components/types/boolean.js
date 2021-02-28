@@ -1,7 +1,6 @@
-import clone from 'lodash.clonedeep';
 import def from './default';
 
-const boolean = clone(def);
+const boolean = Object.assign({}, def);
 
 boolean.isRight = true;
 

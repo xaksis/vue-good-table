@@ -1,9 +1,7 @@
-const DEFAULT_SORT_TYPE = 'asc';
-const SORT_TYPES = {
-  Ascending: 'asc',
-  Descending: 'desc',
-  None: 'none',
-};
+import {
+  DEFAULT_SORT_TYPE,
+  SORT_TYPES,
+} from './constants';
 
 function getColumnFirstSortType(column) {
   return column.firstSortType || DEFAULT_SORT_TYPE;
@@ -29,7 +27,7 @@ function getIndex(sortArray, column) {
   return -1;
 }
 
-exports.primarySort = (sortArray, column) => {
+const primarySort = (sortArray, column) => {
   const currentPrimarySort = getCurrentPrimarySort(sortArray, column);
   const nextPrimarySort = getNextSort(currentPrimarySort);
   return [{
@@ -38,7 +36,7 @@ exports.primarySort = (sortArray, column) => {
   }];
 };
 
-exports.secondarySort = (sortArray, column) => {
+const secondarySort = (sortArray, column) => {
   const index = getIndex(sortArray, column);
   if (index === -1) {
     sortArray.push({
@@ -50,3 +48,8 @@ exports.secondarySort = (sortArray, column) => {
   }
   return sortArray;
 };
+
+export {
+  primarySort,
+  secondarySort,
+}

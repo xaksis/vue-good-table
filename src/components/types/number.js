@@ -1,7 +1,6 @@
-import clone from 'lodash.clonedeep';
 import def from './default';
 
-const number = clone(def);
+const number = Object.assign({}, def);
 
 number.isRight = true;
 

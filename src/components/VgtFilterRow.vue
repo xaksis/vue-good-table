@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import isEqual from 'lodash.isequal';
 
 export default {
   name: 'VgtFilterRow',
