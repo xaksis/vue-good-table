@@ -1582,6 +1582,7 @@ export default {
 
     initializeSort() {
       const { enabled, initialSortBy, multipleColumns } = this.sortOptions;
+      const initSortBy = JSON.parse(JSON.stringify(initialSortBy));
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
@@ -1592,18 +1593,18 @@ export default {
       }
 
       //* initialSortBy can be an array or an object
-      if (typeof initialSortBy === 'object') {
+      if (typeof initSortBy === 'object') {
         const ref = this.fixedHeader
           ? this.$refs['table-header-secondary']
           : this.$refs['table-header-primary'];
-        if (Array.isArray(initialSortBy)) {
-          ref.setInitialSort(initialSortBy);
+        if (Array.isArray(initSortBy)) {
+          ref.setInitialSort(initSortBy);
         } else {
           const hasField = Object.prototype.hasOwnProperty.call(
-            initialSortBy,
+            initSortBy,
             'field'
           );
-          if (hasField) ref.setInitialSort([initialSortBy]);
+          if (hasField) ref.setInitialSort([initSortBy]);
         }
       }
     },
