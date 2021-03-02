@@ -29,7 +29,7 @@ export default {
   compare(x, y) {
     function cook(d) {
       if (typeof d === 'undefined' || d === null) return '';
-      return diacriticless(d.toLowerCase());
+      return diacriticless(String(d).toLowerCase());
     }
     x = cook(x);
     y = cook(y);
