@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.6
+ * vue-good-table v2.21.7
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -111,6 +111,18 @@ function _nonIterableSpread() {
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
+
+var DEFAULT_SORT_TYPE = 'asc';
+var SORT_TYPES = {
+  Ascending: 'asc',
+  Descending: 'desc',
+  None: 'none'
+};
+var PAGINATION_MODES = {
+  Pages: 'pages',
+  Records: 'records'
+};
+var DEFAULT_ROWS_PER_PAGE_DROPDOWN = [10, 20, 30, 40, 50];
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -2112,7 +2124,7 @@ var defaultType = {
   compare: function compare(x, y) {
     function cook(d) {
       if (typeof d === 'undefined' || d === null) return '';
-      return diacriticless(d.toLowerCase());
+      return diacriticless(String(d).toLowerCase());
     }
 
     x = cook(x);
@@ -2122,18 +2134,6 @@ var defaultType = {
     return 0;
   }
 };
-
-var DEFAULT_SORT_TYPE = 'asc';
-var SORT_TYPES = {
-  Ascending: 'asc',
-  Descending: 'desc',
-  None: 'none'
-};
-var PAGINATION_MODES = {
-  Pages: 'pages',
-  Records: 'records'
-};
-var DEFAULT_ROWS_PER_PAGE_DROPDOWN = [10, 20, 30, 40, 50];
 
 //
 var script = {
@@ -3169,12 +3169,24 @@ function getCurrentPrimarySort(sortArray, column) {
   return sortArray.length === 1 && sortArray[0].field === column.field ? sortArray[0].type : undefined;
 }
 
-function getNextSort(currentSort) {
-  if (currentSort === SORT_TYPES.Ascending) {
+function getNextSort(currentSort, column) {
+  if (SORT_TYPES.Descending === getColumnFirstSortType(column) && currentSort === SORT_TYPES.Ascending) {
+    return SORT_TYPES.None;
+  } else if (currentSort === SORT_TYPES.Ascending) {
     return SORT_TYPES.Descending;
   }
 
-  return SORT_TYPES.Ascending;
+  if (SORT_TYPES.Descending === getColumnFirstSortType(column) && currentSort === SORT_TYPES.Descending) {
+    return SORT_TYPES.Ascending;
+  } else if (currentSort === SORT_TYPES.Descending) {
+    return SORT_TYPES.None;
+  }
+
+  if (SORT_TYPES.Descending === getColumnFirstSortType(column) && currentSort === SORT_TYPES.None) {
+    return SORT_TYPES.Descending;
+  } else {
+    return SORT_TYPES.Ascending;
+  }
 }
 
 function getIndex(sortArray, column) {
@@ -3187,7 +3199,7 @@ function getIndex(sortArray, column) {
 
 var primarySort = function primarySort(sortArray, column) {
   var currentPrimarySort = getCurrentPrimarySort(sortArray, column);
-  var nextPrimarySort = getNextSort(currentPrimarySort);
+  var nextPrimarySort = getNextSort(currentPrimarySort, column);
   return [{
     field: column.field,
     type: currentPrimarySort ? nextPrimarySort : getColumnFirstSortType(column)
@@ -3203,7 +3215,7 @@ var secondarySort = function secondarySort(sortArray, column) {
       type: getColumnFirstSortType(column)
     });
   } else {
-    sortArray[index].type = getNextSort(sortArray[index].type);
+    sortArray[index].type = getNextSort(sortArray[index].type, column);
   }
 
   return sortArray;
@@ -3240,16 +3252,10 @@ var script$4 = {
     sortable: {
       type: Boolean
     },
-    // sortColumn: {
-    //   type: Number,
-    // },
-    // sortType: {
-    //   type: String,
-    // },
-    // utility functions
-    // isSortableColumn: {
-    //   type: Function,
-    // },
+    multipleColumnSort: {
+      type: Boolean,
+      "default": true
+    },
     getClasses: {
       type: Function
     },
@@ -3308,7 +3314,7 @@ var script$4 = {
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) return;
 
-      if (e.shiftKey) {
+      if (e.shiftKey && this.multipleColumnSort) {
         this.sorts = secondarySort(this.sorts, column);
       } else {
         this.sorts = primarySort(this.sorts, column);
@@ -8547,6 +8553,7 @@ var script$6 = {
       "default": function _default() {
         return {
           enabled: true,
+          multipleColumns: true,
           initialSortBy: {}
         };
       }
@@ -8602,6 +8609,7 @@ var script$6 = {
       // internal sort options
       sortable: true,
       defaultSortBy: null,
+      multipleColumnSort: true,
       // internal search options
       searchEnabled: false,
       searchTrigger: null,
@@ -8847,8 +8855,9 @@ var script$6 = {
         });
         var filteredRows = [];
         allRows.forEach(function (row) {
-          _this.columns.forEach(function (col) {
-            // if col does not have search disabled,
+          for (var i = 0; i < _this.columns.length; i += 1) {
+            var col = _this.columns[i]; // if col does not have search disabled,
+
             if (!col.globalSearchDisabled) {
               // if a search function is provided,
               // use that for searching, otherwise,
@@ -8858,7 +8867,7 @@ var script$6 = {
 
                 if (foundMatch) {
                   filteredRows.push(row);
-                  return false; // break the loop
+                  break; // break the loop
                 }
               } else {
                 // comparison
@@ -8866,11 +8875,11 @@ var script$6 = {
 
                 if (matched) {
                   filteredRows.push(row);
-                  return false; // break loop
+                  break; // break loop
                 }
               }
             }
-          });
+          }
         }); // this is where we emit on search
 
         this.$emit('on-search', {
@@ -8885,6 +8894,7 @@ var script$6 = {
           var children = filteredRows.filter(function (r) {
             return r.vgt_id === i;
           });
+          console.log(children);
 
           if (children.length) {
             var newHeaderRow = JSON.parse(JSON.stringify(headerRow));
@@ -8902,20 +8912,27 @@ var script$6 = {
             var sortValue;
 
             for (var i = 0; i < _this.sorts.length; i += 1) {
-              var column = _this.getColumnForField(_this.sorts[i].field);
+              var srt = _this.sorts[i];
 
-              var xvalue = _this.collect(xRow, _this.sorts[i].field);
-
-              var yvalue = _this.collect(yRow, _this.sorts[i].field); //* if a custom sort function has been provided we use that
-
-
-              var sortFn = column.sortFn;
-
-              if (sortFn && typeof sortFn === 'function') {
-                sortValue = sortValue || sortFn(xvalue, yvalue, column, xRow, yRow) * (_this.sorts[i].type === 'desc' ? -1 : 1);
+              if (srt.type === SORT_TYPES.None) {
+                //* if no sort, we need to use the original index to sort.
+                sortValue = sortValue || xRow.originalIndex - yRow.originalIndex;
               } else {
-                //* else we use our own sort
-                sortValue = sortValue || column.typeDef.compare(xvalue, yvalue, column) * (_this.sorts[i].type === 'desc' ? -1 : 1);
+                var column = _this.getColumnForField(srt.field);
+
+                var xvalue = _this.collect(xRow, srt.field);
+
+                var yvalue = _this.collect(yRow, srt.field); //* if a custom sort function has been provided we use that
+
+
+                var sortFn = column.sortFn;
+
+                if (sortFn && typeof sortFn === 'function') {
+                  sortValue = sortValue || sortFn(xvalue, yvalue, column, xRow, yRow) * (srt.type === SORT_TYPES.Descending ? -1 : 1);
+                } else {
+                  //* else we use our own sort
+                  sortValue = sortValue || column.typeDef.compare(xvalue, yvalue, column) * (srt.type === SORT_TYPES.Descending ? -1 : 1);
+                }
               }
             }
 
@@ -9669,21 +9686,27 @@ var script$6 = {
     initializeSort: function initializeSort() {
       var _this$sortOptions = this.sortOptions,
           enabled = _this$sortOptions.enabled,
-          initialSortBy = _this$sortOptions.initialSortBy;
+          initialSortBy = _this$sortOptions.initialSortBy,
+          multipleColumns = _this$sortOptions.multipleColumns;
+      var initSortBy = JSON.parse(JSON.stringify(initialSortBy));
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
+      }
+
+      if (typeof multipleColumns === 'boolean') {
+        this.multipleColumnSort = multipleColumns;
       } //* initialSortBy can be an array or an object
 
 
-      if (_typeof(initialSortBy) === 'object') {
+      if (_typeof(initSortBy) === 'object') {
         var ref = this.fixedHeader ? this.$refs['table-header-secondary'] : this.$refs['table-header-primary'];
 
-        if (Array.isArray(initialSortBy)) {
-          ref.setInitialSort(initialSortBy);
+        if (Array.isArray(initSortBy)) {
+          ref.setInitialSort(initSortBy);
         } else {
-          var hasField = Object.prototype.hasOwnProperty.call(initialSortBy, 'field');
-          if (hasField) ref.setInitialSort([initialSortBy]);
+          var hasField = Object.prototype.hasOwnProperty.call(initSortBy, 'field');
+          if (hasField) ref.setInitialSort([initSortBy]);
         }
       }
     },
@@ -9852,6 +9875,7 @@ var __vue_render__$6 = function __vue_render__() {
       "all-selected-indeterminate": _vm.allSelectedIndeterminate,
       "mode": _vm.mode,
       "sortable": _vm.sortable,
+      "multiple-column-sort": _vm.multipleColumnSort,
       "typed-columns": _vm.typedColumns,
       "getClasses": _vm.getClasses,
       "searchEnabled": _vm.searchEnabled,
@@ -9908,6 +9932,7 @@ var __vue_render__$6 = function __vue_render__() {
       "all-selected-indeterminate": _vm.allSelectedIndeterminate,
       "mode": _vm.mode,
       "sortable": _vm.sortable,
+      "multiple-column-sort": _vm.multipleColumnSort,
       "typed-columns": _vm.typedColumns,
       "getClasses": _vm.getClasses,
       "searchEnabled": _vm.searchEnabled
