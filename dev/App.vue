@@ -54,8 +54,8 @@ export default {
       rowStyleClass: 'red',
       searchTerm: '',
       paginationOptions: {
+        enabled: false,
         mode: 'records',
-        enabled: true,
         perPage: 5,
         perPageDropdown: [3, 50, 100, 200, 300, 500, 1000],
         perPageDropdownEnabled: true,

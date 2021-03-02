@@ -763,7 +763,8 @@ export default {
         });
         const filteredRows = [];
         allRows.forEach((row) => {
-          this.columns.forEach((col) => {
+          for (let i = 0; i < this.columns.length; i += 1) {
+            const col = this.columns[i];
             // if col does not have search disabled,
             if (!col.globalSearchDisabled) {
               // if a search function is provided,
@@ -778,7 +779,7 @@ export default {
                 );
                 if (foundMatch) {
                   filteredRows.push(row);
-                  return false; // break the loop
+                  break; // break the loop
                 }
               } else {
                 // comparison
@@ -789,11 +790,11 @@ export default {
                 );
                 if (matched) {
                   filteredRows.push(row);
-                  return false; // break loop
+                  break; // break loop
                 }
               }
             }
-          });
+          }
         });
 
         // this is where we emit on search
@@ -808,6 +809,7 @@ export default {
         this.filteredRows.forEach((headerRow) => {
           const i = headerRow.vgt_header_id;
           const children = filteredRows.filter((r) => r.vgt_id === i);
+          console.log(children);
           if (children.length) {
             const newHeaderRow = JSON.parse(JSON.stringify(headerRow));
             newHeaderRow.children = children;
