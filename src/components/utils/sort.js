@@ -13,13 +13,27 @@ function getCurrentPrimarySort(sortArray, column) {
   : undefined;
 }
 
-function getNextSort(currentSort) {
-  if (currentSort === SORT_TYPES.Ascending) {
+function getNextSort(currentSort, column) {
+  if (SORT_TYPES.Descending === getColumnFirstSortType(column)
+    && currentSort === SORT_TYPES.Ascending) {
+    return SORT_TYPES.None
+  } else if (currentSort === SORT_TYPES.Ascending) {
     return SORT_TYPES.Descending;
+  }
+  if (SORT_TYPES.Descending === getColumnFirstSortType(column)
+    && currentSort === SORT_TYPES.Descending) {
+    return SORT_TYPES.Ascending;
   } else if (currentSort === SORT_TYPES.Descending) {
     return SORT_TYPES.None;
   }
-  return SORT_TYPES.Ascending;
+
+  if (SORT_TYPES.Descending === getColumnFirstSortType(column)
+    && currentSort === SORT_TYPES.None) {
+    return SORT_TYPES.Descending;
+  } else {
+    return SORT_TYPES.Ascending;
+  }
+
 }
 
 function getIndex(sortArray, column) {
@@ -31,7 +45,7 @@ function getIndex(sortArray, column) {
 
 const primarySort = (sortArray, column) => {
   const currentPrimarySort = getCurrentPrimarySort(sortArray, column);
-  const nextPrimarySort = getNextSort(currentPrimarySort);
+  const nextPrimarySort = getNextSort(currentPrimarySort, column);
   return [{
     field: column.field,
     type: currentPrimarySort ? nextPrimarySort : getColumnFirstSortType(column),
@@ -46,7 +60,7 @@ const secondarySort = (sortArray, column) => {
       type: getColumnFirstSortType(column),
     });
   } else {
-    sortArray[index].type = getNextSort(sortArray[index].type);
+    sortArray[index].type = getNextSort(sortArray[index].type, column);
   }
   return sortArray;
 };

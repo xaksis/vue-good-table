@@ -89,17 +89,11 @@ export default {
     sortable: {
       type: Boolean,
     },
-    // sortColumn: {
-    //   type: Number,
-    // },
-    // sortType: {
-    //   type: String,
-    // },
+    multipleColumnSort: {
+      type: Boolean,
+      default: true,
+    },
 
-    // utility functions
-    // isSortableColumn: {
-    //   type: Function,
-    // },
     getClasses: {
       type: Function,
     },
@@ -163,7 +157,7 @@ export default {
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) return;
 
-      if (e.shiftKey) {
+      if (e.shiftKey && this.multipleColumnSort) {
         this.sorts = secondarySort(this.sorts, column);
       } else {
         this.sorts = primarySort(this.sorts, column);

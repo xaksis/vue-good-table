@@ -89,6 +89,7 @@
             :all-selected-indeterminate="allSelectedIndeterminate"
             :mode="mode"
             :sortable="sortable"
+            :multiple-column-sort="multipleColumnSort"
             :typed-columns="typedColumns"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
@@ -145,6 +146,7 @@
             :all-selected-indeterminate="allSelectedIndeterminate"
             :mode="mode"
             :sortable="sortable"
+            :multiple-column-sort="multipleColumnSort"
             :typed-columns="typedColumns"
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
@@ -407,6 +409,7 @@ export default {
       default() {
         return {
           enabled: true,
+          multipleColumns: true,
           initialSortBy: {},
         };
       },
@@ -470,6 +473,7 @@ export default {
     // internal sort options
     sortable: true,
     defaultSortBy: null,
+    multipleColumnSort: true,
 
     // internal search options
     searchEnabled: false,
@@ -1577,10 +1581,14 @@ export default {
     },
 
     initializeSort() {
-      const { enabled, initialSortBy } = this.sortOptions;
+      const { enabled, initialSortBy, multipleColumns } = this.sortOptions;
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
+      }
+
+      if (typeof multipleColumns === 'boolean') {
+        this.multipleColumnSort = multipleColumns;
       }
 
       //* initialSortBy can be an array or an object

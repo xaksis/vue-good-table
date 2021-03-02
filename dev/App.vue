@@ -28,6 +28,7 @@
       styleClass="vgt-table bordered"
       :sort-options="{
         enabled: true,
+        multipleColumns: false,
       }"
       :search-options="{
         enabled: true,
