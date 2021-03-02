@@ -14,6 +14,7 @@
       @on-sort-change="onSortChange"
       @on-page-change="onPageChange"
       @on-per-page-change="onPerPageChange"
+      @on-rows-change="onRowsChange"
       @on-search="onSearch"
       @on-selected-rows-change="onSelectChanged"
       :columns="columns"
@@ -264,6 +265,9 @@ export default {
     },
     resetTable() {
       this.$refs['my-table'].reset();
+    },
+    onRowsChange(params) {
+      console.log({ onRowsChange: params });
     },
     onSelectAll(params) {
       console.log(params);

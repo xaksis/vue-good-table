@@ -866,7 +866,7 @@ export default {
       // if the filtering is event based, we need to maintain filter
       // rows
       if (this.searchTrigger === 'enter') {
-        this.filteredRows = computedRows;
+        this.setFilteredRows(computedRows);
       }
 
       return computedRows;
@@ -1216,7 +1216,7 @@ export default {
         this.handleSearch();
         // we reset the filteredRows here because
         // we want to search across everything.
-        this.filteredRows = JSON.parse(JSON.stringify(this.originalRows));
+        this.setFilteredRows(JSON.parse(JSON.stringify(this.originalRows)));
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -1226,6 +1226,13 @@ export default {
       if (this.searchTrigger !== 'enter') {
         this.handleSearch();
       }
+    },
+
+    setFilteredRows(rows) {
+      this.filteredRows = rows;
+      this.$emit('on-rows-change', {
+        filteredRows: rows.map(row => row.children),
+      });
     },
 
     resetTable() {
@@ -1357,7 +1364,7 @@ export default {
             this.$emit('update:isLoading', true);
           } else {
             // if remote filtering has already been taken care of.
-            this.filteredRows = computedRows;
+            this.setFilteredRows(computedRows);
           }
           return;
         }
@@ -1401,7 +1408,7 @@ export default {
           }
         }
       }
-      this.filteredRows = computedRows;
+      this.setFilteredRows(computedRows);
     },
 
     getCurrentIndex(rowId) {
