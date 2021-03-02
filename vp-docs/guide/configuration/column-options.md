@@ -10,7 +10,7 @@ Text to put on column header.
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name'
   },
   // ...
@@ -21,14 +21,14 @@ columns: [
 
 type `String`
 
-Row object property that this column corresponds to. This can be: 
+Row object property that this column corresponds to. This can be:
 
 * String <code>eg: 'name'</code> - simple row property name
 * String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
 * Function - a function that returns a value to be displayed based on the row object
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: this.fealdFn,
   },
@@ -53,7 +53,7 @@ type of column. default: 'text'. This determines the formatting for the column a
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'joined On',
     field: 'createdAt',
     type: 'date',
@@ -68,7 +68,7 @@ columns: [
 
 type `String`
 
-provide the format to parse date string. 
+provide the format to parse date string.
 
 ::: tip
 Vue-good-table uses date-fns for date parsing. [Check out their formats here](https://date-fns.org/v2.17.0/docs/parse).
@@ -87,7 +87,7 @@ type `Boolean`
 enable/disable sorting on columns. This property is higher priority than global sortable property
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     sortable: false,
@@ -102,12 +102,12 @@ type `String (default: 'asc')`
 
 controls the first sort type when sorting by the column. If you want the first sort type for this column to be descending, set this property to 'desc'. Possible values:
 * _asc_ - the initial sort will be ascending
-* _desc_ - the initial sort will be descending 
+* _desc_ - the initial sort will be descending
 
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     sortable: true,
@@ -175,8 +175,8 @@ formatFn: function(value) {
 
 type `Boolean`
 
-indicates whether this column will require html rendering. 
-::: tip 
+indicates whether this column will require html rendering.
+::: tip
 The preferred way of creating columns that have html is by [using slots](../advanced/#custom-row-template)
 :::
 
@@ -206,7 +206,7 @@ provide a width value for this column
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     width: '50px',
@@ -220,9 +220,10 @@ columns: [
 type `Boolean`
 
 hide a column
+
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     hidden: true,
@@ -236,9 +237,10 @@ columns: [
 type `String`
 
 provide custom class(es) to the table header
+
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     thClass: 'custom-th-class',
@@ -254,7 +256,7 @@ type `String` or `Function`
 provide custom class(es) to the table cells
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     tdClass: 'text-center',
@@ -266,7 +268,7 @@ or
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     tdClass: this.tdClassFunc,
@@ -291,10 +293,27 @@ type `Boolean (default: false)`
 if true, this column will be ignored by the global search
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     globalSearchDisabled: true,
+  },
+  // ...
+]
+```
+
+## tooltip
+
+type `String`
+
+Text to put on a simple tooltip for column header.
+
+```javascript
+columns: [
+  {
+    label: 'name',
+    field: 'user_name',
+    tooltip: 'A simple tooltip',
   },
   // ...
 ]
