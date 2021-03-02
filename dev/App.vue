@@ -69,6 +69,7 @@ export default {
           filterOptions: {
             enabled: true,
             placeholder: 'All',
+            trigger: 'enter',
             // filterDropdownItems: ['Chris', 'Dan', 'Susan'],
             // filterValue: 'Chris',
           },
@@ -80,8 +81,9 @@ export default {
           firstSortType: 'desc',
           filterOptions: {
             enabled: true,
-            filterDropdownItems: ['24', '16', '30'],
-            styleClass: 'class1'
+            // filterDropdownItems: ['24', '16', '30'],
+            styleClass: 'class1',
+            trigger: 'enter',
             // filterDropdownItems: [
             //   {
             //     value: 24,

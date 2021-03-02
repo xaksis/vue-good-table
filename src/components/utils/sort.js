@@ -16,6 +16,8 @@ function getCurrentPrimarySort(sortArray, column) {
 function getNextSort(currentSort) {
   if (currentSort === SORT_TYPES.Ascending) {
     return SORT_TYPES.Descending;
+  } else if (currentSort === SORT_TYPES.Descending) {
+    return SORT_TYPES.None;
   }
   return SORT_TYPES.Ascending;
 }

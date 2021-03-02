@@ -340,6 +340,10 @@
 </template>
 
 <script>
+import {
+  DEFAULT_SORT_TYPE,
+  SORT_TYPES,
+} from './utils/constants';
 import isEqual from 'lodash.isequal';
 import defaultType from './types/default';
 import VgtPagination from './pagination/VgtPagination.vue';
@@ -824,23 +828,30 @@ export default {
             //* we need to get column for each sort
             let sortValue;
             for (let i = 0; i < this.sorts.length; i += 1) {
-              const column = this.getColumnForField(this.sorts[i].field);
-              const xvalue = this.collect(xRow, this.sorts[i].field);
-              const yvalue = this.collect(yRow, this.sorts[i].field);
+              const srt = this.sorts[i];
 
-              //* if a custom sort function has been provided we use that
-              const { sortFn } = column;
-              if (sortFn && typeof sortFn === 'function') {
-                sortValue =
-                  sortValue ||
-                  sortFn(xvalue, yvalue, column, xRow, yRow) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
-              } else {
-                //* else we use our own sort
-                sortValue =
-                  sortValue ||
-                  column.typeDef.compare(xvalue, yvalue, column) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
+              if (srt.type === SORT_TYPES.None) {
+                //* if no sort, we need to use the original index to sort.
+                sortValue = sortValue || (xRow.originalIndex - yRow.originalIndex);
+              } else{
+                const column = this.getColumnForField(srt.field);
+                const xvalue = this.collect(xRow, srt.field);
+                const yvalue = this.collect(yRow, srt.field);
+  
+                //* if a custom sort function has been provided we use that
+                const { sortFn } = column;
+                if (sortFn && typeof sortFn === 'function') {
+                  sortValue =
+                    sortValue ||
+                    sortFn(xvalue, yvalue, column, xRow, yRow) *
+                      (srt.type === SORT_TYPES.Descending ? -1 : 1);
+                } else {
+                  //* else we use our own sort
+                  sortValue =
+                    sortValue ||
+                    column.typeDef.compare(xvalue, yvalue, column) *
+                      (srt.type === SORT_TYPES.Descending ? -1 : 1);
+                }
               }
             }
             return sortValue;
