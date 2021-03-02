@@ -79,6 +79,7 @@ export default {
           label: 'Age',
           field: 'age',
           type: 'number',
+          tooltip: 'Age tooltip',
           firstSortType: 'desc',
           filterOptions: {
             enabled: true,
