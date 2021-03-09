@@ -1581,10 +1581,8 @@ export default {
     },
 
     initializeSort() {
-      const enabled = this.sortOptions.enabled;
-      const multipleColumns = this.sortOptions.multipleColumns;
-      const initialSortBy = this.sortOptions.initialSortBy || {};
-      const initSortBy = JSON.parse(JSON.stringify(initialSortBy));
+      const { enabled, initialSortBy, multipleColumns } = this.sortOptions;
+      const initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
