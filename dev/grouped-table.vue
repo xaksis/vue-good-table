@@ -41,11 +41,17 @@
         {{props.formattedRow[props.column.field]}}
       </span>
     </template> -->
+
+    <template v-slot:table-actions-dropdown="{columns}">
+      <vgt-column-dropdown :columns="columns" />
+    </template>
   </vue-good-table>
 </div>
 </template>
 
 <script>
+import VgtColumnDropdown from '../src/components/plugins/VgtColumnDropdown.vue';
+
 export default {
   name: 'grouped-table',
   props: [],
@@ -141,6 +147,7 @@ export default {
   mounted() {
   },
   components: {
+    VgtColumnDropdown
   },
 };
 </script>

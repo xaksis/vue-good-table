@@ -37,21 +37,19 @@
           :info-fn="paginationInfoFn"
         ></vgt-pagination>
       </slot>
-        <div slot="table-actions">
-          <slot name="table-actions-header"></slot>
-          <slot name="table-actions-global-search">
-            <vgt-global-search
-              @on-keyup="searchTableOnKeyUp"
-              @on-enter="searchTableOnEnter"
-              v-model="globalSearchTerm"
-              :search-enabled="searchEnabled && externalSearchQuery == null"
-              :global-search-placeholder="searchPlaceholder"
-            />
-          </slot>
-          <slot name="table-actions-dropdown">
-            <vgt-column-dropdown v-if="columnFilterEnabled" :columns="columns" @input="toggleFilteredColumn"/>
-          </slot>
-        </div>
+      <div>
+        <slot name="table-actions-header"></slot>
+        <slot name="table-actions-global-search">
+          <vgt-global-search
+            @on-keyup="searchTableOnKeyUp"
+            @on-enter="searchTableOnEnter"
+            v-model="globalSearchTerm"
+            :search-enabled="searchEnabled && externalSearchQuery == null"
+            :global-search-placeholder="searchPlaceholder"
+          />
+        </slot>
+        <slot name="table-actions-dropdown" :columns="columns"></slot>
+      </div>
       <div
         v-if="selectedRowCount && !disableSelectInfo"
         class="vgt-selection-info-row clearfix"
@@ -349,7 +347,6 @@ import VgtPagination from './pagination/VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
-import VgtColumnDropdown from './VgtColumnDropdown.vue';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -440,14 +437,6 @@ export default {
         };
       },
     },
-
-    columnFilterOptions: {
-      default() {
-        return {
-          enabled: false,
-        };
-      },
-    },
   },
 
   data: () => ({
@@ -506,9 +495,6 @@ export default {
     forceSearch: false,
     sortChanged: false,
     dataTypes: dataTypes || {},
-
-    // internal column filter options
-    columnFilterEnabled: false,
   }),
 
   watch: {
@@ -570,14 +556,6 @@ export default {
           selectedRows: this.selectedRows,
         });
       }
-    },
-
-    columnFilterOptions: {
-      handler() {
-        this.initializeColumnFilter();
-      },
-      deep: true,
-      immediate: true,
     },
   },
 
@@ -1462,10 +1440,6 @@ export default {
       return originalRows;
     },
 
-    toggleFilteredColumn(value) {
-      this.columns.find(column => column.label === value.label).hidden = !value.checked;
-    },
-
     initializePagination() {
       const {
         enabled,
@@ -1659,13 +1633,6 @@ export default {
       }
     },
 
-    initializeColumnFilter() {
-      const { enabled } = this.columnFilterOptions;
-
-      if (typeof enabled === 'boolean') {
-        this.columnFilterEnabled = enabled;
-      }
-    },
   },
 
   mounted() {
@@ -1680,7 +1647,6 @@ export default {
     'vgt-global-search': VgtGlobalSearch,
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
-    'vgt-column-dropdown': VgtColumnDropdown,
   },
 };
 </script>

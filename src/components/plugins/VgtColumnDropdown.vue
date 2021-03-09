@@ -27,9 +27,13 @@ export default {
       selectOpen: false
     }
   },
+  mounted() {
+    const { parentProps } = this;
+    console.log(parentProps);
+  },
   methods: {
-    updateFilteredColumn(columnLabel, checked) {
-      this.$emit('input', { label: columnLabel, checked });
+    updateFilteredColumn(label, checked) {
+      this.columns.find(column => column.label === label).hidden = !checked;
     }
   },
   watch: {
