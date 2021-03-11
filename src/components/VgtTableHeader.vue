@@ -12,6 +12,7 @@
     <th v-for="(column, index) in columns"
       scope="col"
       :key="index"
+      :title="column.tooltip"
       :class="getHeaderClasses(column, index)"
       :style="columnStyles[index]"
       :aria-sort="getColumnSortLong(column)"
@@ -256,7 +257,7 @@ export default {
             this.setColumnStyles();
         });
         this.ro.observe(this.$parent.$el);
-        
+
         // If this is a fixed-header table, we want to observe each column header from the non-fixed header.
         // You can imagine two columns swapping widths, which wouldn't cause the above to trigger.
         // This gets the first tr element of the primary table header, and iterates through its children (the th elements)
@@ -271,7 +272,7 @@ export default {
   beforeDestroy() {
     if (this.ro) {
       this.ro.disconnect();
-    } 
+    }
   },
   components: {
     'vgt-filter-row': VgtFilterRow,
