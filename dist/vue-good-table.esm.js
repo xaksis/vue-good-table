@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.7
+ * vue-good-table v2.21.8
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -2512,7 +2512,7 @@ var script$1 = {
         });
       }
 
-      this.changePage(1, false);
+      this.changePage(1, true);
     },
     // Handle per page changing
     handlePerPage: function handlePerPage() {
@@ -2792,7 +2792,7 @@ var __vue_render__$2 = function __vue_render__() {
     attrs: {
       "id": _vm.id,
       "type": "text",
-      "placeholder": null
+      "placeholder": _vm.globalSearchPlaceholder
     },
     domProps: {
       "value": _vm.value
@@ -3468,6 +3468,7 @@ var __vue_render__$4 = function __vue_render__() {
       style: _vm.columnStyles[index],
       attrs: {
         "scope": "col",
+        "title": column.tooltip,
         "aria-sort": _vm.getColumnSortLong(column),
         "aria-controls": "col-" + index
       }
@@ -9684,7 +9685,7 @@ var script$6 = {
           enabled = _this$sortOptions.enabled,
           initialSortBy = _this$sortOptions.initialSortBy,
           multipleColumns = _this$sortOptions.multipleColumns;
-      var initSortBy = JSON.parse(JSON.stringify(initialSortBy));
+      var initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
