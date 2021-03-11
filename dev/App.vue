@@ -55,10 +55,10 @@ export default {
       rowStyleClass: 'red',
       searchTerm: '',
       paginationOptions: {
-        enabled: false,
+        enabled: true,
         mode: 'records',
-        perPage: 5,
-        perPageDropdown: [3, 50, 100, 200, 300, 500, 1000],
+        perPage: 3,
+        perPageDropdown: [3, 5, 10, 200, 300, 500, 1000],
         perPageDropdownEnabled: true,
         // infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
       },

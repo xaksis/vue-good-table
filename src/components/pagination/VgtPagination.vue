@@ -181,7 +181,7 @@ export default {
         //* only emit if this isn't first initialization
         this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
       }
-      this.changePage(1, false);
+      this.changePage(1, true);
     },
 
     // Handle per page changing
