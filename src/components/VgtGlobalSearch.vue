@@ -12,7 +12,7 @@
       :id="id"
       type="text"
       class="vgt-input vgt-pull-left"
-      :placeholder="null"
+      :placeholder="globalSearchPlaceholder"
       :value="value"
       @input="updateValue($event.target.value)"
       @keyup.enter="entered($event.target.value)" />
