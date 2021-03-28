@@ -144,7 +144,7 @@ export default {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
         this.prevPage = this.currentPage;
         this.currentPage = pageNumber;
-        if (emit) this.pageChanged();
+        this.pageChanged(emit);
       }
     },
 
@@ -167,11 +167,13 @@ export default {
     },
 
     // Indicate page changing
-    pageChanged() {
-      this.$emit('page-changed', {
+    pageChanged(emit = true) {
+      const payload = {
         currentPage: this.currentPage,
         prevPage: this.prevPage,
-      });
+      };
+      if (!emit) payload.noEmit = true;
+      this.$emit('page-changed', payload);
     },
 
     // Indicate per page changing
@@ -181,7 +183,7 @@ export default {
         //* only emit if this isn't first initialization
         this.$emit('per-page-changed', { currentPerPage: this.currentPerPage });
       }
-      this.changePage(1, true);
+      this.changePage(1, false);
     },
 
     // Handle per page changing

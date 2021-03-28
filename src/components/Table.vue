@@ -1103,11 +1103,13 @@ export default {
 
     pageChanged(pagination) {
       this.currentPage = pagination.currentPage;
-      const pageChangedEvent = this.pageChangedEvent();
-      pageChangedEvent.prevPage = pagination.prevPage;
-      this.$emit('on-page-change', pageChangedEvent);
-      if (this.mode === 'remote') {
-        this.$emit('update:isLoading', true);
+      if (!pagination.noEmit) {
+        const pageChangedEvent = this.pageChangedEvent();
+        pageChangedEvent.prevPage = pagination.prevPage;
+        this.$emit('on-page-change', pageChangedEvent);
+        if (this.mode === 'remote') {
+          this.$emit('update:isLoading', true);
+        }
       }
     },
 
