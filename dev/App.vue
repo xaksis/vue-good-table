@@ -60,7 +60,7 @@ export default {
         perPage: 3,
         perPageDropdown: [3, 5, 10, 200, 300, 500, 1000],
         perPageDropdownEnabled: true,
-        // infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
+        infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
       },
       columns: [
         {
@@ -143,98 +143,99 @@ export default {
           },
         }
       ],
-      rows: [
-        // { id:1, name:"John", age: 20, createdAt: '2018-02-18T00:00:43-05:00',score: 0.03343 },
-        {
-          id: 2,
-          name: 'Jane',
-          age: 24,
-          createdAt: '2011-10-31',
-          score: 0.03343,
-          bool: true,
-          exact: 'match',
-          average: 1
-        },
-        {
-          id: 3,
-          name: 'Angel',
-          age: 16,
-          createdAt: '2011-10-30',
-          score: 0.03343,
-          bool: true,
-          exact: 'match',
-          average: null
-        },
-        {
-          id: 4,
-          name: 'Chris',
-          age: 55,
-          createdAt: '2011-10-11',
-          score: 0.03343,
-          bool: false,
-          exact: null
-        },
-        {
-          id: 5,
-          name: 'Dan',
-          age: 40,
-          createdAt: '',
-          score: 0.03343,
-          bool: null,
-          exact: 'rematch',
-          average: 2
-        },
-        {
-          id: 5,
-          name: '193.23',
-          age: 20,
-          createdAt: null,
-          score: 0.03343,
-          bool: null,
-          exact: 'rematch',
-          average: 3
-        },
-        {
-          id: 5,
-          name: 'Dan',
-          age: 34,
-          createdAt: null,
-          score: 0.03343,
-          bool: null,
-          exact: null,
-          average: 2
-        },
-        {
-          id: 6,
-          name: 'John',
-          age: 20,
-          createdAt: '2011-10-31',
-          score: 0.03343,
-          bool: true,
-          exact: 'match',
-          average: 1.5
-        },
-        {
-          id: 7,
-          name: 'Ángel',
-          age: 20,
-          createdAt: '2013-09-21',
-          score: null,
-          bool: 'false',
-          exact: null,
-          average: 1
-        },
-        {
-          id: 8,
-          name: 'Susan',
-          age: 16,
-          createdAt: '2013-10-31',
-          score: 0.03343,
-          bool: true,
-          exact: 'rematch',
-          average: 1
-        },
-      ],
+      rows: [],
+      // rows: [
+      //   // { id:1, name:"John", age: 20, createdAt: '2018-02-18T00:00:43-05:00',score: 0.03343 },
+      //   {
+      //     id: 2,
+      //     name: 'Jane',
+      //     age: 24,
+      //     createdAt: '2011-10-31',
+      //     score: 0.03343,
+      //     bool: true,
+      //     exact: 'match',
+      //     average: 1
+      //   },
+      //   {
+      //     id: 3,
+      //     name: 'Angel',
+      //     age: 16,
+      //     createdAt: '2011-10-30',
+      //     score: 0.03343,
+      //     bool: true,
+      //     exact: 'match',
+      //     average: null
+      //   },
+      //   {
+      //     id: 4,
+      //     name: 'Chris',
+      //     age: 55,
+      //     createdAt: '2011-10-11',
+      //     score: 0.03343,
+      //     bool: false,
+      //     exact: null
+      //   },
+      //   {
+      //     id: 5,
+      //     name: 'Dan',
+      //     age: 40,
+      //     createdAt: '',
+      //     score: 0.03343,
+      //     bool: null,
+      //     exact: 'rematch',
+      //     average: 2
+      //   },
+      //   {
+      //     id: 5,
+      //     name: '193.23',
+      //     age: 20,
+      //     createdAt: null,
+      //     score: 0.03343,
+      //     bool: null,
+      //     exact: 'rematch',
+      //     average: 3
+      //   },
+      //   {
+      //     id: 5,
+      //     name: 'Dan',
+      //     age: 34,
+      //     createdAt: null,
+      //     score: 0.03343,
+      //     bool: null,
+      //     exact: null,
+      //     average: 2
+      //   },
+      //   {
+      //     id: 6,
+      //     name: 'John',
+      //     age: 20,
+      //     createdAt: '2011-10-31',
+      //     score: 0.03343,
+      //     bool: true,
+      //     exact: 'match',
+      //     average: 1.5
+      //   },
+      //   {
+      //     id: 7,
+      //     name: 'Ángel',
+      //     age: 20,
+      //     createdAt: '2013-09-21',
+      //     score: null,
+      //     bool: 'false',
+      //     exact: null,
+      //     average: 1
+      //   },
+      //   {
+      //     id: 8,
+      //     name: 'Susan',
+      //     age: 16,
+      //     createdAt: '2013-10-31',
+      //     score: 0.03343,
+      //     bool: true,
+      //     exact: 'rematch',
+      //     average: 1
+      //   },
+      // ],
     };
   },
   methods: {

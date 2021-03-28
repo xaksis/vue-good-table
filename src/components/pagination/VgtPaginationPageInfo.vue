@@ -83,9 +83,14 @@ export default {
       return `${first} - ${last} ${this.ofText} ${this.totalRecords}`;
     },
     infoParams() {
+      let first = this.firstRecordOnPage;
+      const last = this.lastRecordOnPage;
+      if (last === 0) {
+        first = 0;
+      }
       return {
-        firstRecordOnPage: this.firstRecordOnPage,
-        lastRecordOnPage: this.lastRecordOnPage,
+        firstRecordOnPage: first,
+        lastRecordOnPage: last,
         totalRecords: this.totalRecords,
         currentPage: this.currentPage,
         totalPages: this.lastPage,
