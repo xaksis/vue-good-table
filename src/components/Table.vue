@@ -1400,7 +1400,7 @@ export default {
           }
         }
       }
-      this.filteredRows = computedRows;
+      this.filteredRows = computedRows.filter((h) => h.children && h.children.length);
     },
 
     getCurrentIndex(rowId) {
