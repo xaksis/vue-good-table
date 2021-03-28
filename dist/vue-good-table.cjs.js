@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.8
+ * vue-good-table v2.21.9
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -2190,9 +2190,16 @@ var script = {
       return "".concat(first, " - ").concat(last, " ").concat(this.ofText, " ").concat(this.totalRecords);
     },
     infoParams: function infoParams() {
+      var first = this.firstRecordOnPage;
+      var last = this.lastRecordOnPage;
+
+      if (last === 0) {
+        first = 0;
+      }
+
       return {
-        firstRecordOnPage: this.firstRecordOnPage,
-        lastRecordOnPage: this.lastRecordOnPage,
+        firstRecordOnPage: first,
+        lastRecordOnPage: last,
         totalRecords: this.totalRecords,
         currentPage: this.currentPage,
         totalPages: this.lastPage
@@ -2356,7 +2363,7 @@ var __vue_staticRenderFns__ = [];
 var __vue_inject_styles__ = undefined;
 /* scoped */
 
-var __vue_scope_id__ = "data-v-375daa9e";
+var __vue_scope_id__ = "data-v-3b496d41";
 /* module identifier */
 
 var __vue_module_identifier__ = undefined;
@@ -2480,7 +2487,7 @@ var script$1 = {
       if (pageNumber > 0 && this.total > this.currentPerPage * (pageNumber - 1)) {
         this.prevPage = this.currentPage;
         this.currentPage = pageNumber;
-        if (emit) this.pageChanged();
+        this.pageChanged(emit);
       }
     },
     // Go to next page
@@ -2501,10 +2508,13 @@ var script$1 = {
     },
     // Indicate page changing
     pageChanged: function pageChanged() {
-      this.$emit('page-changed', {
+      var emit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var payload = {
         currentPage: this.currentPage,
         prevPage: this.prevPage
-      });
+      };
+      if (!emit) payload.noEmit = true;
+      this.$emit('page-changed', payload);
     },
     // Indicate per page changing
     perPageChanged: function perPageChanged(oldValue) {
@@ -2516,7 +2526,7 @@ var script$1 = {
         });
       }
 
-      this.changePage(1, true);
+      this.changePage(1, false);
     },
     // Handle per page changing
     handlePerPage: function handlePerPage() {
@@ -8895,7 +8905,6 @@ var script$6 = {
           var children = filteredRows.filter(function (r) {
             return r.vgt_id === i;
           });
-          console.log(children);
 
           if (children.length) {
             var newHeaderRow = JSON.parse(JSON.stringify(headerRow));
@@ -9201,12 +9210,15 @@ var script$6 = {
     },
     pageChanged: function pageChanged(pagination) {
       this.currentPage = pagination.currentPage;
-      var pageChangedEvent = this.pageChangedEvent();
-      pageChangedEvent.prevPage = pagination.prevPage;
-      this.$emit('on-page-change', pageChangedEvent);
 
-      if (this.mode === 'remote') {
-        this.$emit('update:isLoading', true);
+      if (!pagination.noEmit) {
+        var pageChangedEvent = this.pageChangedEvent();
+        pageChangedEvent.prevPage = pagination.prevPage;
+        this.$emit('on-page-change', pageChangedEvent);
+
+        if (this.mode === 'remote') {
+          this.$emit('update:isLoading', true);
+        }
       }
     },
     perPageChanged: function perPageChanged(pagination) {
@@ -9497,7 +9509,9 @@ var script$6 = {
         if (_typeof(_ret) === "object") return _ret.v;
       }
 
-      this.filteredRows = computedRows;
+      this.filteredRows = computedRows.filter(function (h) {
+        return h.children && h.children.length;
+      });
     },
     getCurrentIndex: function getCurrentIndex(rowId) {
       var index = 0;
