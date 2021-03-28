@@ -817,7 +817,6 @@ export default {
         this.filteredRows.forEach((headerRow) => {
           const i = headerRow.vgt_header_id;
           const children = filteredRows.filter((r) => r.vgt_id === i);
-          console.log(children);
           if (children.length) {
             const newHeaderRow = JSON.parse(JSON.stringify(headerRow));
             newHeaderRow.children = children;
