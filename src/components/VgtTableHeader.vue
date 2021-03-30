@@ -252,7 +252,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       // We're going to watch the parent element for resize events, and calculate column widths if it changes
-      if (ResizeObserver) {
+      if ('ResizeObserver' in window) {
         this.ro = new ResizeObserver(() => {
             this.setColumnStyles();
         });
