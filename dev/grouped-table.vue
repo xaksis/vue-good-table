@@ -3,6 +3,7 @@
   <button @click="expandAll">Expand All</button>
   <button @click="collapseAll">Collapse All</button>
   <vue-good-table
+    id="vgt-root"
     :columns="columns"
     :rows="rows"
     :line-numbers="true"
@@ -28,6 +29,9 @@
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
+    :column-filter-options="{
+      enabled: true
+    }"
   >
     <!-- <template slot="table-header-row" slot-scope="props">
       <span v-if="props.row.mode === 'span'">
@@ -37,11 +41,17 @@
         {{props.formattedRow[props.column.field]}}
       </span>
     </template> -->
+
+    <template v-slot:table-actions-dropdown="{columns}">
+      <vgt-column-dropdown :columns="columns" />
+    </template>
   </vue-good-table>
 </div>
 </template>
 
 <script>
+import VgtColumnDropdown from '../src/components/plugins/VgtColumnDropdown.vue';
+
 export default {
   name: 'grouped-table',
   props: [],
@@ -54,6 +64,7 @@ export default {
           filterOptions: {
             enabled: true,
           },
+          hidden: false,
         },
         {
           label: 'Diet',
@@ -66,6 +77,7 @@ export default {
           field: 'count',
           headerField: this.sumCount,
           type: 'number',
+          hidden: false,
         },
       ],
       rows: [
@@ -135,12 +147,42 @@ export default {
   mounted() {
   },
   components: {
+    VgtColumnDropdown
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.row-style{
-    background-color: red;
+.row-style {
+  background-color: red;
+}
+
+#vgt-root >>> {
+  .vgt-dropdown {
+    float: right;
+    margin-bottom: 5px;
   }
+
+  ul.vgt-dropdown-menu {
+    position: absolute;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-clip: padding-box;
+    border-radius: 4px;
+    
+    li > span {
+      display: block;
+      padding: 3px 20px;
+      clear: both;
+      font-weight: 400;
+      line-height: 1.42857143;
+      white-space: nowrap;
+    }
+  }
+}
 </style>
