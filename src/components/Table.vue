@@ -1332,6 +1332,7 @@ export default {
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
       let computedRows = JSON.parse(JSON.stringify(this.originalRows));
+      let instancesOfFiltering = false;
 
       // do we have a filter to care about?
       // if not we don't need to do anything
@@ -1373,6 +1374,8 @@ export default {
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
           if (this.columnFilters[fieldKey(col.field)]) {
+
+            instancesOfFiltering = true;
             computedRows.forEach((headerRow) => {
               const newChildren = headerRow.children.filter((row) => {
                 // If column has a custom filter, use that.
@@ -1402,7 +1405,12 @@ export default {
           }
         }
       }
-      this.filteredRows = computedRows.filter((h) => h.children && h.children.length);
+
+      if (instancesOfFiltering) {
+        this.filteredRows = computedRows.filter((h) => h.children && h.children.length);
+      } else {
+        this.filteredRows = computedRows;
+      }
     },
 
     getCurrentIndex(rowId) {
