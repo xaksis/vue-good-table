@@ -93,7 +93,7 @@ export default {
         lastRecordOnPage: last,
         totalRecords: this.totalRecords,
         currentPage: this.currentPage,
-        totalPages: this.lastPage,
+        totalPage: this.lastPage,
       };
     },
   },
