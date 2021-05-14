@@ -25,6 +25,9 @@
           :rtl="rtl"
           :total="totalRows || totalRowCount"
           :mode="paginationMode"
+          :jumpFirstOrLast="paginationOptions.jumpFirstOrLast"
+          :firstText="firstText"
+          :lastText="lastText"
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
@@ -325,6 +328,9 @@
           :rtl="rtl"
           :total="totalRows || totalRowCount"
           :mode="paginationMode"
+          :jumpFirstOrLast="paginationOptions.jumpFirstOrLast"
+          :firstText="firstText"
+          :lastText="lastText"
           :nextText="nextText"
           :prevText="prevText"
           :rowsPerPageText="rowsPerPageText"
@@ -428,6 +434,7 @@ export default {
           dropdownAllowAll: true,
           mode: 'records', // or pages
           infoFn: null,
+          jumpFirstOrLast : false
         };
       },
     },
@@ -450,6 +457,8 @@ export default {
     tableLoading: false,
 
     // text options
+    firstText: "First",
+    lastText: "Last",
     nextText: 'Next',
     prevText: 'Previous',
     rowsPerPageText: 'Rows per page',
@@ -1473,6 +1482,8 @@ export default {
         perPageDropdown,
         perPageDropdownEnabled,
         dropdownAllowAll,
+        firstLabel,
+        lastLabel,
         nextLabel,
         prevLabel,
         rowsPerPageLabel,
@@ -1517,6 +1528,14 @@ export default {
 
       if (typeof mode === 'string') {
         this.paginationMode = mode;
+      }
+
+      if (typeof firstLabel === 'string') {
+        this.firstText = firstLabel;
+      }
+
+      if (typeof lastLabel === 'string') {
+        this.lastText = lastLabel;
       }
 
       if (typeof nextLabel === 'string') {
