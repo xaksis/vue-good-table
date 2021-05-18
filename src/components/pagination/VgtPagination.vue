@@ -17,7 +17,7 @@
             :value="option">
             {{ option }}
           </option>
-          <option v-if="paginateDropdownAllowAll" :value="total">{{allText}}</option>
+          <option v-if="paginateDropdownAllowAll" :value="-1">{{allText}}</option>
         </select>
       </form>
     </div>
@@ -118,6 +118,10 @@ export default {
   computed: {
     // Number of pages
     pagesCount() {
+      // if the setting is set to 'all'
+      if(this.currentPerPage === -1) {
+        return 1;
+      }
       const quotient = Math.floor(this.total / this.currentPerPage);
       const remainder = this.total % this.currentPerPage;
 

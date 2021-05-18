@@ -70,6 +70,10 @@ export default {
       return ((this.currentPage - 1) * this.currentPerPage) + 1;
     },
     lastRecordOnPage() {
+      // if the setting is set to 'all'
+      if(this.currentPerPage === -1) {
+        return this.totalRecords;
+      }
       return Math.min(this.totalRecords, this.currentPage * this.currentPerPage);
     },
     recordInfo() {
