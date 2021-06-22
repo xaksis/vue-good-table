@@ -10,6 +10,8 @@ $footer-font-size: 1.1rem;
   border: 1px solid $border-color;
   background: linear-gradient($thead-bg-color-1, $thead-bg-color-2);
   .footer__row-count{
+    position: relative;
+    padding-right: 3px;
     &__label, &__select{
       display: inline-block;
       vertical-align: middle;
@@ -18,12 +20,43 @@ $footer-font-size: 1.1rem;
       font-size: $footer-font-size;
     }
     &__select{
-      width: auto;
       font-size: $footer-font-size;
+      background-color: transparent;
+      width: auto;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      height: auto;
       margin-left: 8px;
-      padding: 3px;
-      -webkit-appearance: listbox;
-      -moz-appearance: listbox;
+      color:  $text-color;
+      font-weight: bold;
+      -webkit-appearance: none; 
+      -moz-appearance: none;
+      appearance: none;
+      padding-right: 15px;
+      padding-left: 5px;
+      &::-ms-expand{
+        display: none;
+      }
+      &:focus{
+        outline: none;
+        border-color: $link-color;
+      }
+    }
+    &::after{
+      content: '';
+      display: block;
+      position: absolute;
+      height: 0px;
+      width: 0px;
+      right: 6px;
+      top: 50%;
+      margin-top: -1px;
+      border-top:  6px solid $text-color;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: none;
+      pointer-events: none
     }
   }
   .footer__navigation{

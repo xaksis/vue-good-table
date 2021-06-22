@@ -1,4 +1,4 @@
-import diacriticless from 'diacriticless';
+import { diacriticless } from '../utils/diacritics';
 
 const escapeRegExp = str => str.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 

@@ -8,7 +8,7 @@
     :line-numbers="true"
     :select-options="{
       enabled: true,
-      selectAllByGroup: true
+      selectAllByGroup: true,
     }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
@@ -18,7 +18,7 @@
       enabled: true,
     }"
     :pagination-options="{
-      enabled: true,
+      enabled: false,
       perPage: 5,
     }"
     :group-options="{

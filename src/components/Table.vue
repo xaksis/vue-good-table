@@ -817,7 +817,6 @@ export default {
         this.filteredRows.forEach((headerRow) => {
           const i = headerRow.vgt_header_id;
           const children = filteredRows.filter((r) => r.vgt_id === i);
-          console.log(children);
           if (children.length) {
             const newHeaderRow = JSON.parse(JSON.stringify(headerRow));
             newHeaderRow.children = children;
@@ -1104,11 +1103,13 @@ export default {
 
     pageChanged(pagination) {
       this.currentPage = pagination.currentPage;
-      const pageChangedEvent = this.pageChangedEvent();
-      pageChangedEvent.prevPage = pagination.prevPage;
-      this.$emit('on-page-change', pageChangedEvent);
-      if (this.mode === 'remote') {
-        this.$emit('update:isLoading', true);
+      if (!pagination.noEmit) {
+        const pageChangedEvent = this.pageChangedEvent();
+        pageChangedEvent.prevPage = pagination.prevPage;
+        this.$emit('on-page-change', pageChangedEvent);
+        if (this.mode === 'remote') {
+          this.$emit('update:isLoading', true);
+        }
       }
     },
 
@@ -1331,6 +1332,7 @@ export default {
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
       let computedRows = JSON.parse(JSON.stringify(this.originalRows));
+      let instancesOfFiltering = false;
 
       // do we have a filter to care about?
       // if not we don't need to do anything
@@ -1372,6 +1374,8 @@ export default {
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
           if (this.columnFilters[fieldKey(col.field)]) {
+
+            instancesOfFiltering = true;
             computedRows.forEach((headerRow) => {
               const newChildren = headerRow.children.filter((row) => {
                 // If column has a custom filter, use that.
@@ -1401,7 +1405,12 @@ export default {
           }
         }
       }
-      this.filteredRows = computedRows;
+
+      if (instancesOfFiltering) {
+        this.filteredRows = computedRows.filter((h) => h.children && h.children.length);
+      } else {
+        this.filteredRows = computedRows;
+      }
     },
 
     getCurrentIndex(rowId) {
@@ -1582,7 +1591,7 @@ export default {
 
     initializeSort() {
       const { enabled, initialSortBy, multipleColumns } = this.sortOptions;
-      const initSortBy = JSON.parse(JSON.stringify(initialSortBy));
+      const initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;

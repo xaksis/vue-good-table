@@ -9,6 +9,17 @@
 ```
 <theme-example/>
 
+## Polar-bear
+```html
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  theme="polar-bear">
+</vue-good-table>
+```
+<theme-example theme="polar-bear"/>
+
+
 ## Black-rhino
 ```html
 <vue-good-table

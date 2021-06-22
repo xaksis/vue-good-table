@@ -15,7 +15,6 @@
       perPage: 5,
       perPageDropdown: [20, 50, 100, 200],
       dropdownAllowAll: false,
-      position: 'top',
     }"
     :search-options="{
       enabled: false,

@@ -1,0 +1,179 @@
+@import './overrides';
+// suggested by wifey
+.vgt-inner-wrap{
+  border-radius: 0.25rem;
+  // box-shadow: 0 1px 3px rgba(50,50,93,.15), 0 1px 0 rgba(0,0,0,.02);
+  box-shadow: 0 1px 3px 0 rgba(50,50,93,.1), 0 1px 2px 0 rgba(50,50,93,.06);
+}
+.vgt-table.polar-bear{
+  border-spacing: 0;
+  border-collapse: separate;
+  font-size: 1rem;
+  background-color: $white;
+  border: 1px solid $border-color;
+  border-bottom: none;
+  border-radius: 0.25rem;
+  // td
+  & td {
+    padding: 1em .75em 1em .75em;
+    border-bottom:  1px solid $border-color-td;
+    color: $text-color-td;
+    &.vgt-right-align{
+      text-align: right;
+    }
+  }
+
+  //th
+  & th.line-numbers, & th.vgt-checkbox-col {
+    color: $text-color;
+    border-right: 1px solid $border-color;
+    background: $thead-bg-color-3;
+  }
+  thead th{
+    color: $header-color;
+    font-weight: 600;
+    // text-shadow: 1px 1px $text-shadow-color;
+    border-bottom:  1px solid $border-color;
+    background: $thead-bg-color-3;
+    &.sorting-asc, &.sorting-desc {
+      color: $link-color;
+    }
+    &.sorting-desc{
+      &:before{
+        border-top: 5px solid lighten($link-color, 5%);
+      }
+    }
+    &.sorting-asc{
+      &:after{
+        border-bottom: 5px solid lighten($link-color, 5%);
+      }
+    }
+
+    .vgt-input, .vgt-select{
+      height: 2.75em;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+      border: 1px solid $border-color-td;
+    }
+    
+    .vgt-input:focus, .vgt-select:focus {
+      outline: 0;
+      border-color: lighten($focus-color, 25%);
+    }
+  }
+  thead tr:first-child{
+    th:first-child{
+      border-top-left-radius: 0.25rem;
+    }
+    th:last-child{
+      border-top-right-radius: 0.25rem;
+    }
+  }
+  
+  //bordered
+  &.bordered td {
+    border: 1px solid $border-color;
+    background: $white;
+  }
+
+  &.bordered th {
+    // border: none;
+    border: 1px solid $border-color;
+  }
+}
+
+.vgt-wrap.polar-bear{
+  .vgt-wrap__footer{
+    color: $text-color;
+    border: 1px solid $border-color;
+    border-bottom: 0px;
+    border-top: 0px;
+    background: linear-gradient($thead-bg-color-3, $thead-bg-color-3);
+    .footer__row-count{
+      position: relative;
+      padding-right: 3px;
+      &__label{
+        color: $secondary-text-color;
+      }
+      &__select{
+        text-align: center;
+        color:  $text-color-td;
+        background: $table-bg;
+        border: none;
+        -webkit-appearance: none; 
+        -moz-appearance: none;
+        appearance: none;
+        padding: 5px;
+        padding-right: 30px;
+        border-radius: 3px;
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+        border: 1px solid $border-color-td;
+        &::-ms-expand{
+          display: none;
+        }
+        &:focus{
+          border-color: $link-color;
+        }
+      }
+      &::after{
+        content: '';
+        display: block;
+        position: absolute;
+        height: 0px;
+        width: 0px;
+        right: 15px;
+        top: 50%;
+        margin-top: -3px;
+        border-top:  6px solid $text-color-td;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: none;
+        pointer-events: none
+      }
+    }
+    .footer__navigation{
+      &__page-btn{
+        color: $text-color;
+        &.disabled,
+        &.disabled:hover {
+          .chevron.left:after{
+            border-right-color: $text-color;
+          }
+          .chevron.right:after{
+            border-left-color: $text-color;
+          }
+        }
+      }
+      &__info, &__page-info{
+        color: $text-color;
+      }
+    }
+  }
+
+  // control bar
+  .vgt-global-search{
+    border:  1px solid $border-color;
+    border-bottom: 0px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    background: $thead-bg-color-3;
+  }
+  .vgt-global-search__input{
+    .input__icon{
+      .magnifying-glass{
+        border: 2px solid darken($border-color, 2%);
+        &:before{
+          background: darken($border-color, 2%);
+        }
+      }
+    }
+    .vgt-input, .vgt-select{
+      height: 2.75em;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+      border: 1px solid $border-color-td;
+      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: $text-color;
+        opacity: 0.3; /* Firefox */
+      }
+    }
+  }
+}
