@@ -318,3 +318,22 @@ columns: [
   // ...
 ]
 ```
+
+## rowTooltip
+
+type `String` or `Function`
+
+Text to put on a simple tooltip for each column.
+
+```javascript
+columns: [
+  {
+    label: 'name',
+    field: 'user_name',
+    tooltip: 'A simple tooltip',
+    rowTooltip: 'age', // or
+    // rowTooltip: row => row.age
+  },
+  // ...
+]
+```
