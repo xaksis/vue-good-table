@@ -2872,21 +2872,9 @@ var __vue_component__$2 = /*#__PURE__*/normalizeComponent({
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var script$3 = {
-  name: 'VgtFilterRow',
-  props: ['lineNumbers', 'columns', 'typedColumns', 'globalSearchEnabled', 'selectable', 'mode'],
+  name: "VgtFilterRow",
+  props: ["lineNumbers", "columns", "typedColumns", "globalSearchEnabled", "selectable", "mode"],
   watch: {
     columns: {
       handler: function handler(newValue, oldValue) {
@@ -2922,7 +2910,7 @@ var script$3 = {
   },
   methods: {
     fieldKey: function fieldKey(field) {
-      if (typeof field === 'function' && field.name) {
+      if (typeof field === "function" && field.name) {
         return field.name;
       }
 
@@ -2933,7 +2921,7 @@ var script$3 = {
       this.columnFilters = {};
 
       if (emitEvent) {
-        this.$emit('filter-changed', this.columnFilters);
+        this.$emit("filter-changed", this.columnFilters);
       }
     },
     isFilterable: function isFilterable(column) {
@@ -2943,14 +2931,14 @@ var script$3 = {
       return this.isFilterable(column) && column.filterOptions.filterDropdownItems && column.filterOptions.filterDropdownItems.length;
     },
     isDropdownObjects: function isDropdownObjects(column) {
-      return this.isDropdown(column) && _typeof(column.filterOptions.filterDropdownItems[0]) === 'object';
+      return this.isDropdown(column) && _typeof(column.filterOptions.filterDropdownItems[0]) === "object";
     },
     isDropdownArray: function isDropdownArray(column) {
-      return this.isDropdown(column) && _typeof(column.filterOptions.filterDropdownItems[0]) !== 'object';
+      return this.isDropdown(column) && _typeof(column.filterOptions.filterDropdownItems[0]) !== "object";
     },
     getClasses: function getClasses(column) {
-      var firstClass = 'filter-th';
-      return column.filterOptions && column.filterOptions.styleClass ? [firstClass].concat(_toConsumableArray(column.filterOptions.styleClass.split(' '))).join(' ') : firstClass;
+      var firstClass = "filter-th";
+      return column.filterOptions && column.filterOptions.styleClass ? [firstClass].concat(_toConsumableArray(column.filterOptions.styleClass.split(" "))).join(" ") : firstClass;
     },
     // get column's defined placeholder or default one
     getPlaceholder: function getPlaceholder(column) {
@@ -2966,13 +2954,13 @@ var script$3 = {
     },
     updateFiltersOnKeyup: function updateFiltersOnKeyup(column, value) {
       // if the trigger is enter, we don't filter on keyup
-      if (column.filterOptions.trigger === 'enter') return;
+      if (column.filterOptions.trigger === "enter") return;
       this.updateFilters(column, value);
     },
     updateSlotFilter: function updateSlotFilter(column, value) {
       var fieldToFilter = column.filterOptions.slotFilterField || column.field;
 
-      if (typeof column.filterOptions.formatValue === 'function') {
+      if (typeof column.filterOptions.formatValue === "function") {
         value = column.filterOptions.formatValue(value);
       }
 
@@ -2990,21 +2978,21 @@ var script$3 = {
     },
     updateFiltersImmediately: function updateFiltersImmediately(field, value) {
       this.$set(this.columnFilters, this.fieldKey(field), value);
-      this.$emit('filter-changed', this.columnFilters);
+      this.$emit("filter-changed", this.columnFilters);
     },
     populateInitialFilters: function populateInitialFilters() {
       for (var i = 0; i < this.columns.length; i++) {
         var col = this.columns[i]; // lets see if there are initial
         // filters supplied by user
 
-        if (this.isFilterable(col) && typeof col.filterOptions.filterValue !== 'undefined' && col.filterOptions.filterValue !== null) {
+        if (this.isFilterable(col) && typeof col.filterOptions.filterValue !== "undefined" && col.filterOptions.filterValue !== null) {
           this.$set(this.columnFilters, this.fieldKey(col.field), col.filterOptions.filterValue); // this.updateFilters(col, col.filterOptions.filterValue);
           // this.$set(col.filterOptions, 'filterValue', undefined);
         }
       } //* lets emit event once all filters are set
 
 
-      this.$emit('filter-changed', this.columnFilters);
+      this.$emit("filter-changed", this.columnFilters);
     }
   }
 };
@@ -3062,7 +3050,8 @@ var __vue_render__$3 = function __vue_render__() {
     }, [_c('option', {
       key: "-1",
       attrs: {
-        "value": ""
+        "value": "",
+        "disabled": ""
       }
     }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
       return _c('option', {
@@ -3070,7 +3059,7 @@ var __vue_render__$3 = function __vue_render__() {
         domProps: {
           "value": option
         }
-      }, [_vm._v("\n              " + _vm._s(option) + "\n            ")]);
+      }, [_vm._v("\n            " + _vm._s(option) + "\n          ")]);
     })], 2) : _vm._e(), _vm._v(" "), _vm.isDropdownObjects(column) ? _c('select', {
       staticClass: "vgt-select",
       attrs: {
@@ -3087,7 +3076,8 @@ var __vue_render__$3 = function __vue_render__() {
     }, [_c('option', {
       key: "-1",
       attrs: {
-        "value": ""
+        "value": "",
+        "disabled": ""
       }
     }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
       return _c('option', {
@@ -3109,7 +3099,7 @@ var __vue_staticRenderFns__$3 = [];
 var __vue_inject_styles__$3 = undefined;
 /* scoped */
 
-var __vue_scope_id__$3 = "data-v-6869bf1c";
+var __vue_scope_id__$3 = "data-v-620e9364";
 /* module identifier */
 
 var __vue_module_identifier__$3 = undefined;
@@ -8454,11 +8444,11 @@ var index = {
 var dataTypes = {};
 var coreDataTypes = index;
 Object.keys(coreDataTypes).forEach(function (key) {
-  var compName = key.replace(/^\.\//, '').replace(/\.js/, '');
+  var compName = key.replace(/^\.\//, "").replace(/\.js/, "");
   dataTypes[compName] = coreDataTypes[key]["default"];
 });
 var script$6 = {
-  name: 'vue-good-table',
+  name: "vue-good-table",
   props: {
     isLoading: {
       "default": null,
@@ -8470,16 +8460,16 @@ var script$6 = {
     },
     fixedHeader: Boolean,
     theme: {
-      "default": ''
+      "default": ""
     },
     mode: {
-      "default": 'local'
+      "default": "local"
     },
     // could be remote
     totalRows: {},
     // required if mode = 'remote'
     styleClass: {
-      "default": 'vgt-table bordered'
+      "default": "vgt-table bordered"
     },
     columns: {},
     rows: {},
@@ -8507,9 +8497,9 @@ var script$6 = {
       "default": function _default() {
         return {
           enabled: false,
-          selectionInfoClass: '',
-          selectionText: 'rows selected',
-          clearSelectionText: 'clear',
+          selectionInfoClass: "",
+          selectionText: "rows selected",
+          clearSelectionText: "clear",
           disableSelectInfo: false,
           selectAllByGroup: false
         };
@@ -8532,11 +8522,11 @@ var script$6 = {
 
         return _ref = {
           enabled: false,
-          position: 'bottom',
+          position: "bottom",
           perPage: 10,
           perPageDropdown: null,
           perPageDropdownEnabled: true
-        }, _defineProperty(_ref, "position", 'bottom'), _defineProperty(_ref, "dropdownAllowAll", true), _defineProperty(_ref, "mode", 'records'), _defineProperty(_ref, "infoFn", null), _ref;
+        }, _defineProperty(_ref, "position", "bottom"), _defineProperty(_ref, "dropdownAllowAll", true), _defineProperty(_ref, "mode", "records"), _defineProperty(_ref, "infoFn", null), _ref;
       }
     },
     searchOptions: {
@@ -8546,7 +8536,7 @@ var script$6 = {
           trigger: null,
           externalQuery: null,
           searchFn: null,
-          placeholder: 'Search Table'
+          placeholder: "Search Table"
         };
       }
     }
@@ -8556,20 +8546,20 @@ var script$6 = {
       // loading state for remote mode
       tableLoading: false,
       // text options
-      nextText: 'Next',
-      prevText: 'Previous',
-      rowsPerPageText: 'Rows per page',
-      ofText: 'of',
-      allText: 'All',
-      pageText: 'page',
+      nextText: "Next",
+      prevText: "Previous",
+      rowsPerPageText: "Rows per page",
+      ofText: "of",
+      allText: "All",
+      pageText: "page",
       // internal select options
       selectable: false,
       selectOnCheckboxOnly: false,
       selectAllByPage: true,
       disableSelectInfo: false,
-      selectionInfoClass: '',
-      selectionText: 'rows selected',
-      clearSelectionText: 'clear',
+      selectionInfoClass: "",
+      selectionText: "rows selected",
+      clearSelectionText: "clear",
       // keys for rows that are currently expanded
       maintainExpanded: true,
       expandedRowKeys: new Set(),
@@ -8582,7 +8572,7 @@ var script$6 = {
       searchTrigger: null,
       externalSearchQuery: null,
       searchFn: null,
-      searchPlaceholder: 'Search Table',
+      searchPlaceholder: "Search Table",
       searchSkipDiacritics: false,
       // internal pagination options
       perPage: null,
@@ -8591,23 +8581,24 @@ var script$6 = {
       paginateOnBottom: true,
       customRowsPerPageDropdown: [],
       paginateDropdownAllowAll: true,
-      paginationMode: 'records',
+      paginationMode: "records",
       paginationInfoFn: null,
       currentPage: 1,
       currentPerPage: 10,
       sorts: [],
-      globalSearchTerm: '',
+      globalSearchTerm: "",
       filteredRows: [],
       columnFilters: {},
       forceSearch: false,
       sortChanged: false,
-      dataTypes: dataTypes || {}
+      dataTypes: dataTypes || {},
+      backupRows: []
     };
   },
   watch: {
     rows: {
       handler: function handler() {
-        this.$emit('update:isLoading', false);
+        this.$emit("update:isLoading", false);
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
@@ -8652,7 +8643,7 @@ var script$6 = {
     },
     selectedRows: function selectedRows(newValue, oldValue) {
       if (!lodash_isequal(newValue, oldValue)) {
-        this.$emit('on-selected-rows-change', {
+        this.$emit("on-selected-rows-change", {
           selectedRows: this.selectedRows
         });
       }
@@ -8660,27 +8651,27 @@ var script$6 = {
   },
   computed: {
     tableStyles: function tableStyles() {
-      if (this.compactMode) return this.tableStyleClasses + 'vgt-compact';else return this.tableStyleClasses;
+      if (this.compactMode) return this.tableStyleClasses + "vgt-compact";else return this.tableStyleClasses;
     },
     hasFooterSlot: function hasFooterSlot() {
-      return !!this.$slots['table-actions-bottom'];
+      return !!this.$slots["table-actions-bottom"];
     },
     wrapperStyles: function wrapperStyles() {
       return {
-        overflow: 'scroll-y',
-        maxHeight: this.maxHeight ? this.maxHeight : 'auto'
+        overflow: "scroll-y",
+        maxHeight: this.maxHeight ? this.maxHeight : "auto"
       };
     },
     rowKeyField: function rowKeyField() {
-      return this.groupOptions.rowKey || 'vgt_header_id';
+      return this.groupOptions.rowKey || "vgt_header_id";
     },
     hasHeaderRowTemplate: function hasHeaderRowTemplate() {
-      return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
+      return !!this.$slots["table-header-row"] || !!this.$scopedSlots["table-header-row"];
     },
     showEmptySlot: function showEmptySlot() {
       if (!this.paginated.length) return true;
 
-      if (this.paginated[0].label === 'no groups' && !this.paginated[0].children.length) {
+      if (this.paginated[0].label === "no groups" && !this.paginated[0].children.length) {
         return true;
       }
 
@@ -8739,7 +8730,7 @@ var script$6 = {
       return fullColspan;
     },
     groupHeaderOnTop: function groupHeaderOnTop() {
-      if (this.groupOptions && this.groupOptions.enabled && this.groupOptions.headerPosition && this.groupOptions.headerPosition === 'bottom') {
+      if (this.groupOptions && this.groupOptions.enabled && this.groupOptions.headerPosition && this.groupOptions.headerPosition === "bottom") {
         return false;
       }
 
@@ -8748,7 +8739,7 @@ var script$6 = {
       return false;
     },
     groupHeaderOnBottom: function groupHeaderOnBottom() {
-      if (this.groupOptions && this.groupOptions.enabled && this.groupOptions.headerPosition && this.groupOptions.headerPosition === 'bottom') {
+      if (this.groupOptions && this.groupOptions.enabled && this.groupOptions.headerPosition && this.groupOptions.headerPosition === "bottom") {
         return true;
       }
 
@@ -8769,8 +8760,8 @@ var script$6 = {
       return total;
     },
     wrapStyleClasses: function wrapStyleClasses() {
-      var classes = 'vgt-wrap';
-      if (this.rtl) classes += ' rtl';
+      var classes = "vgt-wrap";
+      if (this.rtl) classes += " rtl";
       classes += " ".concat(this.theme);
       return classes;
     },
@@ -8784,11 +8775,11 @@ var script$6 = {
     },
     //
     globalSearchAllowed: function globalSearchAllowed() {
-      if (this.searchEnabled && !!this.globalSearchTerm && this.searchTrigger !== 'enter') {
+      if (this.searchEnabled && !!this.globalSearchTerm && this.searchTrigger !== "enter") {
         return true;
       }
 
-      if (this.externalSearchQuery != null && this.searchTrigger !== 'enter') {
+      if (this.externalSearchQuery != null && this.searchTrigger !== "enter") {
         return true;
       }
 
@@ -8808,7 +8799,7 @@ var script$6 = {
       // we only process rows when mode is local
       var computedRows = this.filteredRows;
 
-      if (this.mode === 'remote') {
+      if (this.mode === "remote") {
         return computedRows;
       } // take care of the global filter here also
 
@@ -8849,7 +8840,7 @@ var script$6 = {
           }
         }); // this is where we emit on search
 
-        this.$emit('on-search', {
+        this.$emit("on-search", {
           searchTerm: this.searchTerm,
           rowCount: filteredRows.length
         }); // here we need to reconstruct the nested structure
@@ -8893,7 +8884,7 @@ var script$6 = {
 
                 var sortFn = column.sortFn;
 
-                if (sortFn && typeof sortFn === 'function') {
+                if (sortFn && typeof sortFn === "function") {
                   sortValue = sortValue || sortFn(xvalue, yvalue, column, xRow, yRow) * (srt.type === SORT_TYPES.Descending ? -1 : 1);
                 } else {
                   //* else we use our own sort
@@ -8909,7 +8900,7 @@ var script$6 = {
       // rows
 
 
-      if (this.searchTrigger === 'enter') {
+      if (this.searchTrigger === "enter") {
         this.filteredRows = computedRows;
       }
 
@@ -8920,7 +8911,7 @@ var script$6 = {
 
       if (!this.processedRows.length) return [];
 
-      if (this.mode === 'remote') {
+      if (this.mode === "remote") {
         return this.processedRows;
       } //* flatten the rows for paging.
 
@@ -8991,12 +8982,20 @@ var script$6 = {
       return reconstructedRows;
     },
     originalRows: function originalRows() {
+      if (this.rows) {
+        this.backupRows = this.rows;
+      }
+
+      if (!this.rows) {
+        this.rows = this.backupRows;
+      }
+
       var rows = JSON.parse(JSON.stringify(this.rows));
       var nestedRows = [];
 
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([{
-          label: 'no groups',
+          label: "no groups",
           children: rows
         }]);
       } else {
@@ -9024,7 +9023,7 @@ var script$6 = {
       return columns;
     },
     hasRowClickListener: function hasRowClickListener() {
-      return this.$listeners && this.$listeners['on-row-click'];
+      return this.$listeners && this.$listeners["on-row-click"];
     }
   },
   methods: {
@@ -9032,9 +9031,9 @@ var script$6 = {
     //* to maintain it when sorting/filtering
     handleExpanded: function handleExpanded(headerRow) {
       if (this.maintainExpanded && this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
-        this.$set(headerRow, 'vgtIsExpanded', true);
+        this.$set(headerRow, "vgtIsExpanded", true);
       } else {
-        this.$set(headerRow, 'vgtIsExpanded', false);
+        this.$set(headerRow, "vgtIsExpanded", false);
       }
     },
     toggleExpand: function toggleExpand(id) {
@@ -9045,7 +9044,7 @@ var script$6 = {
       });
 
       if (headerRow) {
-        this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
+        this.$set(headerRow, "vgtIsExpanded", !headerRow.vgtIsExpanded);
       }
 
       if (this.maintainExpanded && headerRow.vgtIsExpanded) {
@@ -9058,7 +9057,7 @@ var script$6 = {
       var _this4 = this;
 
       this.filteredRows.forEach(function (row) {
-        _this4.$set(row, 'vgtIsExpanded', true);
+        _this4.$set(row, "vgtIsExpanded", true);
 
         if (_this4.maintainExpanded) {
           _this4.expandedRowKeys.add(row[_this4.rowKeyField]);
@@ -9069,7 +9068,7 @@ var script$6 = {
       var _this5 = this;
 
       this.filteredRows.forEach(function (row) {
-        _this5.$set(row, 'vgtIsExpanded', false);
+        _this5.$set(row, "vgtIsExpanded", false);
 
         _this5.expandedRowKeys.clear();
       });
@@ -9082,8 +9081,8 @@ var script$6 = {
     handleSearch: function handleSearch() {
       this.resetTable(); // for remote mode, we need to emit on-search
 
-      if (this.mode === 'remote') {
-        this.$emit('on-search', {
+      if (this.mode === "remote") {
+        this.$emit("on-search", {
           searchTerm: this.searchTerm
         });
       }
@@ -9091,14 +9090,14 @@ var script$6 = {
     reset: function reset() {
       this.initializeSort();
       this.changePage(1);
-      this.$refs['table-header-primary'].reset(true);
+      this.$refs["table-header-primary"].reset(true);
 
-      if (this.$refs['table-header-secondary']) {
-        this.$refs['table-header-secondary'].reset(true);
+      if (this.$refs["table-header-secondary"]) {
+        this.$refs["table-header-secondary"].reset(true);
       }
     },
     emitSelectedRows: function emitSelectedRows() {
-      this.$emit('on-select-all', {
+      this.$emit("on-select-all", {
         selected: this.selectedRowCount === this.totalRowCount,
         selectedRows: this.selectedRows
       });
@@ -9109,7 +9108,7 @@ var script$6 = {
       var rows = this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
       rows.forEach(function (headerRow, i) {
         headerRow.children.forEach(function (row, j) {
-          _this6.$set(row, 'vgtSelected', false);
+          _this6.$set(row, "vgtSelected", false);
         });
       });
       this.emitSelectedRows();
@@ -9125,7 +9124,7 @@ var script$6 = {
       var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach(function (headerRow) {
         headerRow.children.forEach(function (row) {
-          _this7.$set(row, 'vgtSelected', true);
+          _this7.$set(row, "vgtSelected", true);
         });
       });
       this.emitSelectedRows();
@@ -9134,7 +9133,7 @@ var script$6 = {
       var _this8 = this;
 
       headerRow.children.forEach(function (row) {
-        _this8.$set(row, 'vgtSelected', event.checked);
+        _this8.$set(row, "vgtSelected", event.checked);
       });
     },
     changePage: function changePage(value) {
@@ -9170,10 +9169,10 @@ var script$6 = {
       if (!pagination.noEmit) {
         var pageChangedEvent = this.pageChangedEvent();
         pageChangedEvent.prevPage = pagination.prevPage;
-        this.$emit('on-page-change', pageChangedEvent);
+        this.$emit("on-page-change", pageChangedEvent);
 
-        if (this.mode === 'remote') {
-          this.$emit('update:isLoading', true);
+        if (this.mode === "remote") {
+          this.$emit("update:isLoading", true);
         }
       }
     },
@@ -9183,31 +9182,31 @@ var script$6 = {
 
       var paginationPosition = this.paginationOptions.position;
 
-      if (this.$refs.paginationTop && (paginationPosition === 'top' || paginationPosition === 'both')) {
+      if (this.$refs.paginationTop && (paginationPosition === "top" || paginationPosition === "both")) {
         this.$refs.paginationTop.currentPerPage = this.currentPerPage;
       }
 
-      if (this.$refs.paginationBottom && (paginationPosition === 'bottom' || paginationPosition === 'both')) {
+      if (this.$refs.paginationBottom && (paginationPosition === "bottom" || paginationPosition === "both")) {
         this.$refs.paginationBottom.currentPerPage = this.currentPerPage;
       } //* update perPage also
 
 
       var perPageChangedEvent = this.pageChangedEvent();
-      this.$emit('on-per-page-change', perPageChangedEvent);
+      this.$emit("on-per-page-change", perPageChangedEvent);
 
-      if (this.mode === 'remote') {
-        this.$emit('update:isLoading', true);
+      if (this.mode === "remote") {
+        this.$emit("update:isLoading", true);
       }
     },
     changeSort: function changeSort(sorts) {
       this.sorts = sorts;
-      this.$emit('on-sort-change', sorts); // every time we change sort we need to reset to page 1
+      this.$emit("on-sort-change", sorts); // every time we change sort we need to reset to page 1
 
       this.changePage(1); // if the mode is remote, we don't need to do anything
       // after this. just set table loading to true
 
-      if (this.mode === 'remote') {
-        this.$emit('update:isLoading', true);
+      if (this.mode === "remote") {
+        this.$emit("update:isLoading", true);
         return;
       }
 
@@ -9215,8 +9214,8 @@ var script$6 = {
     },
     // checkbox click should always do the following
     onCheckboxClicked: function onCheckboxClicked(row, index, event) {
-      this.$set(row, 'vgtSelected', !row.vgtSelected);
-      this.$emit('on-row-click', {
+      this.$set(row, "vgtSelected", !row.vgtSelected);
+      this.$emit("on-row-click", {
         row: row,
         pageIndex: index,
         selected: !!row.vgtSelected,
@@ -9224,7 +9223,7 @@ var script$6 = {
       });
     },
     onRowDoubleClicked: function onRowDoubleClicked(row, index, event) {
-      this.$emit('on-row-dblclick', {
+      this.$emit("on-row-dblclick", {
         row: row,
         pageIndex: index,
         selected: !!row.vgtSelected,
@@ -9233,10 +9232,10 @@ var script$6 = {
     },
     onRowClicked: function onRowClicked(row, index, event) {
       if (this.selectable && !this.selectOnCheckboxOnly) {
-        this.$set(row, 'vgtSelected', !row.vgtSelected);
+        this.$set(row, "vgtSelected", !row.vgtSelected);
       }
 
-      this.$emit('on-row-click', {
+      this.$emit("on-row-click", {
         row: row,
         pageIndex: index,
         selected: !!row.vgtSelected,
@@ -9244,7 +9243,7 @@ var script$6 = {
       });
     },
     onRowAuxClicked: function onRowAuxClicked(row, index, event) {
-      this.$emit('on-row-aux-click', {
+      this.$emit("on-row-aux-click", {
         row: row,
         pageIndex: index,
         selected: !!row.vgtSelected,
@@ -9252,7 +9251,7 @@ var script$6 = {
       });
     },
     onCellClicked: function onCellClicked(row, column, rowIndex, event) {
-      this.$emit('on-cell-click', {
+      this.$emit("on-cell-click", {
         row: row,
         column: column,
         rowIndex: rowIndex,
@@ -9260,19 +9259,19 @@ var script$6 = {
       });
     },
     onMouseenter: function onMouseenter(row, index) {
-      this.$emit('on-row-mouseenter', {
+      this.$emit("on-row-mouseenter", {
         row: row,
         pageIndex: index
       });
     },
     onMouseleave: function onMouseleave(row, index) {
-      this.$emit('on-row-mouseleave', {
+      this.$emit("on-row-mouseleave", {
         row: row,
         pageIndex: index
       });
     },
     searchTableOnEnter: function searchTableOnEnter() {
-      if (this.searchTrigger === 'enter') {
+      if (this.searchTrigger === "enter") {
         this.handleSearch(); // we reset the filteredRows here because
         // we want to search across everything.
 
@@ -9282,7 +9281,7 @@ var script$6 = {
       }
     },
     searchTableOnKeyUp: function searchTableOnKeyUp() {
-      if (this.searchTrigger !== 'enter') {
+      if (this.searchTrigger !== "enter") {
         this.handleSearch();
       }
     },
@@ -9299,10 +9298,10 @@ var script$6 = {
       // utility function to get nested property
       function dig(obj, selector) {
         var result = obj;
-        var splitter = selector.split('.');
+        var splitter = selector.split(".");
 
         for (var i = 0; i < splitter.length; i++) {
-          if (typeof result === 'undefined' || result === null) {
+          if (typeof result === "undefined" || result === null) {
             return undefined;
           }
 
@@ -9312,8 +9311,8 @@ var script$6 = {
         return result;
       }
 
-      if (typeof field === 'function') return field(obj);
-      if (typeof field === 'string') return dig(obj, field);
+      if (typeof field === "function") return field(obj);
+      if (typeof field === "string") return dig(obj, field);
       return undefined;
     },
     collectFormatted: function collectFormatted(obj, column) {
@@ -9326,10 +9325,10 @@ var script$6 = {
         value = this.collect(obj, column.field);
       }
 
-      if (value === undefined) return ''; // if user has supplied custom formatter,
+      if (value === undefined) return ""; // if user has supplied custom formatter,
       // use that here
 
-      if (column.formatFn && typeof column.formatFn === 'function') {
+      if (column.formatFn && typeof column.formatFn === "function") {
         return column.formatFn(value, obj);
       } // lets format the resultant data
 
@@ -9344,7 +9343,7 @@ var script$6 = {
 
       var result = type.format(value, column); // we must have some values in compact mode
 
-      if (this.compactMode && (result == '' || result == null)) return '-';
+      if (this.compactMode && (result == "" || result == null)) return "-";
       return result;
     },
     formattedRow: function formattedRow(row) {
@@ -9370,14 +9369,14 @@ var script$6 = {
       var isRight = typeDef.isRight;
       if (this.rtl) isRight = true;
       var classes = {
-        'vgt-right-align': isRight,
-        'vgt-left-align': !isRight
+        "vgt-right-align": isRight,
+        "vgt-left-align": !isRight
       }; // for td we need to check if value is
       // a function.
 
-      if (typeof custom === 'function') {
+      if (typeof custom === "function") {
         classes[custom(row)] = true;
-      } else if (typeof custom === 'string') {
+      } else if (typeof custom === "string") {
         classes[custom] = true;
       }
 
@@ -9402,7 +9401,7 @@ var script$6 = {
           // to 1
           // if the mode is remote, we only need to reset, if this is
           // being called from filter, not when rows are changing
-          if (_this9.mode !== 'remote' || fromFilter) {
+          if (_this9.mode !== "remote" || fromFilter) {
             _this9.changePage(1);
           } // we need to emit an event and that's that.
           // but this only needs to be invoked if filter is changing
@@ -9410,15 +9409,15 @@ var script$6 = {
 
 
           if (fromFilter) {
-            _this9.$emit('on-column-filter', {
+            _this9.$emit("on-column-filter", {
               columnFilters: _this9.columnFilters
             });
           } // if mode is remote, we don't do any filtering here.
 
 
-          if (_this9.mode === 'remote') {
+          if (_this9.mode === "remote") {
             if (fromFilter) {
-              _this9.$emit('update:isLoading', true);
+              _this9.$emit("update:isLoading", true);
             } else {
               // if remote filtering has already been taken care of.
               _this9.filteredRows = computedRows;
@@ -9430,7 +9429,7 @@ var script$6 = {
           }
 
           var fieldKey = function fieldKey(field) {
-            if (typeof field === 'function' && field.name) {
+            if (typeof field === "function" && field.name) {
               return field.name;
             }
 
@@ -9445,13 +9444,13 @@ var script$6 = {
               computedRows.forEach(function (headerRow) {
                 var newChildren = headerRow.children.filter(function (row) {
                   // If column has a custom filter, use that.
-                  if (col.filterOptions && typeof col.filterOptions.filterFn === 'function') {
+                  if (col.filterOptions && typeof col.filterOptions.filterFn === "function") {
                     return col.filterOptions.filterFn(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)]);
                   } // Otherwise Use default filters
 
 
                   var typeDef = col.typeDef;
-                  return typeDef.filterPredicate(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === 'object');
+                  return typeDef.filterPredicate(_this9.collect(row, col.field), _this9.columnFilters[fieldKey(col.field)], false, col.filterOptions && _typeof(col.filterOptions.filterDropdownItems) === "object");
                 }); // should we remove the header?
 
                 headerRow.children = newChildren;
@@ -9502,11 +9501,11 @@ var script$6 = {
       return (this.currentPage - 1) * this.currentPerPage + index + 1;
     },
     getRowStyleClass: function getRowStyleClass(row) {
-      var classes = '';
-      if (this.hasRowClickListener) classes += 'clickable';
+      var classes = "";
+      if (this.hasRowClickListener) classes += "clickable";
       var rowStyleClasses;
 
-      if (typeof this.rowStyleClass === 'function') {
+      if (typeof this.rowStyleClass === "function") {
         rowStyleClasses = this.rowStyleClass(row);
       } else {
         rowStyleClasses = this.rowStyleClass;
@@ -9525,7 +9524,7 @@ var script$6 = {
         headerRow.vgt_header_id = i;
 
         if (_this10.groupOptions.maintainExpanded && _this10.expandedRowKeys.has(headerRow[_this10.groupOptions.rowKey])) {
-          _this10.$set(headerRow, 'vgtIsExpanded', true);
+          _this10.$set(headerRow, "vgtIsExpanded", true);
         }
 
         headerRow.children.forEach(function (childRow) {
@@ -9554,19 +9553,19 @@ var script$6 = {
           mode = _this$paginationOptio.mode,
           infoFn = _this$paginationOptio.infoFn;
 
-      if (typeof enabled === 'boolean') {
+      if (typeof enabled === "boolean") {
         this.paginate = enabled;
       }
 
-      if (typeof perPage === 'number') {
+      if (typeof perPage === "number") {
         this.perPage = perPage;
       }
 
-      if (position === 'top') {
+      if (position === "top") {
         this.paginateOnTop = true; // default is false
 
         this.paginateOnBottom = false; // default is true
-      } else if (position === 'both') {
+      } else if (position === "both") {
         this.paginateOnTop = true;
         this.paginateOnBottom = true;
       }
@@ -9581,49 +9580,49 @@ var script$6 = {
         }
       }
 
-      if (typeof perPageDropdownEnabled === 'boolean') {
+      if (typeof perPageDropdownEnabled === "boolean") {
         this.perPageDropdownEnabled = perPageDropdownEnabled;
       }
 
-      if (typeof dropdownAllowAll === 'boolean') {
+      if (typeof dropdownAllowAll === "boolean") {
         this.paginateDropdownAllowAll = dropdownAllowAll;
       }
 
-      if (typeof mode === 'string') {
+      if (typeof mode === "string") {
         this.paginationMode = mode;
       }
 
-      if (typeof nextLabel === 'string') {
+      if (typeof nextLabel === "string") {
         this.nextText = nextLabel;
       }
 
-      if (typeof prevLabel === 'string') {
+      if (typeof prevLabel === "string") {
         this.prevText = prevLabel;
       }
 
-      if (typeof rowsPerPageLabel === 'string') {
+      if (typeof rowsPerPageLabel === "string") {
         this.rowsPerPageText = rowsPerPageLabel;
       }
 
-      if (typeof ofLabel === 'string') {
+      if (typeof ofLabel === "string") {
         this.ofText = ofLabel;
       }
 
-      if (typeof pageLabel === 'string') {
+      if (typeof pageLabel === "string") {
         this.pageText = pageLabel;
       }
 
-      if (typeof allLabel === 'string') {
+      if (typeof allLabel === "string") {
         this.allText = allLabel;
       }
 
-      if (typeof setCurrentPage === 'number') {
+      if (typeof setCurrentPage === "number") {
         setTimeout(function () {
           _this11.changePage(setCurrentPage);
         }, 500);
       }
 
-      if (typeof infoFn === 'function') {
+      if (typeof infoFn === "function") {
         this.paginationInfoFn = infoFn;
       }
     },
@@ -9636,27 +9635,27 @@ var script$6 = {
           placeholder = _this$searchOptions.placeholder,
           skipDiacritics = _this$searchOptions.skipDiacritics;
 
-      if (typeof enabled === 'boolean') {
+      if (typeof enabled === "boolean") {
         this.searchEnabled = enabled;
       }
 
-      if (trigger === 'enter') {
+      if (trigger === "enter") {
         this.searchTrigger = trigger;
       }
 
-      if (typeof externalQuery === 'string') {
+      if (typeof externalQuery === "string") {
         this.externalSearchQuery = externalQuery;
       }
 
-      if (typeof searchFn === 'function') {
+      if (typeof searchFn === "function") {
         this.searchFn = searchFn;
       }
 
-      if (typeof placeholder === 'string') {
+      if (typeof placeholder === "string") {
         this.searchPlaceholder = placeholder;
       }
 
-      if (typeof skipDiacritics === 'boolean') {
+      if (typeof skipDiacritics === "boolean") {
         this.searchSkipDiacritics = skipDiacritics;
       }
     },
@@ -9667,22 +9666,22 @@ var script$6 = {
           multipleColumns = _this$sortOptions.multipleColumns;
       var initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
 
-      if (typeof enabled === 'boolean') {
+      if (typeof enabled === "boolean") {
         this.sortable = enabled;
       }
 
-      if (typeof multipleColumns === 'boolean') {
+      if (typeof multipleColumns === "boolean") {
         this.multipleColumnSort = multipleColumns;
       } //* initialSortBy can be an array or an object
 
 
-      if (_typeof(initSortBy) === 'object') {
-        var ref = this.fixedHeader ? this.$refs['table-header-secondary'] : this.$refs['table-header-primary'];
+      if (_typeof(initSortBy) === "object") {
+        var ref = this.fixedHeader ? this.$refs["table-header-secondary"] : this.$refs["table-header-primary"];
 
         if (Array.isArray(initSortBy)) {
           ref.setInitialSort(initSortBy);
         } else {
-          var hasField = Object.prototype.hasOwnProperty.call(initSortBy, 'field');
+          var hasField = Object.prototype.hasOwnProperty.call(initSortBy, "field");
           if (hasField) ref.setInitialSort([initSortBy]);
         }
       }
@@ -9698,35 +9697,35 @@ var script$6 = {
           disableSelectInfo = _this$selectOptions.disableSelectInfo,
           selectAllByGroup = _this$selectOptions.selectAllByGroup;
 
-      if (typeof enabled === 'boolean') {
+      if (typeof enabled === "boolean") {
         this.selectable = enabled;
       }
 
-      if (typeof selectOnCheckboxOnly === 'boolean') {
+      if (typeof selectOnCheckboxOnly === "boolean") {
         this.selectOnCheckboxOnly = selectOnCheckboxOnly;
       }
 
-      if (typeof selectAllByPage === 'boolean') {
+      if (typeof selectAllByPage === "boolean") {
         this.selectAllByPage = selectAllByPage;
       }
 
-      if (typeof selectAllByGroup === 'boolean') {
+      if (typeof selectAllByGroup === "boolean") {
         this.selectAllByGroup = selectAllByGroup;
       }
 
-      if (typeof disableSelectInfo === 'boolean') {
+      if (typeof disableSelectInfo === "boolean") {
         this.disableSelectInfo = disableSelectInfo;
       }
 
-      if (typeof selectionInfoClass === 'string') {
+      if (typeof selectionInfoClass === "string") {
         this.selectionInfoClass = selectionInfoClass;
       }
 
-      if (typeof selectionText === 'string') {
+      if (typeof selectionText === "string") {
         this.selectionText = selectionText;
       }
 
-      if (typeof clearSelectionText === 'string') {
+      if (typeof clearSelectionText === "string") {
         this.clearSelectionText = clearSelectionText;
       }
     }
@@ -9739,10 +9738,10 @@ var script$6 = {
     this.initializeSort();
   },
   components: {
-    'vgt-pagination': __vue_component__$1,
-    'vgt-global-search': __vue_component__$2,
-    'vgt-header-row': __vue_component__$5,
-    'vgt-table-header': __vue_component__$4
+    "vgt-pagination": __vue_component__$1,
+    "vgt-global-search": __vue_component__$2,
+    "vgt-header-row": __vue_component__$5,
+    "vgt-table-header": __vue_component__$4
   }
 };
 
