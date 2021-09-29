@@ -936,7 +936,7 @@ export default {
     },
 
     originalRows() {
-      const rows = JSON.parse(JSON.stringify(this.rows));
+      const rows = this.rows && this.rows.length ? JSON.parse(JSON.stringify(this.rows)) : [];
       let nestedRows = [];
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([
