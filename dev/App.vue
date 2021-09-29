@@ -60,6 +60,7 @@ export default {
         perPage: 3,
         perPageDropdown: [3, 5, 10, 200, 300, 500, 1000],
         perPageDropdownEnabled: true,
+        jumpFirstOrLast: true,
         // infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
       },
       columns: [

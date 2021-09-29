@@ -82,10 +82,12 @@ data() {
     serverParams: {
       columnFilters: {
       },
-      sort: {
-        field: '', 
-        type: '',
-      },
+      sort: [
+        {
+          field: '',
+          type: ''
+        }
+      ],
       page: 1, 
       perPage: 10
     }

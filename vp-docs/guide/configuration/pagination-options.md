@@ -14,6 +14,9 @@ A set of options that are related to table pagination. Each of these are optiona
     perPageDropdown: [3, 7, 9],
     dropdownAllowAll: false,
     setCurrentPage: 2,
+    jumpFirstOrLast : true
+    firstLabel : 'First Page'
+    lastLabel : 'Last Page'
     nextLabel: 'next',
     prevLabel: 'prev',
     rowsPerPageLabel: 'Rows per page',
@@ -185,6 +188,12 @@ There's no validation for number of pages so please be careful using this.
   }">
 </vue-good-table>
 ```
+
+## jumpFirstOrLast
+
+type: `Boolean (default: false)`
+
+Enable pagination buttons to jump to the first or last page.
 
 ## pagination label/text options
 you can change one or more of the texts shown on pagination by overriding the labels in the following way: 
