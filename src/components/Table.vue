@@ -902,7 +902,7 @@ export default {
         // calculate page end now
         let pageEnd = paginatedRows.length + 1;
 
-        // if the setting is set to 'all'
+        // if the setting is not set to 'all'
         if (this.currentPerPage !== -1) {
           pageEnd = this.currentPage * this.currentPerPage;
         }
