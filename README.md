@@ -8,7 +8,7 @@
 An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
 
 
-| Vue 3 Update |
+| :bangbang: Vue 3 Update |
 |:---------------------------|
 | @borisflesch is working on a Vue 3 compatible version of VGT . Please follow/contribute to his repository as it gets production ready: [vue-good-table-next](https://github.com/borisflesch/vue-good-table-next)|
  
