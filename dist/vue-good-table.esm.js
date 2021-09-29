@@ -2129,6 +2129,11 @@ var script = {
       return (this.currentPage - 1) * this.currentPerPage + 1;
     },
     lastRecordOnPage: function lastRecordOnPage() {
+      // if the setting is set to 'all'
+      if (this.currentPerPage === -1) {
+        return this.totalRecords;
+      }
+
       return Math.min(this.totalRecords, this.currentPage * this.currentPerPage);
     },
     recordInfo: function recordInfo() {
@@ -2154,7 +2159,7 @@ var script = {
         lastRecordOnPage: last,
         totalRecords: this.totalRecords,
         currentPage: this.currentPage,
-        totalPages: this.lastPage
+        totalPage: this.lastPage
       };
     }
   },
@@ -2315,7 +2320,7 @@ var __vue_staticRenderFns__ = [];
 var __vue_inject_styles__ = undefined;
 /* scoped */
 
-var __vue_scope_id__ = "data-v-3b496d41";
+var __vue_scope_id__ = "data-v-347cbcfa";
 /* module identifier */
 
 var __vue_module_identifier__ = undefined;
@@ -2361,7 +2366,16 @@ var script$1 = {
     mode: {
       "default": PAGINATION_MODES.Records
     },
+    jumpFirstOrLast: {
+      "default": false
+    },
     // text options
+    firstText: {
+      "default": "First"
+    },
+    lastText: {
+      "default": "Last"
+    },
     nextText: {
       "default": 'Next'
     },
@@ -2415,9 +2429,22 @@ var script$1 = {
   computed: {
     // Number of pages
     pagesCount: function pagesCount() {
+      // if the setting is set to 'all'
+      if (this.currentPerPage === -1) {
+        return 1;
+      }
+
       var quotient = Math.floor(this.total / this.currentPerPage);
       var remainder = this.total % this.currentPerPage;
       return remainder === 0 ? quotient : quotient + 1;
+    },
+    // Can go to first page
+    firstIsPossible: function firstIsPossible() {
+      return this.currentPage > 1;
+    },
+    // Can go to last page
+    lastIsPossible: function lastIsPossible() {
+      return this.currentPage < Math.ceil(this.total / this.currentPerPage);
     },
     // Can go to next page
     nextIsPossible: function nextIsPossible() {
@@ -2440,6 +2467,22 @@ var script$1 = {
         this.prevPage = this.currentPage;
         this.currentPage = pageNumber;
         this.pageChanged(emit);
+      }
+    },
+    // Go to first page
+    firstPage: function firstPage() {
+      if (this.firstIsPossible) {
+        this.currentPage = 1;
+        this.prevPage = 0;
+        this.pageChanged();
+      }
+    },
+    // Go to last page
+    lastPage: function lastPage() {
+      if (this.lastIsPossible) {
+        this.currentPage = this.pagesCount;
+        this.prev = this.currentPage - 1;
+        this.pageChanged();
       }
     },
     // Go to next page
@@ -2570,7 +2613,7 @@ var __vue_render__$1 = function __vue_render__() {
     }, [_vm._v("\n          " + _vm._s(option) + "\n        ")]);
   }), _vm._v(" "), _vm.paginateDropdownAllowAll ? _c('option', {
     domProps: {
-      "value": _vm.total
+      "value": -1
     }
   }, [_vm._v(_vm._s(_vm.allText))]) : _vm._e()], 2)])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "footer__navigation vgt-pull-right"
@@ -2588,7 +2631,32 @@ var __vue_render__$1 = function __vue_render__() {
     on: {
       "page-changed": _vm.changePage
     }
-  }), _vm._v(" "), _c('button', {
+  }), _vm._v(" "), _vm.jumpFirstOrLast ? _c('button', {
+    staticClass: "footer__navigation__page-btn",
+    "class": {
+      disabled: !_vm.firstIsPossible
+    },
+    attrs: {
+      "type": "button",
+      "aria-controls": "vgt-table"
+    },
+    on: {
+      "click": function click($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return _vm.firstPage($event);
+      }
+    }
+  }, [_c('span', {
+    staticClass: "chevron",
+    "class": {
+      left: !_vm.rtl,
+      right: _vm.rtl
+    },
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.firstText))])]) : _vm._e(), _vm._v(" "), _c('button', {
     staticClass: "footer__navigation__page-btn",
     "class": {
       disabled: !_vm.prevIsPossible
@@ -2638,7 +2706,32 @@ var __vue_render__$1 = function __vue_render__() {
     attrs: {
       "aria-hidden": "true"
     }
-  })])], 1)]);
+  })]), _vm._v(" "), _vm.jumpFirstOrLast ? _c('button', {
+    staticClass: "footer__navigation__page-btn",
+    "class": {
+      disabled: !_vm.lastIsPossible
+    },
+    attrs: {
+      "type": "button",
+      "aria-controls": "vgt-table"
+    },
+    on: {
+      "click": function click($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return _vm.lastPage($event);
+      }
+    }
+  }, [_c('span', [_vm._v(_vm._s(_vm.lastText))]), _vm._v(" "), _c('span', {
+    staticClass: "chevron",
+    "class": {
+      right: !_vm.rtl,
+      left: _vm.rtl
+    },
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })]) : _vm._e()], 1)]);
 };
 
 var __vue_staticRenderFns__$1 = [];
@@ -8532,7 +8625,7 @@ var script$6 = {
           perPage: 10,
           perPageDropdown: null,
           perPageDropdownEnabled: true
-        }, _defineProperty(_ref, "position", 'bottom'), _defineProperty(_ref, "dropdownAllowAll", true), _defineProperty(_ref, "mode", 'records'), _defineProperty(_ref, "infoFn", null), _ref;
+        }, _defineProperty(_ref, "position", 'bottom'), _defineProperty(_ref, "dropdownAllowAll", true), _defineProperty(_ref, "mode", 'records'), _defineProperty(_ref, "infoFn", null), _defineProperty(_ref, "jumpFirstOrLast", false), _ref;
       }
     },
     searchOptions: {
@@ -8552,6 +8645,8 @@ var script$6 = {
       // loading state for remote mode
       tableLoading: false,
       // text options
+      firstText: "First",
+      lastText: "Last",
       nextText: 'Next',
       prevText: 'Previous',
       rowsPerPageText: 'Rows per page',
@@ -8944,7 +9039,7 @@ var script$6 = {
         } // calculate page end now
 
 
-        var pageEnd = paginatedRows.length + 1; // if the setting is set to 'all'
+        var pageEnd = paginatedRows.length + 1; // if the setting is not set to 'all'
 
         if (this.currentPerPage !== -1) {
           pageEnd = this.currentPage * this.currentPerPage;
@@ -8987,7 +9082,7 @@ var script$6 = {
       return reconstructedRows;
     },
     originalRows: function originalRows() {
-      var rows = JSON.parse(JSON.stringify(this.rows));
+      var rows = this.rows && this.rows.length ? JSON.parse(JSON.stringify(this.rows)) : [];
       var nestedRows = [];
 
       if (!this.groupOptions.enabled) {
@@ -9540,6 +9635,8 @@ var script$6 = {
           perPageDropdown = _this$paginationOptio.perPageDropdown,
           perPageDropdownEnabled = _this$paginationOptio.perPageDropdownEnabled,
           dropdownAllowAll = _this$paginationOptio.dropdownAllowAll,
+          firstLabel = _this$paginationOptio.firstLabel,
+          lastLabel = _this$paginationOptio.lastLabel,
           nextLabel = _this$paginationOptio.nextLabel,
           prevLabel = _this$paginationOptio.prevLabel,
           rowsPerPageLabel = _this$paginationOptio.rowsPerPageLabel,
@@ -9587,6 +9684,14 @@ var script$6 = {
 
       if (typeof mode === 'string') {
         this.paginationMode = mode;
+      }
+
+      if (typeof firstLabel === 'string') {
+        this.firstText = firstLabel;
+      }
+
+      if (typeof lastLabel === 'string') {
+        this.lastText = lastLabel;
       }
 
       if (typeof nextLabel === 'string') {
@@ -9771,6 +9876,9 @@ var __vue_render__$6 = function __vue_render__() {
       "rtl": _vm.rtl,
       "total": _vm.totalRows || _vm.totalRowCount,
       "mode": _vm.paginationMode,
+      "jumpFirstOrLast": _vm.paginationOptions.jumpFirstOrLast,
+      "firstText": _vm.firstText,
+      "lastText": _vm.lastText,
       "nextText": _vm.nextText,
       "prevText": _vm.prevText,
       "rowsPerPageText": _vm.rowsPerPageText,
@@ -10073,6 +10181,9 @@ var __vue_render__$6 = function __vue_render__() {
       "rtl": _vm.rtl,
       "total": _vm.totalRows || _vm.totalRowCount,
       "mode": _vm.paginationMode,
+      "jumpFirstOrLast": _vm.paginationOptions.jumpFirstOrLast,
+      "firstText": _vm.firstText,
+      "lastText": _vm.lastText,
       "nextText": _vm.nextText,
       "prevText": _vm.prevText,
       "rowsPerPageText": _vm.rowsPerPageText,
