@@ -246,6 +246,7 @@
                 @click="onCellClicked(row, column, index, $event)"
                 v-for="(column, i) in columns"
                 :key="i"
+                :title="collect(row, column.rowTooltip)"
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
                 v-bind:data-label="compactMode ? column.label : undefined"

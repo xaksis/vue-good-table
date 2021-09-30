@@ -81,6 +81,7 @@ export default {
           field: 'age',
           type: 'number',
           tooltip: 'Age tooltip',
+          rowTooltip: row => row.age,
           firstSortType: 'desc',
           filterOptions: {
             enabled: true,
