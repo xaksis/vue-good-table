@@ -75,6 +75,7 @@ export default {
             // filterDropdownItems: ['Chris', 'Dan', 'Susan'],
             // filterValue: 'Chris',
           },
+          hidden: false,
         },
         {
           label: 'Age',
@@ -98,6 +99,7 @@ export default {
             //   },
             // ],
           },
+          hidden: false,
         },
         {
           filterOptions: {
@@ -109,16 +111,19 @@ export default {
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd',
           dateOutputFormat: 'PPPP',
+          hidden: false,
         },
         {
           label: 'Percent',
           field: 'score',
           type: 'percentage',
+          hidden: false,
         },
         {
           label: 'func',
           field: this.funcValue,
           type: 'number',
+          hidden: false,
         },
         {
           label: 'Valid',
@@ -131,6 +136,7 @@ export default {
               false,
             ],
           },
+          hidden: false,
         },
         {
           label: 'Exact',
@@ -142,6 +148,7 @@ export default {
               'rematch',
             ],
           },
+          hidden: false,
         }
       ],
       rows: [
