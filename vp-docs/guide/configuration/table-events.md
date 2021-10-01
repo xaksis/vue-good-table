@@ -171,7 +171,7 @@ methods: {
 
  
 ## @on-column-filter
-event emitted when column is filtered (only emitted for remote mode)
+event emitted when column is filtered
 ```html
 <vue-good-table
   :columns="columns"
