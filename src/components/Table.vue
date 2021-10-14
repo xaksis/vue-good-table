@@ -236,24 +236,15 @@
                 @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
               >
-                <template
-                    v-if="hasCheckboxColumnTemplate"
-                    slot="table-checkbox-column"
-                    slot-scope="props"
-                >
-                  <slot
-                      name="table-checkbox-column"
-                      :row="props.row"
-                  >
-                  </slot>
+                <template v-if="hasCheckboxColumnTemplate">
+                  <slot v-slot="props" name="table-checkbox-column" :row="row"></slot>
                 </template>
-
-                <input
-                  v-else
-                  type="checkbox"
-                  :disabled="row.vgtDisabled"
-                  :checked="row.vgtSelected"
-                />
+                  <input
+                      v-else
+                      type="checkbox"
+                      :disabled="row.vgtDisabled"
+                      :checked="row.vgtSelected"
+                  />
               </th>
               <td
                 @click="onCellClicked(row, column, index, $event)"
