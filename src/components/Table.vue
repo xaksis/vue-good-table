@@ -426,7 +426,6 @@ export default {
       default() {
         return {
           enabled: false,
-          position: 'bottom',
           perPage: 10,
           perPageDropdown: null,
           perPageDropdownEnabled: true,
@@ -849,7 +848,7 @@ export default {
                 const column = this.getColumnForField(srt.field);
                 const xvalue = this.collect(xRow, srt.field);
                 const yvalue = this.collect(yRow, srt.field);
-  
+
                 //* if a custom sort function has been provided we use that
                 const { sortFn } = column;
                 if (sortFn && typeof sortFn === 'function') {
