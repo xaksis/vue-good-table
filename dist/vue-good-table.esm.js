@@ -10158,16 +10158,18 @@ var __vue_render__$6 = function __vue_render__() {
             $event.stopPropagation();
             return _vm.onCheckboxClicked(row, index, $event);
           }
+        }
+      }, [_vm.hasCheckboxColumnTemplate ? [_vm._t("table-checkbox-column", null, {
+        "row": row
+      })] : _c('input', {
+        attrs: {
+          "type": "checkbox",
+          "disabled": row.vgtDisabled
         },
-        scopedSlots: _vm._u([{
-          key: "table-checkbox-column",
-          fn: function fn(props) {
-            return _vm.hasCheckboxColumnTemplate ? [_vm._t("table-checkbox-column", null, {
-              "row": props.row
-            })] : undefined;
-          }
-        }], null, true)
-      }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+        domProps: {
+          "checked": row.vgtSelected
+        }
+      })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return !column.hidden && column.field ? _c('td', {
           key: i,
           "class": _vm.getClasses(i, 'td', row),
