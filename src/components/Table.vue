@@ -621,7 +621,7 @@ export default {
           !!this.$slots['table-checkbox-column'] ||
           !!this.$scopedSlots['table-checkbox-column']
       );
-    }
+    },
 
     showEmptySlot() {
       if (!this.paginated.length) return true;
