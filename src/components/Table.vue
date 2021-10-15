@@ -1446,6 +1446,7 @@ export default {
     getRowStyleClass(row) {
       let classes = '';
       if (this.hasRowClickListener) classes += 'clickable';
+      if (row.vgtSelected) classes +=' vgt-selected-row';
       let rowStyleClasses;
       if (typeof this.rowStyleClass === 'function') {
         rowStyleClasses = this.rowStyleClass(row);
