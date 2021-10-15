@@ -57,21 +57,18 @@ function _arrayWithHoles(arr) {
 }
 
 function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-
-  if (_i == null) return;
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
   var _arr = [];
   var _n = true;
   var _d = false;
-
-  var _s, _e;
+  var _e = undefined;
 
   try {
-    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
       _arr.push(_s.value);
 
       if (i && _arr.length === i) break;
@@ -2308,7 +2305,7 @@ var __vue_render__ = function __vue_render__() {
         }
 
         $event.stopPropagation();
-        return _vm.changePage.apply(null, arguments);
+        return _vm.changePage($event);
       }
     }
   }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.pageInfo))])]), _vm._v(" "), _c('span', {
@@ -2651,7 +2648,7 @@ var __vue_render__$1 = function __vue_render__() {
       "click": function click($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        return _vm.firstPage.apply(null, arguments);
+        return _vm.firstPage($event);
       }
     }
   }, [_c('span', {
@@ -2676,7 +2673,7 @@ var __vue_render__$1 = function __vue_render__() {
       "click": function click($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        return _vm.previousPage.apply(null, arguments);
+        return _vm.previousPage($event);
       }
     }
   }, [_c('span', {
@@ -2701,7 +2698,7 @@ var __vue_render__$1 = function __vue_render__() {
       "click": function click($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        return _vm.nextPage.apply(null, arguments);
+        return _vm.nextPage($event);
       }
     }
   }, [_c('span', [_vm._v(_vm._s(_vm.nextText))]), _vm._v(" "), _c('span', {
@@ -2726,7 +2723,7 @@ var __vue_render__$1 = function __vue_render__() {
       "click": function click($event) {
         $event.preventDefault();
         $event.stopPropagation();
-        return _vm.lastPage.apply(null, arguments);
+        return _vm.lastPage($event);
       }
     }
   }, [_c('span', [_vm._v(_vm._s(_vm.lastText))]), _vm._v(" "), _c('span', {
@@ -3120,81 +3117,79 @@ var __vue_render__$3 = function __vue_render__() {
     return !column.hidden ? _c('th', {
       key: index,
       "class": _vm.getClasses(column)
-    }, [_vm._t("column-filter", function () {
-      return [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', {
-        staticClass: "vgt-input",
-        attrs: {
-          "name": _vm.getName(column),
-          "type": "text",
-          "placeholder": _vm.getPlaceholder(column)
-        },
-        domProps: {
-          "value": _vm.columnFilters[_vm.fieldKey(column.field)]
-        },
-        on: {
-          "keyup": function keyup($event) {
-            if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
-              return null;
-            }
+    }, [_vm._t("column-filter", [_vm.isFilterable(column) ? _c('div', [!_vm.isDropdown(column) ? _c('input', {
+      staticClass: "vgt-input",
+      attrs: {
+        "name": _vm.getName(column),
+        "type": "text",
+        "placeholder": _vm.getPlaceholder(column)
+      },
+      domProps: {
+        "value": _vm.columnFilters[_vm.fieldKey(column.field)]
+      },
+      on: {
+        "keyup": function keyup($event) {
+          if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) {
+            return null;
+          }
 
-            return _vm.updateFiltersOnEnter(column, $event.target.value);
-          },
-          "input": function input($event) {
-            return _vm.updateFiltersOnKeyup(column, $event.target.value);
-          }
-        }
-      }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c('select', {
-        staticClass: "vgt-select",
-        attrs: {
-          "name": _vm.getName(column)
+          return _vm.updateFiltersOnEnter(column, $event.target.value);
         },
+        "input": function input($event) {
+          return _vm.updateFiltersOnKeyup(column, $event.target.value);
+        }
+      }
+    }) : _vm._e(), _vm._v(" "), _vm.isDropdownArray(column) ? _c('select', {
+      staticClass: "vgt-select",
+      attrs: {
+        "name": _vm.getName(column)
+      },
+      domProps: {
+        "value": _vm.columnFilters[_vm.fieldKey(column.field)]
+      },
+      on: {
+        "change": function change($event) {
+          return _vm.updateFiltersImmediately(column.field, $event.target.value);
+        }
+      }
+    }, [_c('option', {
+      key: "-1",
+      attrs: {
+        "value": ""
+      }
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
+      return _c('option', {
+        key: i,
         domProps: {
-          "value": _vm.columnFilters[_vm.fieldKey(column.field)]
-        },
-        on: {
-          "change": function change($event) {
-            return _vm.updateFiltersImmediately(column.field, $event.target.value);
-          }
+          "value": option
         }
-      }, [_c('option', {
-        key: "-1",
-        attrs: {
-          "value": ""
+      }, [_vm._v("\n              " + _vm._s(option) + "\n            ")]);
+    })], 2) : _vm._e(), _vm._v(" "), _vm.isDropdownObjects(column) ? _c('select', {
+      staticClass: "vgt-select",
+      attrs: {
+        "name": _vm.getName(column)
+      },
+      domProps: {
+        "value": _vm.columnFilters[_vm.fieldKey(column.field)]
+      },
+      on: {
+        "change": function change($event) {
+          return _vm.updateFiltersImmediately(column.field, $event.target.value);
         }
-      }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
-        return _c('option', {
-          key: i,
-          domProps: {
-            "value": option
-          }
-        }, [_vm._v("\n              " + _vm._s(option) + "\n            ")]);
-      })], 2) : _vm._e(), _vm._v(" "), _vm.isDropdownObjects(column) ? _c('select', {
-        staticClass: "vgt-select",
-        attrs: {
-          "name": _vm.getName(column)
-        },
+      }
+    }, [_c('option', {
+      key: "-1",
+      attrs: {
+        "value": ""
+      }
+    }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
+      return _c('option', {
+        key: i,
         domProps: {
-          "value": _vm.columnFilters[_vm.fieldKey(column.field)]
-        },
-        on: {
-          "change": function change($event) {
-            return _vm.updateFiltersImmediately(column.field, $event.target.value);
-          }
+          "value": option.value
         }
-      }, [_c('option', {
-        key: "-1",
-        attrs: {
-          "value": ""
-        }
-      }, [_vm._v(_vm._s(_vm.getPlaceholder(column)))]), _vm._v(" "), _vm._l(column.filterOptions.filterDropdownItems, function (option, i) {
-        return _c('option', {
-          key: i,
-          domProps: {
-            "value": option.value
-          }
-        }, [_vm._v(_vm._s(option.text))]);
-      })], 2) : _vm._e()]) : _vm._e()];
-    }, {
+      }, [_vm._v(_vm._s(option.text))]);
+    })], 2) : _vm._e()]) : _vm._e()], {
       "column": column,
       "updateFilters": _vm.updateSlotFilter
     })], 2) : _vm._e();
@@ -3540,9 +3535,7 @@ var __vue_render__$4 = function __vue_render__() {
         "aria-sort": _vm.getColumnSortLong(column),
         "aria-controls": "col-" + index
       }
-    }, [_vm._t("table-column", function () {
-      return [_vm._v("\n        " + _vm._s(column.label) + "\n      ")];
-    }, {
+    }, [_vm._t("table-column", [_vm._v("\n        " + _vm._s(column.label) + "\n      ")], {
       "column": column
     }), _vm._v(" "), _vm.isSortableColumn(column) ? _c('button', {
       on: {
@@ -3762,21 +3755,19 @@ var __vue_render__$5 = function __vue_render__() {
     attrs: {
       "colspan": _vm.fullColspan
     }
-  }, [_vm.selectAllByGroup ? [_vm._t("table-header-group-select", function () {
-    return [_c('input', {
-      attrs: {
-        "type": "checkbox"
-      },
-      domProps: {
-        "checked": _vm.allSelected
-      },
-      on: {
-        "change": function change($event) {
-          return _vm.toggleSelectGroup($event);
-        }
+  }, [_vm.selectAllByGroup ? [_vm._t("table-header-group-select", [_c('input', {
+    attrs: {
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": _vm.allSelected
+    },
+    on: {
+      "change": function change($event) {
+        return _vm.toggleSelectGroup($event);
       }
-    })];
-  }, {
+    }
+  })], {
     "columns": _vm.columns,
     "row": _vm.headerRow
   })] : _vm._e(), _vm._v(" "), _c('span', {
@@ -3790,33 +3781,29 @@ var __vue_render__$5 = function __vue_render__() {
     "class": {
       'expand': _vm.headerRow.vgtIsExpanded
     }
-  }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", function () {
-    return [_vm.headerRow.html ? _c('span', {
-      domProps: {
-        "innerHTML": _vm._s(_vm.headerRow.label)
-      }
-    }) : _c('span', [_vm._v("\n          " + _vm._s(_vm.headerRow.label) + "\n        ")])];
-  }, {
+  }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", [_vm.headerRow.html ? _c('span', {
+    domProps: {
+      "innerHTML": _vm._s(_vm.headerRow.label)
+    }
+  }) : _c('span', [_vm._v("\n          " + _vm._s(_vm.headerRow.label) + "\n        ")])], {
     "row": _vm.headerRow
   })], 2)], 2) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
     staticClass: "vgt-row-header"
   }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
     staticClass: "vgt-row-header"
-  }, [_vm.selectAllByGroup ? [_vm._t("table-header-group-select", function () {
-    return [_c('input', {
-      attrs: {
-        "type": "checkbox"
-      },
-      domProps: {
-        "checked": _vm.allSelected
-      },
-      on: {
-        "change": function change($event) {
-          return _vm.toggleSelectGroup($event);
-        }
+  }, [_vm.selectAllByGroup ? [_vm._t("table-header-group-select", [_c('input', {
+    attrs: {
+      "type": "checkbox"
+    },
+    domProps: {
+      "checked": _vm.allSelected
+    },
+    on: {
+      "change": function change($event) {
+        return _vm.toggleSelectGroup($event);
       }
-    })];
-  }, {
+    }
+  })], {
     "columns": _vm.columns,
     "row": _vm.headerRow
   })] : _vm._e()], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
@@ -3834,13 +3821,11 @@ var __vue_render__$5 = function __vue_render__() {
       "class": {
         'expand': _vm.headerRow.vgtIsExpanded
       }
-    }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", function () {
-      return [!column.html ? _c('span', [_vm._v("\n        " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + "\n      ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
-        domProps: {
-          "innerHTML": _vm._s(_vm.collectFormatted(_vm.headerRow, column, true))
-        }
-      }) : _vm._e()];
-    }, {
+    }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", [!column.html ? _c('span', [_vm._v("\n        " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + "\n      ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(_vm.collectFormatted(_vm.headerRow, column, true))
+      }
+    }) : _vm._e()], {
       "row": _vm.headerRow,
       "column": column,
       "formattedRow": _vm.formattedRow(_vm.headerRow, true)
@@ -3974,6 +3959,11 @@ function addMilliseconds(dirtyDate, dirtyAmount) {
   return new Date(timestamp + amount);
 }
 
+var MILLISECONDS_IN_MINUTE = 60000;
+
+function getDateMillisecondsPart(date) {
+  return date.getTime() % MILLISECONDS_IN_MINUTE;
+}
 /**
  * Google Chrome as of 67.0.3396.87 introduced timezones with offset that includes seconds.
  * They usually appear for dates that denote time before the timezones were introduced
@@ -3985,10 +3975,15 @@ function addMilliseconds(dirtyDate, dirtyAmount) {
  *
  * This function returns the timezone offset in milliseconds that takes seconds in account.
  */
-function getTimezoneOffsetInMilliseconds(date) {
-  var utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-  utcDate.setUTCFullYear(date.getFullYear());
-  return date.getTime() - utcDate.getTime();
+
+
+function getTimezoneOffsetInMilliseconds(dirtyDate) {
+  var date = new Date(dirtyDate.getTime());
+  var baseTimezoneOffset = Math.ceil(date.getTimezoneOffset());
+  date.setSeconds(0, 0);
+  var hasNegativeUTCOffset = baseTimezoneOffset > 0;
+  var millisecondsPartOfTimezoneOffset = hasNegativeUTCOffset ? (MILLISECONDS_IN_MINUTE + getDateMillisecondsPart(date)) % MILLISECONDS_IN_MINUTE : getDateMillisecondsPart(date);
+  return baseTimezoneOffset * MILLISECONDS_IN_MINUTE + millisecondsPartOfTimezoneOffset;
 }
 
 /**
@@ -4044,48 +4039,6 @@ function compareAsc(dirtyDateLeft, dirtyDateRight) {
 }
 
 /**
- * @name isDate
- * @category Common Helpers
- * @summary Is the given value a date?
- *
- * @description
- * Returns true if the given value is an instance of Date. The function works for dates transferred across iframes.
- *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
- *
- * @param {*} value - the value to check
- * @returns {boolean} true if the given value is a date
- * @throws {TypeError} 1 arguments required
- *
- * @example
- * // For a valid date:
- * const result = isDate(new Date())
- * //=> true
- *
- * @example
- * // For an invalid date:
- * const result = isDate(new Date(NaN))
- * //=> true
- *
- * @example
- * // For some value:
- * const result = isDate('2014-02-31')
- * //=> false
- *
- * @example
- * // For an object:
- * const result = isDate({})
- * //=> false
- */
-
-function isDate(value) {
-  requiredArgs(1, arguments);
-  return value instanceof Date || typeof value === 'object' && Object.prototype.toString.call(value) === '[object Date]';
-}
-
-/**
  * @name isValid
  * @category Common Helpers
  * @summary Is the given date valid?
@@ -4129,29 +4082,24 @@ function isDate(value) {
  *
  * @example
  * // For the valid date:
- * const result = isValid(new Date(2014, 1, 31))
+ * var result = isValid(new Date(2014, 1, 31))
  * //=> true
  *
  * @example
  * // For the value, convertable into a date:
- * const result = isValid(1393804800000)
+ * var result = isValid(1393804800000)
  * //=> true
  *
  * @example
  * // For the invalid date:
- * const result = isValid(new Date(''))
+ * var result = isValid(new Date(''))
  * //=> false
  */
 
 function isValid(dirtyDate) {
   requiredArgs(1, arguments);
-
-  if (!isDate(dirtyDate) && typeof dirtyDate !== 'number') {
-    return false;
-  }
-
   var date = toDate(dirtyDate);
-  return !isNaN(Number(date));
+  return !isNaN(date);
 }
 
 var formatDistanceLocale = {
@@ -4217,21 +4165,20 @@ var formatDistanceLocale = {
     other: 'almost {{count}} years'
   }
 };
-
-var formatDistance = function (token, count, options) {
+function formatDistance(token, count, options) {
+  options = options || {};
   var result;
-  var tokenValue = formatDistanceLocale[token];
 
-  if (typeof tokenValue === 'string') {
-    result = tokenValue;
+  if (typeof formatDistanceLocale[token] === 'string') {
+    result = formatDistanceLocale[token];
   } else if (count === 1) {
-    result = tokenValue.one;
+    result = formatDistanceLocale[token].one;
   } else {
-    result = tokenValue.other.replace('{{count}}', count.toString());
+    result = formatDistanceLocale[token].other.replace('{{count}}', count);
   }
 
-  if (options !== null && options !== void 0 && options.addSuffix) {
-    if (options.comparison && options.comparison > 0) {
+  if (options.addSuffix) {
+    if (options.comparison > 0) {
       return 'in ' + result;
     } else {
       return result + ' ago';
@@ -4239,12 +4186,11 @@ var formatDistance = function (token, count, options) {
   }
 
   return result;
-};
+}
 
 function buildFormatLongFn(args) {
-  return function () {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    // TODO: Remove String()
+  return function (dirtyOptions) {
+    var options = dirtyOptions || {};
     var width = options.width ? String(options.width) : args.defaultWidth;
     var format = args.formats[width] || args.formats[args.defaultWidth];
     return format;
@@ -4292,10 +4238,9 @@ var formatRelativeLocale = {
   nextWeek: "eeee 'at' p",
   other: 'P'
 };
-
-var formatRelative = function (token, _date, _baseDate, _options) {
+function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale[token];
-};
+}
 
 function buildLocalizeFn(args) {
   return function (dirtyIndex, dirtyOptions) {
@@ -4315,8 +4260,7 @@ function buildLocalizeFn(args) {
       valuesArray = args.values[_width] || args.values[_defaultWidth];
     }
 
-    var index = args.argumentCallback ? args.argumentCallback(dirtyIndex) : dirtyIndex; // @ts-ignore: For some reason TypeScript just don't want to match it, no matter how hard we try. I challange you to try to remove it!
-
+    var index = args.argumentCallback ? args.argumentCallback(dirtyIndex) : dirtyIndex;
     return valuesArray[index];
   };
 }
@@ -4329,12 +4273,12 @@ var eraValues = {
 var quarterValues = {
   narrow: ['1', '2', '3', '4'],
   abbreviated: ['Q1', 'Q2', 'Q3', 'Q4'],
-  wide: ['1st quarter', '2nd quarter', '3rd quarter', '4th quarter']
-}; // Note: in English, the names of days of the week and months are capitalized.
-// If you are making a new locale based on this one, check if the same is true for the language you're working on.
-// Generally, formatted dates should look like they are in the middle of a sentence,
-// e.g. in Spanish language the weekdays and months should be in the lowercase.
+  wide: ['1st quarter', '2nd quarter', '3rd quarter', '4th quarter'] // Note: in English, the names of days of the week and months are capitalized.
+  // If you are making a new locale based on this one, check if the same is true for the language you're working on.
+  // Generally, formatted dates should look like they are in the middle of a sentence,
+  // e.g. in Spanish language the weekdays and months should be in the lowercase.
 
+};
 var monthValues = {
   narrow: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
   abbreviated: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -4411,13 +4355,16 @@ var formattingDayPeriodValues = {
   }
 };
 
-var ordinalNumber = function (dirtyNumber, _options) {
+function ordinalNumber(dirtyNumber, _dirtyOptions) {
   var number = Number(dirtyNumber); // If ordinal numbers depend on context, for example,
   // if they are different for different grammatical genders,
-  // use `options.unit`.
+  // use `options.unit`:
   //
-  // `unit` can be 'year', 'quarter', 'month', 'week', 'date', 'dayOfYear',
-  // 'day', 'hour', 'minute', 'second'.
+  //   var options = dirtyOptions || {}
+  //   var unit = String(options.unit)
+  //
+  // where `unit` can be 'year', 'quarter', 'month', 'week', 'date', 'dayOfYear',
+  // 'day', 'hour', 'minute', 'second'
 
   var rem100 = number % 100;
 
@@ -4435,7 +4382,7 @@ var ordinalNumber = function (dirtyNumber, _options) {
   }
 
   return number + 'th';
-};
+}
 
 var localize = {
   ordinalNumber: ordinalNumber,
@@ -4447,7 +4394,7 @@ var localize = {
     values: quarterValues,
     defaultWidth: 'wide',
     argumentCallback: function (quarter) {
-      return quarter - 1;
+      return Number(quarter) - 1;
     }
   }),
   month: buildLocalizeFn({
@@ -4466,9 +4413,36 @@ var localize = {
   })
 };
 
+function buildMatchPatternFn(args) {
+  return function (dirtyString, dirtyOptions) {
+    var string = String(dirtyString);
+    var options = dirtyOptions || {};
+    var matchResult = string.match(args.matchPattern);
+
+    if (!matchResult) {
+      return null;
+    }
+
+    var matchedString = matchResult[0];
+    var parseResult = string.match(args.parsePattern);
+
+    if (!parseResult) {
+      return null;
+    }
+
+    var value = args.valueCallback ? args.valueCallback(parseResult[0]) : parseResult[0];
+    value = options.valueCallback ? options.valueCallback(value) : value;
+    return {
+      value: value,
+      rest: string.slice(matchedString.length)
+    };
+  };
+}
+
 function buildMatchFn(args) {
-  return function (string) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  return function (dirtyString, dirtyOptions) {
+    var string = String(dirtyString);
+    var options = dirtyOptions || {};
     var width = options.width;
     var matchPattern = width && args.matchPatterns[width] || args.matchPatterns[args.defaultMatchWidth];
     var matchResult = string.match(matchPattern);
@@ -4479,18 +4453,23 @@ function buildMatchFn(args) {
 
     var matchedString = matchResult[0];
     var parsePatterns = width && args.parsePatterns[width] || args.parsePatterns[args.defaultParseWidth];
-    var key = Array.isArray(parsePatterns) ? findIndex(parsePatterns, function (pattern) {
-      return pattern.test(matchedString);
-    }) : findKey(parsePatterns, function (pattern) {
-      return pattern.test(matchedString);
-    });
     var value;
-    value = args.valueCallback ? args.valueCallback(key) : key;
+
+    if (Object.prototype.toString.call(parsePatterns) === '[object Array]') {
+      value = findIndex(parsePatterns, function (pattern) {
+        return pattern.test(matchedString);
+      });
+    } else {
+      value = findKey(parsePatterns, function (pattern) {
+        return pattern.test(matchedString);
+      });
+    }
+
+    value = args.valueCallback ? args.valueCallback(value) : value;
     value = options.valueCallback ? options.valueCallback(value) : value;
-    var rest = string.slice(matchedString.length);
     return {
       value: value,
-      rest: rest
+      rest: string.slice(matchedString.length)
     };
   };
 }
@@ -4501,8 +4480,6 @@ function findKey(object, predicate) {
       return key;
     }
   }
-
-  return undefined;
 }
 
 function findIndex(array, predicate) {
@@ -4511,26 +4488,6 @@ function findIndex(array, predicate) {
       return key;
     }
   }
-
-  return undefined;
-}
-
-function buildMatchPatternFn(args) {
-  return function (string) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var matchResult = string.match(args.matchPattern);
-    if (!matchResult) return null;
-    var matchedString = matchResult[0];
-    var parseResult = string.match(args.parsePattern);
-    if (!parseResult) return null;
-    var value = args.valueCallback ? args.valueCallback(parseResult[0]) : parseResult[0];
-    value = options.valueCallback ? options.valueCallback(value) : value;
-    var rest = string.slice(matchedString.length);
-    return {
-      value: value,
-      rest: rest
-    };
-  };
 }
 
 var matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
@@ -4638,6 +4595,7 @@ var match = {
  * @author Sasha Koss [@kossnocorp]{@link https://github.com/kossnocorp}
  * @author Lesha Koss [@leshakoss]{@link https://github.com/leshakoss}
  */
+
 var locale = {
   code: 'en-US',
   formatDistance: formatDistance,
@@ -4947,53 +4905,53 @@ var dayPeriodEnum = {
   afternoon: 'afternoon',
   evening: 'evening',
   night: 'night'
-};
-/*
- * |     | Unit                           |     | Unit                           |
- * |-----|--------------------------------|-----|--------------------------------|
- * |  a  | AM, PM                         |  A* | Milliseconds in day            |
- * |  b  | AM, PM, noon, midnight         |  B  | Flexible day period            |
- * |  c  | Stand-alone local day of week  |  C* | Localized hour w/ day period   |
- * |  d  | Day of month                   |  D  | Day of year                    |
- * |  e  | Local day of week              |  E  | Day of week                    |
- * |  f  |                                |  F* | Day of week in month           |
- * |  g* | Modified Julian day            |  G  | Era                            |
- * |  h  | Hour [1-12]                    |  H  | Hour [0-23]                    |
- * |  i! | ISO day of week                |  I! | ISO week of year               |
- * |  j* | Localized hour w/ day period   |  J* | Localized hour w/o day period  |
- * |  k  | Hour [1-24]                    |  K  | Hour [0-11]                    |
- * |  l* | (deprecated)                   |  L  | Stand-alone month              |
- * |  m  | Minute                         |  M  | Month                          |
- * |  n  |                                |  N  |                                |
- * |  o! | Ordinal number modifier        |  O  | Timezone (GMT)                 |
- * |  p! | Long localized time            |  P! | Long localized date            |
- * |  q  | Stand-alone quarter            |  Q  | Quarter                        |
- * |  r* | Related Gregorian year         |  R! | ISO week-numbering year        |
- * |  s  | Second                         |  S  | Fraction of second             |
- * |  t! | Seconds timestamp              |  T! | Milliseconds timestamp         |
- * |  u  | Extended year                  |  U* | Cyclic year                    |
- * |  v* | Timezone (generic non-locat.)  |  V* | Timezone (location)            |
- * |  w  | Local week of year             |  W* | Week of month                  |
- * |  x  | Timezone (ISO-8601 w/o Z)      |  X  | Timezone (ISO-8601)            |
- * |  y  | Year (abs)                     |  Y  | Local week-numbering year      |
- * |  z  | Timezone (specific non-locat.) |  Z* | Timezone (aliases)             |
- *
- * Letters marked by * are not implemented but reserved by Unicode standard.
- *
- * Letters marked by ! are non-standard, but implemented by date-fns:
- * - `o` modifies the previous token to turn it into an ordinal (see `format` docs)
- * - `i` is ISO day of week. For `i` and `ii` is returns numeric ISO week days,
- *   i.e. 7 for Sunday, 1 for Monday, etc.
- * - `I` is ISO week of year, as opposed to `w` which is local week of year.
- * - `R` is ISO week-numbering year, as opposed to `Y` which is local week-numbering year.
- *   `R` is supposed to be used in conjunction with `I` and `i`
- *   for universal ISO week-numbering date, whereas
- *   `Y` is supposed to be used in conjunction with `w` and `e`
- *   for week-numbering date specific to the locale.
- * - `P` is long localized date format
- * - `p` is long localized time format
- */
+  /*
+   * |     | Unit                           |     | Unit                           |
+   * |-----|--------------------------------|-----|--------------------------------|
+   * |  a  | AM, PM                         |  A* | Milliseconds in day            |
+   * |  b  | AM, PM, noon, midnight         |  B  | Flexible day period            |
+   * |  c  | Stand-alone local day of week  |  C* | Localized hour w/ day period   |
+   * |  d  | Day of month                   |  D  | Day of year                    |
+   * |  e  | Local day of week              |  E  | Day of week                    |
+   * |  f  |                                |  F* | Day of week in month           |
+   * |  g* | Modified Julian day            |  G  | Era                            |
+   * |  h  | Hour [1-12]                    |  H  | Hour [0-23]                    |
+   * |  i! | ISO day of week                |  I! | ISO week of year               |
+   * |  j* | Localized hour w/ day period   |  J* | Localized hour w/o day period  |
+   * |  k  | Hour [1-24]                    |  K  | Hour [0-11]                    |
+   * |  l* | (deprecated)                   |  L  | Stand-alone month              |
+   * |  m  | Minute                         |  M  | Month                          |
+   * |  n  |                                |  N  |                                |
+   * |  o! | Ordinal number modifier        |  O  | Timezone (GMT)                 |
+   * |  p! | Long localized time            |  P! | Long localized date            |
+   * |  q  | Stand-alone quarter            |  Q  | Quarter                        |
+   * |  r* | Related Gregorian year         |  R! | ISO week-numbering year        |
+   * |  s  | Second                         |  S  | Fraction of second             |
+   * |  t! | Seconds timestamp              |  T! | Milliseconds timestamp         |
+   * |  u  | Extended year                  |  U* | Cyclic year                    |
+   * |  v* | Timezone (generic non-locat.)  |  V* | Timezone (location)            |
+   * |  w  | Local week of year             |  W* | Week of month                  |
+   * |  x  | Timezone (ISO-8601 w/o Z)      |  X  | Timezone (ISO-8601)            |
+   * |  y  | Year (abs)                     |  Y  | Local week-numbering year      |
+   * |  z  | Timezone (specific non-locat.) |  Z* | Timezone (aliases)             |
+   *
+   * Letters marked by * are not implemented but reserved by Unicode standard.
+   *
+   * Letters marked by ! are non-standard, but implemented by date-fns:
+   * - `o` modifies the previous token to turn it into an ordinal (see `format` docs)
+   * - `i` is ISO day of week. For `i` and `ii` is returns numeric ISO week days,
+   *   i.e. 7 for Sunday, 1 for Monday, etc.
+   * - `I` is ISO week of year, as opposed to `w` which is local week of year.
+   * - `R` is ISO week-numbering year, as opposed to `Y` which is local week-numbering year.
+   *   `R` is supposed to be used in conjunction with `I` and `i`
+   *   for universal ISO week-numbering date, whereas
+   *   `Y` is supposed to be used in conjunction with `w` and `e`
+   *   for week-numbering date specific to the locale.
+   * - `P` is long localized date format
+   * - `p` is long localized time format
+   */
 
+};
 var formatters$1 = {
   // Era
   G: function (date, token, localize) {
@@ -6018,28 +5976,28 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * | Day of week (formatting)        | E..EEE  | Mon, Tue, Wed, ..., Sun           |       |
  * |                                 | EEEE    | Monday, Tuesday, ..., Sunday      | 2     |
  * |                                 | EEEEE   | M, T, W, T, F, S, S               |       |
- * |                                 | EEEEEE  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * |                                 | EEEEEE  | Mo, Tu, We, Th, Fr, Su, Sa        |       |
  * | ISO day of week (formatting)    | i       | 1, 2, 3, ..., 7                   | 7     |
  * |                                 | io      | 1st, 2nd, ..., 7th                | 7     |
  * |                                 | ii      | 01, 02, ..., 07                   | 7     |
  * |                                 | iii     | Mon, Tue, Wed, ..., Sun           | 7     |
  * |                                 | iiii    | Monday, Tuesday, ..., Sunday      | 2,7   |
  * |                                 | iiiii   | M, T, W, T, F, S, S               | 7     |
- * |                                 | iiiiii  | Mo, Tu, We, Th, Fr, Sa, Su        | 7     |
+ * |                                 | iiiiii  | Mo, Tu, We, Th, Fr, Su, Sa        | 7     |
  * | Local day of week (formatting)  | e       | 2, 3, 4, ..., 1                   |       |
  * |                                 | eo      | 2nd, 3rd, ..., 1st                | 7     |
  * |                                 | ee      | 02, 03, ..., 01                   |       |
  * |                                 | eee     | Mon, Tue, Wed, ..., Sun           |       |
  * |                                 | eeee    | Monday, Tuesday, ..., Sunday      | 2     |
  * |                                 | eeeee   | M, T, W, T, F, S, S               |       |
- * |                                 | eeeeee  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * |                                 | eeeeee  | Mo, Tu, We, Th, Fr, Su, Sa        |       |
  * | Local day of week (stand-alone) | c       | 2, 3, 4, ..., 1                   |       |
  * |                                 | co      | 2nd, 3rd, ..., 1st                | 7     |
  * |                                 | cc      | 02, 03, ..., 01                   |       |
  * |                                 | ccc     | Mon, Tue, Wed, ..., Sun           |       |
  * |                                 | cccc    | Monday, Tuesday, ..., Sunday      | 2     |
  * |                                 | ccccc   | M, T, W, T, F, S, S               |       |
- * |                                 | cccccc  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * |                                 | cccccc  | Mo, Tu, We, Th, Fr, Su, Sa        |       |
  * | AM, PM                          | a..aa   | AM, PM                            |       |
  * |                                 | aaa     | am, pm                            |       |
  * |                                 | aaaa    | a.m., p.m.                        | 2     |
@@ -6071,7 +6029,7 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * |                                 | ss      | 00, 01, ..., 59                   |       |
  * | Fraction of second              | S       | 0, 1, ..., 9                      |       |
  * |                                 | SS      | 00, 01, ..., 99                   |       |
- * |                                 | SSS     | 000, 001, ..., 999                |       |
+ * |                                 | SSS     | 000, 0001, ..., 999               |       |
  * |                                 | SSSS    | ...                               | 3     |
  * | Timezone (ISO-8601 w/ Z)        | X       | -08, +0530, Z                     |       |
  * |                                 | XX      | -0800, +0530, Z                   |       |
@@ -6344,7 +6302,7 @@ function assign(target, dirtyObject) {
   dirtyObject = dirtyObject || {};
 
   for (var property in dirtyObject) {
-    if (Object.prototype.hasOwnProperty.call(dirtyObject, property)) {
+    if (dirtyObject.hasOwnProperty(property)) {
       target[property] = dirtyObject[property];
     }
   }
@@ -6419,7 +6377,7 @@ function setUTCWeek(dirtyDate, dirtyWeek, options) {
 }
 
 var MILLISECONDS_IN_HOUR = 3600000;
-var MILLISECONDS_IN_MINUTE = 60000;
+var MILLISECONDS_IN_MINUTE$1 = 60000;
 var MILLISECONDS_IN_SECOND = 1000;
 var numericPatterns = {
   month: /^(1[0-2]|0?\d)/,
@@ -6502,7 +6460,7 @@ function parseTimezonePattern(pattern, string) {
   var minutes = matchResult[3] ? parseInt(matchResult[3], 10) : 0;
   var seconds = matchResult[5] ? parseInt(matchResult[5], 10) : 0;
   return {
-    value: sign * (hours * MILLISECONDS_IN_HOUR + minutes * MILLISECONDS_IN_MINUTE + seconds * MILLISECONDS_IN_SECOND),
+    value: sign * (hours * MILLISECONDS_IN_HOUR + minutes * MILLISECONDS_IN_MINUTE$1 + seconds * MILLISECONDS_IN_SECOND),
     rest: string.slice(matchResult[0].length)
   };
 }
@@ -8031,28 +7989,28 @@ var unescapedLatinCharacterRegExp$1 = /[a-zA-Z]/;
  * | Day of week (formatting)        |  90 | E..EEE  | Mon, Tue, Wed, ..., Sun           |       |
  * |                                 |     | EEEE    | Monday, Tuesday, ..., Sunday      | 2     |
  * |                                 |     | EEEEE   | M, T, W, T, F, S, S               |       |
- * |                                 |     | EEEEEE  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * |                                 |     | EEEEEE  | Mo, Tu, We, Th, Fr, Su, Sa        |       |
  * | ISO day of week (formatting)    |  90 | i       | 1, 2, 3, ..., 7                   | 5     |
  * |                                 |     | io      | 1st, 2nd, ..., 7th                | 5     |
  * |                                 |     | ii      | 01, 02, ..., 07                   | 5     |
  * |                                 |     | iii     | Mon, Tue, Wed, ..., Sun           | 5     |
  * |                                 |     | iiii    | Monday, Tuesday, ..., Sunday      | 2,5   |
  * |                                 |     | iiiii   | M, T, W, T, F, S, S               | 5     |
- * |                                 |     | iiiiii  | Mo, Tu, We, Th, Fr, Sa, Su        | 5     |
+ * |                                 |     | iiiiii  | Mo, Tu, We, Th, Fr, Su, Sa        | 5     |
  * | Local day of week (formatting)  |  90 | e       | 2, 3, 4, ..., 1                   |       |
  * |                                 |     | eo      | 2nd, 3rd, ..., 1st                | 5     |
  * |                                 |     | ee      | 02, 03, ..., 01                   |       |
  * |                                 |     | eee     | Mon, Tue, Wed, ..., Sun           |       |
  * |                                 |     | eeee    | Monday, Tuesday, ..., Sunday      | 2     |
  * |                                 |     | eeeee   | M, T, W, T, F, S, S               |       |
- * |                                 |     | eeeeee  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * |                                 |     | eeeeee  | Mo, Tu, We, Th, Fr, Su, Sa        |       |
  * | Local day of week (stand-alone) |  90 | c       | 2, 3, 4, ..., 1                   |       |
  * |                                 |     | co      | 2nd, 3rd, ..., 1st                | 5     |
  * |                                 |     | cc      | 02, 03, ..., 01                   |       |
  * |                                 |     | ccc     | Mon, Tue, Wed, ..., Sun           |       |
  * |                                 |     | cccc    | Monday, Tuesday, ..., Sunday      | 2     |
  * |                                 |     | ccccc   | M, T, W, T, F, S, S               |       |
- * |                                 |     | cccccc  | Mo, Tu, We, Th, Fr, Sa, Su        |       |
+ * |                                 |     | cccccc  | Mo, Tu, We, Th, Fr, Su, Sa        |       |
  * | AM, PM                          |  80 | a..aaa  | AM, PM                            |       |
  * |                                 |     | aaaa    | a.m., p.m.                        | 2     |
  * |                                 |     | aaaaa   | a, p                              |       |
@@ -8291,9 +8249,9 @@ function parse(dirtyDateString, dirtyFormatString, dirtyReferenceDate, dirtyOpti
   var subFnOptions = {
     firstWeekContainsDate: firstWeekContainsDate,
     weekStartsOn: weekStartsOn,
-    locale: locale$1
-  }; // If timezone isn't specified, it will be set to the system timezone
+    locale: locale$1 // If timezone isn't specified, it will be set to the system timezone
 
+  };
   var setters = [{
     priority: TIMEZONE_UNIT_PRIORITY,
     subPriority: -1,
@@ -8813,9 +8771,6 @@ var script$6 = {
     },
     hasHeaderRowTemplate: function hasHeaderRowTemplate() {
       return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
-    },
-    hasCheckboxColumnTemplate: function hasCheckboxColumnTemplate() {
-      return !!this.$slots['table-checkbox-column'] || !!this.$scopedSlots['table-checkbox-column'];
     },
     showEmptySlot: function showEmptySlot() {
       if (!this.paginated.length) return true;
@@ -9911,43 +9866,39 @@ var __vue_render__$6 = function __vue_render__() {
     "class": _vm.wrapStyleClasses
   }, [_vm.isLoading ? _c('div', {
     staticClass: "vgt-loading vgt-center-align"
-  }, [_vm._t("loadingContent", function () {
-    return [_c('span', {
-      staticClass: "vgt-loading__content"
-    }, [_vm._v("\n        Loading...\n      ")])];
-  })], 2) : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_vm._t("loadingContent", [_c('span', {
+    staticClass: "vgt-loading__content"
+  }, [_vm._v("\n        Loading...\n      ")])])], 2) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "vgt-inner-wrap",
     "class": {
       'is-loading': _vm.isLoading
     }
-  }, [_vm.paginate && _vm.paginateOnTop ? _vm._t("pagination-top", function () {
-    return [_c('vgt-pagination', {
-      ref: "paginationTop",
-      attrs: {
-        "perPage": _vm.perPage,
-        "rtl": _vm.rtl,
-        "total": _vm.totalRows || _vm.totalRowCount,
-        "mode": _vm.paginationMode,
-        "jumpFirstOrLast": _vm.paginationOptions.jumpFirstOrLast,
-        "firstText": _vm.firstText,
-        "lastText": _vm.lastText,
-        "nextText": _vm.nextText,
-        "prevText": _vm.prevText,
-        "rowsPerPageText": _vm.rowsPerPageText,
-        "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
-        "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
-        "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
-        "ofText": _vm.ofText,
-        "pageText": _vm.pageText,
-        "allText": _vm.allText,
-        "info-fn": _vm.paginationInfoFn
-      },
-      on: {
-        "page-changed": _vm.pageChanged,
-        "per-page-changed": _vm.perPageChanged
-      }
-    })];
-  }, {
+  }, [_vm.paginate && _vm.paginateOnTop ? _vm._t("pagination-top", [_c('vgt-pagination', {
+    ref: "paginationTop",
+    attrs: {
+      "perPage": _vm.perPage,
+      "rtl": _vm.rtl,
+      "total": _vm.totalRows || _vm.totalRowCount,
+      "mode": _vm.paginationMode,
+      "jumpFirstOrLast": _vm.paginationOptions.jumpFirstOrLast,
+      "firstText": _vm.firstText,
+      "lastText": _vm.lastText,
+      "nextText": _vm.nextText,
+      "prevText": _vm.prevText,
+      "rowsPerPageText": _vm.rowsPerPageText,
+      "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
+      "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
+      "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
+      "ofText": _vm.ofText,
+      "pageText": _vm.pageText,
+      "allText": _vm.allText,
+      "info-fn": _vm.paginationInfoFn
+    },
+    on: {
+      "page-changed": _vm.pageChanged,
+      "per-page-changed": _vm.perPageChanged
+    }
+  })], {
     "pageChanged": _vm.pageChanged,
     "perPageChanged": _vm.perPageChanged,
     "total": _vm.totalRows || _vm.totalRowCount
@@ -10024,9 +9975,7 @@ var __vue_render__$6 = function __vue_render__() {
     scopedSlots: _vm._u([{
       key: "table-column",
       fn: function fn(props) {
-        return [_vm._t("table-column", function () {
-          return [_c('span', [_vm._v(_vm._s(props.column.label))])];
-        }, {
+        return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
           "column": props.column
         })];
       }
@@ -10081,9 +10030,7 @@ var __vue_render__$6 = function __vue_render__() {
     scopedSlots: _vm._u([{
       key: "table-column",
       fn: function fn(props) {
-        return [_vm._t("table-column", function () {
-          return [_c('span', [_vm._v(_vm._s(props.column.label))])];
-        }, {
+        return [_vm._t("table-column", [_c('span', [_vm._v(_vm._s(props.column.label))])], {
           "column": props.column
         })];
       }
@@ -10162,16 +10109,16 @@ var __vue_render__$6 = function __vue_render__() {
             $event.stopPropagation();
             return _vm.onCheckboxClicked(row, index, $event);
           }
+        }
+      }, [_c('input', {
+        attrs: {
+          "type": "checkbox",
+          "disabled": row.vgtDisabled
         },
-        scopedSlots: _vm._u([{
-          key: "table-checkbox-column",
-          fn: function fn(props) {
-            return _vm.hasCheckboxColumnTemplate ? [_vm._t("table-checkbox-column", null, {
-              "row": props.row
-            })] : undefined;
-          }
-        }], null, true)
-      }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+        domProps: {
+          "checked": row.vgtSelected
+        }
+      })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
         return !column.hidden && column.field ? _c('td', {
           key: i,
           "class": _vm.getClasses(i, 'td', row),
@@ -10183,13 +10130,11 @@ var __vue_render__$6 = function __vue_render__() {
               return _vm.onCellClicked(row, column, index, $event);
             }
           }
-        }, [_vm._t("table-row", function () {
-          return [!column.html ? _c('span', [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")]) : _c('span', {
-            domProps: {
-              "innerHTML": _vm._s(_vm.collect(row, column.field))
-            }
-          })];
-        }, {
+        }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")]) : _c('span', {
+          domProps: {
+            "innerHTML": _vm._s(_vm.collect(row, column.field))
+          }
+        })], {
           "row": row,
           "column": column,
           "formattedRow": _vm.formattedRow(row),
@@ -10229,40 +10174,36 @@ var __vue_render__$6 = function __vue_render__() {
     attrs: {
       "colspan": _vm.fullColspan
     }
-  }, [_vm._t("emptystate", function () {
-    return [_c('div', {
-      staticClass: "vgt-center-align vgt-text-disabled"
-    }, [_vm._v("\n                  No data for table\n                ")])];
-  })], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
+  }, [_vm._t("emptystate", [_c('div', {
+    staticClass: "vgt-center-align vgt-text-disabled"
+  }, [_vm._v("\n                  No data for table\n                ")])])], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
     staticClass: "vgt-wrap__actions-footer"
-  }, [_vm._t("table-actions-bottom")], 2) : _vm._e(), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", function () {
-    return [_c('vgt-pagination', {
-      ref: "paginationBottom",
-      attrs: {
-        "perPage": _vm.perPage,
-        "rtl": _vm.rtl,
-        "total": _vm.totalRows || _vm.totalRowCount,
-        "mode": _vm.paginationMode,
-        "jumpFirstOrLast": _vm.paginationOptions.jumpFirstOrLast,
-        "firstText": _vm.firstText,
-        "lastText": _vm.lastText,
-        "nextText": _vm.nextText,
-        "prevText": _vm.prevText,
-        "rowsPerPageText": _vm.rowsPerPageText,
-        "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
-        "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
-        "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
-        "ofText": _vm.ofText,
-        "pageText": _vm.pageText,
-        "allText": _vm.allText,
-        "info-fn": _vm.paginationInfoFn
-      },
-      on: {
-        "page-changed": _vm.pageChanged,
-        "per-page-changed": _vm.perPageChanged
-      }
-    })];
-  }, {
+  }, [_vm._t("table-actions-bottom")], 2) : _vm._e(), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", [_c('vgt-pagination', {
+    ref: "paginationBottom",
+    attrs: {
+      "perPage": _vm.perPage,
+      "rtl": _vm.rtl,
+      "total": _vm.totalRows || _vm.totalRowCount,
+      "mode": _vm.paginationMode,
+      "jumpFirstOrLast": _vm.paginationOptions.jumpFirstOrLast,
+      "firstText": _vm.firstText,
+      "lastText": _vm.lastText,
+      "nextText": _vm.nextText,
+      "prevText": _vm.prevText,
+      "rowsPerPageText": _vm.rowsPerPageText,
+      "perPageDropdownEnabled": _vm.paginationOptions.perPageDropdownEnabled,
+      "customRowsPerPageDropdown": _vm.customRowsPerPageDropdown,
+      "paginateDropdownAllowAll": _vm.paginateDropdownAllowAll,
+      "ofText": _vm.ofText,
+      "pageText": _vm.pageText,
+      "allText": _vm.allText,
+      "info-fn": _vm.paginationInfoFn
+    },
+    on: {
+      "page-changed": _vm.pageChanged,
+      "per-page-changed": _vm.perPageChanged
+    }
+  })], {
     "pageChanged": _vm.pageChanged,
     "perPageChanged": _vm.perPageChanged,
     "total": _vm.totalRows || _vm.totalRowCount
