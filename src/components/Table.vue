@@ -236,11 +236,15 @@
                 @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
               >
-                <input
-                  type="checkbox"
-                  :disabled="row.vgtDisabled"
-                  :checked="row.vgtSelected"
-                />
+                <template v-if="hasCheckboxColumnTemplate">
+                  <slot v-slot="props" name="table-checkbox-column" :row="row"></slot>
+                </template>
+                  <input
+                      v-else
+                      type="checkbox"
+                      :disabled="row.vgtDisabled"
+                      :checked="row.vgtSelected"
+                  />
               </th>
               <td
                 @click="onCellClicked(row, column, index, $event)"
@@ -603,6 +607,13 @@ export default {
       );
     },
 
+    hasCheckboxColumnTemplate(){
+      return (
+          !!this.$slots['table-checkbox-column'] ||
+          !!this.$scopedSlots['table-checkbox-column']
+      );
+    },
+
     showEmptySlot() {
       if (!this.paginated.length) return true;
 
@@ -849,7 +860,7 @@ export default {
                 const column = this.getColumnForField(srt.field);
                 const xvalue = this.collect(xRow, srt.field);
                 const yvalue = this.collect(yRow, srt.field);
-  
+
                 //* if a custom sort function has been provided we use that
                 const { sortFn } = column;
                 if (sortFn && typeof sortFn === 'function') {
