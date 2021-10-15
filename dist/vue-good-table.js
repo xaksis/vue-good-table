@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.11
+ * vue-good-table v2.21.11-hiber.1
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8774,6 +8774,9 @@
       hasHeaderRowTemplate: function hasHeaderRowTemplate() {
         return !!this.$slots['table-header-row'] || !!this.$scopedSlots['table-header-row'];
       },
+      hasCheckboxColumnTemplate: function hasCheckboxColumnTemplate() {
+        return !!this.$slots['table-checkbox-column'] || !!this.$scopedSlots['table-checkbox-column'];
+      },
       showEmptySlot: function showEmptySlot() {
         if (!this.paginated.length) return true;
 
@@ -9601,6 +9604,7 @@
       getRowStyleClass: function getRowStyleClass(row) {
         var classes = '';
         if (this.hasRowClickListener) classes += 'clickable';
+        if (row.vgtSelected) classes += ' vgt-selected-row';
         var rowStyleClasses;
 
         if (typeof this.rowStyleClass === 'function') {
@@ -10112,7 +10116,9 @@
               return _vm.onCheckboxClicked(row, index, $event);
             }
           }
-        }, [_c('input', {
+        }, [_vm.hasCheckboxColumnTemplate ? [_vm._t("table-checkbox-column", null, {
+          "row": row
+        })] : _c('input', {
           attrs: {
             "type": "checkbox",
             "disabled": row.vgtDisabled
@@ -10120,7 +10126,7 @@
           domProps: {
             "checked": row.vgtSelected
           }
-        })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+        })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
           return !column.hidden && column.field ? _c('td', {
             key: i,
             "class": _vm.getClasses(i, 'td', row),
