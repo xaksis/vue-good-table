@@ -300,7 +300,7 @@
             </vgt-header-row>
           </tbody>
 
-          <tbody v-if="showEmptySlot">
+          <tbody v-if="showEmptySlot" class='vgt-empty-body'>
             <tr>
               <td :colspan="fullColspan">
                 <slot name="emptystate">
