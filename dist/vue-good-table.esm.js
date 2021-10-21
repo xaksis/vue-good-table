@@ -10172,7 +10172,9 @@ var __vue_render__$6 = function __vue_render__() {
         }
       }], null, true)
     }) : _vm._e()], 2);
-  }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', [_c('tr', [_c('td', {
+  }), _vm._v(" "), _vm.showEmptySlot ? _c('tbody', {
+    staticClass: "vgt-empty-body"
+  }, [_c('tr', [_c('td', {
     attrs: {
       "colspan": _vm.fullColspan
     }
