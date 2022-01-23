@@ -249,6 +249,7 @@
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
                 v-bind:data-label="compactMode ? column.label : undefined"
+                :colspan="getColSpan(i,column,row)"
               >
                 <slot
                   name="table-row"
@@ -1312,6 +1313,16 @@ export default {
       }
       return formattedRow;
     },
+    
+    //col span
+    getColSpan(index, column, row){
+       if(typeof column.colspan == "function"){
+          return column.colspan(row);
+       }else if(typeof column.colspan != "undefined"){
+          return column.colspan;
+       }
+       return 1;
+    }
 
     // Get classes for the given column index & element.
     getClasses(index, element, row) {
