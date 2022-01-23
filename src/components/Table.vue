@@ -1317,7 +1317,7 @@ export default {
     //col span
     getColSpan(index, column, row){
        if(typeof column.colspan == "function"){
-          return column.colspan(row);
+          return column.colspan(index,row);
        }else if(typeof column.colspan != "undefined"){
           return column.colspan;
        }
