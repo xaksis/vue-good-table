@@ -49,7 +49,7 @@
     "@vuepress/plugin-google-analytics": "^1.0.0-rc.1",
     "bili": "^4.8.0",
     "eslint-config-airbnb": "^18.2.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "poi": "^12.7.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-vue": "^5.1.9",
