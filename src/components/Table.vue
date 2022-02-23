@@ -1064,10 +1064,19 @@ export default {
         });
       });
       this.emitSelectedRows();
+      this.$nextTick( () => this.setSelectAllChecked(false) );
+    },
+
+    selectAllChecked(){
+      return this.$refs['table-header-primary'].$refs.checkbox.checked
+    },
+
+    setSelectAllChecked(checked){
+      this.$refs['table-header-primary'].$refs.checkbox.checked = checked
     },
 
     toggleSelectAll() {
-      if (this.allSelected) {
+      if (this.allSelected || !this.selectAllChecked()) {
         this.unselectAllInternal();
         return;
       }

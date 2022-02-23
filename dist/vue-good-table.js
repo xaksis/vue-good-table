@@ -3516,6 +3516,7 @@
         "scope": "col"
       }
     }, [_c('input', {
+      ref: "checkbox",
       attrs: {
         "type": "checkbox"
       },
@@ -9210,11 +9211,20 @@
           });
         });
         this.emitSelectedRows();
+        this.$nextTick(function () {
+          return _this6.setSelectAllChecked(false);
+        });
+      },
+      selectAllChecked: function selectAllChecked() {
+        return this.$refs['table-header-primary'].$refs.checkbox.checked;
+      },
+      setSelectAllChecked: function setSelectAllChecked(checked) {
+        this.$refs['table-header-primary'].$refs.checkbox.checked = checked;
       },
       toggleSelectAll: function toggleSelectAll() {
         var _this7 = this;
 
-        if (this.allSelected) {
+        if (this.allSelected || !this.selectAllChecked()) {
           this.unselectAllInternal();
           return;
         }

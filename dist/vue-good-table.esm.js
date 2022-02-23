@@ -3510,6 +3510,7 @@ var __vue_render__$4 = function __vue_render__() {
       "scope": "col"
     }
   }, [_c('input', {
+    ref: "checkbox",
     attrs: {
       "type": "checkbox"
     },
@@ -9204,11 +9205,20 @@ var script$6 = {
         });
       });
       this.emitSelectedRows();
+      this.$nextTick(function () {
+        return _this6.setSelectAllChecked(false);
+      });
+    },
+    selectAllChecked: function selectAllChecked() {
+      return this.$refs['table-header-primary'].$refs.checkbox.checked;
+    },
+    setSelectAllChecked: function setSelectAllChecked(checked) {
+      this.$refs['table-header-primary'].$refs.checkbox.checked = checked;
     },
     toggleSelectAll: function toggleSelectAll() {
       var _this7 = this;
 
-      if (this.allSelected) {
+      if (this.allSelected || !this.selectAllChecked()) {
         this.unselectAllInternal();
         return;
       }
