@@ -1073,7 +1073,7 @@ export default {
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach((headerRow) => {
-        headerRow.children.forEach((row) => {
+        headerRow.children.filter( (row) => !row.vgtDisabled ).forEach((row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });

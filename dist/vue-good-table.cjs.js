@@ -9219,7 +9219,9 @@ var script$6 = {
 
       var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach(function (headerRow) {
-        headerRow.children.forEach(function (row) {
+        headerRow.children.filter(function (row) {
+          return !row.vgtDisabled;
+        }).forEach(function (row) {
           _this7.$set(row, 'vgtSelected', true);
         });
       });
