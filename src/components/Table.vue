@@ -1159,6 +1159,7 @@ export default {
 
     // checkbox click should always do the following
     onCheckboxClicked(row, index, event) {
+      if( row.vgtDisabled ) return;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row,
