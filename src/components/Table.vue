@@ -1064,7 +1064,7 @@ export default {
         });
       });
       this.emitSelectedRows();
-      this.$nextTick( () => this.setSelectAllChecked(false) );
+      this.setSelectAllChecked(false);
     },
 
     selectAllChecked(){
@@ -1072,7 +1072,9 @@ export default {
     },
 
     setSelectAllChecked(checked){
-      this.$refs['table-header-primary'].$refs.checkbox.checked = checked
+      if( this.$refs['table-header-primary'] && this.$refs['table-header-primary'].$refs.checkbox ){
+        this.$refs['table-header-primary'].$refs.checkbox.checked = checked
+      }
     },
 
     toggleSelectAll() {

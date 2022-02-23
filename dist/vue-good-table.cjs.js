@@ -9209,15 +9209,15 @@ var script$6 = {
         });
       });
       this.emitSelectedRows();
-      this.$nextTick(function () {
-        return _this6.setSelectAllChecked(false);
-      });
+      this.setSelectAllChecked(false);
     },
     selectAllChecked: function selectAllChecked() {
       return this.$refs['table-header-primary'].$refs.checkbox.checked;
     },
     setSelectAllChecked: function setSelectAllChecked(checked) {
-      this.$refs['table-header-primary'].$refs.checkbox.checked = checked;
+      if (this.$refs['table-header-primary'] && this.$refs['table-header-primary'].$refs.checkbox) {
+        this.$refs['table-header-primary'].$refs.checkbox.checked = checked;
+      }
     },
     toggleSelectAll: function toggleSelectAll() {
       var _this7 = this;
