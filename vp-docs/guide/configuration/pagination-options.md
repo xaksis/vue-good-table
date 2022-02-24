@@ -93,7 +93,7 @@ For tables that may have many pages, 'pages' mode offers the ability to jump to 
 
 type: `String (default: 'bottom')`
 
-Add pagination on 'top' or 'bottom' (top and bottom) of the table (default position is bottom)
+Add pagination on 'top', 'bottom', or both (top and bottom) of the table (default position is bottom)
 ```html
 <vue-good-table
   :columns="columns"
