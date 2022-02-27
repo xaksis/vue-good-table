@@ -5,6 +5,7 @@
     <th scope="col" v-if="selectable" class="vgt-checkbox-col">
       <input
         type="checkbox"
+        ref="checkbox"
         :checked="allSelected"
         :indeterminate.prop="allSelectedIndeterminate"
         @change="toggleSelectAll" />

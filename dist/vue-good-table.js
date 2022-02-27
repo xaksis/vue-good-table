@@ -3516,6 +3516,7 @@
         "scope": "col"
       }
     }, [_c('input', {
+      ref: "checkbox",
       attrs: {
         "type": "checkbox"
       },
@@ -9210,18 +9211,29 @@
           });
         });
         this.emitSelectedRows();
+        this.setSelectAllChecked(false);
+      },
+      selectAllChecked: function selectAllChecked() {
+        return this.$refs['table-header-primary'].$refs.checkbox.checked;
+      },
+      setSelectAllChecked: function setSelectAllChecked(checked) {
+        if (this.$refs['table-header-primary'] && this.$refs['table-header-primary'].$refs.checkbox) {
+          this.$refs['table-header-primary'].$refs.checkbox.checked = checked;
+        }
       },
       toggleSelectAll: function toggleSelectAll() {
         var _this7 = this;
 
-        if (this.allSelected) {
+        if (this.allSelected || !this.selectAllChecked()) {
           this.unselectAllInternal();
           return;
         }
 
         var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
         rows.forEach(function (headerRow) {
-          headerRow.children.forEach(function (row) {
+          headerRow.children.filter(function (row) {
+            return !row.vgtDisabled;
+          }).forEach(function (row) {
             _this7.$set(row, 'vgtSelected', true);
           });
         });
@@ -9312,6 +9324,7 @@
       },
       // checkbox click should always do the following
       onCheckboxClicked: function onCheckboxClicked(row, index, event) {
+        if (row.vgtDisabled) return;
         this.$set(row, 'vgtSelected', !row.vgtSelected);
         this.$emit('on-row-click', {
           row: row,

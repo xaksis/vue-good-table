@@ -1064,16 +1064,27 @@ export default {
         });
       });
       this.emitSelectedRows();
+      this.setSelectAllChecked(false);
+    },
+
+    selectAllChecked(){
+      return this.$refs['table-header-primary'].$refs.checkbox.checked
+    },
+
+    setSelectAllChecked(checked){
+      if( this.$refs['table-header-primary'] && this.$refs['table-header-primary'].$refs.checkbox ){
+        this.$refs['table-header-primary'].$refs.checkbox.checked = checked
+      }
     },
 
     toggleSelectAll() {
-      if (this.allSelected) {
+      if (this.allSelected || !this.selectAllChecked()) {
         this.unselectAllInternal();
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach((headerRow) => {
-        headerRow.children.forEach((row) => {
+        headerRow.children.filter( (row) => !row.vgtDisabled ).forEach((row) => {
           this.$set(row, 'vgtSelected', true);
         });
       });
@@ -1159,6 +1170,7 @@ export default {
 
     // checkbox click should always do the following
     onCheckboxClicked(row, index, event) {
+      if( row.vgtDisabled ) return;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row,
