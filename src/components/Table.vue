@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="wrapStyleClasses">
+      :class="wrapStyleClasses">
     <div v-if="isLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
         <span class="vgt-loading__content">
@@ -9,43 +9,43 @@
       </slot>
     </div>
     <div class="vgt-inner-wrap"
-      :class="{'is-loading': isLoading}">
+         :class="{'is-loading': isLoading}">
       <slot
-        v-if="paginate && paginateOnTop"
-        name="pagination-top"
-        :pageChanged="pageChanged"
-        :perPageChanged="perPageChanged"
-        :total="totalRows || totalRowCount"
+          v-if="paginate && paginateOnTop"
+          name="pagination-top"
+          :pageChanged="pageChanged"
+          :perPageChanged="perPageChanged"
+          :total="totalRows || totalRowCount"
       >
         <vgt-pagination
-          ref="paginationTop"
-          @page-changed="pageChanged"
-          @per-page-changed="perPageChanged"
-          :perPage="perPage"
-          :rtl="rtl"
-          :total="totalRows || totalRowCount"
-          :mode="paginationMode"
-          :jumpFirstOrLast="paginationOptions.jumpFirstOrLast"
-          :firstText="firstText"
-          :lastText="lastText"
-          :nextText="nextText"
-          :prevText="prevText"
-          :rowsPerPageText="rowsPerPageText"
-          :perPageDropdownEnabled="paginationOptions.perPageDropdownEnabled"
-          :customRowsPerPageDropdown="customRowsPerPageDropdown"
-          :paginateDropdownAllowAll="paginateDropdownAllowAll"
-          :ofText="ofText"
-          :pageText="pageText"
-          :allText="allText"
-          :info-fn="paginationInfoFn"
+            ref="paginationTop"
+            @page-changed="pageChanged"
+            @per-page-changed="perPageChanged"
+            :perPage="perPage"
+            :rtl="rtl"
+            :total="totalRows || totalRowCount"
+            :mode="paginationMode"
+            :jumpFirstOrLast="paginationOptions.jumpFirstOrLast"
+            :firstText="firstText"
+            :lastText="lastText"
+            :nextText="nextText"
+            :prevText="prevText"
+            :rowsPerPageText="rowsPerPageText"
+            :perPageDropdownEnabled="paginationOptions.perPageDropdownEnabled"
+            :customRowsPerPageDropdown="customRowsPerPageDropdown"
+            :paginateDropdownAllowAll="paginateDropdownAllowAll"
+            :ofText="ofText"
+            :pageText="pageText"
+            :allText="allText"
+            :info-fn="paginationInfoFn"
         ></vgt-pagination>
       </slot>
       <vgt-global-search
-        @on-keyup="searchTableOnKeyUp"
-        @on-enter="searchTableOnEnter"
-        v-model="globalSearchTerm"
-        :search-enabled="searchEnabled && externalSearchQuery == null"
-        :global-search-placeholder="searchPlaceholder"
+          @on-keyup="searchTableOnKeyUp"
+          @on-enter="searchTableOnEnter"
+          v-model="globalSearchTerm"
+          :search-enabled="searchEnabled && externalSearchQuery == null"
+          :global-search-placeholder="searchPlaceholder"
       >
         <template slot="internal-table-actions">
           <slot name="table-actions">
@@ -53,16 +53,16 @@
         </template>
       </vgt-global-search>
       <div
-        v-if="selectedRowCount && !disableSelectInfo"
-        class="vgt-selection-info-row clearfix"
-        :class="selectionInfoClass"
+          v-if="selectedRowCount && !disableSelectInfo"
+          class="vgt-selection-info-row clearfix"
+          :class="selectionInfoClass"
       >
-        {{selectionInfo}}
+        {{ selectionInfo }}
         <a
-          href=""
-          @click.prevent="unselectAllInternal(true)"
+            href=""
+            @click.prevent="unselectAllInternal(true)"
         >
-          {{clearSelectionText}}
+          {{ clearSelectionText }}
         </a>
         <div class="vgt-selection-info-row__actions vgt-pull-right">
           <slot name="selected-row-actions">
@@ -71,119 +71,119 @@
       </div>
       <div class="vgt-fixed-header">
         <table
-          id="vgt-table"
-          v-if="fixedHeader"
-          :class="tableStyleClasses"
+            id="vgt-table"
+            v-if="fixedHeader"
+            :class="tableStyleClasses"
         >
-        <colgroup>
-          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
-        </colgroup>
+          <colgroup>
+            <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+          </colgroup>
           <!-- Table header -->
           <thead
-            is="vgt-table-header"
-            ref="table-header-secondary"
-            @on-toggle-select-all="toggleSelectAll"
-            @on-sort-change="changeSort"
-            @filter-changed="filterRows"
-            :columns="columns"
-            :line-numbers="lineNumbers"
-            :selectable="selectable"
-            :all-selected="allSelected"
-            :all-selected-indeterminate="allSelectedIndeterminate"
-            :mode="mode"
-            :sortable="sortable"
-            :multiple-column-sort="multipleColumnSort"
-            :typed-columns="typedColumns"
-            :getClasses="getClasses"
-            :searchEnabled="searchEnabled"
-            :paginated="paginated"
-            :table-ref="$refs.table"
+              is="vgt-table-header"
+              ref="table-header-secondary"
+              @on-toggle-select-all="toggleSelectAll"
+              @on-sort-change="changeSort"
+              @filter-changed="filterRows"
+              :columns="columns"
+              :line-numbers="lineNumbers"
+              :selectable="selectable"
+              :all-selected="allSelected"
+              :all-selected-indeterminate="allSelectedIndeterminate"
+              :mode="mode"
+              :sortable="sortable"
+              :multiple-column-sort="multipleColumnSort"
+              :typed-columns="typedColumns"
+              :getClasses="getClasses"
+              :searchEnabled="searchEnabled"
+              :paginated="paginated"
+              :table-ref="$refs.table"
           >
-            <template
+          <template
               slot="table-column"
               slot-scope="props"
-            >
-              <slot
+          >
+            <slot
                 name="table-column"
                 :column="props.column"
-              >
-                <span>{{props.column.label}}</span>
-              </slot>
-            </template>
-            <template
-                slot="column-filter"
-                slot-scope="props"
             >
-              <slot
-                  name="column-filter"
-                  :column="props.column"
-                  :updateFilters="props.updateFilters"
-              ></slot>
-            </template>
+              <span>{{ props.column.label }}</span>
+            </slot>
+          </template>
+          <template
+              slot="column-filter"
+              slot-scope="props"
+          >
+            <slot
+                name="column-filter"
+                :column="props.column"
+                :updateFilters="props.updateFilters"
+            ></slot>
+          </template>
           </thead>
         </table>
       </div>
       <div
-        :class="{'vgt-responsive': responsive}"
-        :style="wrapperStyles"
+          :class="{'vgt-responsive': responsive}"
+          :style="wrapperStyles"
       >
         <table
-          id="vgt-table"
-          ref="table"
-          :class="tableStyles"
+            id="vgt-table"
+            ref="table"
+            :class="tableStyles"
         >
-        <colgroup>
-          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
-        </colgroup>
+          <colgroup>
+            <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+          </colgroup>
           <!-- Table header -->
           <thead
-            is="vgt-table-header"
-            ref="table-header-primary"
-            @on-toggle-select-all="toggleSelectAll"
-            @on-sort-change="changeSort"
-            @filter-changed="filterRows"
-            :columns="columns"
-            :line-numbers="lineNumbers"
-            :selectable="selectable"
-            :all-selected="allSelected"
-            :all-selected-indeterminate="allSelectedIndeterminate"
-            :mode="mode"
-            :sortable="sortable"
-            :multiple-column-sort="multipleColumnSort"
-            :typed-columns="typedColumns"
-            :getClasses="getClasses"
-            :searchEnabled="searchEnabled"
+              is="vgt-table-header"
+              ref="table-header-primary"
+              @on-toggle-select-all="toggleSelectAll"
+              @on-sort-change="changeSort"
+              @filter-changed="filterRows"
+              :columns="columns"
+              :line-numbers="lineNumbers"
+              :selectable="selectable"
+              :all-selected="allSelected"
+              :all-selected-indeterminate="allSelectedIndeterminate"
+              :mode="mode"
+              :sortable="sortable"
+              :multiple-column-sort="multipleColumnSort"
+              :typed-columns="typedColumns"
+              :getClasses="getClasses"
+              :searchEnabled="searchEnabled"
           >
-            <template
+          <template
               slot="table-column"
               slot-scope="props"
-            >
-              <slot
+          >
+            <slot
                 name="table-column"
                 :column="props.column"
-              >
-                <span>{{props.column.label}}</span>
-              </slot>
-            </template>
-            <template
+            >
+              <span>{{ props.column.label }}</span>
+            </slot>
+          </template>
+          <template
               slot="column-filter"
               slot-scope="props"
-            >
-              <slot
+          >
+            <slot
                 name="column-filter"
                 :column="props.column"
                 :updateFilters="props.updateFilters"
-              ></slot>
-            </template>
+            ></slot>
+          </template>
           </thead>
 
           <!-- Table body starts here -->
           <tbody
-            v-for="(headerRow, hIndex) in paginated"
-            :key="hIndex"
+              v-for="(headerRow, hIndex) in paginated"
+              :key="hIndex"
           >
-            <!-- if group row header is at the top -->
-            <vgt-header-row
+          <!-- if group row header is at the top -->
+          <vgt-header-row
               v-if="groupHeaderOnTop"
               @vgtExpand="toggleExpand(headerRow[rowKeyField])"
               :header-row="headerRow"
@@ -199,23 +199,23 @@
               :full-colspan="fullColspan"
               :groupIndex="hIndex"
               @on-select-group-change="toggleSelectGroup($event, headerRow)"
-            >
-              <template
+          >
+            <template
                 v-if="hasHeaderRowTemplate"
                 slot="table-header-row"
                 slot-scope="props"
-              >
-                <slot
+            >
+              <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                >
-                </slot>
-              </template>
-            </vgt-header-row>
-            <!-- normal rows here. we loop over all rows -->
-            <tr
+              >
+              </slot>
+            </template>
+          </vgt-header-row>
+          <!-- normal rows here. we loop over all rows -->
+          <tr
               v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
               v-for="(row, index) in headerRow.children"
               :key="row.originalIndex"
@@ -225,52 +225,52 @@
               @dblclick="onRowDoubleClicked(row, index, $event)"
               @click="onRowClicked(row, index, $event)"
               @auxclick="onRowAuxClicked(row, index, $event)">
-              <th
+            <th
                 v-if="lineNumbers"
                 class="line-numbers"
-              >
-                {{ getCurrentIndex(row.originalIndex) }}
-              </th>
-              <th
+            >
+              {{ getCurrentIndex(row.originalIndex) }}
+            </th>
+            <th
                 v-if="selectable"
                 @click.stop="onCheckboxClicked(row, index, $event)"
                 class="vgt-checkbox-col"
-              >
-                <template v-if="hasCheckboxColumnTemplate">
-                  <slot v-slot="props" name="table-checkbox-column" :row="row"></slot>
-                </template>
-                  <input
-                      v-else
-                      type="checkbox"
-                      :disabled="row.vgtDisabled"
-                      :checked="row.vgtSelected"
-                  />
-              </th>
-              <td
+            >
+              <template v-if="hasCheckboxColumnTemplate">
+                <slot v-slot="props" name="table-checkbox-column" :row="row"></slot>
+              </template>
+              <input
+                  v-else
+                  type="checkbox"
+                  :disabled="row.vgtDisabled"
+                  :checked="row.vgtSelected"
+              />
+            </th>
+            <td
                 @click="onCellClicked(row, column, index, $event)"
                 v-for="(column, i) in columns"
                 :key="i"
                 :class="getClasses(i, 'td', row)"
                 v-if="!column.hidden && column.field"
                 v-bind:data-label="compactMode ? column.label : undefined"
-              >
-                <slot
+            >
+              <slot
                   name="table-row"
                   :row="row"
                   :column="column"
                   :formattedRow="formattedRow(row)"
                   :index="index"
-                >
+              >
                   <span v-if="!column.html">
                     {{ collectFormatted(row, column) }}
                   </span>
-                  <span v-else v-html="collect(row, column.field)">
+                <span v-else v-html="collect(row, column.field)">
                   </span>
-                </slot>
-              </td>
-            </tr>
-            <!-- if group row header is at the bottom -->
-            <vgt-header-row
+              </slot>
+            </td>
+          </tr>
+          <!-- if group row header is at the bottom -->
+          <vgt-header-row
               v-if="groupHeaderOnBottom"
               :header-row="headerRow"
               :columns="columns"
@@ -283,33 +283,33 @@
               :full-colspan="fullColspan"
               :groupIndex="index"
               @on-select-group-change="toggleSelectGroup($event, headerRow)"
-            >
-              <template
+          >
+            <template
                 v-if="hasHeaderRowTemplate"
                 slot="table-header-row"
                 slot-scope="props"
-              >
-                <slot
+            >
+              <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                >
-                </slot>
-              </template>
-            </vgt-header-row>
+              >
+              </slot>
+            </template>
+          </vgt-header-row>
           </tbody>
 
           <tbody v-if="showEmptySlot" class='vgt-empty-body'>
-            <tr>
-              <td :colspan="fullColspan">
-                <slot name="emptystate">
-                  <div class="vgt-center-align vgt-text-disabled">
-                    No data for table
-                  </div>
-                </slot>
-              </td>
-            </tr>
+          <tr>
+            <td :colspan="fullColspan">
+              <slot name="emptystate">
+                <div class="vgt-center-align vgt-text-disabled">
+                  No data for table
+                </div>
+              </slot>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -318,33 +318,33 @@
         </slot>
       </div>
       <slot
-        v-if="paginate && paginateOnBottom"
-        name="pagination-bottom"
-        :pageChanged="pageChanged"
-        :perPageChanged="perPageChanged"
-        :total="totalRows || totalRowCount"
+          v-if="paginate && paginateOnBottom"
+          name="pagination-bottom"
+          :pageChanged="pageChanged"
+          :perPageChanged="perPageChanged"
+          :total="totalRows || totalRowCount"
       >
         <vgt-pagination
-          ref="paginationBottom"
-          @page-changed="pageChanged"
-          @per-page-changed="perPageChanged"
-          :perPage="perPage"
-          :rtl="rtl"
-          :total="totalRows || totalRowCount"
-          :mode="paginationMode"
-          :jumpFirstOrLast="paginationOptions.jumpFirstOrLast"
-          :firstText="firstText"
-          :lastText="lastText"
-          :nextText="nextText"
-          :prevText="prevText"
-          :rowsPerPageText="rowsPerPageText"
-          :perPageDropdownEnabled="paginationOptions.perPageDropdownEnabled"
-          :customRowsPerPageDropdown="customRowsPerPageDropdown"
-          :paginateDropdownAllowAll="paginateDropdownAllowAll"
-          :ofText="ofText"
-          :pageText="pageText"
-          :allText="allText"
-          :info-fn="paginationInfoFn"
+            ref="paginationBottom"
+            @page-changed="pageChanged"
+            @per-page-changed="perPageChanged"
+            :perPage="perPage"
+            :rtl="rtl"
+            :total="totalRows || totalRowCount"
+            :mode="paginationMode"
+            :jumpFirstOrLast="paginationOptions.jumpFirstOrLast"
+            :firstText="firstText"
+            :lastText="lastText"
+            :nextText="nextText"
+            :prevText="prevText"
+            :rowsPerPageText="rowsPerPageText"
+            :perPageDropdownEnabled="paginationOptions.perPageDropdownEnabled"
+            :customRowsPerPageDropdown="customRowsPerPageDropdown"
+            :paginateDropdownAllowAll="paginateDropdownAllowAll"
+            :ofText="ofText"
+            :pageText="pageText"
+            :allText="allText"
+            :info-fn="paginationInfoFn"
         ></vgt-pagination>
       </slot>
     </div>
@@ -378,7 +378,7 @@ export default {
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: Boolean ,
+    fixedHeader: Boolean,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
@@ -386,7 +386,7 @@ export default {
     columns: {},
     rows: {},
     lineNumbers: Boolean,
-    responsive: { default: true , type: Boolean },
+    responsive: { default: true, type: Boolean },
     rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
     compactMode: Boolean,
@@ -396,7 +396,7 @@ export default {
         return {
           enabled: false,
           collapsable: false,
-          rowKey: null
+          rowKey: null,
         };
       },
     },
@@ -438,7 +438,7 @@ export default {
           dropdownAllowAll: true,
           mode: 'records', // or pages
           infoFn: null,
-          jumpFirstOrLast : false
+          jumpFirstOrLast: false,
         };
       },
     },
@@ -461,8 +461,8 @@ export default {
     tableLoading: false,
 
     // text options
-    firstText: "First",
-    lastText: "Last",
+    firstText: 'First',
+    lastText: 'Last',
     nextText: 'Next',
     prevText: 'Previous',
     rowsPerPageText: 'Rows per page',
@@ -548,8 +548,8 @@ export default {
     searchOptions: {
       handler() {
         if (
-          this.searchOptions.externalQuery !== undefined &&
-          this.searchOptions.externalQuery !== this.searchTerm
+            this.searchOptions.externalQuery !== undefined &&
+            this.searchOptions.externalQuery !== this.searchTerm
         ) {
           //* we need to set searchTerm to externalQuery first.
           this.externalSearchQuery = this.searchOptions.externalQuery;
@@ -582,9 +582,9 @@ export default {
   computed: {
     tableStyles() {
       if (this.compactMode)
-        return this.tableStyleClasses + 'vgt-compact'
+        return this.tableStyleClasses + 'vgt-compact';
       else
-        return this.tableStyleClasses
+        return this.tableStyleClasses;
     },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
@@ -602,12 +602,12 @@ export default {
 
     hasHeaderRowTemplate() {
       return (
-        !!this.$slots['table-header-row'] ||
-        !!this.$scopedSlots['table-header-row']
+          !!this.$slots['table-header-row'] ||
+          !!this.$scopedSlots['table-header-row']
       );
     },
 
-    hasCheckboxColumnTemplate(){
+    hasCheckboxColumnTemplate() {
       return (
           !!this.$slots['table-checkbox-column'] ||
           !!this.$scopedSlots['table-checkbox-column']
@@ -618,8 +618,8 @@ export default {
       if (!this.paginated.length) return true;
 
       if (
-        this.paginated[0].label === 'no groups' &&
-        !this.paginated[0].children.length
+          this.paginated[0].label === 'no groups' &&
+          !this.paginated[0].children.length
       ) {
         return true;
       }
@@ -629,19 +629,19 @@ export default {
 
     allSelected() {
       return (
-        this.selectedRowCount > 0 &&
-        ((this.selectAllByPage &&
-          this.selectedPageRowsCount === this.totalPageRowCount) ||
-          (!this.selectAllByPage &&
-            this.selectedRowCount === this.totalRowCount))
+          this.selectedRowCount > 0 &&
+          ((this.selectAllByPage &&
+                  this.selectedPageRowsCount === this.totalPageRowCount) ||
+              (!this.selectAllByPage &&
+                  this.selectedRowCount === this.totalRowCount))
       );
     },
 
     allSelectedIndeterminate() {
       return (
-        !this.allSelected &&
-        ((this.selectAllByPage && this.selectedPageRowsCount > 0) ||
-          (!this.selectAllByPage && this.selectedRowCount > 0))
+          !this.allSelected &&
+          ((this.selectAllByPage && this.selectedPageRowsCount > 0) ||
+              (!this.selectAllByPage && this.selectedRowCount > 0))
       );
     },
 
@@ -694,10 +694,10 @@ export default {
     },
     groupHeaderOnTop() {
       if (
-        this.groupOptions &&
-        this.groupOptions.enabled &&
-        this.groupOptions.headerPosition &&
-        this.groupOptions.headerPosition === 'bottom'
+          this.groupOptions &&
+          this.groupOptions.enabled &&
+          this.groupOptions.headerPosition &&
+          this.groupOptions.headerPosition === 'bottom'
       ) {
         return false;
       }
@@ -708,10 +708,10 @@ export default {
     },
     groupHeaderOnBottom() {
       if (
-        this.groupOptions &&
-        this.groupOptions.enabled &&
-        this.groupOptions.headerPosition &&
-        this.groupOptions.headerPosition === 'bottom'
+          this.groupOptions &&
+          this.groupOptions.enabled &&
+          this.groupOptions.headerPosition &&
+          this.groupOptions.headerPosition === 'bottom'
       ) {
         return true;
       }
@@ -745,16 +745,16 @@ export default {
 
     searchTerm() {
       return this.externalSearchQuery != null
-        ? this.externalSearchQuery
-        : this.globalSearchTerm;
+          ? this.externalSearchQuery
+          : this.globalSearchTerm;
     },
 
     //
     globalSearchAllowed() {
       if (
-        this.searchEnabled &&
-        !!this.globalSearchTerm &&
-        this.searchTrigger !== 'enter'
+          this.searchEnabled &&
+          !!this.globalSearchTerm &&
+          this.searchTrigger !== 'enter'
       ) {
         return true;
       }
@@ -800,10 +800,10 @@ export default {
               // use the default search behavior
               if (this.searchFn) {
                 const foundMatch = this.searchFn(
-                  row,
-                  col,
-                  this.collectFormatted(row, col),
-                  this.searchTerm
+                    row,
+                    col,
+                    this.collectFormatted(row, col),
+                    this.searchTerm,
                 );
                 if (foundMatch) {
                   filteredRows.push(row);
@@ -812,9 +812,9 @@ export default {
               } else {
                 // comparison
                 const matched = defaultType.filterPredicate(
-                  this.collectFormatted(row, col),
-                  this.searchTerm,
-                  this.searchSkipDiacritics
+                    this.collectFormatted(row, col),
+                    this.searchTerm,
+                    this.searchSkipDiacritics,
                 );
                 if (matched) {
                   filteredRows.push(row);
@@ -856,7 +856,7 @@ export default {
               if (srt.type === SORT_TYPES.None) {
                 //* if no sort, we need to use the original index to sort.
                 sortValue = sortValue || (xRow.originalIndex - yRow.originalIndex);
-              } else{
+              } else {
                 const column = this.getColumnForField(srt.field);
                 const xvalue = this.collect(xRow, srt.field);
                 const yvalue = this.collect(yRow, srt.field);
@@ -865,14 +865,14 @@ export default {
                 const { sortFn } = column;
                 if (sortFn && typeof sortFn === 'function') {
                   sortValue =
-                    sortValue ||
-                    sortFn(xvalue, yvalue, column, xRow, yRow) *
+                      sortValue ||
+                      sortFn(xvalue, yvalue, column, xRow, yRow) *
                       (srt.type === SORT_TYPES.Descending ? -1 : 1);
                 } else {
                   //* else we use our own sort
                   sortValue =
-                    sortValue ||
-                    column.typeDef.compare(xvalue, yvalue, column) *
+                      sortValue ||
+                      column.typeDef.compare(xvalue, yvalue, column) *
                       (srt.type === SORT_TYPES.Descending ? -1 : 1);
                 }
               }
@@ -999,7 +999,7 @@ export default {
     //* to maintain it when sorting/filtering
     handleExpanded(headerRow) {
       if (this.maintainExpanded &&
-        this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
+          this.expandedRowKeys.has(headerRow[this.rowKeyField])) {
         this.$set(headerRow, 'vgtIsExpanded', true);
       } else {
         this.$set(headerRow, 'vgtIsExpanded', false);
@@ -1011,7 +1011,7 @@ export default {
         this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
       if (this.maintainExpanded
-        && headerRow.vgtIsExpanded) {
+          && headerRow.vgtIsExpanded) {
         this.expandedRowKeys.add(headerRow[this.rowKeyField]);
       } else {
         this.expandedRowKeys.delete(headerRow[this.rowKeyField]);
@@ -1068,7 +1068,7 @@ export default {
 
     unselectAllInternal(forceAll) {
       const rows =
-        this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
+          this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
       rows.forEach((headerRow, i) => {
         headerRow.children.forEach((row, j) => {
           this.$set(row, 'vgtSelected', false);
@@ -1099,13 +1099,13 @@ export default {
 
     changePage(value) {
       const enabled = this.paginate;
-      let { paginationBottom, paginationTop } = this.$refs
+      let { paginationBottom, paginationTop } = this.$refs;
       if (enabled) {
         if (this.paginateOnTop && paginationTop) {
-          paginationTop.currentPage = value
+          paginationTop.currentPage = value;
         }
         if (this.paginateOnBottom && paginationBottom) {
-          paginationBottom.currentPage = value
+          paginationBottom.currentPage = value;
         }
         // we also need to set the currentPage
         // for table.
@@ -1137,12 +1137,12 @@ export default {
       this.currentPerPage = pagination.currentPerPage;
       // ensure that both sides of pagination are in agreement
       // this fixes changes during position = 'both'
-      let paginationPosition = this.paginationOptions.position
+      let paginationPosition = this.paginationOptions.position;
       if (this.$refs.paginationTop && (paginationPosition === 'top' || paginationPosition === 'both')) {
-        this.$refs.paginationTop.currentPerPage = this.currentPerPage
+        this.$refs.paginationTop.currentPerPage = this.currentPerPage;
       }
       if (this.$refs.paginationBottom && (paginationPosition === 'bottom' || paginationPosition === 'both')) {
-        this.$refs.paginationBottom.currentPerPage = this.currentPerPage
+        this.$refs.paginationBottom.currentPerPage = this.currentPerPage;
       }
       //* update perPage also
       const perPageChangedEvent = this.pageChangedEvent();
@@ -1315,9 +1315,9 @@ export default {
         // what happens if field is
         if (col.field) {
           formattedRow[col.field] = this.collectFormatted(
-            row,
-            col,
-            isHeaderRow
+              row,
+              col,
+              isHeaderRow,
           );
         }
       }
@@ -1385,11 +1385,11 @@ export default {
         }
 
         const fieldKey = (field) => {
-          if (typeof(field) === 'function' && field.name) {
+          if (typeof (field) === 'function' && field.name) {
             return field.name;
           }
           return field;
-        }
+        };
 
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
@@ -1400,23 +1400,23 @@ export default {
               const newChildren = headerRow.children.filter((row) => {
                 // If column has a custom filter, use that.
                 if (
-                  col.filterOptions &&
-                  typeof col.filterOptions.filterFn === 'function'
+                    col.filterOptions &&
+                    typeof col.filterOptions.filterFn === 'function'
                 ) {
                   return col.filterOptions.filterFn(
-                    this.collect(row, col.field),
-                    this.columnFilters[fieldKey(col.field)]
+                      this.collect(row, col.field),
+                      this.columnFilters[fieldKey(col.field)],
                   );
                 }
 
                 // Otherwise Use default filters
                 const { typeDef } = col;
                 return typeDef.filterPredicate(
-                  this.collect(row, col.field),
-                  this.columnFilters[fieldKey(col.field)],
-                  false,
-                  col.filterOptions &&
-                    typeof col.filterOptions.filterDropdownItems === 'object'
+                    this.collect(row, col.field),
+                    this.columnFilters[fieldKey(col.field)],
+                    false,
+                    col.filterOptions &&
+                    typeof col.filterOptions.filterDropdownItems === 'object',
                 );
               });
               // should we remove the header?
@@ -1457,7 +1457,7 @@ export default {
     getRowStyleClass(row) {
       let classes = '';
       if (this.hasRowClickListener) classes += 'clickable';
-      if (row.vgtSelected) classes +=' vgt-selected-row';
+      if (row.vgtSelected) classes += ' vgt-selected-row';
       let rowStyleClasses;
       if (typeof this.rowStyleClass === 'function') {
         rowStyleClasses = this.rowStyleClass(row);
@@ -1474,8 +1474,8 @@ export default {
       originalRows.forEach((headerRow, i) => {
         headerRow.vgt_header_id = i;
         if (
-          this.groupOptions.maintainExpanded &&
-          this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
+            this.groupOptions.maintainExpanded &&
+            this.expandedRowKeys.has(headerRow[this.groupOptions.rowKey])
         ) {
           this.$set(headerRow, 'vgtIsExpanded', true);
         }
@@ -1635,14 +1635,14 @@ export default {
       //* initialSortBy can be an array or an object
       if (typeof initSortBy === 'object') {
         const ref = this.fixedHeader
-          ? this.$refs['table-header-secondary']
-          : this.$refs['table-header-primary'];
+            ? this.$refs['table-header-secondary']
+            : this.$refs['table-header-primary'];
         if (Array.isArray(initSortBy)) {
           ref.setInitialSort(initSortBy);
         } else {
           const hasField = Object.prototype.hasOwnProperty.call(
-            initSortBy,
-            'field'
+              initSortBy,
+              'field',
           );
           if (hasField) ref.setInitialSort([initSortBy]);
         }

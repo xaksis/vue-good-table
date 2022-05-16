@@ -1,29 +1,29 @@
 <template>
-<div class="footer__navigation__page-info">
-  <div v-if="infoFn">
-    {{infoFn(infoParams)}}
-  </div>
-  <form v-else-if="mode === 'pages'" @submit.prevent>
-    <label :for="id" class="page-info__label">
-      <span>{{pageText}}</span>
-      <input
-        :id="id"
-        aria-describedby="change-page-hint"
-        aria-controls="vgb-table"
-        class="footer__navigation__page-info__current-entry"
-        type="text"
-        @keyup.enter.stop="changePage"
-        :value="currentPage"> 
-      <span>{{pageInfo}}</span>
-    </label>
-    <span id="change-page-hint" style="display: none;">
+  <div class="footer__navigation__page-info">
+    <div v-if="infoFn">
+      {{ infoFn(infoParams) }}
+    </div>
+    <form v-else-if="mode === 'pages'" @submit.prevent>
+      <label :for="id" class="page-info__label">
+        <span>{{ pageText }}</span>
+        <input
+            :id="id"
+            aria-describedby="change-page-hint"
+            aria-controls="vgb-table"
+            class="footer__navigation__page-info__current-entry"
+            type="text"
+            @keyup.enter.stop="changePage"
+            :value="currentPage">
+        <span>{{ pageInfo }}</span>
+      </label>
+      <span id="change-page-hint" style="display: none;">
       Type a page number and press Enter to change the page.
     </span>
-  </form>
-  <div v-else>
-    {{recordInfo}}
+    </form>
+    <div v-else>
+      {{ recordInfo }}
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -71,7 +71,7 @@ export default {
     },
     lastRecordOnPage() {
       // if the setting is set to 'all'
-      if(this.currentPerPage === -1) {
+      if (this.currentPerPage === -1) {
         return this.totalRecords;
       }
       return Math.min(this.totalRecords, this.currentPage * this.currentPerPage);
@@ -110,8 +110,8 @@ export default {
 
       //! invalid number
       if (Number.isNaN(value)
-        || value > this.lastPage
-        || value < 1) {
+          || value > this.lastPage
+          || value < 1) {
         event.target.value = this.currentPage;
         return false;
       }
@@ -123,8 +123,7 @@ export default {
   },
   mounted() {
   },
-  components: {
-  },
+  components: {},
 };
 </script>
 

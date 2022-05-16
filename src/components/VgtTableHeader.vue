@@ -1,58 +1,58 @@
 <template>
-<thead>
+  <thead>
   <tr>
     <th scope="col" v-if="lineNumbers" class="line-numbers"></th>
     <th scope="col" v-if="selectable" class="vgt-checkbox-col">
       <input
-        type="checkbox"
-        :checked="allSelected"
-        :indeterminate.prop="allSelectedIndeterminate"
-        @change="toggleSelectAll" />
+          type="checkbox"
+          :checked="allSelected"
+          :indeterminate.prop="allSelectedIndeterminate"
+          @change="toggleSelectAll"/>
     </th>
     <th v-for="(column, index) in columns"
-      scope="col"
-      :key="index"
-      :title="column.tooltip"
-      :class="getHeaderClasses(column, index)"
-      :style="columnStyles[index]"
-      :aria-sort="getColumnSortLong(column)"
-      :aria-controls="`col-${index}`"
-      v-if="!column.hidden">
+        scope="col"
+        :key="index"
+        :title="column.tooltip"
+        :class="getHeaderClasses(column, index)"
+        :style="columnStyles[index]"
+        :aria-sort="getColumnSortLong(column)"
+        :aria-controls="`col-${index}`"
+        v-if="!column.hidden">
       <slot name="table-column" :column="column">
-        {{column.label}}
+        {{ column.label }}
       </slot>
-        <button
-        v-if="isSortableColumn(column)"
-        @click="sort($event, column)">
+      <button
+          v-if="isSortableColumn(column)"
+          @click="sort($event, column)">
         <span class="sr-only">
           Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
           </span>
-        </button>
+      </button>
     </th>
   </tr>
   <tr
-    is="vgt-filter-row"
-    ref="filter-row"
-    @filter-changed="filterRows"
-    :global-search-enabled="searchEnabled"
-    :line-numbers="lineNumbers"
-    :selectable="selectable"
-    :columns="columns"
-    :mode="mode"
-    :typed-columns="typedColumns">
-      <template
+      is="vgt-filter-row"
+      ref="filter-row"
+      @filter-changed="filterRows"
+      :global-search-enabled="searchEnabled"
+      :line-numbers="lineNumbers"
+      :selectable="selectable"
+      :columns="columns"
+      :mode="mode"
+      :typed-columns="typedColumns">
+    <template
         slot="column-filter"
         slot-scope="props"
-      >
-        <slot
+    >
+      <slot
           name="column-filter"
           :column="props.column"
           :updateFilters="props.updateFilters"
-        >
-        </slot>
-      </template>
+      >
+      </slot>
+    </template>
   </tr>
-</thead>
+  </thead>
 </template>
 
 <script>
@@ -136,12 +136,10 @@ export default {
       lineNumberThStyle: {},
       columnStyles: [],
       sorts: [],
-      ro: null
+      ro: null,
     };
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
     reset() {
       this.$refs['filter-row'].reset(true);
@@ -182,8 +180,8 @@ export default {
 
     getColumnSortLong(column) {
       return this.getColumnSort(column) === 'asc'
-        ? 'ascending'
-        : 'descending'
+          ? 'ascending'
+          : 'descending';
     },
 
     getHeaderClasses(column, index) {
@@ -254,7 +252,7 @@ export default {
       // We're going to watch the parent element for resize events, and calculate column widths if it changes
       if ('ResizeObserver' in window) {
         this.ro = new ResizeObserver(() => {
-            this.setColumnStyles();
+          this.setColumnStyles();
         });
         this.ro.observe(this.$parent.$el);
 
@@ -264,7 +262,7 @@ export default {
         if (this.tableRef) {
           Array.from(this.$parent.$refs['table-header-primary'].$el.children[0].children).forEach((header) => {
             this.ro.observe(header);
-          })
+          });
         }
       }
     });
