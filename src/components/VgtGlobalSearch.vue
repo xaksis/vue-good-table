@@ -3,9 +3,9 @@
     <div class="vgt-global-search__input vgt-pull-left">
       <form @submit.prevent v-if="searchEnabled" role="search">
         <label :for="id">
-        <span aria-hidden="true" class="input__icon">
-        <div class="magnifying-glass"></div>
-        </span>
+          <span aria-hidden="true" class="input__icon">
+            <div class="magnifying-glass"></div>
+          </span>
           <span class="sr-only">Search</span>
         </label>
         <input

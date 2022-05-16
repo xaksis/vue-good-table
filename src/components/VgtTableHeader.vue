@@ -9,29 +9,30 @@
           :indeterminate.prop="allSelectedIndeterminate"
           @change="toggleSelectAll"/>
     </th>
-    <th v-for="(column, index) in columns"
-        scope="col"
-        :key="index"
-        :title="column.tooltip"
-        :class="getHeaderClasses(column, index)"
-        :style="columnStyles[index]"
-        :aria-sort="getColumnSortLong(column)"
-        :aria-controls="`col-${index}`"
-        v-if="!column.hidden">
-      <slot name="table-column" :column="column">
-        {{ column.label }}
-      </slot>
-      <button
-          v-if="isSortableColumn(column)"
-          @click="sort($event, column)">
-        <span class="sr-only">
-          Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
+    <template v-for="(column, index) in columns">
+      <th
+          scope="col"
+          :key="index"
+          :title="column.tooltip"
+          :class="getHeaderClasses(column, index)"
+          :style="columnStyles[index]"
+          :aria-sort="getColumnSortLong(column)"
+          :aria-controls="`col-${index}`"
+          v-if="!column.hidden">
+        <slot name="table-column" :column="column">
+          {{ column.label }}
+        </slot>
+        <button
+            v-if="isSortableColumn(column)"
+            @click="sort($event, column)">
+          <span class="sr-only">
+            Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
           </span>
-      </button>
-    </th>
+        </button>
+      </th>
+    </template>
   </tr>
-  <tr
-      is="vgt-filter-row"
+  <vgt-filter-row
       ref="filter-row"
       @filter-changed="filterRows"
       :global-search-enabled="searchEnabled"
@@ -41,8 +42,7 @@
       :mode="mode"
       :typed-columns="typedColumns">
     <template
-        slot="column-filter"
-        slot-scope="props"
+        v-slot:column-filter="props"
     >
       <slot
           name="column-filter"
@@ -51,7 +51,7 @@
       >
       </slot>
     </template>
-  </tr>
+  </vgt-filter-row>
   </thead>
 </template>
 
@@ -85,7 +85,6 @@ export default {
       type: String,
     },
     typedColumns: {},
-
     //* Sort related
     sortable: {
       type: Boolean,
@@ -94,18 +93,14 @@ export default {
       type: Boolean,
       default: true,
     },
-
     getClasses: {
       type: Function,
     },
-
     //* search related
     searchEnabled: {
       type: Boolean,
     },
-
     tableRef: {},
-
     paginated: {},
   },
   watch: {
@@ -155,7 +150,6 @@ export default {
     sort(e, column) {
       //* if column is not sortable, return right here
       if (!this.isSortableColumn(column)) return;
-
       if (e.shiftKey && this.multipleColumnSort) {
         this.sorts = secondarySort(this.sorts, column);
       } else {
@@ -163,12 +157,10 @@ export default {
       }
       this.$emit('on-sort-change', this.sorts);
     },
-
     setInitialSort(sorts) {
       this.sorts = sorts;
       this.$emit('on-sort-change', this.sorts);
     },
-
     getColumnSort(column) {
       for (let i = 0; i < this.sorts.length; i += 1) {
         if (this.sorts[i].field === column.field) {
@@ -177,13 +169,11 @@ export default {
       }
       return null;
     },
-
     getColumnSortLong(column) {
       return this.getColumnSort(column) === 'asc'
           ? 'ascending'
           : 'descending';
     },
-
     getHeaderClasses(column, index) {
       const classes = Object.assign({}, this.getClasses(index, 'th'), {
         sortable: this.isSortableColumn(column),
@@ -192,11 +182,9 @@ export default {
       });
       return classes;
     },
-
     filterRows(columnFilters) {
       this.$emit('filter-changed', columnFilters);
     },
-
     getWidthStyle(dom) {
       if (window && window.getComputedStyle && dom) {
         const cellStyle = window.getComputedStyle(dom, null);
@@ -208,7 +196,6 @@ export default {
         width: 'auto',
       };
     },
-
     setColumnStyles() {
       const colStyles = [];
       for (let i = 0; i < this.columns.length; i++) {
@@ -246,6 +233,12 @@ export default {
       }
       return styleObject;
     },
+
+    beforeUnmount() {
+      if (this.ro) {
+        this.ro.disconnect();
+      }
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -267,10 +260,11 @@ export default {
       }
     });
   },
+  beforeUnmount() {
+    this.beforeUnmount();
+  },
   beforeDestroy() {
-    if (this.ro) {
-      this.ro.disconnect();
-    }
+    this.beforeUnmount();
   },
   components: {
     'vgt-filter-row': VgtFilterRow,

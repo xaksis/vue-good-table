@@ -17,8 +17,8 @@
         <span>{{ pageInfo }}</span>
       </label>
       <span id="change-page-hint" style="display: none;">
-      Type a page number and press Enter to change the page.
-    </span>
+        Type a page number and press Enter to change the page.
+      </span>
     </form>
     <div v-else>
       {{ recordInfo }}
@@ -33,6 +33,7 @@ import {
 
 export default {
   name: 'VgtPaginationPageInfo',
+  emits: ['page-changed'],
   props: {
     currentPage: {
       default: 1,
@@ -70,20 +71,14 @@ export default {
       return ((this.currentPage - 1) * this.currentPerPage) + 1;
     },
     lastRecordOnPage() {
-      // if the setting is set to 'all'
-      if (this.currentPerPage === -1) {
-        return this.totalRecords;
-      }
       return Math.min(this.totalRecords, this.currentPage * this.currentPerPage);
     },
     recordInfo() {
       let first = this.firstRecordOnPage;
       const last = this.lastRecordOnPage;
-
       if (last === 0) {
         first = 0;
       }
-
       return `${first} - ${last} ${this.ofText} ${this.totalRecords}`;
     },
     infoParams() {
@@ -97,7 +92,7 @@ export default {
         lastRecordOnPage: last,
         totalRecords: this.totalRecords,
         currentPage: this.currentPage,
-        totalPage: this.lastPage,
+        totalPages: this.lastPage,
       };
     },
   },
@@ -107,7 +102,6 @@ export default {
     },
     changePage(event) {
       const value = parseInt(event.target.value, 10);
-
       //! invalid number
       if (Number.isNaN(value)
           || value > this.lastPage
@@ -115,7 +109,6 @@ export default {
         event.target.value = this.currentPage;
         return false;
       }
-
       //* valid number
       event.target.value = value;
       this.$emit('page-changed', value);

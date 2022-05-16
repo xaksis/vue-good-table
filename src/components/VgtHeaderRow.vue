@@ -17,17 +17,17 @@
         </slot>
       </template>
       <span @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
-      <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+        <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
         <slot
             :row="headerRow"
             name="table-header-row">
-        <span v-if="headerRow.html" v-html="headerRow.label">
-        </span>
-        <span v-else>
-          {{ headerRow.label }}
-        </span>
-      </slot>
-    </span>
+          <span v-if="headerRow.html" v-html="headerRow.label">
+          </span>
+          <span v-else>
+            {{ headerRow.label }}
+          </span>
+        </slot>
+      </span>
     </th>
     <!-- if the mode is not span, we display every column -->
     <th
@@ -49,32 +49,36 @@
         </slot>
       </template>
     </th>
-    <th
-        v-if="headerRow.mode !== 'span' && !column.hidden"
-        v-for="(column, i) in columns"
-        :key="i"
-        class="vgt-row-header"
-        :class="getClasses(i, 'td')"
-        @click="columnCollapsable(i) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
-      <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
-      <slot
-          :row="headerRow"
-          :column="column"
-          :formattedRow="formattedRow(headerRow, true)"
-          name="table-header-row">
-      <span v-if="!column.html">
-        {{ collectFormatted(headerRow, column, true) }}
-      </span>
-        <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
-      </span>
-      </slot>
-    </th>
+    <template v-if="headerRow.mode !== 'span'">
+      <template v-for="(column, i) in columns">
+        <th
+            v-if="!column.hidden"
+            :key="i"
+            class="vgt-row-header"
+            :class="getClasses(i, 'td')"
+            @click="columnCollapsable(i) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
+          <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+          <slot
+              :row="headerRow"
+              :column="column"
+              :formattedRow="formattedRow(headerRow, true)"
+              name="table-header-row">
+            <span v-if="!column.html">
+              {{ collectFormatted(headerRow, column, true) }}
+            </span>
+            <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
+            </span>
+          </slot>
+        </th>
+      </template>
+    </template>
   </tr>
 </template>
 
 <script>
 export default {
   name: 'VgtHeaderRow',
+  emits: ['on-select-group-change', 'vgtExpand'],
   props: {
     headerRow: {
       type: Object,

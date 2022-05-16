@@ -17,7 +17,7 @@
               :value="option">
             {{ option }}
           </option>
-          <option v-if="paginateDropdownAllowAll" :value="-1">{{ allText }}</option>
+          <option v-if="paginateDropdownAllowAll" :value="total">{{ allText }}</option>
         </select>
       </form>
     </div>
@@ -32,22 +32,6 @@
           :page-text="pageText"
           :info-fn="infoFn"
           :mode="mode"/>
-      <button
-          v-if="jumpFirstOrLast"
-          type="button"
-          aria-controls="vgt-table"
-          class="footer__navigation__page-btn"
-          :class="{ disabled: !firstIsPossible }"
-          @click.prevent.stop="firstPage"
-      >
-        <span
-            aria-hidden="true"
-            class="chevron"
-            v-bind:class="{ left: !rtl, right: rtl }"
-        ></span>
-        <span>{{ firstText }}</span>
-      </button>
-
       <button
           type="button"
           aria-controls="vgt-table"
@@ -67,22 +51,6 @@
         <span>{{ nextText }}</span>
         <span aria-hidden="true" class="chevron" v-bind:class="{ 'right': !rtl, 'left': rtl }"></span>
       </button>
-
-      <button
-          v-if="jumpFirstOrLast"
-          type="button"
-          aria-controls="vgt-table"
-          class="footer__navigation__page-btn"
-          :class="{ disabled: !lastIsPossible }"
-          @click.prevent.stop="lastPage"
-      >
-        <span>{{ lastText }}</span>
-        <span
-            aria-hidden="true"
-            class="chevron"
-            v-bind:class="{ right: !rtl, left: rtl }"
-        ></span>
-      </button>
     </div>
   </div>
 </template>
@@ -96,6 +64,7 @@ import {
 
 export default {
   name: 'VgtPagination',
+  emits: ['page-changed', 'per-page-changed'],
   props: {
     styleClass: { default: 'table table-bordered' },
     total: { default: null },
@@ -109,11 +78,7 @@ export default {
     },
     paginateDropdownAllowAll: { default: true },
     mode: { default: PAGINATION_MODES.Records },
-    jumpFirstOrLast: { default: false },
-
     // text options
-    firstText: { default: 'First' },
-    lastText: { default: 'Last' },
     nextText: { default: 'Next' },
     prevText: { default: 'Prev' },
     rowsPerPageText: { default: 'Rows per page:' },
@@ -122,7 +87,6 @@ export default {
     allText: { default: 'All' },
     infoFn: { default: null },
   },
-
   data() {
     return {
       id: this.getId(),
@@ -140,11 +104,9 @@ export default {
       },
       immediate: true,
     },
-
     customRowsPerPageDropdown() {
       this.handlePerPage();
     },
-
     total: {
       handler(newValue, oldValue) {
         if (this.rowsPerPageOptions.indexOf(this.currentPerPage) === -1) {
@@ -153,41 +115,22 @@ export default {
       },
     },
   },
-
   computed: {
     // Number of pages
     pagesCount() {
-      // if the setting is set to 'all'
-      if (this.currentPerPage === -1) {
-        return 1;
-      }
       const quotient = Math.floor(this.total / this.currentPerPage);
       const remainder = this.total % this.currentPerPage;
-
       return remainder === 0 ? quotient : quotient + 1;
     },
-
-    // Can go to first page
-    firstIsPossible() {
-      return this.currentPage > 1;
-    },
-
-    // Can go to last page
-    lastIsPossible() {
-      return this.currentPage < Math.ceil(this.total / this.currentPerPage);
-    },
-
     // Can go to next page
     nextIsPossible() {
       return this.currentPage < this.pagesCount;
     },
-
     // Can go to previous page
     prevIsPossible() {
       return this.currentPage > 1;
     },
   },
-
   methods: {
     getId() {
       return `vgt-select-rpp-${Math.floor(Math.random() * Date.now())}`;
@@ -200,25 +143,6 @@ export default {
         this.pageChanged(emit);
       }
     },
-
-    // Go to first page
-    firstPage() {
-      if (this.firstIsPossible) {
-        this.currentPage = 1;
-        this.prevPage = 0;
-        this.pageChanged();
-      }
-    },
-
-    // Go to last page
-    lastPage() {
-      if (this.lastIsPossible) {
-        this.currentPage = this.pagesCount;
-        this.prev = this.currentPage - 1;
-        this.pageChanged();
-      }
-    },
-
     // Go to next page
     nextPage() {
       if (this.nextIsPossible) {
@@ -227,7 +151,6 @@ export default {
         this.pageChanged();
       }
     },
-
     // Go to previous page
     previousPage() {
       if (this.prevIsPossible) {
@@ -236,7 +159,6 @@ export default {
         this.pageChanged();
       }
     },
-
     // Indicate page changing
     pageChanged(emit = true) {
       const payload = {
@@ -246,7 +168,6 @@ export default {
       if (!emit) payload.noEmit = true;
       this.$emit('page-changed', payload);
     },
-
     // Indicate per page changing
     perPageChanged(oldValue) {
       // go back to first page
@@ -256,7 +177,6 @@ export default {
       }
       this.changePage(1, false);
     },
-
     // Handle per page changing
     handlePerPage() {
       //* if there's a custom dropdown then we use that
@@ -268,7 +188,6 @@ export default {
         //* otherwise we use the default rows per page dropdown
         this.rowsPerPageOptions = JSON.parse(JSON.stringify(DEFAULT_ROWS_PER_PAGE_DROPDOWN));
       }
-
       if (this.perPage) {
         this.currentPerPage = this.perPage;
         // if perPage doesn't already exist, we add it
@@ -287,10 +206,8 @@ export default {
       }
     },
   },
-
   mounted() {
   },
-
   components: {
     'pagination-page-info': VgtPaginationPageInfo,
   },
