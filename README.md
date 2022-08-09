@@ -1033,7 +1033,7 @@ event emitted on sort change
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  @on-sort-change="onSortChange">
+  @sort-change="onSortChange">
 ```
 ```javascript
 methods: {

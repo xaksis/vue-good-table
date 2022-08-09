@@ -158,7 +158,7 @@ is an array.
 <vue-good-table
   :columns="columns"
   :rows="rows"
-  @on-sort-change="onSortChange">
+  @sort-change="onSortChange">
 ```
 ```javascript
 methods: {

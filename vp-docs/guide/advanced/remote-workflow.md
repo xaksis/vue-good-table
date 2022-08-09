@@ -56,10 +56,10 @@ Now instead of doing the above client side, each user interaction will generate 
 ```html
 <vue-good-table
   mode="remote"
-  @on-page-change="onPageChange"
-  @on-sort-change="onSortChange"
-  @on-column-filter="onColumnFilter"
-  @on-per-page-change="onPerPageChange"
+  @page-change="onPageChange"
+  @sort-change="onSortChange"
+  @column-filter="onColumnFilter"
+  @per-page-change="onPerPageChange"
   :totalRows="totalRecords"
   :isLoading.sync="isLoading"
   :pagination-options="{

@@ -82,8 +82,8 @@
           <thead
             is="vgt-table-header"
             ref="table-header-secondary"
-            @on-toggle-select-all="toggleSelectAll"
-            @on-sort-change="changeSort"
+            @toggle-select-all="toggleSelectAll"
+            @sort-change="changeSort"
             @filter-changed="filterRows"
             :columns="columns"
             :line-numbers="lineNumbers"
@@ -139,8 +139,8 @@
           <thead
             is="vgt-table-header"
             ref="table-header-primary"
-            @on-toggle-select-all="toggleSelectAll"
-            @on-sort-change="changeSort"
+            @toggle-select-all="toggleSelectAll"
+            @sort-change="changeSort"
             @filter-changed="filterRows"
             :columns="columns"
             :line-numbers="lineNumbers"
