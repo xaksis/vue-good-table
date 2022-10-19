@@ -933,6 +933,7 @@ export default {
           if (!hRow) {
             hRow = this.processedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
             if (hRow) {
+              this.handleExpanded(hRow);
               hRow = JSON.parse(JSON.stringify(hRow));
               hRow.children = [];
               reconstructedRows.push(hRow);
