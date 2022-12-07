@@ -17,5 +17,8 @@
       right: inherit;
       left: 6px;
     }
+    th.sortable button {
+		  &:after, &:before { right: auto; left: 6px; }
+	  }
   }
 }

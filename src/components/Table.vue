@@ -99,27 +99,30 @@
             :paginated="paginated"
             :table-ref="$refs.table"
           >
-            <template
-              slot="table-column"
-              slot-scope="props"
-            >
-              <slot
-                name="table-column"
-                :column="props.column"
-              >
-                <span>{{props.column.label}}</span>
-              </slot>
-            </template>
-            <template
-                slot="column-filter"
+            <template v-if="!fixedHeader">
+              <template
+                slot="table-column"
                 slot-scope="props"
-            >
-              <slot
-                  name="column-filter"
+              >
+                <slot
+                  name="table-column"
                   :column="props.column"
-                  :updateFilters="props.updateFilters"
-              ></slot>
+                >
+                  <span>{{props.column.label}}</span>
+                </slot>
+              </template>
+              <template
+                  slot="column-filter"
+                  slot-scope="props"
+              >
+                <slot
+                    name="column-filter"
+                    :column="props.column"
+                    :updateFilters="props.updateFilters"
+                ></slot>
+              </template>
             </template>
+            <th v-else ></th>
           </thead>
         </table>
       </div>
@@ -1159,6 +1162,12 @@ export default {
 
     // checkbox click should always do the following
     onCheckboxClicked(row, index, event) {
+      
+      if (event.shiftKey && this.lastIndex > -1) { // support for multiple select with shift
+        const first = Math.min(this.lastIndex, index), last = Math.max(this.lastIndex, index);
+        for (let i = first; i <= last;i++) this.$set(this.rows[i], 'vgtSelected', !row.vgtSelected);
+      }
+      this.lastIndex = index;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row,
