@@ -2,23 +2,12 @@
   direction: rtl;
 
   .vgt-table{
-    thead th, &.condensed thead th {
-      padding-left:  1.5em;
-      padding-right:  .75em;
-    }
     th.sorting:after,
     th.sorting-asc:after{
       margin-right:  5px;
       margin-left:  0px;
     }
 
-    th.sortable:after, 
-    th.sortable:before {
-      right: inherit;
-      left: 6px;
-    }
-    th.sortable button {
-		  &:after, &:before { right: auto; left: 6px; }
-	  }
+   
   }
 }

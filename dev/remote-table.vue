@@ -3,6 +3,7 @@
   <vue-good-table
     :columns="columns"
     :rows="rows"
+                  :rtl="true"
     :totalRows="totalRecords"
     mode="remote"
     @on-page-change="onPageChange"

@@ -1,1 +1,1 @@
-npm run bundle && robocopy  /mir  E:\inetpub\otzar\vue-good-table\dist   E:\inetpub\otzar\vsif\node_modules\vue-good-table\dist
+npm run bundle && robocopy  /mir  .\dist   ..\vsif\node_modules\vue-good-table\dist && robocopy  /mir  .\dist   \\192.168.15.51\e$\vsif\app\node_modules\vue-good-table\dist

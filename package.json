@@ -1,6 +1,6 @@
 {
   "name": "vue-good-table",
-  "version": "2.21.12",
+  "version": "2.21.21",
   "sideEffects": [
     "*.vue",
     "*.css"
