@@ -203,7 +203,7 @@ export default {
       if (window && window.getComputedStyle && dom) {
         const cellStyle = window.getComputedStyle(dom, null);
         return {
-          width: cellStyle.width,
+          width: cellStyle.width
         };
       }
       return {
@@ -224,7 +224,7 @@ export default {
           colStyles.push({
             minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
             maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
-            width: this.columns[i].width ? this.columns[i].width : 'auto',
+            width: this.columns[i].width ? this.columns[i].width : 'auto'
           });
         }
       }

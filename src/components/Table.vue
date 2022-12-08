@@ -74,6 +74,7 @@
           id="vgt-table"
           v-if="fixedHeader"
           :class="tableStyleClasses"
+               style="table-layout: fixed;"
         >
         <colgroup>
           <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
@@ -99,7 +100,6 @@
             :paginated="paginated"
             :table-ref="$refs.table"
           >
-            <template v-if="!fixedHeader">
               <template
                 slot="table-column"
                 slot-scope="props"
@@ -121,8 +121,7 @@
                     :updateFilters="props.updateFilters"
                 ></slot>
               </template>
-            </template>
-            <th v-else ></th>
+          
           </thead>
         </table>
       </div>
@@ -172,11 +171,12 @@
               slot="column-filter"
               slot-scope="props"
             >
-              <slot
+              <slot v-if="!fixedHeader"
                 name="column-filter"
                 :column="props.column"
                 :updateFilters="props.updateFilters"
               ></slot>
+              <span v-else />
             </template>
           </thead>
 
@@ -1352,6 +1352,11 @@ export default {
       let computedRows = JSON.parse(JSON.stringify(this.originalRows));
       let instancesOfFiltering = false;
 
+
+      
+      this.calculateTopSize()
+
+
       // do we have a filter to care about?
       // if not we don't need to do anything
       if (this.columnFilters && Object.keys(this.columnFilters).length) {
@@ -1429,6 +1434,7 @@ export default {
       } else {
         this.filteredRows = computedRows;
       }
+
     },
 
     getCurrentIndex(rowId) {
@@ -1690,6 +1696,15 @@ export default {
         this.clearSelectionText = clearSelectionText;
       }
     },
+
+    calculateTopSize() {
+      this.$nextTick(() => {
+        const heads = this.$el.querySelectorAll('thead');
+        if (!heads[1])
+          return;
+        heads[1].style.height = `${heads[0].offsetHeight}px`;
+      })
+    }
   },
 
   mounted() {
