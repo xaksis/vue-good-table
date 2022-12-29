@@ -28,7 +28,7 @@
         disableSelectInfo: true,
       }"
       theme="polar-bear"
-      styleClass="vgt-table"
+      styleClass="vgt-table condensed"
       :sort-options="{
         enabled: true,
         multipleColumns: false,
