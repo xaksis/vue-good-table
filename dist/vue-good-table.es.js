@@ -2034,6 +2034,9 @@ Object.keys(coreDataTypes).forEach(function (key) {
   var compName = key.replace(/^\.\//, '').replace(/\.js/, '');
   dataTypes[compName] = coreDataTypes[key]["default"];
 });
+function flat(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 var script = {
   name: 'vue-good-table',
   props: {
@@ -2115,6 +2118,14 @@ var script = {
         }, _defineProperty(_ref, "position", 'bottom'), _defineProperty(_ref, "dropdownAllowAll", true), _defineProperty(_ref, "mode", 'records'), _defineProperty(_ref, "infoFn", null), _defineProperty(_ref, "jumpFirstOrLast", false), _ref;
       }
     },
+    virtualPaginationOptions: {
+      "default": function _default() {
+        return {
+          enabled: true,
+          height: 32
+        };
+      }
+    },
     searchOptions: {
       "default": function _default() {
         return {
@@ -2179,7 +2190,8 @@ var script = {
       columnFilters: {},
       forceSearch: false,
       sortChanged: false,
-      dataTypes: dataTypes || {}
+      dataTypes: dataTypes || {},
+      scrollTop: 0
     };
   },
   watch: {
@@ -2429,7 +2441,7 @@ var script = {
             return r.vgt_id === i;
           });
           if (children.length) {
-            var newHeaderRow = JSON.parse(JSON.stringify(headerRow));
+            var newHeaderRow = flat(headerRow);
             newHeaderRow.children = children;
             computedRows.push(newHeaderRow);
           }
@@ -2472,6 +2484,27 @@ var script = {
         this.filteredRows = computedRows;
       }
       return computedRows;
+    },
+    paginated2ScrollTop: function paginated2ScrollTop() {
+      var max = this.paginated2ScrollHeight; //this.$refs.scroller.scrollHeight - this.$refs.scroller.offsetHeight
+      this.scrollTop % this.virtualPaginationOptions.height;
+      return Math.min(max, this.scrollTop); // - (this.$refs.scroller?.offsetHeight||400)
+    },
+    paginated2ScrollHeight: function paginated2ScrollHeight() {
+      return this.rows.length * this.virtualPaginationOptions.height;
+    },
+    paginated2: function paginated2() {
+      var rows = this.filteredRows;
+
+      // const skip = this.$refs.fixedHeader?.offsetHeight || 60;
+      var start = this.scrollTop / this.virtualPaginationOptions.height;
+      var startfloor = Math.floor(start);
+      var end = startfloor + 20;
+      return [Object.assign({}, rows[0], {
+        children: rows[0].children.filter(function (f, i) {
+          return i >= startfloor && i < end;
+        })
+      })]; // .slice(start, end);
     },
     paginated: function paginated() {
       var _this2 = this;
@@ -2516,7 +2549,7 @@ var script = {
         //* header row?
         if (flatRow.vgt_header_id !== undefined) {
           _this2.handleExpanded(flatRow);
-          var newHeaderRow = JSON.parse(JSON.stringify(flatRow));
+          var newHeaderRow = flat(flatRow);
           newHeaderRow.children = [];
           reconstructedRows.push(newHeaderRow);
         } else {
@@ -2529,7 +2562,7 @@ var script = {
               return r.vgt_header_id === flatRow.vgt_id;
             });
             if (hRow) {
-              hRow = JSON.parse(JSON.stringify(hRow));
+              hRow = flat(hRow);
               hRow.children = [];
               reconstructedRows.push(hRow);
             }
@@ -3216,9 +3249,14 @@ var script = {
     }
   },
   mounted: function mounted() {
+    var _this13 = this;
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
+    this.$refs.scroller.addEventListener('scroll', function () {
+      var _this13$$refs$scrolle;
+      return _this13.scrollTop = ((_this13$$refs$scrolle = _this13.$refs.scroller) === null || _this13$$refs$scrolle === void 0 ? void 0 : _this13$$refs$scrolle.scrollTop) || 0;
+    });
     this.initializeSort();
   },
   components: {
@@ -3314,6 +3352,7 @@ var __vue_render__ = function __vue_render__() {
   }, [_vm._v("\n        " + _vm._s(_vm.clearSelectionText) + "\n      ")]), _vm._v(" "), _c('div', {
     staticClass: "vgt-selection-info-row__actions vgt-pull-right"
   }, [_vm._t("selected-row-actions")], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
+    ref: "fixedHeader",
     staticClass: "vgt-fixed-header"
   }, [_vm.fixedHeader ? _c('table', {
     "class": _vm.tableStyleClasses,
@@ -3372,6 +3411,7 @@ var __vue_render__ = function __vue_render__() {
       }
     }], null, true)
   })], 1) : _vm._e()]), _vm._v(" "), _c('div', {
+    ref: "scroller",
     "class": {
       'vgt-responsive': _vm.responsive
     },
@@ -3379,6 +3419,9 @@ var __vue_render__ = function __vue_render__() {
   }, [_c('table', {
     ref: "table",
     "class": _vm.tableStyles,
+    style: {
+      'margin-top': _vm.paginated2ScrollTop + 'px'
+    },
     attrs: {
       "id": "vgt-table"
     }
@@ -3428,7 +3471,7 @@ var __vue_render__ = function __vue_render__() {
         }) : _c('span')];
       }
     }], null, true)
-  }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, hIndex) {
+  }), _vm._v(" "), _vm._l(_vm.paginated2, function (headerRow, hIndex) {
     return _c('tbody', {
       key: hIndex
     }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
@@ -3565,7 +3608,12 @@ var __vue_render__ = function __vue_render__() {
     return [_c('div', {
       staticClass: "vgt-center-align vgt-text-disabled"
     }, [_vm._v("\n                  No data for table\n                ")])];
-  })], 2)])]) : _vm._e()], 2)]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
+  })], 2)])]) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    style: {
+      height: _vm.paginated2ScrollHeight + 'px',
+      'background-color': 'red'
+    }
+  })]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
     staticClass: "vgt-wrap__actions-footer"
   }, [_vm._t("table-actions-bottom")], 2) : _vm._e(), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", function () {
     return [_c('vgt-pagination', {

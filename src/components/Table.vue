@@ -69,7 +69,8 @@
           </slot>
         </div>
       </div>
-      <div class="vgt-fixed-header">
+      
+      <div class="vgt-fixed-header" ref="fixedHeader">
         <table
           id="vgt-table"
           v-if="fixedHeader"
@@ -125,14 +126,12 @@
           </thead>
         </table>
       </div>
-      <div
-        :class="{'vgt-responsive': responsive}"
-        :style="wrapperStyles"
-      >
+      <div  :class="{'vgt-responsive': responsive}"        :style="wrapperStyles" ref="scroller"      >
         <table
           id="vgt-table"
           ref="table"
           :class="tableStyles"
+          :style="{ 'trabsform':  virtualPaginationOptions.enabled ? 'translate(0,'  paginated2ScrollTop +'px)'  :'unset' }"
         >
         <colgroup>
           <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
@@ -182,7 +181,7 @@
 
           <!-- Table body starts here -->
           <tbody
-            v-for="(headerRow, hIndex) in paginated"
+            v-for="(headerRow, hIndex) in paginated2"
             :key="hIndex"
           >
             <!-- if group row header is at the top -->
@@ -311,6 +310,8 @@
             </tr>
           </tbody>
         </table>
+
+         <div v-if="virtualPaginationOptions.enabled" :style="{height: paginated2ScrollHeight +'px', 'background-color': 'red' } " /> 
       </div>
       <div v-if="hasFooterSlot" class="vgt-wrap__actions-footer">
         <slot name="table-actions-bottom">
@@ -372,12 +373,13 @@ Object.keys(coreDataTypes).forEach((key) => {
   dataTypes[compName] = coreDataTypes[key].default;
 });
 
+  function flat(obj) { return JSON.parse(JSON.stringify(obj)) }
 export default {
   name: 'vue-good-table',
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: Boolean ,
+    fixedHeader: Boolean,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
@@ -389,7 +391,7 @@ export default {
     rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
     compactMode: Boolean,
-
+   
     groupOptions: {
       default() {
         return {
@@ -440,6 +442,15 @@ export default {
           jumpFirstOrLast : false
         };
       },
+    },
+
+    virtualPaginationOptions: {
+      default() {
+        return {
+          enabled: false,
+          height: 32
+        }
+      }
     },
 
     searchOptions: {
@@ -514,6 +525,8 @@ export default {
     forceSearch: false,
     sortChanged: false,
     dataTypes: dataTypes || {},
+
+    scrollTop: 0,
   }),
 
   watch: {
@@ -830,7 +843,7 @@ export default {
           const i = headerRow.vgt_header_id;
           const children = filteredRows.filter((r) => r.vgt_id === i);
           if (children.length) {
-            const newHeaderRow = JSON.parse(JSON.stringify(headerRow));
+            const newHeaderRow = flat(headerRow);
             newHeaderRow.children = children;
             computedRows.push(newHeaderRow);
           }
@@ -882,6 +895,29 @@ export default {
 
       return computedRows;
     },
+    paginated2ScrollTop() {
+    //https://codesandbox.io/s/0bdq0?file=/src/components/HelloWorld.vue:2629-2640
+      const max = this.paginated2ScrollHeight; //this.$refs.scroller.scrollHeight - this.$refs.scroller.offsetHeight
+      const diff = this.scrollTop % this.virtualPaginationOptions.height;
+      return Math.min(max, this.scrollTop) // - (this.$refs.scroller?.offsetHeight||400)
+    },
+    paginated2ScrollHeight() {
+    return (this.rows.length *this.virtualPaginationOptions.height)
+    },
+    paginated2() {
+      if (!this.virtualPaginationOptions.enabled) return this.paginated;
+      let rows = this.filteredRows;
+
+      // const skip = this.$refs.fixedHeader?.offsetHeight || 60;
+      const start = (this.scrollTop / this.virtualPaginationOptions.height)-1;
+      const startfloor = Math.floor(start);
+
+      const end = startfloor + 20;
+      return [{ ...rows[0], children: rows[0].children.filter((f, i) => i >= startfloor && i < end) }];// .slice(start, end);
+      
+ 
+  return rows;
+ },
 
     paginated() {
       if (!this.processedRows.length) return [];
@@ -927,7 +963,7 @@ export default {
         //* header row?
         if (flatRow.vgt_header_id !== undefined) {
           this.handleExpanded(flatRow);
-          const newHeaderRow = JSON.parse(JSON.stringify(flatRow));
+          const newHeaderRow = flat(flatRow);
           newHeaderRow.children = [];
           reconstructedRows.push(newHeaderRow);
         } else {
@@ -936,7 +972,7 @@ export default {
           if (!hRow) {
             hRow = this.processedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
             if (hRow) {
-              hRow = JSON.parse(JSON.stringify(hRow));
+              hRow = flat(hRow);
               hRow.children = [];
               reconstructedRows.push(hRow);
             }
@@ -1711,6 +1747,8 @@ export default {
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
+
+    this.$refs.scroller.addEventListener('scroll', () => this.scrollTop = (this.$refs.scroller?.scrollTop || 0));
     this.initializeSort();
   },
 

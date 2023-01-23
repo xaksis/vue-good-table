@@ -6,6 +6,7 @@
     <button @click="hideColumn">hide column</button>
     <button @click="setFilter">SetFilter</button>
     <button @click="changePage">Change Page</button>
+    <button @click="virtualPaging=!virtualPaging">virtualPaging</button>
     <input type="text" v-model="searchTerm">
     
     <vue-good-table
@@ -22,6 +23,7 @@
       :columns="columns"
       :rows="rows"
       :pagination-options="paginationOptions"
+      :virtualPaginationOptions=" {enabled: virtualPaging, height: 56}"
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: false,
@@ -38,10 +40,11 @@
         skipDiacritics: true,
       }">
     </vue-good-table>
-    <h3>Remote Table</h3>
+    
+    <!--<h3>Remote Table</h3>
     <remote-table/>
     <h3>Grouped Table</h3>
-     <grouped-table></grouped-table>
+     <grouped-table></grouped-table>-->
   </div>
 </template>
 
@@ -159,6 +162,7 @@ export default {
         jumpFirstOrLast: true,
         // infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
       },
+      virtualPaging: true,
       columns: [
         {
           label: 'Name',
@@ -240,7 +244,7 @@ export default {
           },
         }
       ],
-      rows: Rows.concat(Rows).concat(Rows),
+      rows:(( Rows.concat(Rows).concat(Rows)).concat(Rows).concat(Rows)).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows),
     };
   },
   methods: {
