@@ -131,7 +131,7 @@
           id="vgt-table"
           ref="table"
           :class="tableStyles"
-          :style="{ 'trabsform':  virtualPaginationOptions.enabled ? 'translate(0,'  paginated2ScrollTop +'px)'  :'unset' }"
+          :style="{ 'transform':  virtualPaginationOptions.enabled ? 'translate(0,' + paginated2ScrollTop +'px)'  :'unset' }"
         >
         <colgroup>
           <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
@@ -899,7 +899,7 @@ export default {
     //https://codesandbox.io/s/0bdq0?file=/src/components/HelloWorld.vue:2629-2640
       const max = this.paginated2ScrollHeight; //this.$refs.scroller.scrollHeight - this.$refs.scroller.offsetHeight
       const diff = this.scrollTop % this.virtualPaginationOptions.height;
-      return Math.min(max, this.scrollTop) // - (this.$refs.scroller?.offsetHeight||400)
+      return Math.min(max, this.scrollTop - diff) // - (this.$refs.scroller?.offsetHeight||400)
     },
     paginated2ScrollHeight() {
     return (this.rows.length *this.virtualPaginationOptions.height)
@@ -908,11 +908,11 @@ export default {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       let rows = this.filteredRows;
 
-      // const skip = this.$refs.fixedHeader?.offsetHeight || 60;
+      const count = (this.$refs.scroller?.offsetHeight - this.$refs.fixedHeader?.offsetHeight || 60) / this.virtualPaginationOptions.height + 2 || 20;// = this.$refs.fixedHeader?.offsetHeight || 60;
       const start = (this.scrollTop / this.virtualPaginationOptions.height)-1;
       const startfloor = Math.floor(start);
 
-      const end = startfloor + 20;
+      const end = startfloor + count;
       return [{ ...rows[0], children: rows[0].children.filter((f, i) => i >= startfloor && i < end) }];// .slice(start, end);
       
  

@@ -2121,7 +2121,7 @@ var script = {
     virtualPaginationOptions: {
       "default": function _default() {
         return {
-          enabled: true,
+          enabled: false,
           height: 32
         };
       }
@@ -2486,20 +2486,22 @@ var script = {
       return computedRows;
     },
     paginated2ScrollTop: function paginated2ScrollTop() {
+      //https://codesandbox.io/s/0bdq0?file=/src/components/HelloWorld.vue:2629-2640
       var max = this.paginated2ScrollHeight; //this.$refs.scroller.scrollHeight - this.$refs.scroller.offsetHeight
-      this.scrollTop % this.virtualPaginationOptions.height;
-      return Math.min(max, this.scrollTop); // - (this.$refs.scroller?.offsetHeight||400)
+      var diff = this.scrollTop % this.virtualPaginationOptions.height;
+      return Math.min(max, this.scrollTop - diff); // - (this.$refs.scroller?.offsetHeight||400)
     },
     paginated2ScrollHeight: function paginated2ScrollHeight() {
       return this.rows.length * this.virtualPaginationOptions.height;
     },
     paginated2: function paginated2() {
+      var _this$$refs$scroller, _this$$refs$fixedHead;
+      if (!this.virtualPaginationOptions.enabled) return this.paginated;
       var rows = this.filteredRows;
-
-      // const skip = this.$refs.fixedHeader?.offsetHeight || 60;
-      var start = this.scrollTop / this.virtualPaginationOptions.height;
+      var count = (((_this$$refs$scroller = this.$refs.scroller) === null || _this$$refs$scroller === void 0 ? void 0 : _this$$refs$scroller.offsetHeight) - ((_this$$refs$fixedHead = this.$refs.fixedHeader) === null || _this$$refs$fixedHead === void 0 ? void 0 : _this$$refs$fixedHead.offsetHeight) || 60) / this.virtualPaginationOptions.height + 2 || 20; // = this.$refs.fixedHeader?.offsetHeight || 60;
+      var start = this.scrollTop / this.virtualPaginationOptions.height - 1;
       var startfloor = Math.floor(start);
-      var end = startfloor + 20;
+      var end = startfloor + count;
       return [Object.assign({}, rows[0], {
         children: rows[0].children.filter(function (f, i) {
           return i >= startfloor && i < end;
@@ -3420,7 +3422,7 @@ var __vue_render__ = function __vue_render__() {
     ref: "table",
     "class": _vm.tableStyles,
     style: {
-      'margin-top': _vm.paginated2ScrollTop + 'px'
+      'transform': _vm.virtualPaginationOptions.enabled ? 'translate(0,' + _vm.paginated2ScrollTop + 'px)' : 'unset'
     },
     attrs: {
       "id": "vgt-table"
@@ -3608,12 +3610,12 @@ var __vue_render__ = function __vue_render__() {
     return [_c('div', {
       staticClass: "vgt-center-align vgt-text-disabled"
     }, [_vm._v("\n                  No data for table\n                ")])];
-  })], 2)])]) : _vm._e()], 2), _vm._v(" "), _c('div', {
+  })], 2)])]) : _vm._e()], 2), _vm._v(" "), _vm.virtualPaginationOptions.enabled ? _c('div', {
     style: {
       height: _vm.paginated2ScrollHeight + 'px',
       'background-color': 'red'
     }
-  })]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
+  }) : _vm._e()]), _vm._v(" "), _vm.hasFooterSlot ? _c('div', {
     staticClass: "vgt-wrap__actions-footer"
   }, [_vm._t("table-actions-bottom")], 2) : _vm._e(), _vm._v(" "), _vm.paginate && _vm.paginateOnBottom ? _vm._t("pagination-bottom", function () {
     return [_c('vgt-pagination', {

@@ -6,7 +6,7 @@
     <button @click="hideColumn">hide column</button>
     <button @click="setFilter">SetFilter</button>
     <button @click="changePage">Change Page</button>
-    <button @click="virtualPaging=!virtualPaging">virtualPaging</button>
+    <button @click="virtualPaging=!virtualPaging">virtualPaging {{virtualPaging}} </button>
     <input type="text" v-model="searchTerm">
     
     <vue-good-table
@@ -244,7 +244,7 @@ export default {
           },
         }
       ],
-      rows:(( Rows.concat(Rows).concat(Rows)).concat(Rows).concat(Rows)).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows),
+      rows: ((Rows.concat(Rows).concat(Rows)).concat(Rows).concat(Rows)).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).sort(f => Math.random()),
     };
   },
   methods: {
