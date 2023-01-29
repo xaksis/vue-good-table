@@ -373,7 +373,7 @@ Object.keys(coreDataTypes).forEach((key) => {
   dataTypes[compName] = coreDataTypes[key].default;
 });
 
-  function flat(obj) { return JSON.parse(JSON.stringify(obj)) }
+  function flat(obj) { return  JSON.parse(JSON.stringify(obj)) }
 export default {
   name: 'vue-good-table',
   props: {
@@ -984,7 +984,7 @@ export default {
     },
 
     originalRows() {
-      const rows = this.rows && this.rows.length ? JSON.parse(JSON.stringify(this.rows)) : [];
+      const rows = this.rows && this.rows.length ? flat(this.rows) : [];
       let nestedRows = [];
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([
@@ -1271,7 +1271,7 @@ export default {
         this.handleSearch();
         // we reset the filteredRows here because
         // we want to search across everything.
-        this.filteredRows = JSON.parse(JSON.stringify(this.originalRows));
+        this.filteredRows = flat(this.originalRows);
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -1385,7 +1385,7 @@ export default {
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
-      let computedRows = JSON.parse(JSON.stringify(this.originalRows));
+      let computedRows = flat(this.originalRows);
       let instancesOfFiltering = false;
 
 
@@ -1661,7 +1661,7 @@ export default {
 
     initializeSort() {
       const { enabled, initialSortBy, multipleColumns } = this.sortOptions;
-      const initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
+      const initSortBy = flat(initialSortBy || {});
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
