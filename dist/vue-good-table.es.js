@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.11
+ * vue-good-table v2.21.12
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -2495,10 +2495,14 @@ var script = {
     paginated2ScrollHeight: function paginated2ScrollHeight() {
       return this.rows.length * this.virtualPaginationOptions.height;
     },
+    paginated2Start: function paginated2Start() {
+      if (!this.virtualPaginationOptions.enabled) return 0;
+      return this.scrollTop / this.virtualPaginationOptions.height;
+    },
     paginated2: function paginated2() {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       var rows = this.filteredRows;
-      var count = this.scrollHeight / this.virtualPaginationOptions.height + 2 || 20; // = this.$refs.fixedHeader?.offsetHeight || 60;
+      var count = this.scrollHeight / this.virtualPaginationOptions.height + 2 || 30; // = this.$refs.fixedHeader?.offsetHeight || 60;
       var start = this.scrollTop / this.virtualPaginationOptions.height - 1;
       var startfloor = Math.floor(start);
       var end = startfloor + count;
@@ -2775,19 +2779,22 @@ var script = {
     },
     // checkbox click should always do the following
     onCheckboxClicked: function onCheckboxClicked(row, index, event) {
+      var offset = this.paginated2Start;
+      var currentIndex = index + Math.floor(offset);
       if (event.shiftKey && this.lastIndex > -1) {
         // support for multiple select with shift
-        var first = Math.min(this.lastIndex, index),
-          last = Math.max(this.lastIndex, index);
+        var lastI = this.lastIndex;
+        var first = Math.min(lastI, currentIndex),
+          last = Math.max(lastI, currentIndex);
         for (var i = first; i <= last; i++) {
           this.$set(this.rows[i], 'vgtSelected', !row.vgtSelected);
         }
       }
-      this.lastIndex = index;
+      this.lastIndex = currentIndex;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row: row,
-        pageIndex: index,
+        pageIndex: currentIndex,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2795,7 +2802,7 @@ var script = {
     onRowDoubleClicked: function onRowDoubleClicked(row, index, event) {
       this.$emit('on-row-dblclick', {
         row: row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2806,7 +2813,7 @@ var script = {
       }
       this.$emit('on-row-click', {
         row: row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2814,7 +2821,7 @@ var script = {
     onRowAuxClicked: function onRowAuxClicked(row, index, event) {
       this.$emit('on-row-aux-click', {
         row: row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2830,13 +2837,13 @@ var script = {
     onMouseenter: function onMouseenter(row, index) {
       this.$emit('on-row-mouseenter', {
         row: row,
-        pageIndex: index
+        pageIndex: Math.floor(this.paginated2Start) + index
       });
     },
     onMouseleave: function onMouseleave(row, index) {
       this.$emit('on-row-mouseleave', {
         row: row,
-        pageIndex: index
+        pageIndex: Math.floor(this.paginated2Start) + index
       });
     },
     searchTableOnEnter: function searchTableOnEnter() {
