@@ -527,6 +527,7 @@ export default {
     dataTypes: dataTypes || {},
 
     scrollTop: 0,
+    scrollHeight: 0,
   }),
 
   watch: {
@@ -912,8 +913,8 @@ export default {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       let rows = this.filteredRows;
 
-      const count = ((this.$refs.scroller?.offsetHeight|| window.innerHeight) - this.$refs.fixedHeader?.offsetHeight || 60) / this.virtualPaginationOptions.height + 2 || 30;// = this.$refs.fixedHeader?.offsetHeight || 60;
-      const start = this.paginated2Start;
+      const count = this.scrollHeight / this.virtualPaginationOptions.height + 2 || 30;// = this.$refs.fixedHeader?.offsetHeight || 60;
+      const start = (this.scrollTop / this.virtualPaginationOptions.height)-1;
       const startfloor = Math.floor(start);
 
       const end = startfloor + count;
@@ -1754,8 +1755,14 @@ export default {
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
-
-    this.$refs.scroller.addEventListener('scroll', () => this.scrollTop = (this.$refs.scroller?.scrollTop || 0));
+    const fHeight = () => {
+      this.scrollTop = (this.$refs.scroller?.scrollTop || 0)
+      this.scrollHeight = (this.$refs.scroller?.offsetHeight - this.$refs.fixedHeader?.offsetHeight || 60);
+    }
+      ;
+    this.$refs.scroller.addEventListener('scroll', fHeight);
+    this.ro =  new ResizeObserver(fHeight);
+    this.ro.observe(this.$refs.scroller);
     this.initializeSort();
   },
 
