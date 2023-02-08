@@ -904,12 +904,16 @@ export default {
     paginated2ScrollHeight() {
     return (this.rows.length *this.virtualPaginationOptions.height)
     },
+    paginated2Start() { 
+      if (!this.virtualPaginationOptions.enabled) return 0;
+      return (this.scrollTop / this.virtualPaginationOptions.height)
+    },
     paginated2() {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       let rows = this.filteredRows;
 
-      const count = (this.$refs.scroller?.offsetHeight - this.$refs.fixedHeader?.offsetHeight || 60) / this.virtualPaginationOptions.height + 2 || 20;// = this.$refs.fixedHeader?.offsetHeight || 60;
-      const start = (this.scrollTop / this.virtualPaginationOptions.height)-1;
+      const count = ((this.$refs.scroller?.offsetHeight|| window.innerHeight) - this.$refs.fixedHeader?.offsetHeight || 60) / this.virtualPaginationOptions.height + 2 || 30;// = this.$refs.fixedHeader?.offsetHeight || 60;
+      const start = this.paginated2Start;
       const startfloor = Math.floor(start);
 
       const end = startfloor + count;
@@ -1198,16 +1202,19 @@ export default {
 
     // checkbox click should always do the following
     onCheckboxClicked(row, index, event) {
-      
+
+      const offset = this.paginated2Start;
+      const currentIndex = index + Math.floor( offset);
       if (event.shiftKey && this.lastIndex > -1) { // support for multiple select with shift
-        const first = Math.min(this.lastIndex, index), last = Math.max(this.lastIndex, index);
+        const lastI = this.lastIndex;
+        const first = Math.min(lastI, currentIndex), last = Math.max(lastI, currentIndex);
         for (let i = first; i <= last;i++) this.$set(this.rows[i], 'vgtSelected', !row.vgtSelected);
       }
-      this.lastIndex = index;
+      this.lastIndex = currentIndex;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row,
-        pageIndex: index,
+        pageIndex: currentIndex,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1216,7 +1223,7 @@ export default {
     onRowDoubleClicked(row, index, event) {
       this.$emit('on-row-dblclick', {
         row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1228,7 +1235,7 @@ export default {
       }
       this.$emit('on-row-click', {
         row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1237,7 +1244,7 @@ export default {
     onRowAuxClicked(row, index, event) {
       this.$emit('on-row-aux-click', {
         row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1255,14 +1262,14 @@ export default {
     onMouseenter(row, index) {
       this.$emit('on-row-mouseenter', {
         row,
-        pageIndex: index,
+        pageIndex:  Math.floor(this.paginated2Start) + index,
       });
     },
 
     onMouseleave(row, index) {
       this.$emit('on-row-mouseleave', {
         row,
-        pageIndex: index,
+        pageIndex:  Math.floor(this.paginated2Start) + index,
       });
     },
 

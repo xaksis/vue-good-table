@@ -2494,12 +2494,16 @@ var script = {
     paginated2ScrollHeight: function paginated2ScrollHeight() {
       return this.rows.length * this.virtualPaginationOptions.height;
     },
+    paginated2Start: function paginated2Start() {
+      if (!this.virtualPaginationOptions.enabled) return 0;
+      return this.scrollTop / this.virtualPaginationOptions.height;
+    },
     paginated2: function paginated2() {
       var _this$$refs$scroller, _this$$refs$fixedHead;
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       var rows = this.filteredRows;
-      var count = (((_this$$refs$scroller = this.$refs.scroller) === null || _this$$refs$scroller === void 0 ? void 0 : _this$$refs$scroller.offsetHeight) - ((_this$$refs$fixedHead = this.$refs.fixedHeader) === null || _this$$refs$fixedHead === void 0 ? void 0 : _this$$refs$fixedHead.offsetHeight) || 60) / this.virtualPaginationOptions.height + 2 || 20; // = this.$refs.fixedHeader?.offsetHeight || 60;
-      var start = this.scrollTop / this.virtualPaginationOptions.height - 1;
+      var count = ((((_this$$refs$scroller = this.$refs.scroller) === null || _this$$refs$scroller === void 0 ? void 0 : _this$$refs$scroller.offsetHeight) || window.innerHeight) - ((_this$$refs$fixedHead = this.$refs.fixedHeader) === null || _this$$refs$fixedHead === void 0 ? void 0 : _this$$refs$fixedHead.offsetHeight) || 60) / this.virtualPaginationOptions.height + 2 || 30; // = this.$refs.fixedHeader?.offsetHeight || 60;
+      var start = this.paginated2Start;
       var startfloor = Math.floor(start);
       var end = startfloor + count;
       return [Object.assign({}, rows[0], {
@@ -2575,7 +2579,7 @@ var script = {
       return reconstructedRows;
     },
     originalRows: function originalRows() {
-      var rows = this.rows && this.rows.length ? JSON.parse(JSON.stringify(this.rows)) : [];
+      var rows = this.rows && this.rows.length ? flat(this.rows) : [];
       var nestedRows = [];
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([{
@@ -2775,19 +2779,22 @@ var script = {
     },
     // checkbox click should always do the following
     onCheckboxClicked: function onCheckboxClicked(row, index, event) {
+      var offset = this.paginated2Start;
+      var currentIndex = index + Math.floor(offset);
       if (event.shiftKey && this.lastIndex > -1) {
         // support for multiple select with shift
-        var first = Math.min(this.lastIndex, index),
-          last = Math.max(this.lastIndex, index);
+        var lastI = this.lastIndex;
+        var first = Math.min(lastI, currentIndex),
+          last = Math.max(lastI, currentIndex);
         for (var i = first; i <= last; i++) {
           this.$set(this.rows[i], 'vgtSelected', !row.vgtSelected);
         }
       }
-      this.lastIndex = index;
+      this.lastIndex = currentIndex;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row: row,
-        pageIndex: index,
+        pageIndex: currentIndex,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2795,7 +2802,7 @@ var script = {
     onRowDoubleClicked: function onRowDoubleClicked(row, index, event) {
       this.$emit('on-row-dblclick', {
         row: row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2806,7 +2813,7 @@ var script = {
       }
       this.$emit('on-row-click', {
         row: row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2814,7 +2821,7 @@ var script = {
     onRowAuxClicked: function onRowAuxClicked(row, index, event) {
       this.$emit('on-row-aux-click', {
         row: row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event: event
       });
@@ -2830,13 +2837,13 @@ var script = {
     onMouseenter: function onMouseenter(row, index) {
       this.$emit('on-row-mouseenter', {
         row: row,
-        pageIndex: index
+        pageIndex: Math.floor(this.paginated2Start) + index
       });
     },
     onMouseleave: function onMouseleave(row, index) {
       this.$emit('on-row-mouseleave', {
         row: row,
-        pageIndex: index
+        pageIndex: Math.floor(this.paginated2Start) + index
       });
     },
     searchTableOnEnter: function searchTableOnEnter() {
@@ -2844,7 +2851,7 @@ var script = {
         this.handleSearch();
         // we reset the filteredRows here because
         // we want to search across everything.
-        this.filteredRows = JSON.parse(JSON.stringify(this.originalRows));
+        this.filteredRows = flat(this.originalRows);
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -2950,7 +2957,7 @@ var script = {
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
-      var computedRows = JSON.parse(JSON.stringify(this.originalRows));
+      var computedRows = flat(this.originalRows);
       var instancesOfFiltering = false;
       this.calculateTopSize();
 
@@ -3187,7 +3194,7 @@ var script = {
         enabled = _this$sortOptions.enabled,
         initialSortBy = _this$sortOptions.initialSortBy,
         multipleColumns = _this$sortOptions.multipleColumns;
-      var initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
+      var initSortBy = flat(initialSortBy || {});
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
       }
