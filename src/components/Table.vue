@@ -374,6 +374,7 @@ export default {
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
+    minHeight: { default: null, type: String },
     fixedHeader: Boolean ,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
@@ -589,6 +590,7 @@ export default {
       return {
         overflow: 'scroll-y',
         maxHeight: this.maxHeight ? this.maxHeight : 'auto',
+        minHeight: this.minHeight ? this.minHeight : 'auto',
       };
     },
 
