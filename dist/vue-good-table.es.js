@@ -2497,7 +2497,7 @@ var script = {
     },
     paginated2Start: function paginated2Start() {
       if (!this.virtualPaginationOptions.enabled) return 0;
-      return this.scrollTop / this.virtualPaginationOptions.height;
+      return Math.max(0, this.scrollTop / this.virtualPaginationOptions.height - 1);
     },
     paginated2: function paginated2() {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
