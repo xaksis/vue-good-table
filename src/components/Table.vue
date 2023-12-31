@@ -1110,7 +1110,7 @@ export default {
       this.emitSelectedRows();
     },
 
-    toggleSelectAll() {
+    toggleSelectAll(e) {
       if (this.allSelected) {
         this.unselectAllInternal();
         return;
@@ -1118,7 +1118,7 @@ export default {
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach((headerRow) => {
         headerRow.children.forEach((row) => {
-          this.$set(row, 'vgtSelected', true);
+          this.$set(row, 'vgtSelected', e.revert ? !row.vgtSelected : true);
         });
       });
       this.emitSelectedRows();

@@ -7,7 +7,7 @@
         type="checkbox"
         :checked="allSelected"
         :indeterminate.prop="allSelectedIndeterminate"
-        @change="toggleSelectAll" />
+        @change="toggleSelectAll" @click.right.prevent.stop="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
       scope="col"
@@ -146,8 +146,8 @@ export default {
     reset() {
       this.$refs['filter-row'].reset(true);
     },
-    toggleSelectAll() {
-      this.$emit('on-toggle-select-all');
+    toggleSelectAll(e) {
+      this.$emit('on-toggle-select-all',{revert:  !!e.button });
     },
     isSortableColumn(column) {
       const { sortable } = column;

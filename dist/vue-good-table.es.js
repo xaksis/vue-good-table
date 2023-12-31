@@ -1434,8 +1434,10 @@ var script$2 = {
     reset: function reset() {
       this.$refs['filter-row'].reset(true);
     },
-    toggleSelectAll: function toggleSelectAll() {
-      this.$emit('on-toggle-select-all');
+    toggleSelectAll: function toggleSelectAll(e) {
+      this.$emit('on-toggle-select-all', {
+        revert: !!e.button
+      });
     },
     isSortableColumn: function isSortableColumn(column) {
       var sortable = column.sortable;
@@ -1583,7 +1585,12 @@ var __vue_render__$2 = function __vue_render__() {
       "indeterminate": _vm.allSelectedIndeterminate
     },
     on: {
-      "change": _vm.toggleSelectAll
+      "change": _vm.toggleSelectAll,
+      "contextmenu": function contextmenu($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return _vm.toggleSelectAll.apply(null, arguments);
+      }
     }
   })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
     return !column.hidden ? _c('th', {
@@ -2689,7 +2696,7 @@ var script = {
       });
       this.emitSelectedRows();
     },
-    toggleSelectAll: function toggleSelectAll() {
+    toggleSelectAll: function toggleSelectAll(e) {
       var _this7 = this;
       if (this.allSelected) {
         this.unselectAllInternal();
@@ -2698,7 +2705,7 @@ var script = {
       var rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach(function (headerRow) {
         headerRow.children.forEach(function (row) {
-          _this7.$set(row, 'vgtSelected', true);
+          _this7.$set(row, 'vgtSelected', e.revert ? !row.vgtSelected : true);
         });
       });
       this.emitSelectedRows();
