@@ -373,7 +373,23 @@ Object.keys(coreDataTypes).forEach((key) => {
   dataTypes[compName] = coreDataTypes[key].default;
 });
 
-  function flat(obj) { return  JSON.parse(JSON.stringify(obj)) }
+  function flat(obj) { return JSON.parse(JSON.stringify(obj)) }
+
+
+
+function debounce(func, delay) {
+  let timeoutId;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(context, args);
+    }, delay);
+  };
+  }
+
+
 export default {
   name: 'vue-good-table',
   props: {
@@ -925,7 +941,6 @@ export default {
     },
     rowsWidth() {
       if (!this.rows || !this.rows.length) return {};
-
       const ret = {}; const  columns = this.columns;
       for (var i = 0; i < this.rows.length; i++) {
          const rowret = {};
@@ -940,11 +955,14 @@ export default {
     },
     rowsWidth2() { //calculate the width of the rows in  virtualPagination
       if (!this.virtualPaginationOptions.enabled) return [];
-      const  sum = this.typedColumns.reduce((accumulator, currentValue) => accumulator + Math.max(currentValue.maxWidth||0, 10), 0);
-      const maxPerc = Math.max ((100 / this.typedColumns.length)*2,50);
+      const rowsWidth = this.rowsWidth;
+      const  fW = (column) =>  rowsWidth[column.field] || 0;
+
+      const  sum = this.columns.reduce((accumulator, currentValue) => accumulator + Math.max(fW(currentValue), 10), 0);
+      const maxPerc = Math.max ((100 / this.columns.length)*2,50);
       const colStyles = [];
-      for (let i = 0; i < this.typedColumns.length; i++) {
-        const w = Math.min(Math.max((this.typedColumns[i].maxWidth / sum) * 100, 10), maxPerc);
+      for (let i = 0; i < this.columns.length; i++) {
+        const w = Math.min(Math.max(( fW(this.columns[i]) / sum) * 100, 10), maxPerc);
         colStyles.push({
           //minWidth: (w / 2) + "%",
          // maxWidth: w + "%",
@@ -1049,7 +1067,6 @@ export default {
       for (let i = 0; i < this.columns.length; i++) {
         const column = columns[i];
         column.typeDef = this.dataTypes[column.type] || defaultType;
-        column.maxWidth = rowsWidth[column.field] || 0;
       }
       return columns;
     },
@@ -1384,8 +1401,9 @@ export default {
 
     formattedRow(row, isHeaderRow = false) {
       const formattedRow = {};
-      for (let i = 0; i < this.typedColumns.length; i++) {
-        const col = this.typedColumns[i];
+      const tc = this.typedColumns;
+      for (let i = 0; i < tc.length; i++) {
+        const col = tc[i];
         // what happens if field is
         if (col.field) {
           formattedRow[col.field] = this.collectFormatted(
@@ -1787,16 +1805,21 @@ export default {
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
-    const fHeight = () => {
+    const fHeight =  (() => {
       this.scrollTop = (this.$refs.scroller?.scrollTop || 0)
       this.scrollHeight = (this.$refs.scroller?.offsetHeight - this.$refs.fixedHeader?.offsetHeight || 60);
-    }
-      ;
+    });
+
+    this._fHeight = fHeight;
     this.$refs.scroller.addEventListener('scroll', fHeight);
     this.ro =  new ResizeObserver(fHeight);
     this.ro.observe(this.$refs.scroller);
     this.initializeSort();
-  },
+    },
+    beforeUnmount() {
+      thi.ro.disconnect();
+      this.$refs.scroller.removeEventListener('scroll',this._fHeight);
+    },
 
   components: {
     'vgt-pagination': VgtPagination,

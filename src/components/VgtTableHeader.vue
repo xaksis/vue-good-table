@@ -214,7 +214,6 @@ export default {
     setColumnStyles() {
       const colStyles = [];
       for (let i = 0; i < this.columns.length; i++) {
-        
         if (this.tableRef) {
           let skip = 0;
           if (this.selectable) skip++;

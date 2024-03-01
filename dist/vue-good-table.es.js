@@ -2535,13 +2535,19 @@ var script = {
       return ret;
     },
     rowsWidth2: function rowsWidth2() {
-      var sum = this.typedColumns.reduce(function (accumulator, currentValue) {
-        return accumulator + Math.max(currentValue.maxWidth || 0, 10);
+      //calculate the width of the rows in  virtualPagination
+      if (!this.virtualPaginationOptions.enabled) return [];
+      var rowsWidth = this.rowsWidth;
+      var fW = function fW(column) {
+        return rowsWidth[column.field] || 0;
+      };
+      var sum = this.columns.reduce(function (accumulator, currentValue) {
+        return accumulator + Math.max(fW(currentValue), 10);
       }, 0);
-      var maxPerc = Math.max(100 / this.typedColumns.length * 2, 50);
+      var maxPerc = Math.max(100 / this.columns.length * 2, 50);
       var colStyles = [];
-      for (var i = 0; i < this.typedColumns.length; i++) {
-        var w = Math.min(Math.max(this.typedColumns[i].maxWidth / sum * 100, 10), maxPerc);
+      for (var i = 0; i < this.columns.length; i++) {
+        var w = Math.min(Math.max(fW(this.columns[i]) / sum * 100, 10), maxPerc);
         colStyles.push({
           //minWidth: (w / 2) + "%",
           // maxWidth: w + "%",
@@ -2639,11 +2645,10 @@ var script = {
     },
     typedColumns: function typedColumns() {
       var columns = this.columns;
-      var rowsWidth = this.rowsWidth;
+      this.rowsWidth;
       for (var i = 0; i < this.columns.length; i++) {
         var column = columns[i];
         column.typeDef = this.dataTypes[column.type] || defaultType;
-        column.maxWidth = rowsWidth[column.field] || 0;
       }
       return columns;
     },
@@ -2959,8 +2964,9 @@ var script = {
     formattedRow: function formattedRow(row) {
       var isHeaderRow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var formattedRow = {};
-      for (var i = 0; i < this.typedColumns.length; i++) {
-        var col = this.typedColumns[i];
+      var tc = this.typedColumns;
+      for (var i = 0; i < tc.length; i++) {
+        var col = tc[i];
         // what happens if field is
         if (col.field) {
           formattedRow[col.field] = this.collectFormatted(row, col, isHeaderRow);
@@ -3307,10 +3313,15 @@ var script = {
       _this13.scrollTop = ((_this13$$refs$scrolle = _this13.$refs.scroller) === null || _this13$$refs$scrolle === void 0 ? void 0 : _this13$$refs$scrolle.scrollTop) || 0;
       _this13.scrollHeight = ((_this13$$refs$scrolle2 = _this13.$refs.scroller) === null || _this13$$refs$scrolle2 === void 0 ? void 0 : _this13$$refs$scrolle2.offsetHeight) - ((_this13$$refs$fixedHe = _this13.$refs.fixedHeader) === null || _this13$$refs$fixedHe === void 0 ? void 0 : _this13$$refs$fixedHe.offsetHeight) || 60;
     };
+    this._fHeight = fHeight;
     this.$refs.scroller.addEventListener('scroll', fHeight);
     this.ro = new ResizeObserver(fHeight);
     this.ro.observe(this.$refs.scroller);
     this.initializeSort();
+  },
+  beforeUnmount: function beforeUnmount() {
+    thi.ro.disconnect();
+    this.$refs.scroller.removeEventListener('scroll', this._fHeight);
   },
   components: {
     'vgt-pagination': __vue_component__$5,
