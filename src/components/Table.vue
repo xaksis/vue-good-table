@@ -131,10 +131,11 @@
           id="vgt-table"
           ref="table"
           :class="tableStyles"
-          :style="{ 'transform':  virtualPaginationOptions.enabled ? 'translate(0,' + paginated2ScrollTop +'px)'  :'unset' }"
+          :style="{'transform':  virtualPaginationOptions.enabled ? 'translate(0,' + paginated2ScrollTop +'px)'  :'unset' }"
         >
         <colgroup>
-          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`"  :style="rowsWidth2[index- (selectable? 1:0)]">
+          <col v-if="selectable" style="width: auto" />
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`"  :style="columnsWidth2[index]">
         </colgroup>
           <!-- Table header -->
           <thead
@@ -914,9 +915,9 @@ export default {
     },
     paginated2ScrollTop() {
     //https://codesandbox.io/s/0bdq0?file=/src/components/HelloWorld.vue:2629-2640
-      const max = this.paginated2ScrollHeight; //this.$refs.scroller.scrollHeight - this.$refs.scroller.offsetHeight
+      const max = this.paginated2ScrollHeight;
       const diff = this.scrollTop % this.virtualPaginationOptions.height;
-      return Math.min(max, this.scrollTop - diff) // - (this.$refs.scroller?.offsetHeight||400)
+      return Math.min(max, this.scrollTop - diff) 
     },
     paginated2ScrollHeight() {
     return (this.rows.length *this.virtualPaginationOptions.height)
@@ -929,7 +930,7 @@ export default {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       let rows = this.filteredRows;
 
-      const count = this.scrollHeight / this.virtualPaginationOptions.height + 2 || 30;// = this.$refs.fixedHeader?.offsetHeight || 60;
+      const count = this.scrollHeight / this.virtualPaginationOptions.height + 4 || 30;// = this.$refs.fixedHeader?.offsetHeight || 60;
       const start = (this.scrollTop / this.virtualPaginationOptions.height)-1;
       const startfloor = Math.floor(start);
 
@@ -939,34 +940,36 @@ export default {
  
   return rows;
     },
-    rowsWidth() {
+    columnsWidth() {
       if (!this.rows || !this.rows.length) return {};
-      const ret = {}; const  columns = this.columns;
+      const ret = []; const  columns = this.columns;
       for (var i = 0; i < this.rows.length; i++) {
-         const rowret = {};
         for (var i2 = 0; i2 < columns.length; i2++) {
           const col = columns[i2];
-          rowret[col.field] = String(this.rows[i][col.field]).length;
-          if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
+          const currentW = String(this.rows[i][col.field]).length;
+          ret[i2] = (ret[i2] || 0) +  currentW
+          //if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
         }
-        this.$set(this.rows[i], "vgt_width", rowret);
+        //this.$set(this.rows[i], "vgt_width", rowret);
+      }
+      for (var i = 0; i < columns.length; i++) {
+        const f = columns[i].field;
+        ret[f] = (ret[f]||1)/this.rows.length 
       }
       return ret;
     },
-    rowsWidth2() { //calculate the width of the rows in  virtualPagination
+    columnsWidth2() { //calculate the width of the rows in  virtualPagination
       if (!this.virtualPaginationOptions.enabled) return [];
-      const rowsWidth = this.rowsWidth;
-      const  fW = (column) =>  rowsWidth[column.field] || 0;
-
-      const  sum = this.columns.reduce((accumulator, currentValue) => accumulator + Math.max(fW(currentValue), 10), 0);
-      const maxPerc = Math.max ((100 / this.columns.length)*2,50);
+      const columnsWidth = this.columnsWidth;
+      const  fW = (column) =>  columnsWidth[column.field] || 0;
+      const cl = this.columns.length;
+      const sum = this.columns.reduce((accumulator, currentValue, i) => accumulator + Math.max(columnsWidth[i], 8), 0);
+      const maxPerc = Math.max ((100 / cl)*3,50);
       const colStyles = [];
-      for (let i = 0; i < this.columns.length; i++) {
-        const w = Math.min(Math.max(( fW(this.columns[i]) / sum) * 100, 10), maxPerc);
+      for (let i = 0; i < cl; i++) {
+        const w = Math.min(Math.max(( columnsWidth[i] / sum) * 100, 8), maxPerc);
         colStyles.push({
-          //minWidth: (w / 2) + "%",
-         // maxWidth: w + "%",
-          width:w + "%"
+          width: Math.floor(w) + "%"
         });
       }
       return colStyles;
@@ -1063,7 +1066,6 @@ export default {
 
     typedColumns() {
       const columns = this.columns;
-      const rowsWidth = this.rowsWidth;
       for (let i = 0; i < this.columns.length; i++) {
         const column = columns[i];
         column.typeDef = this.dataTypes[column.type] || defaultType;

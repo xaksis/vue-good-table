@@ -10,7 +10,7 @@
     <input type="text" v-model="searchTerm">
     
     <vue-good-table
-      ref="my-table"  :max-height="'600px'"
+      ref="my-table"  :max-height="'900px'"
       :rtl="true"
       :fixed-header="true"
       @on-column-filter="onColumnFilter"

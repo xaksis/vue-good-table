@@ -2495,9 +2495,9 @@ var script = {
     },
     paginated2ScrollTop: function paginated2ScrollTop() {
       //https://codesandbox.io/s/0bdq0?file=/src/components/HelloWorld.vue:2629-2640
-      var max = this.paginated2ScrollHeight; //this.$refs.scroller.scrollHeight - this.$refs.scroller.offsetHeight
+      var max = this.paginated2ScrollHeight;
       var diff = this.scrollTop % this.virtualPaginationOptions.height;
-      return Math.min(max, this.scrollTop - diff); // - (this.$refs.scroller?.offsetHeight||400)
+      return Math.min(max, this.scrollTop - diff);
     },
     paginated2ScrollHeight: function paginated2ScrollHeight() {
       return this.rows.length * this.virtualPaginationOptions.height;
@@ -2509,7 +2509,7 @@ var script = {
     paginated2: function paginated2() {
       if (!this.virtualPaginationOptions.enabled) return this.paginated;
       var rows = this.filteredRows;
-      var count = this.scrollHeight / this.virtualPaginationOptions.height + 2 || 30; // = this.$refs.fixedHeader?.offsetHeight || 60;
+      var count = this.scrollHeight / this.virtualPaginationOptions.height + 4 || 30; // = this.$refs.fixedHeader?.offsetHeight || 60;
       var start = this.scrollTop / this.virtualPaginationOptions.height - 1;
       var startfloor = Math.floor(start);
       var end = startfloor + count;
@@ -2519,39 +2519,40 @@ var script = {
         })
       })]; // .slice(start, end);
     },
-    rowsWidth: function rowsWidth() {
+    columnsWidth: function columnsWidth() {
       if (!this.rows || !this.rows.length) return {};
-      var ret = {};
+      var ret = [];
       var columns = this.columns;
       for (var i = 0; i < this.rows.length; i++) {
-        var rowret = {};
         for (var i2 = 0; i2 < columns.length; i2++) {
           var col = columns[i2];
-          rowret[col.field] = String(this.rows[i][col.field]).length;
-          if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
+          var currentW = String(this.rows[i][col.field]).length;
+          ret[i2] = (ret[i2] || 0) + currentW;
+          //if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
         }
-        this.$set(this.rows[i], "vgt_width", rowret);
+        //this.$set(this.rows[i], "vgt_width", rowret);
+      }
+
+      for (var i = 0; i < columns.length; i++) {
+        var f = columns[i].field;
+        ret[f] = (ret[f] || 1) / this.rows.length;
       }
       return ret;
     },
-    rowsWidth2: function rowsWidth2() {
+    columnsWidth2: function columnsWidth2() {
       //calculate the width of the rows in  virtualPagination
       if (!this.virtualPaginationOptions.enabled) return [];
-      var rowsWidth = this.rowsWidth;
-      var fW = function fW(column) {
-        return rowsWidth[column.field] || 0;
-      };
-      var sum = this.columns.reduce(function (accumulator, currentValue) {
-        return accumulator + Math.max(fW(currentValue), 10);
+      var columnsWidth = this.columnsWidth;
+      var cl = this.columns.length;
+      var sum = this.columns.reduce(function (accumulator, currentValue, i) {
+        return accumulator + Math.max(columnsWidth[i], 8);
       }, 0);
-      var maxPerc = Math.max(100 / this.columns.length * 2, 50);
+      var maxPerc = Math.max(100 / cl * 3, 50);
       var colStyles = [];
-      for (var i = 0; i < this.columns.length; i++) {
-        var w = Math.min(Math.max(fW(this.columns[i]) / sum * 100, 10), maxPerc);
+      for (var i = 0; i < cl; i++) {
+        var w = Math.min(Math.max(columnsWidth[i] / sum * 100, 8), maxPerc);
         colStyles.push({
-          //minWidth: (w / 2) + "%",
-          // maxWidth: w + "%",
-          width: w + "%"
+          width: Math.floor(w) + "%"
         });
       }
       return colStyles;
@@ -2645,7 +2646,6 @@ var script = {
     },
     typedColumns: function typedColumns() {
       var columns = this.columns;
-      this.rowsWidth;
       for (var i = 0; i < this.columns.length; i++) {
         var column = columns[i];
         column.typeDef = this.dataTypes[column.type] || defaultType;
@@ -3489,15 +3489,19 @@ var __vue_render__ = function __vue_render__() {
     attrs: {
       "id": "vgt-table"
     }
-  }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
+  }, [_c('colgroup', [_vm.selectable ? _c('col', {
+    staticStyle: {
+      "width": "auto"
+    }
+  }) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
     return _c('col', {
       key: index,
-      style: _vm.rowsWidth2[index - (_vm.selectable ? 1 : 0)],
+      style: _vm.columnsWidth2[index],
       attrs: {
         "id": "col-" + index
       }
     });
-  }), 0), _vm._v(" "), _c("vgt-table-header", {
+  })], 2), _vm._v(" "), _c("vgt-table-header", {
     ref: "table-header-primary",
     tag: "thead",
     attrs: {
