@@ -2519,6 +2519,37 @@ var script = {
         })
       })]; // .slice(start, end);
     },
+    rowsWidth: function rowsWidth() {
+      if (!this.rows || !this.rows.length) return {};
+      var ret = {};
+      var columns = this.columns;
+      for (var i = 0; i < this.rows.length; i++) {
+        var rowret = {};
+        for (var i2 = 0; i2 < columns.length; i2++) {
+          var col = columns[i2];
+          rowret[col.field] = String(this.rows[i][col.field]).length;
+          if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
+        }
+        this.$set(this.rows[i], "vgt_width", rowret);
+      }
+      return ret;
+    },
+    rowsWidth2: function rowsWidth2() {
+      var sum = this.typedColumns.reduce(function (accumulator, currentValue) {
+        return accumulator + Math.max(currentValue.maxWidth || 0, 10);
+      }, 0);
+      var maxPerc = Math.max(100 / this.typedColumns.length * 2, 50);
+      var colStyles = [];
+      for (var i = 0; i < this.typedColumns.length; i++) {
+        var w = Math.min(Math.max(this.typedColumns[i].maxWidth / sum * 100, 10), maxPerc);
+        colStyles.push({
+          //minWidth: (w / 2) + "%",
+          // maxWidth: w + "%",
+          width: w + "%"
+        });
+      }
+      return colStyles;
+    },
     paginated: function paginated() {
       var _this2 = this;
       if (!this.processedRows.length) return [];
@@ -2608,9 +2639,11 @@ var script = {
     },
     typedColumns: function typedColumns() {
       var columns = this.columns;
+      var rowsWidth = this.rowsWidth;
       for (var i = 0; i < this.columns.length; i++) {
         var column = columns[i];
         column.typeDef = this.dataTypes[column.type] || defaultType;
+        column.maxWidth = rowsWidth[column.field] || 0;
       }
       return columns;
     },
@@ -3448,6 +3481,7 @@ var __vue_render__ = function __vue_render__() {
   }, [_c('colgroup', _vm._l(_vm.columns, function (column, index) {
     return _c('col', {
       key: index,
+      style: _vm.rowsWidth2[index - (_vm.selectable ? 1 : 0)],
       attrs: {
         "id": "col-" + index
       }

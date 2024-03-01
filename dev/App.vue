@@ -66,7 +66,7 @@ import RemoteTable from './remote-table.vue';
     },
     {
       id: 3,
-      name: 'Angel',
+      name: 'Angel asds',
       age: 16,
       createdAt: '2011-10-30',
       score: 0.03343,
@@ -98,7 +98,7 @@ import RemoteTable from './remote-table.vue';
       name: '193.23',
       age: 20,
       createdAt: '2011-10-11',
-      score: 0.03343,
+   
       bool: null,
       exact: 'rematch',
       average: 3
@@ -108,7 +108,6 @@ import RemoteTable from './remote-table.vue';
       name: 'Dan',
       age: 34,
       createdAt: '2011-10-11',
-      score: 0.03343,
       bool: null,
       exact: null,
       average: 2
@@ -118,14 +117,13 @@ import RemoteTable from './remote-table.vue';
       name: 'John',
       age: 20,
       createdAt: '2011-10-31',
-      score: 0.03343,
       bool: true,
       exact: 'match',
       average: 1.5
     },
     {
       id: 7,
-      name: 'Ángel',
+      name: 'Ángel asdsadsad sadsadsadsadsa dsa sda asd sa das dasdsa dsa sa dsa d',
       age: 20,
       createdAt: '2013-09-21',
       score: null,
@@ -138,7 +136,6 @@ import RemoteTable from './remote-table.vue';
       name: 'Susan',
       age: 16,
       createdAt: '2013-10-31',
-      score: 0.03343,
       bool: true,
       exact: 'rematch',
       average: 1
@@ -147,7 +144,12 @@ import RemoteTable from './remote-table.vue';
 
 export default {
   name: 'test',
-  data() {
+    data() {
+
+      var rows = JSON.parse(JSON.stringify(((Rows.concat(Rows).concat(Rows)).concat(Rows).concat(Rows)).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).sort(f => Math.random())));
+
+      rows.forEach((r, i) => { if (i > 20) delete r.score; if (i > 110) r.exact = 'asdsadsadsadasd'; if (i>200) r.name += 'assadsadsadsadsadsas asd asd sadsaaas' });
+
     return {
       currentPage: 1,
       selectedIds: [],
@@ -161,8 +163,7 @@ export default {
         perPageDropdownEnabled: true,
         jumpFirstOrLast: true,
         // infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
-      },
-      virtualPaging: true,
+      },     virtualPaging: true,
       columns: [
         {
           label: 'Name',
@@ -208,7 +209,7 @@ export default {
           field: 'createdAt',
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd',
-          dateOutputFormat: 'PPPP',
+          dateOutputFormat: 'yyyy-MM-dd',
         },
         {
           label: 'Percent',
@@ -244,7 +245,7 @@ export default {
           },
         }
       ],
-      rows: ((Rows.concat(Rows).concat(Rows)).concat(Rows).concat(Rows)).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).concat(Rows).sort(f => Math.random()),
+      rows:rows,
     };
   },
   methods: {

@@ -134,7 +134,7 @@
           :style="{ 'transform':  virtualPaginationOptions.enabled ? 'translate(0,' + paginated2ScrollTop +'px)'  :'unset' }"
         >
         <colgroup>
-          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`"  :style="rowsWidth2[index- (selectable? 1:0)]">
         </colgroup>
           <!-- Table header -->
           <thead
@@ -922,7 +922,37 @@ export default {
       
  
   return rows;
- },
+    },
+    rowsWidth() {
+      if (!this.rows || !this.rows.length) return {};
+
+      const ret = {}; const  columns = this.columns;
+      for (var i = 0; i < this.rows.length; i++) {
+         const rowret = {};
+        for (var i2 = 0; i2 < columns.length; i2++) {
+          const col = columns[i2];
+          rowret[col.field] = String(this.rows[i][col.field]).length;
+          if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
+        }
+        this.$set(this.rows[i], "vgt_width", rowret);
+      }
+      return ret;
+    },
+    rowsWidth2() { //calculate the width of the rows in  virtualPagination
+      if (!this.virtualPaginationOptions.enabled) return [];
+      const  sum = this.typedColumns.reduce((accumulator, currentValue) => accumulator + Math.max(currentValue.maxWidth||0, 10), 0);
+      const maxPerc = Math.max ((100 / this.typedColumns.length)*2,50);
+      const colStyles = [];
+      for (let i = 0; i < this.typedColumns.length; i++) {
+        const w = Math.min(Math.max((this.typedColumns[i].maxWidth / sum) * 100, 10), maxPerc);
+        colStyles.push({
+          //minWidth: (w / 2) + "%",
+         // maxWidth: w + "%",
+          width:w + "%"
+        });
+      }
+      return colStyles;
+    },
 
     paginated() {
       if (!this.processedRows.length) return [];
@@ -1015,9 +1045,11 @@ export default {
 
     typedColumns() {
       const columns = this.columns;
+      const rowsWidth = this.rowsWidth;
       for (let i = 0; i < this.columns.length; i++) {
         const column = columns[i];
         column.typeDef = this.dataTypes[column.type] || defaultType;
+        column.maxWidth = rowsWidth[column.field] || 0;
       }
       return columns;
     },
