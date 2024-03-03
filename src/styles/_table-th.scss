@@ -47,7 +47,7 @@ $sort-chevron-width: 5px;
       }
     }
 
-    .drag {position:absolute;top:0; bottom:0; background-color: $border-color; user-select: none; inset-inline-end: -0.2rem; width: 0.4rem; cursor: e-resize;}
+    .drag {position:absolute;top:0; bottom:0; background-color: $border-color; user-select: none; inset-inline-end: 0; width: 0.4rem; cursor: e-resize;}
   }
   & th.line-numbers, & th.vgt-checkbox-col {
     padding: 0 .75em 0 .75em;
