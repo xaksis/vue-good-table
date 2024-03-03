@@ -156,7 +156,7 @@ export default {
       if (this.resizing) {
         const delta =( event.pageX - this.startX)*-1 //rtl -1;
         if (!delta) return;
-        this.$emit("drag", this.resizeIndex, delta);
+        this.$emit("drag", this.resizeIndex, delta, event.target.parentNode.offsetWidth );
         this.startX = event.pageX;
       }
     },

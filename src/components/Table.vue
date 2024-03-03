@@ -1085,14 +1085,14 @@ export default {
   },
 
     methods: {
-      drag(index, delta) {
+      drag(index, delta, deltaOffsetWidth) {
     
         var w = this.columnsWidth[index];
-        var max = this.$el.offsetWidth;
+        //var max = this.$el.offsetWidth;
         var maxWidth = this.columnWidthSum;
-        var perc = (delta / max);
+        var perc = (delta / deltaOffsetWidth);
         this.columnsWidth[index] += perc * maxWidth;
-        this.resizeForceHandler = !this.resizeForceHandler
+        this.resizeForceHandler = !this.resizeForceHandler //workaround - force render columnsWidth2
       },
 
     //* we need to check for expanded row state here

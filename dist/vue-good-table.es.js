@@ -1443,7 +1443,7 @@ var script$2 = {
       if (this.resizing) {
         var delta = (event.pageX - this.startX) * -1; //rtl -1;
         if (!delta) return;
-        this.$emit("drag", this.resizeIndex, delta);
+        this.$emit("drag", this.resizeIndex, delta, event.target.parentNode.offsetWidth);
         this.startX = event.pageX;
       }
     },
@@ -2691,13 +2691,13 @@ var script = {
     }
   },
   methods: {
-    drag: function drag(index, delta) {
+    drag: function drag(index, delta, deltaOffsetWidth) {
       this.columnsWidth[index];
-      var max = this.$el.offsetWidth;
+      //var max = this.$el.offsetWidth;
       var maxWidth = this.columnWidthSum;
-      var perc = delta / max;
+      var perc = delta / deltaOffsetWidth;
       this.columnsWidth[index] += perc * maxWidth;
-      this.resizeForceHandler = !this.resizeForceHandler;
+      this.resizeForceHandler = !this.resizeForceHandler; //workaround - force render columnsWidth2
     },
     //* we need to check for expanded row state here
     //* to maintain it when sorting/filtering
