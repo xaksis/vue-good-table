@@ -4,7 +4,7 @@ $sort-chevron-width: 5px;
   & th{
     padding: .75em .75em .75em .75em;
     vertical-align: middle;
-    position: relative;
+    position: relative; 
     &.sortable{
       button {
         -webkit-appearance: none;
@@ -14,8 +14,8 @@ $sort-chevron-width: 5px;
         border: none;
         position: absolute;
         top: 0;
-        inset-inline-start: 0;
-        width: 100%;
+        inset-inline-end: 0; cursor:pointer;
+        width: 1rem;
         height: 100%;
         &:focus{
           outline: none;
@@ -46,6 +46,8 @@ $sort-chevron-width: 5px;
         }
       }
     }
+
+    .drag {position:absolute;top:0; bottom:0; background-color: $border-color; user-select: none; inset-inline-end: -0.2rem; width: 0.4rem; cursor: e-resize;}
   }
   & th.line-numbers, & th.vgt-checkbox-col {
     padding: 0 .75em 0 .75em;

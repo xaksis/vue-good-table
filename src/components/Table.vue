@@ -87,6 +87,7 @@
             @on-toggle-select-all="toggleSelectAll"
             @on-sort-change="changeSort"
             @filter-changed="filterRows"
+            @drag="drag"
             :columns="columns"
             :line-numbers="lineNumbers"
             :selectable="selectable"
@@ -543,8 +544,10 @@ export default {
     sortChanged: false,
     dataTypes: dataTypes || {},
 
+    // virtual pagination
     scrollTop: 0,
     scrollHeight: 0,
+    resizeForceHandler: false,
   }),
 
   watch: {
@@ -952,24 +955,27 @@ export default {
         }
         //this.$set(this.rows[i], "vgt_width", rowret);
       }
-      for (var i = 0; i < columns.length; i++) {
-        const f = columns[i].field;
-        ret[f] = (ret[f]||1)/this.rows.length 
-      }
+     
       return ret;
+    },
+    columnWidthSum() {
+      const columnsWidth = this.columnsWidth;
+      const resizeForceHandler = this.resizeForceHandler;
+      return this.columns.reduce((accumulator, currentValue, i) => accumulator + Math.max(columnsWidth[i], 8), 0);
     },
     columnsWidth2() { //calculate the width of the rows in  virtualPagination
       if (!this.virtualPaginationOptions.enabled) return [];
       const columnsWidth = this.columnsWidth;
+      const resizeForceHandler = this.resizeForceHandler; //recalculate when needed
       const  fW = (column) =>  columnsWidth[column.field] || 0;
       const cl = this.columns.length;
-      const sum = this.columns.reduce((accumulator, currentValue, i) => accumulator + Math.max(columnsWidth[i], 8), 0);
+      const sum = this.columnWidthSum;
       const maxPerc = Math.max ((100 / cl)*3,50);
       const colStyles = [];
       for (let i = 0; i < cl; i++) {
         const w = Math.min(Math.max(( columnsWidth[i] / sum) * 100, 8), maxPerc);
         colStyles.push({
-          width: Math.floor(w) + "%"
+          width: (w) + "%"
         });
       }
       return colStyles;
@@ -1078,7 +1084,17 @@ export default {
     },
   },
 
-  methods: {
+    methods: {
+      drag(index, delta) {
+    
+        var w = this.columnsWidth[index];
+        var max = this.$el.offsetWidth;
+        var maxWidth = this.columnWidthSum;
+        var perc = (delta / max);
+        this.columnsWidth[index] += perc * maxWidth;
+        this.resizeForceHandler = !this.resizeForceHandler
+      },
+
     //* we need to check for expanded row state here
     //* to maintain it when sorting/filtering
     handleExpanded(headerRow) {

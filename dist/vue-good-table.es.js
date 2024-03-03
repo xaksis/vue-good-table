@@ -1431,6 +1431,29 @@ var script$2 = {
   },
   computed: {},
   methods: {
+    //resize
+    startResize: function startResize(event, index) {
+      this.resizing = true;
+      this.resizeIndex = index;
+      this.startX = event.pageX;
+      document.addEventListener('mousemove', this.handleResize);
+      document.addEventListener('mouseup', this.stopResize);
+    },
+    handleResize: function handleResize(event) {
+      if (this.resizing) {
+        var delta = (event.pageX - this.startX) * -1; //rtl -1;
+        if (!delta) return;
+        this.$emit("drag", this.resizeIndex, delta);
+        this.startX = event.pageX;
+      }
+    },
+    stopResize: function stopResize() {
+      if (this.resizing) {
+        this.resizing = false;
+        document.removeEventListener('mousemove', this.handleResize);
+        document.removeEventListener('mouseup', this.stopResize);
+      }
+    },
     reset: function reset() {
       this.$refs['filter-row'].reset(true);
     },
@@ -1615,7 +1638,14 @@ var __vue_render__$2 = function __vue_render__() {
       }
     }, [_c('span', {
       staticClass: "sr-only"
-    }, [_vm._v("\r\n          Sort table by " + _vm._s(column.label) + " in " + _vm._s(_vm.getColumnSortLong(column)) + " order\r\n          ")])]) : _vm._e()], 2) : _vm._e();
+    }, [_vm._v("\r\n          Sort table by " + _vm._s(column.label) + " in " + _vm._s(_vm.getColumnSortLong(column)) + " order\r\n          ")])]) : _vm._e(), _vm._v(" "), _c('span', {
+      staticClass: "drag",
+      on: {
+        "mousedown": function mousedown($event) {
+          return _vm.startResize($event, index);
+        }
+      }
+    }, [_vm._v(" ")])], 2) : _vm._e();
   })], 2), _vm._v(" "), _c("vgt-filter-row", {
     ref: "filter-row",
     tag: "tr",
@@ -2198,8 +2228,10 @@ var script = {
       forceSearch: false,
       sortChanged: false,
       dataTypes: dataTypes || {},
+      // virtual pagination
       scrollTop: 0,
-      scrollHeight: 0
+      scrollHeight: 0,
+      resizeForceHandler: false
     };
   },
   watch: {
@@ -2533,26 +2565,28 @@ var script = {
         //this.$set(this.rows[i], "vgt_width", rowret);
       }
 
-      for (var i = 0; i < columns.length; i++) {
-        var f = columns[i].field;
-        ret[f] = (ret[f] || 1) / this.rows.length;
-      }
       return ret;
+    },
+    columnWidthSum: function columnWidthSum() {
+      var columnsWidth = this.columnsWidth;
+      this.resizeForceHandler;
+      return this.columns.reduce(function (accumulator, currentValue, i) {
+        return accumulator + Math.max(columnsWidth[i], 8);
+      }, 0);
     },
     columnsWidth2: function columnsWidth2() {
       //calculate the width of the rows in  virtualPagination
       if (!this.virtualPaginationOptions.enabled) return [];
       var columnsWidth = this.columnsWidth;
+      this.resizeForceHandler; //recalculate when needed
       var cl = this.columns.length;
-      var sum = this.columns.reduce(function (accumulator, currentValue, i) {
-        return accumulator + Math.max(columnsWidth[i], 8);
-      }, 0);
+      var sum = this.columnWidthSum;
       var maxPerc = Math.max(100 / cl * 3, 50);
       var colStyles = [];
       for (var i = 0; i < cl; i++) {
         var w = Math.min(Math.max(columnsWidth[i] / sum * 100, 8), maxPerc);
         colStyles.push({
-          width: Math.floor(w) + "%"
+          width: w + "%"
         });
       }
       return colStyles;
@@ -2657,6 +2691,14 @@ var script = {
     }
   },
   methods: {
+    drag: function drag(index, delta) {
+      this.columnsWidth[index];
+      var max = this.$el.offsetWidth;
+      var maxWidth = this.columnWidthSum;
+      var perc = delta / max;
+      this.columnsWidth[index] += perc * maxWidth;
+      this.resizeForceHandler = !this.resizeForceHandler;
+    },
     //* we need to check for expanded row state here
     //* to maintain it when sorting/filtering
     handleExpanded: function handleExpanded(headerRow) {
@@ -3454,7 +3496,8 @@ var __vue_render__ = function __vue_render__() {
     on: {
       "on-toggle-select-all": _vm.toggleSelectAll,
       "on-sort-change": _vm.changeSort,
-      "filter-changed": _vm.filterRows
+      "filter-changed": _vm.filterRows,
+      "drag": _vm.drag
     },
     scopedSlots: _vm._u([{
       key: "table-column",

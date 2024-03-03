@@ -28,6 +28,7 @@
           Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
           </span>
         </button>
+      <span class="drag"  @mousedown="startResize($event,index)">&nbsp;</span>
     </th>
   </tr>
   <tr
@@ -142,7 +143,34 @@ export default {
   computed: {
 
   },
-  methods: {
+    methods: {
+//resize
+    startResize(event,index) {
+      this.resizing = true;
+      this.resizeIndex = index;
+      this.startX = event.pageX;
+      document.addEventListener('mousemove', this.handleResize);
+      document.addEventListener('mouseup', this.stopResize);
+    },
+    handleResize(event) {
+      if (this.resizing) {
+        const delta =( event.pageX - this.startX)*-1 //rtl -1;
+        if (!delta) return;
+        this.$emit("drag", this.resizeIndex, delta);
+        this.startX = event.pageX;
+      }
+    },
+    stopResize() {
+      if (this.resizing) {
+        this.resizing = false;
+        document.removeEventListener('mousemove', this.handleResize);
+        document.removeEventListener('mouseup', this.stopResize);
+      }
+    } ,
+
+
+
+
     reset() {
       this.$refs['filter-row'].reset(true);
     },
