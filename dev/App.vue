@@ -10,7 +10,7 @@
     <input type="text" v-model="searchTerm">
     
     <vue-good-table
-      ref="my-table"  :max-height="'900px'"
+      ref="table"  :max-height="'900px'"
       :rtl="true"
       :fixed-header="true"
       @on-column-filter="onColumnFilter"
@@ -20,6 +20,7 @@
       @on-per-page-change="onPerPageChange"
       @on-search="onSearch"
       @on-selected-rows-change="onSelectChanged"
+      @drag="onDrag"
       :columns="columns"
       :rows="rows"
       :pagination-options="paginationOptions"
@@ -248,7 +249,11 @@ export default {
       rows:rows,
     };
   },
-  methods: {
+    methods: {
+      onDrag(row) { 
+        var t = this.$refs.table.columnsWidth;
+        for( let i=0;i < this.columns.length;i++) this.columns[i].colWidth = t[i]
+      },
     fieldValid(row) {
       return row.bool;
     },
@@ -275,7 +280,7 @@ export default {
       this.$set(this.columns[0], 'hidden', true);
     },
     resetTable() {
-      this.$refs['my-table'].reset();
+      this.$refs['table'].reset();
     },
     onSelectAll(params) {
       console.log(params);

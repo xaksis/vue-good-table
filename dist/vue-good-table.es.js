@@ -2558,13 +2558,17 @@ var script = {
       for (var i = 0; i < this.rows.length; i++) {
         for (var i2 = 0; i2 < columns.length; i2++) {
           var col = columns[i2];
+          if (col.colWidth) continue;
           var currentW = String(this.rows[i][col.field]).length;
           ret[i2] = (ret[i2] || 0) + currentW;
-          //if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
         }
-        //this.$set(this.rows[i], "vgt_width", rowret);
       }
-
+      this._columnsWidth = ret;
+      // stored width
+      for (var i2 = 0; i2 < columns.length; i2++) {
+        var _col = columns[i2];
+        if (_col.colWidth) ret[i2] = _col.colWidth;
+      }
       return ret;
     },
     columnWidthSum: function columnWidthSum() {
@@ -2581,7 +2585,7 @@ var script = {
       this.resizeForceHandler; //recalculate when needed
       var cl = this.columns.length;
       var sum = this.columnWidthSum;
-      var maxPerc = Math.max(100 / cl * 3, 50);
+      var maxPerc = Math.max(100 / cl * 3, 70);
       var colStyles = [];
       for (var i = 0; i < cl; i++) {
         var w = Math.min(Math.max(columnsWidth[i] / sum * 100, 8), maxPerc);
@@ -2698,6 +2702,7 @@ var script = {
       var perc = delta / deltaOffsetWidth;
       this.columnsWidth[index] += perc * maxWidth;
       this.resizeForceHandler = !this.resizeForceHandler; //workaround - force render columnsWidth2
+      this.$emit("drag", this.columnsWidth);
     },
     //* we need to check for expanded row state here
     //* to maintain it when sorting/filtering

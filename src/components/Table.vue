@@ -949,13 +949,17 @@ export default {
       for (var i = 0; i < this.rows.length; i++) {
         for (var i2 = 0; i2 < columns.length; i2++) {
           const col = columns[i2];
+          if (col.colWidth) continue;
           const currentW = String(this.rows[i][col.field]).length;
           ret[i2] = (ret[i2] || 0) +  currentW
-          //if (!ret[col.field] || rowret[col.field] > ret[col.field]) ret[col.field] = rowret[col.field];
         }
-        //this.$set(this.rows[i], "vgt_width", rowret);
       }
-     
+      this._columnsWidth = ret;
+      // stored width
+      for (var i2 = 0; i2 < columns.length; i2++) {
+        const col = columns[i2];
+        if (col.colWidth) ret[i2] = col.colWidth;
+      }
       return ret;
     },
     columnWidthSum() {
@@ -970,7 +974,7 @@ export default {
       const  fW = (column) =>  columnsWidth[column.field] || 0;
       const cl = this.columns.length;
       const sum = this.columnWidthSum;
-      const maxPerc = Math.max ((100 / cl)*3,50);
+      const maxPerc = Math.max ((100 / cl)*3,70);
       const colStyles = [];
       for (let i = 0; i < cl; i++) {
         const w = Math.min(Math.max(( columnsWidth[i] / sum) * 100, 8), maxPerc);
@@ -1093,6 +1097,7 @@ export default {
         var perc = (delta / deltaOffsetWidth);
         this.columnsWidth[index] += perc * maxWidth;
         this.resizeForceHandler = !this.resizeForceHandler //workaround - force render columnsWidth2
+        this.$emit("drag", this.columnsWidth);
       },
 
     //* we need to check for expanded row state here
