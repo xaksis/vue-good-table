@@ -1641,6 +1641,9 @@ var __vue_render__$2 = function __vue_render__() {
     }, [_vm._v("\r\n          Sort table by " + _vm._s(column.label) + " in " + _vm._s(_vm.getColumnSortLong(column)) + " order\r\n          ")])]) : _vm._e(), _vm._v(" "), _c('span', {
       staticClass: "drag",
       on: {
+        "dblclick": function dblclick($event) {
+          return _vm.$emit('resetResize', index);
+        },
         "mousedown": function mousedown($event) {
           return _vm.startResize($event, index);
         }
@@ -2563,7 +2566,7 @@ var script = {
           ret[i2] = (ret[i2] || 0) + currentW;
         }
       }
-      this._columnsWidth = ret;
+      this._columnsWidth = flat(ret);
       // stored width
       for (var i2 = 0; i2 < columns.length; i2++) {
         var _col = columns[i2];
@@ -2695,6 +2698,11 @@ var script = {
     }
   },
   methods: {
+    resetResize: function resetResize(index) {
+      this.columnsWidth[index] = this._columnsWidth[index];
+      this.resizeForceHandler = !this.resizeForceHandler;
+      this.$emit("drag", this.columnsWidth);
+    },
     drag: function drag(index, delta, deltaOffsetWidth) {
       this.columnsWidth[index];
       //var max = this.$el.offsetWidth;
@@ -3502,7 +3510,8 @@ var __vue_render__ = function __vue_render__() {
       "on-toggle-select-all": _vm.toggleSelectAll,
       "on-sort-change": _vm.changeSort,
       "filter-changed": _vm.filterRows,
-      "drag": _vm.drag
+      "drag": _vm.drag,
+      "resetResize": _vm.resetResize
     },
     scopedSlots: _vm._u([{
       key: "table-column",

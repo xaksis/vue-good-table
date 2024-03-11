@@ -88,6 +88,7 @@
             @on-sort-change="changeSort"
             @filter-changed="filterRows"
             @drag="drag"
+            @resetResize="resetResize"
             :columns="columns"
             :line-numbers="lineNumbers"
             :selectable="selectable"
@@ -954,7 +955,7 @@ export default {
           ret[i2] = (ret[i2] || 0) +  currentW
         }
       }
-      this._columnsWidth = ret;
+      this._columnsWidth = flat(ret);
       // stored width
       for (var i2 = 0; i2 < columns.length; i2++) {
         const col = columns[i2];
@@ -1089,6 +1090,11 @@ export default {
   },
 
     methods: {
+      resetResize(index) {
+        this.columnsWidth[index] = this._columnsWidth[index];
+        this.resizeForceHandler = !this.resizeForceHandler;
+        this.$emit("drag", this.columnsWidth);
+      },
       drag(index, delta, deltaOffsetWidth) {
     
         var w = this.columnsWidth[index];

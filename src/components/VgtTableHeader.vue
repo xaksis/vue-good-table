@@ -28,7 +28,7 @@
           Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
           </span>
         </button>
-      <span class="drag"  @mousedown="startResize($event,index)">&nbsp;</span>
+      <span class="drag" @dblclick="$emit('resetResize',index)" @mousedown="startResize($event,index)">&nbsp;</span>
     </th>
   </tr>
   <tr
@@ -144,7 +144,7 @@ export default {
 
   },
     methods: {
-//resize
+      //resize
     startResize(event,index) {
       this.resizing = true;
       this.resizeIndex = index;
