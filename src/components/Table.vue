@@ -950,7 +950,6 @@ export default {
       for (var i = 0; i < this.rows.length; i++) {
         for (var i2 = 0; i2 < columns.length; i2++) {
           const col = columns[i2];
-          if (col.colWidth) continue;
           const currentW = String(this.rows[i][col.field]).length;
           ret[i2] = (ret[i2] || 0) +  currentW
         }
