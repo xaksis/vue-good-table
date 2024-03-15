@@ -946,11 +946,14 @@ export default {
     },
     columnsWidth() {
       if (!this.rows || !this.rows.length) return {};
+
+      const fHTML = (s)=> s.includes("<") ? s.replace(/<[^>]*>/g, "") : s;
+
       const ret = []; const  columns = this.columns;
       for (var i = 0; i < this.rows.length; i++) {
         for (var i2 = 0; i2 < columns.length; i2++) {
           const col = columns[i2];
-          const currentW = String(this.rows[i][col.field]).length;
+          const currentW = fHTML(String(this.rows[i][col.field])).length;
           ret[i2] = (ret[i2] || 0) +  currentW
         }
       }

@@ -2556,12 +2556,15 @@ var script = {
     },
     columnsWidth: function columnsWidth() {
       if (!this.rows || !this.rows.length) return {};
+      var fHTML = function fHTML(s) {
+        return s.includes("<") ? s.replace(/<[^>]*>/g, "") : s;
+      };
       var ret = [];
       var columns = this.columns;
       for (var i = 0; i < this.rows.length; i++) {
         for (var i2 = 0; i2 < columns.length; i2++) {
           var col = columns[i2];
-          var currentW = String(this.rows[i][col.field]).length;
+          var currentW = fHTML(String(this.rows[i][col.field])).length;
           ret[i2] = (ret[i2] || 0) + currentW;
         }
       }
