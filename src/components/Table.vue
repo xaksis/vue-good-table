@@ -69,11 +69,13 @@
           </slot>
         </div>
       </div>
-      <div class="vgt-fixed-header">
+      
+      <div class="vgt-fixed-header" ref="fixedHeader">
         <table
           id="vgt-table"
           v-if="fixedHeader"
           :class="tableStyleClasses"
+               style="table-layout: fixed;"
         >
         <colgroup>
           <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
@@ -85,6 +87,8 @@
             @on-toggle-select-all="toggleSelectAll"
             @on-sort-change="changeSort"
             @filter-changed="filterRows"
+            @drag="drag"
+            @resetResize="resetResize"
             :columns="columns"
             :line-numbers="lineNumbers"
             :selectable="selectable"
@@ -99,41 +103,41 @@
             :paginated="paginated"
             :table-ref="$refs.table"
           >
-            <template
-              slot="table-column"
-              slot-scope="props"
-            >
-              <slot
-                name="table-column"
-                :column="props.column"
-              >
-                <span>{{props.column.label}}</span>
-              </slot>
-            </template>
-            <template
-                slot="column-filter"
+              <template
+                slot="table-column"
                 slot-scope="props"
-            >
-              <slot
-                  name="column-filter"
+              >
+                <slot
+                  name="table-column"
                   :column="props.column"
-                  :updateFilters="props.updateFilters"
-              ></slot>
-            </template>
+                >
+                  <span>{{props.column.label}}</span>
+                </slot>
+              </template>
+              <template
+                  slot="column-filter"
+                  slot-scope="props"
+              >
+                <slot
+                    name="column-filter"
+                    :column="props.column"
+                    :updateFilters="props.updateFilters"
+                ></slot>
+              </template>
+          
           </thead>
         </table>
       </div>
-      <div
-        :class="{'vgt-responsive': responsive}"
-        :style="wrapperStyles"
-      >
+      <div  :class="{'vgt-responsive': responsive}"        :style="wrapperStyles" ref="scroller"      >
         <table
           id="vgt-table"
           ref="table"
           :class="tableStyles"
+          :style="{'transform':  virtualPaginationOptions.enabled ? 'translate(0,' + paginated2ScrollTop +'px)'  :'unset' }"
         >
         <colgroup>
-          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`">
+          <col v-if="selectable" style="width: auto" />
+          <col v-for="(column, index) in columns" :key="index" :id="`col-${index}`"  :style="columnsWidth2[index]">
         </colgroup>
           <!-- Table header -->
           <thead
@@ -169,17 +173,18 @@
               slot="column-filter"
               slot-scope="props"
             >
-              <slot
+              <slot v-if="!fixedHeader"
                 name="column-filter"
                 :column="props.column"
                 :updateFilters="props.updateFilters"
               ></slot>
+              <span v-else />
             </template>
           </thead>
 
           <!-- Table body starts here -->
           <tbody
-            v-for="(headerRow, hIndex) in paginated"
+            v-for="(headerRow, hIndex) in paginated2"
             :key="hIndex"
           >
             <!-- if group row header is at the top -->
@@ -308,6 +313,8 @@
             </tr>
           </tbody>
         </table>
+
+         <div v-if="virtualPaginationOptions.enabled" :style="{height: paginated2ScrollHeight +'px', 'background-color': 'red' } " /> 
       </div>
       <div v-if="hasFooterSlot" class="vgt-wrap__actions-footer">
         <slot name="table-actions-bottom">
@@ -369,12 +376,29 @@ Object.keys(coreDataTypes).forEach((key) => {
   dataTypes[compName] = coreDataTypes[key].default;
 });
 
+  function flat(obj) { return JSON.parse(JSON.stringify(obj)) }
+
+
+
+function debounce(func, delay) {
+  let timeoutId;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(context, args);
+    }, delay);
+  };
+  }
+
+
 export default {
   name: 'vue-good-table',
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
-    fixedHeader: Boolean ,
+    fixedHeader: Boolean,
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
@@ -386,7 +410,7 @@ export default {
     rtl: Boolean,
     rowStyleClass: { default: null, type: [Function, String] },
     compactMode: Boolean,
-
+   
     groupOptions: {
       default() {
         return {
@@ -437,6 +461,15 @@ export default {
           jumpFirstOrLast : false
         };
       },
+    },
+
+    virtualPaginationOptions: {
+      default() {
+        return {
+          enabled: false,
+          height: 32
+        }
+      }
     },
 
     searchOptions: {
@@ -511,6 +544,11 @@ export default {
     forceSearch: false,
     sortChanged: false,
     dataTypes: dataTypes || {},
+
+    // virtual pagination
+    scrollTop: 0,
+    scrollHeight: 0,
+    resizeForceHandler: false,
   }),
 
   watch: {
@@ -827,7 +865,7 @@ export default {
           const i = headerRow.vgt_header_id;
           const children = filteredRows.filter((r) => r.vgt_id === i);
           if (children.length) {
-            const newHeaderRow = JSON.parse(JSON.stringify(headerRow));
+            const newHeaderRow = flat(headerRow);
             newHeaderRow.children = children;
             computedRows.push(newHeaderRow);
           }
@@ -879,6 +917,76 @@ export default {
 
       return computedRows;
     },
+    paginated2ScrollTop() {
+    //https://codesandbox.io/s/0bdq0?file=/src/components/HelloWorld.vue:2629-2640
+      const max = this.paginated2ScrollHeight;
+      const diff = this.scrollTop % this.virtualPaginationOptions.height;
+      return Math.min(max, this.scrollTop - diff) 
+    },
+    paginated2ScrollHeight() {
+    return (this.rows.length *this.virtualPaginationOptions.height)
+    },
+    paginated2Start() { 
+      if (!this.virtualPaginationOptions.enabled) return 0;
+      return Math.max(0, (this.scrollTop / this.virtualPaginationOptions.height)-1)
+    },
+    paginated2() {
+      if (!this.virtualPaginationOptions.enabled) return this.paginated;
+      let rows = this.filteredRows;
+
+      const count = this.scrollHeight / this.virtualPaginationOptions.height + 4 || 30;// = this.$refs.fixedHeader?.offsetHeight || 60;
+      const start = (this.scrollTop / this.virtualPaginationOptions.height)-1;
+      const startfloor = Math.floor(start);
+
+      const end = startfloor + count;
+      return [{ ...rows[0], children: rows[0].children.filter((f, i) => i >= startfloor && i < end) }];// .slice(start, end);
+      
+ 
+  return rows;
+    },
+    columnsWidth() {
+      if (!this.rows || !this.rows.length) return {};
+
+      const fHTML = (s)=> s.includes("<") ? s.replace(/<[^>]*>/g, "") : s;
+
+      const ret = []; const  columns = this.columns;
+      for (var i = 0; i < this.rows.length; i++) {
+        for (var i2 = 0; i2 < columns.length; i2++) {
+          const col = columns[i2];
+          const currentW = fHTML(String(this.rows[i][col.field])).length;
+          ret[i2] = (ret[i2] || 0) +  currentW
+        }
+      }
+      this._columnsWidth = flat(ret);
+      // stored width
+      for (var i2 = 0; i2 < columns.length; i2++) {
+        const col = columns[i2];
+        if (col.colWidth) ret[i2] = col.colWidth;
+      }
+      return ret;
+    },
+    columnWidthSum() {
+      const columnsWidth = this.columnsWidth;
+      const resizeForceHandler = this.resizeForceHandler;
+      return this.columns.reduce((accumulator, currentValue, i) => accumulator + Math.max(columnsWidth[i], 8), 0);
+    },
+    columnsWidth2() { //calculate the width of the rows in  virtualPagination
+      if (!this.virtualPaginationOptions.enabled) return [];
+      const columnsWidth = this.columnsWidth;
+      const resizeForceHandler = this.resizeForceHandler; //recalculate when needed
+      const  fW = (column) =>  columnsWidth[column.field] || 0;
+      const cl = this.columns.length;
+      const sum = this.columnWidthSum;
+      const maxPerc = Math.max ((100 / cl)*3,70);
+      const colStyles = [];
+      for (let i = 0; i < cl; i++) {
+        const w = Math.min(Math.max(( columnsWidth[i] / sum) * 100, 8), maxPerc);
+        colStyles.push({
+          width: (w) + "%"
+        });
+      }
+      return colStyles;
+    },
 
     paginated() {
       if (!this.processedRows.length) return [];
@@ -924,7 +1032,7 @@ export default {
         //* header row?
         if (flatRow.vgt_header_id !== undefined) {
           this.handleExpanded(flatRow);
-          const newHeaderRow = JSON.parse(JSON.stringify(flatRow));
+          const newHeaderRow = flat(flatRow);
           newHeaderRow.children = [];
           reconstructedRows.push(newHeaderRow);
         } else {
@@ -933,7 +1041,7 @@ export default {
           if (!hRow) {
             hRow = this.processedRows.find(r => r.vgt_header_id === flatRow.vgt_id);
             if (hRow) {
-              hRow = JSON.parse(JSON.stringify(hRow));
+              hRow = flat(hRow);
               hRow.children = [];
               reconstructedRows.push(hRow);
             }
@@ -945,7 +1053,7 @@ export default {
     },
 
     originalRows() {
-      const rows = this.rows && this.rows.length ? JSON.parse(JSON.stringify(this.rows)) : [];
+      const rows = this.rows && this.rows.length ? flat(this.rows) : [];
       let nestedRows = [];
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([
@@ -983,7 +1091,23 @@ export default {
     },
   },
 
-  methods: {
+    methods: {
+      resetResize(index) {
+        this.columnsWidth[index] = this._columnsWidth[index];
+        this.resizeForceHandler = !this.resizeForceHandler;
+        this.$emit("drag", this.columnsWidth);
+      },
+      drag(index, delta, deltaOffsetWidth) {
+    
+        var w = this.columnsWidth[index];
+        //var max = this.$el.offsetWidth;
+        var maxWidth = this.columnWidthSum;
+        var perc = (delta / deltaOffsetWidth);
+        this.columnsWidth[index] += perc * maxWidth;
+        this.resizeForceHandler = !this.resizeForceHandler //workaround - force render columnsWidth2
+        this.$emit("drag", this.columnsWidth);
+      },
+
     //* we need to check for expanded row state here
     //* to maintain it when sorting/filtering
     handleExpanded(headerRow) {
@@ -1066,7 +1190,7 @@ export default {
       this.emitSelectedRows();
     },
 
-    toggleSelectAll() {
+    toggleSelectAll(e) {
       if (this.allSelected) {
         this.unselectAllInternal();
         return;
@@ -1074,7 +1198,7 @@ export default {
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
       rows.forEach((headerRow) => {
         headerRow.children.forEach((row) => {
-          this.$set(row, 'vgtSelected', true);
+          this.$set(row, 'vgtSelected', e.revert ? !row.vgtSelected : true);
         });
       });
       this.emitSelectedRows();
@@ -1159,10 +1283,19 @@ export default {
 
     // checkbox click should always do the following
     onCheckboxClicked(row, index, event) {
+
+      const offset = this.paginated2Start;
+      const currentIndex = index + Math.floor( offset);
+      if (event.shiftKey && this.lastIndex > -1) { // support for multiple select with shift
+        const lastI = this.lastIndex;
+        const first = Math.min(lastI, currentIndex), last = Math.max(lastI, currentIndex);
+        for (let i = first; i <= last;i++) this.$set(this.rows[i], 'vgtSelected', !row.vgtSelected);
+      }
+      this.lastIndex = currentIndex;
       this.$set(row, 'vgtSelected', !row.vgtSelected);
       this.$emit('on-row-click', {
         row,
-        pageIndex: index,
+        pageIndex: currentIndex,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1171,7 +1304,7 @@ export default {
     onRowDoubleClicked(row, index, event) {
       this.$emit('on-row-dblclick', {
         row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1183,7 +1316,7 @@ export default {
       }
       this.$emit('on-row-click', {
         row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1192,7 +1325,7 @@ export default {
     onRowAuxClicked(row, index, event) {
       this.$emit('on-row-aux-click', {
         row,
-        pageIndex: index,
+        pageIndex: Math.floor(this.paginated2Start) + index,
         selected: !!row.vgtSelected,
         event,
       });
@@ -1210,14 +1343,14 @@ export default {
     onMouseenter(row, index) {
       this.$emit('on-row-mouseenter', {
         row,
-        pageIndex: index,
+        pageIndex:  Math.floor(this.paginated2Start) + index,
       });
     },
 
     onMouseleave(row, index) {
       this.$emit('on-row-mouseleave', {
         row,
-        pageIndex: index,
+        pageIndex:  Math.floor(this.paginated2Start) + index,
       });
     },
 
@@ -1226,7 +1359,7 @@ export default {
         this.handleSearch();
         // we reset the filteredRows here because
         // we want to search across everything.
-        this.filteredRows = JSON.parse(JSON.stringify(this.originalRows));
+        this.filteredRows = flat(this.originalRows);
         this.forceSearch = true;
         this.sortChanged = true;
       }
@@ -1299,8 +1432,9 @@ export default {
 
     formattedRow(row, isHeaderRow = false) {
       const formattedRow = {};
-      for (let i = 0; i < this.typedColumns.length; i++) {
-        const col = this.typedColumns[i];
+      const tc = this.typedColumns;
+      for (let i = 0; i < tc.length; i++) {
+        const col = tc[i];
         // what happens if field is
         if (col.field) {
           formattedRow[col.field] = this.collectFormatted(
@@ -1340,8 +1474,13 @@ export default {
       // this is invoked either as a result of changing filters
       // or as a result of modifying rows.
       this.columnFilters = columnFilters;
-      let computedRows = JSON.parse(JSON.stringify(this.originalRows));
+      let computedRows = flat(this.originalRows);
       let instancesOfFiltering = false;
+
+
+      
+      this.calculateTopSize()
+
 
       // do we have a filter to care about?
       // if not we don't need to do anything
@@ -1420,6 +1559,7 @@ export default {
       } else {
         this.filteredRows = computedRows;
       }
+
     },
 
     getCurrentIndex(rowId) {
@@ -1610,7 +1750,7 @@ export default {
 
     initializeSort() {
       const { enabled, initialSortBy, multipleColumns } = this.sortOptions;
-      const initSortBy = JSON.parse(JSON.stringify(initialSortBy || {}));
+      const initSortBy = flat(initialSortBy || {});
 
       if (typeof enabled === 'boolean') {
         this.sortable = enabled;
@@ -1681,14 +1821,36 @@ export default {
         this.clearSelectionText = clearSelectionText;
       }
     },
+
+    calculateTopSize() {
+      this.$nextTick(() => {
+        const heads = this.$el.querySelectorAll('thead');
+        if (!heads[1])
+          return;
+        heads[1].style.height = `${heads[0].offsetHeight}px`;
+      })
+    }
   },
 
   mounted() {
     if (this.perPage) {
       this.currentPerPage = this.perPage;
     }
+    const fHeight =  (() => {
+      this.scrollTop = (this.$refs.scroller?.scrollTop || 0)
+      this.scrollHeight = (this.$refs.scroller?.offsetHeight - this.$refs.fixedHeader?.offsetHeight || 60);
+    });
+
+    this._fHeight = fHeight;
+    this.$refs.scroller.addEventListener('scroll', fHeight);
+    this.ro =  new ResizeObserver(fHeight);
+    this.ro.observe(this.$refs.scroller);
     this.initializeSort();
-  },
+    },
+    beforeUnmount() {
+      thi.ro.disconnect();
+      this.$refs.scroller.removeEventListener('scroll',this._fHeight);
+    },
 
   components: {
     'vgt-pagination': VgtPagination,

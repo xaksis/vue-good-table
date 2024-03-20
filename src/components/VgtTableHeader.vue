@@ -7,7 +7,7 @@
         type="checkbox"
         :checked="allSelected"
         :indeterminate.prop="allSelectedIndeterminate"
-        @change="toggleSelectAll" />
+        @change="toggleSelectAll" @click.right.prevent.stop="toggleSelectAll" />
     </th>
     <th v-for="(column, index) in columns"
       scope="col"
@@ -28,6 +28,7 @@
           Sort table by {{ column.label }} in {{ getColumnSortLong(column) }} order
           </span>
         </button>
+      <span class="drag" @dblclick="$emit('resetResize',index)" @mousedown="startResize($event,index)">&nbsp;</span>
     </th>
   </tr>
   <tr
@@ -142,12 +143,39 @@ export default {
   computed: {
 
   },
-  methods: {
+    methods: {
+      //resize
+    startResize(event,index) {
+      this.resizing = true;
+      this.resizeIndex = index;
+      this.startX = event.pageX;
+      document.addEventListener('mousemove', this.handleResize);
+      document.addEventListener('mouseup', this.stopResize);
+    },
+    handleResize(event) {
+      if (this.resizing) {
+        const delta =( event.pageX - this.startX)*-1 //rtl -1;
+        if (!delta) return;
+        this.$emit("drag", this.resizeIndex, delta, event.target.parentNode.offsetWidth );
+        this.startX = event.pageX;
+      }
+    },
+    stopResize() {
+      if (this.resizing) {
+        this.resizing = false;
+        document.removeEventListener('mousemove', this.handleResize);
+        document.removeEventListener('mouseup', this.stopResize);
+      }
+    } ,
+
+
+
+
     reset() {
       this.$refs['filter-row'].reset(true);
     },
-    toggleSelectAll() {
-      this.$emit('on-toggle-select-all');
+    toggleSelectAll(e) {
+      this.$emit('on-toggle-select-all',{revert:  !!e.button });
     },
     isSortableColumn(column) {
       const { sortable } = column;
@@ -203,7 +231,7 @@ export default {
       if (window && window.getComputedStyle && dom) {
         const cellStyle = window.getComputedStyle(dom, null);
         return {
-          width: cellStyle.width,
+          width: cellStyle.width
         };
       }
       return {
@@ -224,7 +252,7 @@ export default {
           colStyles.push({
             minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
             maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
-            width: this.columns[i].width ? this.columns[i].width : 'auto',
+            width: this.columns[i].width ? this.columns[i].width : 'auto'
           });
         }
       }

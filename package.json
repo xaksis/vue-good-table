@@ -1,6 +1,6 @@
 {
   "name": "vue-good-table",
-  "version": "2.21.11",
+  "version": "2.21.12",
   "sideEffects": [
     "*.vue",
     "*.css"
@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "bundle": "bili",
-    "dev": "poi --serve",
+    "dev": "vite",
     "docs:dev": "vuepress dev vp-docs",
     "docs:build": "vuepress build vp-docs",
     "test": "echo \"No test specified\""
@@ -31,31 +31,31 @@
     "email": "shay@crayonbits.com"
   },
   "license": "MIT",
-  "poi": {
-    "entry": "dev/main.js",
-    "output": {
-      "dir": "dev/dist",
-      "publicUrl": "./",
-      "html": {
-        "template": "dev/index.html"
-      }
-    }
-  },
+ 
   "dependencies": {
     "date-fns": "^2.17.0",
-    "lodash.isequal": "^4.5.0"
+    "lodash.isequal": "^4.5.0",
+    "@vueuse/core": "^9.6.0"
   },
   "devDependencies": {
+    "@vue/compiler-sfc": "2.7.14",
     "@vuepress/plugin-google-analytics": "^1.0.0-rc.1",
-    "bili": "^4.8.0",
+    "bili": "^5.0.5",
     "eslint-config-airbnb": "^18.2.0",
-    "node-sass": "^4.12.0",
-    "poi": "^12.7.0",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-vue": "^5.1.9",
-    "sass-loader": "^7.1.0",
-    "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10",
-    "vuepress": "^1.0.0-rc.1"
+    "rollup-plugin-vue": "5.1.9",
+    "sass-loader": "13.2.0",
+    "vue": "2.7.14",
+    "vue-template-compiler": "^2.7.4",
+    "vuepress": "^1.0.0-rc.1",
+
+    "@vitejs/plugin-vue2": "2.1.0",
+    "@vue/runtime-dom": "^3.2.37",
+    "sass": "^1.32.11",
+    "vite": "^3.0.4",
+    "unplugin-auto-import": "^0.12.0"
+  },
+  "peerDependencies": {
+    "css-loader": "^3.6.0"
   }
 }
